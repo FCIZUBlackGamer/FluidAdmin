@@ -1,11 +1,27 @@
 package com.thetatecno.fluidadmin.model;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class Code {
-    private String description;
-    private String codeType ;
-    private String code ;
-    private String userCode;
+
+    @SerializedName("CODE_TYPE")
+    @Expose
+    private String codeType;
+    @SerializedName("CODE")
+    @Expose
+    private String code;
+    @SerializedName("SYSTEM_REQUIRED")
+    @Expose
     private String systemRequired;
+
+    @SerializedName("USER_CODE")
+    @Expose
+    private String userCode;
+    @SerializedName("DESCRIPTION")
+    @Expose
+    private String description;
+
 
     public String getDescription() {
         return description;

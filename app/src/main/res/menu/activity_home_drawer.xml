@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/agents"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/Agents" />
+        <item
+            android:id="@+id/provider"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="@string/provider" />
+        <item
+            android:id="@+id/client"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="@string/client" />
+        <item
+            android:id="@+id/facility"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="@string/facilty" />
+    </group>
+
+</menu>

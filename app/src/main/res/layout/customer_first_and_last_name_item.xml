@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <Button
+        android:id="@+id/language_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="Button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/language_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/language_txt"
+        android:autoSizeTextType="uniform"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimary"
+        android:layout_marginStart="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/language_btn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/language_btn" />
+
+    <TextView
+        android:id="@+id/first_name_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/first_name"
+        android:textColor="@color/colorPrimary"
+        android:autoSizeTextType="uniform"
+        app:layout_constraintStart_toStartOf="@+id/language_txt"
+        app:layout_constraintTop_toBottomOf="@+id/language_btn" />
+
+    <EditText
+        android:id="@+id/first_name_edt_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="@string/first_name"
+        app:layout_constraintBottom_toBottomOf="@+id/first_name_txt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/first_name_txt"
+        app:layout_constraintTop_toTopOf="@+id/first_name_txt" />
+
+    <TextView
+        android:id="@+id/family_name_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="32dp"
+        android:text="@string/family_name_txt"
+        android:textColor="@color/colorPrimary"
+        android:autoSizeTextType="uniform"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/first_name_txt"
+        app:layout_constraintTop_toBottomOf="@+id/first_name_txt" />
+
+    <EditText
+        android:id="@+id/family_name_edt_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="@string/family_name_txt"
+        app:layout_constraintBottom_toBottomOf="@+id/family_name_txt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/family_name_txt"
+        app:layout_constraintTop_toTopOf="@+id/family_name_txt" />
+</androidx.constraintlayout.widget.ConstraintLayout>

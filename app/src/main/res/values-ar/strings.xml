@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FluidAdmin</string>
+    <string name="first_name">First Name</string>
+    <string name="first_name_ar" translatable="false">الأسم الأول</string>
+    <string name="family_name_txt">Family Name</string>
+    <string name="family_name_ar_txt" translatable="false">أسم العائلة</string>
+    <string name="language_txt">English</string>
+    <string name="language_ar_txt" translatable="false">العربية</string>
+
+    <string name="email_txt">Email</string>
+    <string name="mobile_number_txt">Mobile Number</string>
+    <string name="number_prompt">number</string>
+    <string name="email_prompt">email</string>
+</resources>

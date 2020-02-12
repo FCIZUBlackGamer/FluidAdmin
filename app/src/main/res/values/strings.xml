@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">FluidAdmin</string>
+    <string name="first_name">First Name</string>
+    <string name="first_name_ar" translatable="false">الأسم الأول</string>
+    <string name="family_name_txt">Family Name</string>
+    <string name="family_name_ar_txt" translatable="false">أسم العائلة</string>
+    <string name="language_txt">English</string>
+    <string name="language_ar_txt" translatable="false">العربية</string>
+    <string name="email_txt">Email</string>
+    <string name="mobile_number_txt">Phone</string>
+    <string name="number_prompt">number</string>
+    <string name="email_prompt">email</string>
+    <string name="gender_txt">Gender</string>
+    <string name="cancel_btn_txt">Cancel</string>
+    <string name="update_txt">Update</string>
+    <string name="add_txt">Add</string>
+    <string name="clinics">Clinics</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_tools">Tools</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_send">Send</string>
+    <string name="facilty_id">Facilty Id: </string>
+    <string name="decsription">Decsription</string>
+    <string name="deviceId">Device Id: </string>
+    <string name="type">Type: </string>
+    <string name="waitingAreaID">Waiting Area Id: </string>
+    <string name="Agents">Agents</string>
+    <string name="provider">Provider</string>
+    <string name="client">Client</string>
+    <string name="facilty">Facility</string>
+</resources>

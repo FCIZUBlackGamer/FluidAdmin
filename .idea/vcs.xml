@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$/Fluid" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/FluidCustomer" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ITAdminApp" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/MyApp" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/NurseApp" vcs="Git" />
+  </component>
+</project>

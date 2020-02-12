@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+    <ImageView
+        android:id="@+id/person_img"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:visibility="invisible"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/ic_account_box_black_24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textViewOptions" />
+
+    <TextView
+        android:id="@+id/textViewOptions"
+        android:layout_width="21dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:paddingLeft="16dp"
+        android:text="&#8942;"
+        android:textAppearance="?android:textAppearanceLarge"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/facilityId_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="ENT10"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/person_img"
+        app:layout_constraintTop_toTopOf="@+id/person_img" />
+
+    <TextView
+        android:id="@+id/deviceID_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawablePadding="5dp"
+        android:text="@string/deviceId"
+        app:layout_constraintStart_toStartOf="@+id/facilityId_tv"
+        app:layout_constraintTop_toBottomOf="@+id/person_img" />
+
+    <TextView
+        android:id="@+id/typeCode_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:drawablePadding="5dp"
+        android:text="@string/type"
+        app:layout_constraintStart_toStartOf="@+id/facilityId_tv"
+        app:layout_constraintTop_toBottomOf="@+id/deviceID_tv" />
+
+    <TextView
+        android:id="@+id/waId_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:drawablePadding="5dp"
+        android:text="@string/waitingAreaID"
+        app:layout_constraintStart_toStartOf="@+id/facilityId_tv"
+        app:layout_constraintTop_toBottomOf="@+id/typeCode_tv" />
+
+    <TextView
+        android:id="@+id/desc_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:drawablePadding="5dp"
+        android:text="@string/decsription"
+        android:textSize="24sp"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintStart_toStartOf="@+id/facilityId_tv"
+        app:layout_constraintTop_toBottomOf="@+id/waId_tv" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

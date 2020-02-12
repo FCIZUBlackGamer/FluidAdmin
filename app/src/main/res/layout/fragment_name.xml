@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/language_btn"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/us"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/language_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:autoSizeTextType="uniform"
+            android:text="@string/language_txt"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/language_btn"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/language_btn" />
+
+        <TextView
+            android:id="@+id/first_name_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:autoSizeTextType="uniform"
+            android:drawableEnd="@drawable/ic_ambulance"
+            android:drawablePadding="5dp"
+            android:text="@string/first_name"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintStart_toStartOf="@+id/language_txt"
+            app:layout_constraintTop_toBottomOf="@+id/language_btn" />
+
+        <EditText
+            android:id="@+id/first_name_edt_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/first_name"
+            android:inputType="textPersonName"
+            android:paddingStart="5dp"
+            app:layout_constraintBottom_toBottomOf="@+id/first_name_txt"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/first_name_txt"
+            app:layout_constraintTop_toTopOf="@+id/first_name_txt" />
+
+        <TextView
+            android:id="@+id/family_name_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="32dp"
+            android:autoSizeTextType="uniform"
+            android:drawableEnd="@drawable/ic_ambulance"
+            android:drawablePadding="5dp"
+            android:text="@string/family_name_txt"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/first_name_txt"
+            app:layout_constraintTop_toBottomOf="@+id/first_name_txt" />
+
+        <EditText
+            android:id="@+id/family_name_edt_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/family_name_txt"
+            android:inputType="textPersonName"
+            android:paddingStart="5dp"
+            app:layout_constraintBottom_toBottomOf="@+id/family_name_txt"
+            app:layout_constraintEnd_toEndOf="@+id/first_name_edt_txt"
+            app:layout_constraintStart_toStartOf="@+id/first_name_edt_txt"
+            app:layout_constraintTop_toTopOf="@+id/family_name_txt" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/language_btn1"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/eg"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/language_txt1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:autoSizeTextType="uniform"
+            android:text="@string/language_ar_txt"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/language_btn1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/language_btn1" />
+
+        <TextView
+            android:id="@+id/first_name_txt1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="38dp"
+            android:layout_marginEnd="8dp"
+            android:autoSizeTextType="uniform"
+            android:text="@string/first_name_ar"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/language_txt1" />
+
+        <EditText
+            android:id="@+id/first_name_edt_txt1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/first_name_ar"
+            android:inputType="textPersonName"
+            android:paddingEnd="5dp"
+            app:layout_constraintBottom_toBottomOf="@+id/first_name_txt1"
+            app:layout_constraintEnd_toStartOf="@+id/first_name_txt1"
+            app:layout_constraintStart_toStartOf="@+id/language_btn1"
+            app:layout_constraintTop_toTopOf="@+id/first_name_txt1" />
+
+        <TextView
+            android:id="@+id/family_name_txt1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="32dp"
+            android:autoSizeTextType="uniform"
+            android:text="@string/family_name_ar_txt"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/first_name_txt1"
+            app:layout_constraintTop_toBottomOf="@+id/first_name_txt1"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <EditText
+            android:id="@+id/family_name_edt_txt1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/family_name_ar_txt"
+            android:inputType="textPersonName"
+            android:paddingEnd="5dp"
+            app:layout_constraintBottom_toBottomOf="@+id/family_name_txt1"
+            app:layout_constraintEnd_toEndOf="@+id/first_name_edt_txt1"
+            app:layout_constraintStart_toStartOf="@+id/first_name_edt_txt1"
+            app:layout_constraintTop_toTopOf="@+id/family_name_txt1" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

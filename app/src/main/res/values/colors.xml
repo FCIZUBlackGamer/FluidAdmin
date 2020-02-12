@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#0069C0</color>
+    <color name="colorPrimaryDark">#000063</color>
+    <color name="colorAccent">#E74C3C</color>
+    <color name="colorWhite">#FFF</color>
+    <color name="colorLightForDialog">#F4F9FD</color>
+    <color name="darkGrey">#A9A9A9</color>
+    <color name="silver">#C0C0C0</color>
+    <color name="colorLightBlue">#640069C0</color>
+    <color name="colorLocationLine">#428DFF</color>
+</resources>

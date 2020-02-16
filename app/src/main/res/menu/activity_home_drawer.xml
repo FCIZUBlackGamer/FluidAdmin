@@ -40,5 +40,8 @@
                 android:title="@string/waiting_area" />
         </menu>
     </item>
+    <item android:title="@string/menu_english_language"
+        android:id="@+id/language_reference"
+        android:icon="@drawable/ic_language"/>
 
 </menu>

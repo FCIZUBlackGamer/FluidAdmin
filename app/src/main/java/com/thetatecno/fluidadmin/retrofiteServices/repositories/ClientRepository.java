@@ -2,7 +2,6 @@ package com.thetatecno.fluidadmin.retrofiteServices.repositories;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.thetatecno.fluidadmin.model.CodeList;
 import com.thetatecno.fluidadmin.model.CustomerList;
 import com.thetatecno.fluidadmin.retrofiteServices.interfaces.MyServicesInterface;
 import com.thetatecno.fluidadmin.retrofiteServices.interfaces.RetrofitInstance;

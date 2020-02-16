@@ -44,4 +44,6 @@
     <string name="code">Code</string>
     <string name="clinic">Clinic</string>
     <string name="waiting_area">Waiting Area</string>
+    <string name="menu_english_language">English</string>
+    <string name="menu_arabic_language">Arabic</string>
 </resources>

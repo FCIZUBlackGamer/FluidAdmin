@@ -1,5 +1,6 @@
 package com.thetatecno.fluidadmin;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -27,6 +28,9 @@ import com.thetatecno.fluidadmin.model.Person;
 import com.thetatecno.fluidadmin.model.Provider;
 import com.thetatecno.fluidadmin.model.Staff;
 import com.thetatecno.fluidadmin.model.StaffData;
+import com.thetatecno.fluidadmin.ui.BaseActivity;
+import com.thetatecno.fluidadmin.utils.Constants;
+import com.thetatecno.fluidadmin.utils.PreferenceController;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -37,7 +41,7 @@ import android.view.Menu;
 
 import java.util.List;
 
-public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class HomeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     enum TypeCode {
         PRVDR,
@@ -52,6 +56,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     List<Facility> facilityList;
     static UsageType usageType;
     MainViewModel mainViewModel;
+    NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +66,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.fab);
+
         mainViewModel.getStaffDataForAgents("EN", TypeCode.DSPTCHR.toString()).observe(this, new Observer<StaffData>() {
             @Override
             public void onChanged(StaffData staffData) {
@@ -94,7 +100,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+         navigationView = (NavigationView) findViewById(R.id.nav_view);
+        checkOnTheCurrentLanguage();
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -204,9 +211,36 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
                 break;
 
+            case R.id.language_reference:
+                changeLanguage((String) item.getTitle());
+                break;
+
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void checkOnTheCurrentLanguage() {
+        if (PreferenceController.getInstance(this).get(PreferenceController.LANGUAGE).equals(Constants.ARABIC)) {
+            navigationView.getMenu().findItem(R.id.language_reference).setTitle(R.string.menu_english_language);
+        } else if (PreferenceController.getInstance(this).get(PreferenceController.LANGUAGE).equals(Constants.ENGLISH)) {
+            navigationView.getMenu().findItem(R.id.language_reference).setTitle(R.string.menu_arabic_language);
+
+        }
+    }
+    private void changeLanguage(String language) {
+        if (!PreferenceController.getInstance(this).get(PreferenceController.LANGUAGE).equals(language)) {
+            if (PreferenceController.getInstance(this).get(PreferenceController.LANGUAGE).equals(Constants.ARABIC)) {
+                PreferenceController.getInstance(this).persist(PreferenceController.LANGUAGE, Constants.ENGLISH);
+            } else {
+                PreferenceController.getInstance(this).persist(PreferenceController.LANGUAGE, Constants.ARABIC);
+            }
+            finish();
+            startActivity(new Intent(this, HomeActivity.class));
+            // recreate();
+
+        }
+
     }
 }

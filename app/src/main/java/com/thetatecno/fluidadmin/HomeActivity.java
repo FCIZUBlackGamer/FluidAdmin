@@ -15,12 +15,17 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.view.GravityCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
 import com.thetatecno.fluidadmin.model.CustomerList;
 import com.thetatecno.fluidadmin.model.Facilities;
 import com.thetatecno.fluidadmin.model.Facility;
 import com.thetatecno.fluidadmin.model.Person;
+import com.thetatecno.fluidadmin.model.Provider;
 import com.thetatecno.fluidadmin.model.Staff;
 import com.thetatecno.fluidadmin.model.StaffData;
 import com.thetatecno.fluidadmin.utils.Constants;
@@ -28,9 +33,19 @@ import com.thetatecno.fluidadmin.utils.PreferenceController;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.view.Menu;
+
 import java.util.List;
+
+import io.sentry.Sentry;
+import io.sentry.SentryClient;
+import io.sentry.android.AndroidSentryClientFactory;
+import io.sentry.event.BreadcrumbBuilder;
+import io.sentry.event.UserBuilder;
+
 
 public class HomeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -47,35 +62,44 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     List<Facility> facilityList;
     static UsageType usageType;
     MainViewModel mainViewModel;
+    private static SentryClient sentry;
     NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Sentry.init("https://77af95af46ac4f068742d097b9c782c1@sentry.io/2577929", new AndroidSentryClientFactory(this));
+        Sentry.getContext().setUser(
+                new UserBuilder().setUsername("theta").build()
+        );
         setContentView(R.layout.activity_home);
         mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.fab);
-
-        mainViewModel.getStaffDataForAgents("EN", TypeCode.DSPTCHR.toString()).observe(this, new Observer<StaffData>() {
-            @Override
-            public void onChanged(StaffData staffData) {
-                if (staffData != null) {
-                    if (staffData.getStaffList() != null) {
-                        usageType = UsageType.Agent;
-                        agentList = staffData.getStaffList();
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.nav_host_fragment, MainFragment.setTypeAndData(UsageType.Agent, agentList, null, null, null))
-                                .commit();
+        try {
+            mainViewModel.getStaffDataForAgents("EN", TypeCode.DSPTCHR.toString()).observe(this, new Observer<StaffData>() {
+                @Override
+                public void onChanged(StaffData staffData) {
+                    if (staffData != null) {
+                        if (staffData.getStaffList() != null) {
+                            usageType = UsageType.Agent;
+                            agentList = staffData.getStaffList();
+                            getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.nav_host_fragment, MainFragment.setTypeAndData(UsageType.Agent, agentList, null, null, null))
+                                    .commit();
+                        } else {
+                            Log.e("Staff List", "Is Null");
+                        }
                     } else {
-                        Log.e("Staff List", "Is Null");
+                        Log.e("Staff", "Is Null");
                     }
-                } else {
-                    Log.e("Staff", "Is Null");
                 }
-            }
-        });
+            });
+        } catch (Exception e) {
+            Sentry.capture(e);
+        }
+
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,95 +135,128 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.agents:
-                mainViewModel.getStaffDataForAgents("EN", TypeCode.DSPTCHR.toString()).observe(this, new Observer<StaffData>() {
-                    @Override
-                    public void onChanged(StaffData staffData) {
-                        if (staffData != null) {
-                            if (staffData.getStaffList() != null) {
-                                usageType = UsageType.Agent;
-                                agentList = staffData.getStaffList();
-                                getSupportFragmentManager().beginTransaction()
-                                        .replace(R.id.nav_host_fragment, MainFragment.setTypeAndData(UsageType.Agent, agentList, null, null, null))
-                                        .commit();
+                Sentry.getContext().recordBreadcrumb(new BreadcrumbBuilder().setMessage("User Clicked Agents Button From Navigation Drawer").build());
+                try {
+                    mainViewModel.getStaffDataForAgents("EN", TypeCode.DSPTCHR.toString()).observe(this, new Observer<StaffData>() {
+                        @Override
+                        public void onChanged(StaffData staffData) {
+                            if (staffData != null) {
+                                if (staffData.getStaffList() != null) {
+                                    usageType = UsageType.Agent;
+                                    agentList = staffData.getStaffList();
+                                    getSupportFragmentManager().beginTransaction()
+                                            .replace(R.id.nav_host_fragment, MainFragment.setTypeAndData(UsageType.Agent, agentList, null, null, null))
+                                            .commit();
+                                } else {
+                                    Log.e("Staff List", "Is Null");
+                                }
                             } else {
-                                Log.e("Staff List", "Is Null");
+                                Log.e("Staff", "Is Null");
                             }
-                        } else {
-                            Log.e("Staff", "Is Null");
                         }
-                    }
-                });
+                    });
+                } catch (Exception e) {
+                    Sentry.capture(e);
+                }
+
                 break;
             case R.id.provider:
-                mainViewModel.getStaffDataForProviders("EN", TypeCode.PRVDR.toString()).observe(this, new Observer<StaffData>() {
-                    @Override
-                    public void onChanged(StaffData staffData) {
-                        if (staffData != null) {
-                            if (staffData.getStaffList() != null) {
-                                usageType = UsageType.Provider;
-                                providerList = staffData.getStaffList();
-                                getSupportFragmentManager().beginTransaction()
-                                        .replace(R.id.nav_host_fragment, MainFragment.setTypeAndData(UsageType.Provider, null, providerList, null, null))
-                                        .commit();
+                Sentry.getContext().recordBreadcrumb(new BreadcrumbBuilder().setMessage("User Clicked Provider Button From Navigation Drawer").build());
+                try {
+                    mainViewModel.getStaffDataForProviders("EN", TypeCode.PRVDR.toString()).observe(this, new Observer<StaffData>() {
+                        @Override
+                        public void onChanged(StaffData staffData) {
+                            if (staffData != null) {
+                                if (staffData.getStaffList() != null) {
+                                    usageType = UsageType.Provider;
+                                    providerList = staffData.getStaffList();
+                                    getSupportFragmentManager().beginTransaction()
+                                            .replace(R.id.nav_host_fragment, MainFragment.setTypeAndData(UsageType.Provider, null, providerList, null, null))
+                                            .commit();
+                                } else {
+                                    Log.e("Staff List", "Is Null");
+                                }
                             } else {
-                                Log.e("Staff List", "Is Null");
+                                Log.e("Staff", "Is Null");
                             }
-                        } else {
-                            Log.e("Staff", "Is Null");
                         }
-                    }
-                });
+                    });
+                } catch (Exception e) {
+                    Sentry.capture(e);
+                }
+
                 break;
             case R.id.client:
-                mainViewModel.getStaffDataForPerson("", "EN").observe(this, new Observer<CustomerList>() {
-                    @Override
-                    public void onChanged(CustomerList customerList) {
-                        if (customerList != null) {
-                            if (customerList.getPersonList() != null) {
-                                personList = customerList.getPersonList();
-                                usageType = UsageType.Person;
-                                getSupportFragmentManager().beginTransaction()
-                                        .replace(R.id.nav_host_fragment, MainFragment.setTypeAndData(UsageType.Person, null, null, personList, null))
-                                        .commit();
+                Sentry.getContext().recordBreadcrumb(new BreadcrumbBuilder().setMessage("User Clicked Client Button From Navigation Drawer").build());
+
+                try {
+                    mainViewModel.getStaffDataForPerson("", "EN").observe(this, new Observer<CustomerList>() {
+                        @Override
+                        public void onChanged(CustomerList customerList) {
+                            if (customerList != null) {
+                                if (customerList.getPersonList() != null) {
+                                    personList = customerList.getPersonList();
+                                    usageType = UsageType.Person;
+                                    getSupportFragmentManager().beginTransaction()
+                                            .replace(R.id.nav_host_fragment, MainFragment.setTypeAndData(UsageType.Person, null, null, personList, null))
+                                            .commit();
+                                }
                             }
                         }
-                    }
-                });
+                    });
+
+                } catch (Exception e) {
+                    Sentry.capture(e);
+                }
 
                 break;
             case R.id.clinic:
-                mainViewModel.getStaffDataForClinics("", "EN", TypeCode.CLINIC.toString()).observe(this, new Observer<Facilities>() {
-                    @Override
-                    public void onChanged(Facilities facilities) {
-                        if (facilities != null) {
-                            if (facilities.getFacilities() != null) {
-                                usageType = UsageType.Facility;
-                                facilityList = facilities.getFacilities();
-                                getSupportFragmentManager().beginTransaction()
-                                        .replace(R.id.nav_host_fragment, MainFragment.setTypeAndData(UsageType.Facility, null, null, null, facilityList))
-                                        .commit();
+                Sentry.getContext().recordBreadcrumb(new BreadcrumbBuilder().setMessage("User Clicked Clinic Button From Navigation Drawer").build());
+
+                try {
+                    mainViewModel.getStaffDataForClinics("", "EN", TypeCode.CLINIC.toString()).observe(this, new Observer<Facilities>() {
+                        @Override
+                        public void onChanged(Facilities facilities) {
+                            if (facilities != null) {
+                                if (facilities.getFacilities() != null) {
+                                    usageType = UsageType.Facility;
+                                    facilityList = facilities.getFacilities();
+                                    getSupportFragmentManager().beginTransaction()
+                                            .replace(R.id.nav_host_fragment, MainFragment.setTypeAndData(UsageType.Facility, null, null, null, facilityList))
+                                            .commit();
+                                }
                             }
                         }
-                    }
-                });
+                    });
+                } catch (Exception e) {
+                    Sentry.capture(e);
+                }
+
 
                 break;
 
             case R.id.waiting_area:
-                mainViewModel.getStaffDataForClinics("", "EN", TypeCode.WAITAREA.toString()).observe(this, new Observer<Facilities>() {
-                    @Override
-                    public void onChanged(Facilities facilities) {
-                        if (facilities != null) {
-                            if (facilities.getFacilities() != null) {
-                                usageType = UsageType.Facility;
-                                facilityList = facilities.getFacilities();
-                                getSupportFragmentManager().beginTransaction()
-                                        .replace(R.id.nav_host_fragment, MainFragment.setTypeAndData(UsageType.Facility, null, null, null, facilityList))
-                                        .commit();
+                Sentry.getContext().recordBreadcrumb(new BreadcrumbBuilder().setMessage("User Clicked Waiting Area Button From Navigation Drawer").build());
+
+                try {
+                    mainViewModel.getStaffDataForClinics("", "EN", TypeCode.WAITAREA.toString()).observe(this, new Observer<Facilities>() {
+                        @Override
+                        public void onChanged(Facilities facilities) {
+                            if (facilities != null) {
+                                if (facilities.getFacilities() != null) {
+                                    usageType = UsageType.Facility;
+                                    facilityList = facilities.getFacilities();
+                                    getSupportFragmentManager().beginTransaction()
+                                            .replace(R.id.nav_host_fragment, MainFragment.setTypeAndData(UsageType.Facility, null, null, null, facilityList))
+                                            .commit();
+                                }
                             }
                         }
-                    }
-                });
+                    });
+                } catch (Exception e) {
+                    Sentry.capture(e);
+                }
+
 
                 break;
 

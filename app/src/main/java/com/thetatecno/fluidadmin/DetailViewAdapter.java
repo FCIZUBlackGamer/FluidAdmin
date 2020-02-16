@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,6 +27,10 @@ import com.thetatecno.fluidadmin.model.Provider;
 import com.thetatecno.fluidadmin.model.Staff;
 
 import java.util.List;
+
+import io.sentry.Sentry;
+import io.sentry.android.AndroidSentryClientFactory;
+import io.sentry.event.UserBuilder;
 
 enum UsageType {
     Agent,
@@ -66,6 +71,10 @@ public class DetailViewAdapter extends RecyclerView.Adapter<DetailViewAdapter.vH
 //            view = LayoutInflater.from(context).inflate(R.layout.default_detail_list_item, parent, false);
 //        }
 
+        Sentry.init("https://77af95af46ac4f068742d097b9c782c1@sentry.io/2577929", new AndroidSentryClientFactory(context));
+        Sentry.getContext().setUser(
+                new UserBuilder().setUsername("theta").build()
+        );
         view = LayoutInflater.from(context).inflate(R.layout.default_detail_list_item, parent, false);
         return new vHolder(view);
     }
@@ -73,14 +82,19 @@ public class DetailViewAdapter extends RecyclerView.Adapter<DetailViewAdapter.vH
     @Override
     public void onBindViewHolder(@NonNull final vHolder holder, final int position) {
 
-        if (usageType == UsageType.Agent) {
+        try {
+            if (usageType == UsageType.Agent) {
 //            Log.e("State", "OJk");
-            displayAgents(holder, position);
-        } else if (usageType == UsageType.Provider) {
-            displayProviders(holder, position);
-        } else if (usageType == UsageType.Person) {
-            displayPersons(holder, position);
+                displayAgents(holder, position);
+            } else if (usageType == UsageType.Provider) {
+                displayProviders(holder, position);
+            } else if (usageType == UsageType.Person) {
+                displayPersons(holder, position);
+            }
+        }catch (Exception e){
+            Sentry.capture(e);
         }
+
 
     }
 
@@ -139,7 +153,7 @@ public class DetailViewAdapter extends RecyclerView.Adapter<DetailViewAdapter.vH
         try {
             Glide.with(context).load(providerList.get(position).getImageLink()).into(holder.personImg);
         }catch (Exception e){
-
+            Toast.makeText(context, "FFFGGGGDSWSFCSE", Toast.LENGTH_SHORT).show();
         }
         holder.f_tv.setText(providerList.get(position).getSpeciality());
 

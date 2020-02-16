@@ -15,29 +15,20 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.view.GravityCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
 import com.thetatecno.fluidadmin.model.CustomerList;
 import com.thetatecno.fluidadmin.model.Facilities;
 import com.thetatecno.fluidadmin.model.Facility;
 import com.thetatecno.fluidadmin.model.Person;
-import com.thetatecno.fluidadmin.model.Provider;
 import com.thetatecno.fluidadmin.model.Staff;
 import com.thetatecno.fluidadmin.model.StaffData;
-import com.thetatecno.fluidadmin.ui.BaseActivity;
 import com.thetatecno.fluidadmin.utils.Constants;
 import com.thetatecno.fluidadmin.utils.PreferenceController;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
-import android.view.Menu;
 
 import java.util.List;
 
@@ -91,6 +82,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             public void onClick(View view) {
                 Snackbar.make(view, "" + usageType.toString(), Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+
             }
         });
 

@@ -46,4 +46,5 @@
     <string name="waiting_area">Waiting Area</string>
     <string name="menu_english_language">English</string>
     <string name="menu_arabic_language">Arabic</string>
+    <string name="id_txt">ID</string>
 </resources>

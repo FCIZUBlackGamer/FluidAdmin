@@ -1,4 +1,4 @@
-package com.thetatecno.fluidadmin.ui;
+package com.thetatecno.fluidadmin;
 
 import android.content.Context;
 import android.os.Bundle;

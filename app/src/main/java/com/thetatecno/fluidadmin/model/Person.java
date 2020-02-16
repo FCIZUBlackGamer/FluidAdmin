@@ -12,10 +12,10 @@ public class Person {
     @SerializedName("FAMILY_NAME")
     @Expose
     private String familyName;
-    @SerializedName("email")
+    @SerializedName("EMAIL")
     @Expose
     private String email;
-    @SerializedName("phone")
+    @SerializedName("PHONE")
     @Expose
     private String mobileNumber;
     @SerializedName("SEX_CODE")
@@ -75,6 +75,7 @@ public class Person {
     public void setId(String id) {
         this.id = id;
     }
+
     public String getFamilyName() {
         return familyName;
     }

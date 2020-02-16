@@ -18,7 +18,7 @@ public class Staff extends Person {
     private String typeCode;
     @SerializedName("FACLITIES")
     @Expose
-    private List<Facility> facilityList = null;
+    private List<Facility> facilityList = new ArrayList<>();
     @SerializedName("SPECIALITY")
     @Expose
     private String speciality;

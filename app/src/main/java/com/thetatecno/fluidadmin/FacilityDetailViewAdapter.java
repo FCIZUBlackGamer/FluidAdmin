@@ -1,6 +1,7 @@
 package com.thetatecno.fluidadmin;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,11 +43,12 @@ public class FacilityDetailViewAdapter extends RecyclerView.Adapter<FacilityDeta
     @Override
     public void onBindViewHolder(@NonNull final vHolder holder, final int position) {
 
-        holder.facilityId_tv.setText(R.string.facilty_id + " "+facilityList.get(position).getCode());
-        holder.deviceID_tv.setText(R.string.deviceId + " "+facilityList.get(position).getDeviceId());
-        holder.typeCode_tv.setText(R.string.type + " "+facilityList.get(position).getType());
-        holder.waId_tv.setText(R.string.waitingAreaID + " "+facilityList.get(position).getWaitingAreaID());
-        holder.desc_tv.setText(R.string.decsription + "\n"+facilityList.get(position).getDescription());
+        Log.e("BING", facilityList.get(position).getCode());
+        holder.facilityId_tv.setText(context.getResources().getText(R.string.facilty_id) + " "+facilityList.get(position).getCode());
+        holder.deviceID_tv.setText(context.getResources().getText(R.string.deviceId )+ " "+facilityList.get(position).getDeviceId());
+        holder.typeCode_tv.setText(context.getResources().getText(R.string.type) + " "+facilityList.get(position).getType());
+        holder.waId_tv.setText(context.getResources().getText(R.string.waitingAreaID) + " "+facilityList.get(position).getWaitingAreaID());
+        holder.desc_tv.setText(context.getResources().getText(R.string.decsription) + "\n"+facilityList.get(position).getDescription());
 
         
         holder.textViewOptions.setOnClickListener(new View.OnClickListener() {
@@ -82,6 +84,7 @@ public class FacilityDetailViewAdapter extends RecyclerView.Adapter<FacilityDeta
   
     @Override
     public int getItemCount() {
+        Log.e("Size Count", facilityList.size()+"");
         return facilityList.size();
     }
 
@@ -96,7 +99,7 @@ public class FacilityDetailViewAdapter extends RecyclerView.Adapter<FacilityDeta
             deviceID_tv = itemView.findViewById(R.id.deviceID_tv);
             typeCode_tv = itemView.findViewById(R.id.typeCode_tv);
             desc_tv = itemView.findViewById(R.id.desc_tv);
-            waId_tv = itemView.findViewById(R.id.desc_tv);
+            waId_tv = itemView.findViewById(R.id.waId_tv);
         }
     }
 }

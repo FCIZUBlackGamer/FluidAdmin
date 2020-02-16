@@ -1,6 +1,7 @@
 package com.thetatecno.fluidadmin;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,10 +21,9 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.bumptech.glide.Glide;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
-import com.thetatecno.fluidadmin.model.Agent;
-import com.thetatecno.fluidadmin.model.Facility;
 import com.thetatecno.fluidadmin.model.Person;
 import com.thetatecno.fluidadmin.model.Provider;
+import com.thetatecno.fluidadmin.model.Staff;
 
 import java.util.List;
 
@@ -37,52 +37,44 @@ enum UsageType {
 public class DetailViewAdapter extends RecyclerView.Adapter<DetailViewAdapter.vHolder> {
     Context context;
     FragmentManager fragmentManager;
-    List<Agent> agentList;
-    List<Provider> providerList;
+    List<Staff> agentList;
+    List<Staff> providerList;
     List<Person> personList;
     UsageType usageType;
 
 
-    DetailViewAdapter(Context context, @Nullable List<Agent> agentList,
-                      @Nullable List<Provider> providerList,
+    DetailViewAdapter(Context context, UsageType usageType, @Nullable List<Staff> agentList,
+                      @Nullable List<Staff> providerList,
                       @Nullable List<Person> personList, FragmentManager fragmentManager) {
         this.agentList = agentList;
         this.context = context;
         this.fragmentManager = fragmentManager;
         this.providerList = providerList;
         this.personList = personList;
+        this.usageType = usageType;
     }
 
     @NonNull
     @Override
     public vHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        usageType = checkWhoIsHere();
+//        usageType = checkWhoIsHere();
+//        Log.e("State", usageType.toString());
         View view;
-        if (usageType == UsageType.Facility){
-            view = LayoutInflater.from(context).inflate(R.layout.default_detail_list_item, parent, false);
-        }else {
-            view = LayoutInflater.from(context).inflate(R.layout.default_detail_list_item, parent, false);
-        }
+//        if (usageType == UsageType.Facility) {
+//            view = LayoutInflater.from(context).inflate(R.layout.facilty_detail_list_item, parent, false);
+//        } else {
+//            view = LayoutInflater.from(context).inflate(R.layout.default_detail_list_item, parent, false);
+//        }
 
+        view = LayoutInflater.from(context).inflate(R.layout.default_detail_list_item, parent, false);
         return new vHolder(view);
-    }
-
-    private UsageType checkWhoIsHere() {
-        if (agentList != null)
-            return UsageType.Agent;
-        else if (providerList != null)
-            return UsageType.Provider;
-        else if (personList != null)
-            return UsageType.Person;
-
-        return null;
     }
 
     @Override
     public void onBindViewHolder(@NonNull final vHolder holder, final int position) {
 
-
         if (usageType == UsageType.Agent) {
+//            Log.e("State", "OJk");
             displayAgents(holder, position);
         } else if (usageType == UsageType.Provider) {
             displayProviders(holder, position);
@@ -99,7 +91,7 @@ public class DetailViewAdapter extends RecyclerView.Adapter<DetailViewAdapter.vH
         holder.f_tv.setVisibility(View.GONE);
         //endregion
 
-        holder.name_tv.setText(personList.get(position).getFullNameList().get(position).getFirstName() + " " + personList.get(position).getFullNameList().get(position).getLastName());
+        holder.name_tv.setText(personList.get(position).getFirstName() + " " + personList.get(position).getFamilyName());
         holder.mail_tv.setText(personList.get(position).getEmail());
         holder.phone_tv.setText(personList.get(position).getMobileNumber());
         Glide.with(context).load(personList.get(position).getImageLink()).into(holder.personImg);
@@ -141,10 +133,14 @@ public class DetailViewAdapter extends RecyclerView.Adapter<DetailViewAdapter.vH
         holder.f_tv.setVisibility(View.VISIBLE);
         //endregion
 
-        holder.name_tv.setText(providerList.get(position).getFullNameList().get(position).getFirstName() + " " + providerList.get(position).getFullNameList().get(position).getLastName());
+        holder.name_tv.setText(providerList.get(position).getFirstName() + " " + providerList.get(position).getFamilyName());
         holder.mail_tv.setText(providerList.get(position).getEmail());
         holder.phone_tv.setText(providerList.get(position).getMobileNumber());
-        Glide.with(context).load(providerList.get(position).getImageLink()).into(holder.personImg);
+        try {
+            Glide.with(context).load(providerList.get(position).getImageLink()).into(holder.personImg);
+        }catch (Exception e){
+
+        }
         holder.f_tv.setText(providerList.get(position).getSpeciality());
 
         holder.textViewOptions.setOnClickListener(new View.OnClickListener() {
@@ -188,13 +184,15 @@ public class DetailViewAdapter extends RecyclerView.Adapter<DetailViewAdapter.vH
         holder.f_tv.setVisibility(View.VISIBLE);
         //endregion
 
-        holder.name_tv.setText(agentList.get(position).getFullNameList().get(position).getFirstName() + " " + agentList.get(position).getFullNameList().get(position).getLastName());
+        holder.name_tv.setText(agentList.get(position).getFirstName() + " " + agentList.get(position).getFamilyName());
         holder.mail_tv.setText(agentList.get(position).getEmail());
         holder.phone_tv.setText(agentList.get(position).getMobileNumber());
         Glide.with(context).load(agentList.get(position).getImageLink()).into(holder.personImg);
         holder.f_tv.setText(R.string.clinics);
 
-        NameAdapter nameAdapter = new NameAdapter(context, agentList.get(position).getFacilities(), holder.pager);
+
+//        Log.e("Size", agentList.get(position).getFacilityList().get(0).getDescription()+"");
+        NameAdapter nameAdapter = new NameAdapter(context, agentList.get(position).getFacilityList(), holder.pager);
         holder.pager.setAdapter(nameAdapter);
 
         new TabLayoutMediator(holder.tabLayout, holder.pager,

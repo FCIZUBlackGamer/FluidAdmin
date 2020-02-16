@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".DetailsFragment">
-
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
     <ImageView
 
         android:id="@+id/addProfileImg"
@@ -18,19 +20,95 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/language_btn"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/us"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addProfileImg" />
+
+        <TextView
+            android:id="@+id/language_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:autoSizeTextType="uniform"
+            android:text="@string/language_txt"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/language_btn"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/language_btn" />
+
+        <TextView
+            android:id="@+id/first_name_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:autoSizeTextType="uniform"
+            android:drawableEnd="@drawable/ic_ambulance"
+            android:drawablePadding="5dp"
+            android:text="@string/first_name"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintStart_toStartOf="@+id/language_txt"
+            app:layout_constraintTop_toBottomOf="@+id/language_btn" />
+
+        <EditText
+            android:id="@+id/first_name_edt_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/first_name"
+            android:inputType="textPersonName"
+            android:paddingStart="5dp"
+            app:layout_constraintBottom_toBottomOf="@+id/first_name_txt"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/first_name_txt"
+            app:layout_constraintTop_toTopOf="@+id/first_name_txt" />
+
+    <TextView
+        android:id="@+id/family_name_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:autoSizeTextType="uniform"
+        android:drawableEnd="@drawable/ic_ambulance"
+        android:drawablePadding="5dp"
+        android:text="@string/family_name_txt"
+        android:textColor="@color/colorPrimary"
+        app:layout_constraintStart_toStartOf="@+id/first_name_txt"
+        app:layout_constraintTop_toBottomOf="@+id/first_name_txt" />
+
+        <EditText
+            android:id="@+id/family_name_edt_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/family_name_txt"
+            android:inputType="textPersonName"
+            android:paddingStart="5dp"
+            app:layout_constraintBottom_toBottomOf="@+id/family_name_txt"
+            app:layout_constraintEnd_toEndOf="@+id/first_name_edt_txt"
+            app:layout_constraintStart_toStartOf="@+id/first_name_edt_txt"
+            app:layout_constraintTop_toTopOf="@+id/family_name_txt" />
+
+
     <TextView
         android:id="@+id/email_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:autoSizeTextType="uniform"
         android:drawableStart="@drawable/ic_email_black_24dp"
         android:drawablePadding="8dp"
         android:text="@string/email_txt"
         android:textColor="@color/colorPrimary"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/addProfileImg" />
+        app:layout_constraintTop_toBottomOf="@+id/family_name_edt_txt" />
 
     <EditText
         android:id="@+id/editText"
@@ -41,9 +119,8 @@
 
         android:inputType="textEmailAddress"
         app:layout_constraintBottom_toBottomOf="@+id/email_txt"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.406"
-        app:layout_constraintStart_toEndOf="@+id/email_txt"
+        app:layout_constraintEnd_toEndOf="@+id/family_name_edt_txt"
+        app:layout_constraintStart_toStartOf="@+id/family_name_edt_txt"
         app:layout_constraintTop_toTopOf="@+id/email_txt"
         app:layout_constraintVertical_bias="0.333" />
 
@@ -90,6 +167,7 @@
         android:id="@+id/cancel_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:background="@color/colorAccent"
         android:hint="@string/cancel_btn_txt"
         android:paddingStart="32dp"
@@ -145,5 +223,5 @@
             tools:layout_editor_absoluteY="154dp" />
 
     </RadioGroup>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

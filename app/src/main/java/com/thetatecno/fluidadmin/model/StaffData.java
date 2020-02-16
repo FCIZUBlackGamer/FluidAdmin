@@ -13,11 +13,11 @@ public class StaffData {
     @Expose
     private String status;
 
-    public List<Staff> getFacilities() {
+    public List<Staff> getStaffList() {
         return staffList;
     }
 
-    public void setFacilities(List<Staff> data) {
+    public void setStaffList(List<Staff> data) {
         this.staffList = data;
     }
 

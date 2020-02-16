@@ -1,9 +1,11 @@
 package com.thetatecno.fluidadmin.retrofiteServices.repositories;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.gson.Gson;
 import com.thetatecno.fluidadmin.OnDataChangedCallBackListener;
 import com.thetatecno.fluidadmin.model.Facilities;
 import com.thetatecno.fluidadmin.model.Facility;
@@ -22,9 +24,9 @@ public class StaffRepository {
 
     MutableLiveData<StaffData> facilitiesMutableLiveData = new MutableLiveData<>();
     private static String TAG = StaffRepository.class.getSimpleName();
-    public MutableLiveData getAllFacilities(final String staffId, final String langId,final String typeCode) {
+    public MutableLiveData getAllStuff( final String langId,final String typeCode) {
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
-        Call<StaffData> call = myServicesInterface.getAllStuff(langId, typeCode,staffId);
+        Call<StaffData> call = myServicesInterface.getAllStuff(langId, typeCode);
         call.enqueue(new Callback<StaffData>() {
             @Override
             public void onResponse(Call<StaffData> call, Response<StaffData> response) {
@@ -32,14 +34,21 @@ public class StaffRepository {
 
                     if (response.body() != null) {
                         facilitiesMutableLiveData.setValue(response.body());
+//                        Gson gson = new Gson();
+//                        Log.e("REsult", gson.toJson(response.body()));
 
+                    }else {
+                        Log.e("Res", "No Data for body");
                     }
+                }else {
+                    Log.e("Res", "No Data");
                 }
             }
 
             @Override
             public void onFailure(Call<StaffData> call, Throwable t) {
                 facilitiesMutableLiveData.setValue(null);
+                Log.e("Error", t.getMessage());
 
             }
         });

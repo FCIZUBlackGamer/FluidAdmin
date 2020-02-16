@@ -8,17 +8,17 @@ import java.util.List;
 public class CustomerList {
     @SerializedName("data")
     @Expose
-    private List<Facility> facilities = null;
+    private List<Person> personList = null;
     @SerializedName("status")
     @Expose
     private String status;
 
-    public List<Facility> getFacilities() {
-        return facilities;
+    public List<Person> getPersonList() {
+        return personList;
     }
 
-    public void setFacilities(List<Facility> data) {
-        this.facilities = data;
+    public void setFacilities(List<Person> data) {
+        this.personList = data;
     }
 
 

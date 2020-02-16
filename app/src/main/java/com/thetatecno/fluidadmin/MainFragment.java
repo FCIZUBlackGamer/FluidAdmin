@@ -7,14 +7,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.thetatecno.fluidadmin.model.Agent;
+import com.google.gson.Gson;
 import com.thetatecno.fluidadmin.model.Facility;
 import com.thetatecno.fluidadmin.model.Person;
 import com.thetatecno.fluidadmin.model.Provider;
+import com.thetatecno.fluidadmin.model.Staff;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,18 +24,18 @@ import java.util.List;
 public class MainFragment extends Fragment {
 
     RecyclerView detailsRecycle;
-    static List<Agent> agentList;
-    static List<Provider> providerList;
-    static List<Person> personList;
-    static List<Facility> facilityList;
+    static List<Staff> agentList = null;
+    static List<Staff> providerList = null;
+    static List<Person> personList = null;
+    static List<Facility> facilityList = null;
     static UsageType usageType;
     DetailViewAdapter detailViewAdapter;
     FacilityDetailViewAdapter facilityDetailViewAdapter;
 
-    public static MainFragment setTypeAndData(UsageType type, @Nullable List<Agent> agentList,
-                                       @Nullable List<Provider> providerList,
-                                       @Nullable List<Person> personList,
-                                       @Nullable List<Facility> facilityList
+    public static MainFragment setTypeAndData(UsageType type, @Nullable List<Staff> agentList,
+                                              @Nullable List<Staff> providerList,
+                                              @Nullable List<Person> personList,
+                                              @Nullable List<Facility> facilityList
     ) {
         usageType = type;
         checkWhoIsHere(agentList, providerList, personList, facilityList);
@@ -52,27 +54,41 @@ public class MainFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+
         if (usageType == UsageType.Facility) {
             facilityDetailViewAdapter = new FacilityDetailViewAdapter(getActivity(), facilityList, getActivity().getSupportFragmentManager());
+            detailsRecycle.setAdapter(facilityDetailViewAdapter);
         } else {
-            detailViewAdapter = new DetailViewAdapter(getActivity(), agentList, providerList, personList, getActivity().getSupportFragmentManager());
+            detailViewAdapter = new DetailViewAdapter(getActivity(), usageType, agentList, providerList, personList, getActivity().getSupportFragmentManager());
+            detailsRecycle.setAdapter(detailViewAdapter);
         }
 
-        detailsRecycle.setAdapter(detailViewAdapter);
     }
 
-    private static UsageType checkWhoIsHere(@Nullable List<Agent> agentList1,
-                                     @Nullable List<Provider> providerList1,
-                                     @Nullable List<Person> personList1,
-                                     @Nullable List<Facility> facilityList1) {
+    private static UsageType checkWhoIsHere(@Nullable List<Staff> agentList1,
+                                            @Nullable List<Staff> providerList1,
+                                            @Nullable List<Person> personList1,
+                                            @Nullable List<Facility> facilityList1) {
         if (usageType == UsageType.Agent) {
             agentList = agentList1;
+            providerList = null;
+            personList = null;
+            facilityList = null;
         } else if (usageType == UsageType.Provider) {
             providerList = providerList1;
+            agentList = null;
+            personList = null;
+            facilityList = null;
         } else if (usageType == UsageType.Person) {
             personList = personList1;
+            agentList = null;
+            providerList = null;
+            facilityList = null;
         } else if (usageType == UsageType.Facility) {
             facilityList = facilityList1;
+            agentList = null;
+            providerList = null;
+            personList = null;
         }
 
         return null;

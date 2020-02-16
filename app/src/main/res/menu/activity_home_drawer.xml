@@ -16,10 +16,29 @@
             android:id="@+id/client"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="@string/client" />
+
         <item
-            android:id="@+id/facility"
+            android:id="@+id/code"
             android:icon="@drawable/ic_menu_manage"
-            android:title="@string/facilty" />
+            android:title="@string/code" />
+
     </group>
+    <item
+        android:id="@+id/facility"
+        android:checkableBehavior="single"
+        android:icon="@drawable/ic_menu_manage"
+        android:title="Facility">
+        <menu>
+            <item
+                android:id="@+id/clinic"
+                android:icon="@drawable/ic_phone"
+                android:title="@string/clinic" />
+
+            <item
+                android:id="@+id/waiting_area"
+                android:icon="@drawable/ic_ambulance"
+                android:title="@string/waiting_area" />
+        </menu>
+    </item>
 
 </menu>

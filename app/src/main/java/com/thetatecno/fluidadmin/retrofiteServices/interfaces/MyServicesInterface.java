@@ -46,7 +46,7 @@ public interface MyServicesInterface {
     Call<Void> updateCode(@Body Code code);
 
     @GET("/ords/fluid/api/staff")
-    Call<StaffData> getAllStuff(@Query("langId") String langId, @Query("typeCode") String typeCode, @Query("staffId") String staffId);
+    Call<StaffData> getAllStuff(@Query("langId") String langId, @Query("typeCode") String typeCode);
 
     @POST("/ords/fluid/api/staff")
     Call<Void> insertNewStuff(@Body Staff staff);

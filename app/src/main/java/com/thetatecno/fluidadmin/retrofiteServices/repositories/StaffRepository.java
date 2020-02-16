@@ -7,6 +7,9 @@ import androidx.lifecycle.MutableLiveData;
 import com.thetatecno.fluidadmin.OnDataChangedCallBackListener;
 import com.thetatecno.fluidadmin.model.Facilities;
 import com.thetatecno.fluidadmin.model.Facility;
+import com.thetatecno.fluidadmin.model.Person;
+import com.thetatecno.fluidadmin.model.Staff;
+import com.thetatecno.fluidadmin.model.StaffData;
 import com.thetatecno.fluidadmin.retrofiteServices.interfaces.MyServicesInterface;
 import com.thetatecno.fluidadmin.retrofiteServices.interfaces.RetrofitInstance;
 import com.thetatecno.fluidadmin.utils.Constants;
@@ -15,16 +18,16 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class FacilityRepository {
-    MutableLiveData<Facilities> facilitiesMutableLiveData = new MutableLiveData<>();
-private static String TAG = FacilityRepository.class.getSimpleName();
+public class StaffRepository {
 
-    public MutableLiveData getAllFacilities(final String facilityId, final String langId,final String typeCode) {
+    MutableLiveData<StaffData> facilitiesMutableLiveData = new MutableLiveData<>();
+    private static String TAG = StaffRepository.class.getSimpleName();
+    public MutableLiveData getAllFacilities(final String staffId, final String langId,final String typeCode) {
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
-        Call<Facilities> call = myServicesInterface.getFacilities(facilityId, langId,typeCode);
-        call.enqueue(new Callback<Facilities>() {
+        Call<StaffData> call = myServicesInterface.getAllStuff(langId, typeCode,staffId);
+        call.enqueue(new Callback<StaffData>() {
             @Override
-            public void onResponse(Call<Facilities> call, Response<Facilities> response) {
+            public void onResponse(Call<StaffData> call, Response<StaffData> response) {
                 if (response.code() == Constants.STATE_OK && response.body() != null) {
 
                     if (response.body() != null) {
@@ -35,7 +38,7 @@ private static String TAG = FacilityRepository.class.getSimpleName();
             }
 
             @Override
-            public void onFailure(Call<Facilities> call, Throwable t) {
+            public void onFailure(Call<StaffData> call, Throwable t) {
                 facilitiesMutableLiveData.setValue(null);
 
             }
@@ -43,16 +46,16 @@ private static String TAG = FacilityRepository.class.getSimpleName();
         return facilitiesMutableLiveData;
     }
 
-    public void insertFacility(final Facility facility, final OnDataChangedCallBackListener onDataChangedCallBackListener) {
+    public void insertNewStaff(final Staff staff, final OnDataChangedCallBackListener onDataChangedCallBackListener) {
 
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
-        Call<Void> call = myServicesInterface.addFacility(facility);
+        Call<Void> call = myServicesInterface.insertNewStuff(staff);
         call.enqueue(new Callback<Void>() {
 
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.code() == Constants.STATE_OK && response.body() != null) {
-                    Log.i(TAG, "add Facility response " + response.toString());
+                    Log.i(TAG, "insertNewStaff: response " + response.toString());
                     onDataChangedCallBackListener.onResponse(true);
                 } else
                     onDataChangedCallBackListener.onResponse(false);
@@ -68,16 +71,16 @@ private static String TAG = FacilityRepository.class.getSimpleName();
 
     }
 
-    public void updateFacility(final Facility facility, final OnDataChangedCallBackListener onDataChangedCallBackListener) {
+    public void updateStaff(final Staff staff, final OnDataChangedCallBackListener onDataChangedCallBackListener) {
 
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
-        Call<Void> call = myServicesInterface.updateFacility(facility);
+        Call<Void> call = myServicesInterface.updateStaff(staff);
         call.enqueue(new Callback<Void>() {
 
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.code() == Constants.STATE_OK && response.body() != null) {
-                    Log.i(TAG, "update Facility response " + response.toString());
+                    Log.i(TAG, "updateStaff: response " + response.toString());
                     onDataChangedCallBackListener.onResponse(true);
                 } else
                     onDataChangedCallBackListener.onResponse(false);
@@ -93,16 +96,16 @@ private static String TAG = FacilityRepository.class.getSimpleName();
 
     }
 
-    public void deleteFacility(final String facilityId, final OnDataChangedCallBackListener onDataChangedCallBackListener) {
+    public void deleteStaff(final String staffId, final OnDataChangedCallBackListener onDataChangedCallBackListener) {
 
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
-        Call<Void> call = myServicesInterface.deleteFacility(facilityId);
+        Call<Void> call = myServicesInterface.deleteStuff(staffId);
         call.enqueue(new Callback<Void>() {
 
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.code() == Constants.STATE_OK && response.body() != null) {
-                    Log.i(TAG, "delete Facility response " + response.toString());
+                    Log.i(TAG, "deleteStaff: response " + response.toString());
                     onDataChangedCallBackListener.onResponse(true);
                 } else
                     onDataChangedCallBackListener.onResponse(false);

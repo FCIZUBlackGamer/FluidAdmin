@@ -1,13 +1,31 @@
 package com.thetatecno.fluidadmin.model;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 public class Person {
-    private List<FullName> fullNameList;
+    @SerializedName("FIRST_NAME")
+    @Expose
+    private String firstName;
+    @SerializedName("FAMILY_NAME")
+    @Expose
+    private String familyName;
+    @SerializedName("email")
+    @Expose
     private String email;
+    @SerializedName("phone")
+    @Expose
     private String mobileNumber;
+    @SerializedName("SEX_CODE")
+    @Expose
     private String gender;
-    private String code;
+    @SerializedName("ID")
+    @Expose
+    private String id;
+    @SerializedName("IMAGE_PATH")
+    @Expose
     String imageLink;
 
     public String getImageLink() {
@@ -18,12 +36,12 @@ public class Person {
         this.imageLink = imageLink;
     }
 
-    public List<FullName> getFullNameList() {
-        return fullNameList;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFullNameList(List<FullName> fullNameList) {
-        this.fullNameList = fullNameList;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getEmail() {
@@ -50,11 +68,19 @@ public class Person {
         this.gender = gender;
     }
 
-    public String getCode() {
-        return code;
+    public String getId() {
+        return id;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setId(String id) {
+        this.id = id;
     }
+    public String getFamilyName() {
+        return familyName;
+    }
+
+    public void setFamilyName(String familyName) {
+        this.familyName = familyName;
+    }
+
 }

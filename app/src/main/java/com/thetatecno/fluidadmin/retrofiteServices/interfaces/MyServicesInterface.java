@@ -2,8 +2,12 @@ package com.thetatecno.fluidadmin.retrofiteServices.interfaces;
 
 import com.thetatecno.fluidadmin.model.Code;
 import com.thetatecno.fluidadmin.model.CodeList;
+import com.thetatecno.fluidadmin.model.CustomerList;
 import com.thetatecno.fluidadmin.model.Facilities;
 import com.thetatecno.fluidadmin.model.Facility;
+import com.thetatecno.fluidadmin.model.Person;
+import com.thetatecno.fluidadmin.model.Staff;
+import com.thetatecno.fluidadmin.model.StaffData;
 import com.thetatecno.fluidadmin.utils.Constants;
 
 import retrofit2.Call;
@@ -19,24 +23,40 @@ public interface MyServicesInterface {
 
     @GET("/ords/fluid/api/facility")
     Call<Facilities> getFacilities(@Query(Constants.FACILITY_ID) String facilityId, @Query(Constants.LANG_ID) String langId, @Query(Constants.FACILITY_TYPE_CODE) String typeCode);
+
     @POST("/ords/fluid/api/facility")
-    Call <Void> addFacility(@Body Facility facility);
+    Call<Void> addFacility(@Body Facility facility);
+
     @DELETE("/ords/fluid/api/facility")
     Call<Void> deleteFacility(@Query(Constants.ID) String facilityId);
+
     @PUT("/ords/fluid/api/facility")
-    Call <Void> updateFacility(@Body Facility facility);
+    Call<Void> updateFacility(@Body Facility facility);
+
     @GET("/ords/fluid/api/code")
     Call<CodeList> getCodes(@Query("code") String code, @Query(Constants.LANG_ID) String langId);
+
     @POST("/ords/fluid/api/code")
-    Call <Void> addCode(@Body Code code);
+    Call<Void> addCode(@Body Code code);
+
     @DELETE("/ords/fluid/api/code")
     Call<Void> deleteCode(@Query("code") String code, @Query("codeType") String codeType);
+
     @PUT("/ords/fluid/api/code")
-    Call <Void> updateCode(@Body Code code);
+    Call<Void> updateCode(@Body Code code);
 
+    @GET("/ords/fluid/api/staff")
+    Call<StaffData> getAllStuff(@Query("langId") String langId, @Query("typeCode") String typeCode, @Query("staffId") String staffId);
 
+    @POST("/ords/fluid/api/staff")
+    Call<Void> insertNewStuff(@Body Staff staff);
 
+    @PUT("/ords/fluid/api/staff")
+    Call<Void> updateStaff(@Body Staff staff);
 
+    @DELETE("/ords/fluid/api/staff")
+    Call<Void> deleteStuff(@Query("staffId")String staffId);
 
-
+    @GET("/ords/fluid/api/client")
+    Call<CustomerList> getAllClients(@Query("clientId")String clientId, @Query("langId") String langId);
 }

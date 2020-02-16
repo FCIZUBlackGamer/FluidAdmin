@@ -22,15 +22,15 @@ import java.util.List;
 public class MainFragment extends Fragment {
 
     RecyclerView detailsRecycle;
-    List<Agent> agentList;
-    List<Provider> providerList;
-    List<Person> personList;
-    List<Facility> facilityList;
-    UsageType usageType;
+    static List<Agent> agentList;
+    static List<Provider> providerList;
+    static List<Person> personList;
+    static List<Facility> facilityList;
+    static UsageType usageType;
     DetailViewAdapter detailViewAdapter;
     FacilityDetailViewAdapter facilityDetailViewAdapter;
 
-    public MainFragment setTypeAndData(UsageType type, @Nullable List<Agent> agentList,
+    public static MainFragment setTypeAndData(UsageType type, @Nullable List<Agent> agentList,
                                        @Nullable List<Provider> providerList,
                                        @Nullable List<Person> personList,
                                        @Nullable List<Facility> facilityList
@@ -61,18 +61,18 @@ public class MainFragment extends Fragment {
         detailsRecycle.setAdapter(detailViewAdapter);
     }
 
-    private UsageType checkWhoIsHere(@Nullable List<Agent> agentList,
-                                     @Nullable List<Provider> providerList,
-                                     @Nullable List<Person> personList,
-                                     @Nullable List<Facility> facilityList) {
+    private static UsageType checkWhoIsHere(@Nullable List<Agent> agentList1,
+                                     @Nullable List<Provider> providerList1,
+                                     @Nullable List<Person> personList1,
+                                     @Nullable List<Facility> facilityList1) {
         if (usageType == UsageType.Agent) {
-            this.agentList = agentList;
+            agentList = agentList1;
         } else if (usageType == UsageType.Provider) {
-            this.providerList = providerList;
+            providerList = providerList1;
         } else if (usageType == UsageType.Person) {
-            this.personList = personList;
+            personList = personList1;
         } else if (usageType == UsageType.Facility) {
-            this.facilityList = facilityList;
+            facilityList = facilityList1;
         }
 
         return null;

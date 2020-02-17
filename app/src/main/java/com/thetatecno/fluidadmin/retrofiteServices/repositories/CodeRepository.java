@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.gson.Gson;
 import com.thetatecno.fluidadmin.OnDataChangedCallBackListener;
 import com.thetatecno.fluidadmin.model.Code;
 import com.thetatecno.fluidadmin.model.CodeList;
@@ -26,7 +27,9 @@ public class CodeRepository {
             @Override
             public void onResponse(Call<CodeList> call, Response<CodeList> response) {
                 if (response.code() == Constants.STATE_OK && response.body() != null) {
-
+                    Log.i(TAG, "get All codes response " + response.toString());
+                                            Gson gson = new Gson();
+                        Log.e("REsult", gson.toJson(response.body()));
                     if (response.body() != null) {
 
                         codesMutableLiveData.setValue(response.body());

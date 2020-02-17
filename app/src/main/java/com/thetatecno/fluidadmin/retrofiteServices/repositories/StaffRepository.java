@@ -34,8 +34,6 @@ public class StaffRepository {
 
                     if (response.body() != null) {
                         facilitiesMutableLiveData.setValue(response.body());
-//                        Gson gson = new Gson();
-//                        Log.e("REsult", gson.toJson(response.body()));
 
                     }else {
                         Log.e("Res", "No Data for body");
@@ -55,7 +53,7 @@ public class StaffRepository {
         return facilitiesMutableLiveData;
     }
 
-    public void insertNewStaff(final Staff staff, final OnDataChangedCallBackListener onDataChangedCallBackListener) {
+    public void insertNewStaff(final Staff staff, final OnDataChangedCallBackListener<Boolean> onDataChangedCallBackListener) {
 
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
         Call<Void> call = myServicesInterface.insertNewStuff(staff);

@@ -1,4 +1,4 @@
-package com.thetatecno.fluidadmin;
+package com.thetatecno.fluidadmin.ui;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;

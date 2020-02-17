@@ -3,7 +3,9 @@ package com.thetatecno.fluidadmin.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Code {
+import java.io.Serializable;
+
+public class Code implements Serializable {
 
     @SerializedName("CODE_TYPE")
     @Expose

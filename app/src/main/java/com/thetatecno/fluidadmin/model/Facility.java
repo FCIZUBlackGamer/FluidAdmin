@@ -3,7 +3,9 @@ package com.thetatecno.fluidadmin.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Facility {
+import java.io.Serializable;
+
+public class Facility implements Serializable {
     @SerializedName("WAITING_AREA_ID")
     @Expose
     private String waitingAreaID;

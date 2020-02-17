@@ -23,16 +23,11 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
-    <string name="menu_tools">Tools</string>
-    <string name="menu_share">Share</string>
-    <string name="menu_send">Send</string>
     <string name="facilty_id">Facilty Id: </string>
     <string name="decsription">Decsription</string>
     <string name="deviceId">Device Id: </string>
     <string name="type">Type: </string>
+    <string name="code_type">Code Type</string>
     <string name="waitingAreaID">Waiting Area Id: </string>
     <string name="Agents">Agents</string>
     <string name="provider">Provider</string>
@@ -47,4 +42,11 @@
     <string name="menu_english_language">English</string>
     <string name="menu_arabic_language">Arabic</string>
     <string name="id_txt">ID</string>
+    <string name="code_txt">Code:</string>
+    <string name="user_code_txt">User Code:</string>
+    <string name="edit_txt">edit</string>
+    <string name="link_to_facility_txt">link to facility</string>
+    <string name="delete_txt">delete</string>
+    <string name="link_to_speciality_txt">link to speciality</string>
+    <string name="options_menu">⋮</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.thetatecno.fluidadmin;
+package com.thetatecno.fluidadmin.ui;
 
 import android.content.Context;
 import android.util.Log;
@@ -9,12 +9,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
+import com.thetatecno.fluidadmin.R;
 import com.thetatecno.fluidadmin.model.Facility;
 
 import java.util.List;
@@ -74,6 +73,10 @@ public class FacilityDetailViewAdapter extends RecyclerView.Adapter<FacilityDeta
                             switch (item.getItemId()) {
                                 case R.id.edit:
                                     //handle edit click
+
+                                    fragmentManager.beginTransaction()
+                                            .replace(R.id.nav_host_fragment, FacilityAddFragment.newInstance(facilityList.get(position)))
+                                            .commit();
                                     break;
                                 case R.id.delete:
                                     //handle delete click

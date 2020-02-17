@@ -1,7 +1,6 @@
-package com.thetatecno.fluidadmin;
+package com.thetatecno.fluidadmin.ui;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,8 +21,8 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.bumptech.glide.Glide;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.thetatecno.fluidadmin.R;
 import com.thetatecno.fluidadmin.model.Person;
-import com.thetatecno.fluidadmin.model.Provider;
 import com.thetatecno.fluidadmin.model.Staff;
 
 import java.util.List;
@@ -36,7 +35,8 @@ enum UsageType {
     Agent,
     Provider,
     Facility,
-    Person
+    Person,
+    Code
 }
 
 public class DetailViewAdapter extends RecyclerView.Adapter<DetailViewAdapter.vHolder> {
@@ -84,7 +84,6 @@ public class DetailViewAdapter extends RecyclerView.Adapter<DetailViewAdapter.vH
 
         try {
             if (usageType == UsageType.Agent) {
-//            Log.e("State", "OJk");
                 displayAgents(holder, position);
             } else if (usageType == UsageType.Provider) {
                 displayProviders(holder, position);
@@ -126,6 +125,7 @@ public class DetailViewAdapter extends RecyclerView.Adapter<DetailViewAdapter.vH
                         switch (item.getItemId()) {
                             case R.id.edit:
                                 //handle edit click
+
                                 break;
                             case R.id.delete:
                                 //handle delete click
@@ -140,7 +140,7 @@ public class DetailViewAdapter extends RecyclerView.Adapter<DetailViewAdapter.vH
         });
     }
 
-    private void displayProviders(final vHolder holder, int position) {
+    private void displayProviders(final vHolder holder, final int position) {
         //region HideViews
         holder.tabLayout.setVisibility(View.GONE);
         holder.pager.setVisibility(View.GONE);
@@ -176,6 +176,9 @@ public class DetailViewAdapter extends RecyclerView.Adapter<DetailViewAdapter.vH
                                 break;
                             case R.id.edit:
                                 //handle edit click
+                                fragmentManager.beginTransaction()
+                                        .replace(R.id.nav_host_fragment, AddNewStaffFragment.newInstance(providerList.get(position)))
+                                        .commit();
                                 break;
                             case R.id.delete:
                                 //handle delete click
@@ -190,7 +193,7 @@ public class DetailViewAdapter extends RecyclerView.Adapter<DetailViewAdapter.vH
         });
     }
 
-    private void displayAgents(final vHolder holder, int position) {
+    private void displayAgents(final vHolder holder, final int position) {
 
         //region ShowViews
         holder.tabLayout.setVisibility(View.VISIBLE);
@@ -236,6 +239,9 @@ public class DetailViewAdapter extends RecyclerView.Adapter<DetailViewAdapter.vH
                                 break;
                             case R.id.edit:
                                 //handle edit click
+                                fragmentManager.beginTransaction()
+                                        .replace(R.id.nav_host_fragment, AddOrUpdateAgentFragment.newInstance(agentList.get(position)))
+                                        .commit();
                                 break;
                             case R.id.delete:
                                 //handle delete click

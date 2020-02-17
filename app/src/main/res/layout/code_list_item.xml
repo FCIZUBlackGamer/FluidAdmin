@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+
+    <TextView
+        android:id="@+id/codeTxtViewOptions"
+        android:layout_width="21dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:paddingLeft="16dp"
+        android:text="@string/options_menu"
+        android:textAppearance="?android:textAppearanceLarge"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/code_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/code_txt"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/codeTxtViewOptions"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textViewOptions" />
+
+    <TextView
+        android:layout_marginTop="8dp"
+        android:id="@+id/codeType_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/code_type"
+        app:layout_constraintStart_toStartOf="@id/code_txt"
+        app:layout_constraintTop_toBottomOf="@id/code_txt" />
+
+    <TextView
+        android:id="@+id/userCode_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/user_code_txt"
+        app:layout_constraintStart_toStartOf="@id/code_txt"
+        app:layout_constraintTop_toBottomOf="@+id/codeType_txt" />
+
+
+    <TextView
+        android:id="@+id/codeDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/decsription"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@id/code_txt"
+        app:layout_constraintTop_toBottomOf="@+id/userCode_txt" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,21 +1,16 @@
-package com.thetatecno.fluidadmin;
+package com.thetatecno.fluidadmin.ui;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.thetatecno.fluidadmin.R;
 import com.thetatecno.fluidadmin.model.Facility;
 
 import java.util.List;

@@ -6,7 +6,6 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-
     <ImageView
         android:id="@+id/person_img"
         android:layout_width="50dp"
@@ -14,56 +13,58 @@
         android:layout_marginStart="16dp"
         android:background="@drawable/ic_account_box_black_24dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textViewOptions" />
+        app:layout_constraintTop_toTopOf="@+id/agentTextViewOptions" />
 
     <TextView
-        android:id="@+id/textViewOptions"
-        android:layout_width="21dp"
+        android:id="@+id/agentTextViewOptions"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:paddingLeft="16dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="8dp"
+
         android:text="@string/options_menu"
         android:textAppearance="?android:textAppearanceLarge"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/facilityId_tv"
+        android:id="@+id/fullNameTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="Mo'men Shaheen"
+        android:text="@string/name_txt"
         android:textStyle="bold"
         android:textSize="24sp"
         app:layout_constraintStart_toEndOf="@+id/person_img"
         app:layout_constraintTop_toTopOf="@+id/person_img" />
 
     <TextView
-        android:id="@+id/deviceID_tv"
+        android:id="@+id/email_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/ic_email_black_24dp"
+        android:drawableStart="@drawable/ic_email_black_24dp"
         android:drawablePadding="5dp"
-        android:text="momen.shahen2020@gmail.com"
-        app:layout_constraintStart_toStartOf="@+id/facilityId_tv"
+        android:text="@string/email_example_txt"
+        app:layout_constraintStart_toStartOf="@+id/fullNameTxt"
         app:layout_constraintTop_toBottomOf="@+id/person_img" />
 
     <TextView
-        android:id="@+id/typeCode_tv"
+        android:id="@+id/mobile_num_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:drawableLeft="@drawable/ic_phone_black_24dp"
+        android:drawableStart="@drawable/ic_phone_black_24dp"
         android:drawablePadding="5dp"
-        android:text="+201020118856"
-        app:layout_constraintStart_toStartOf="@+id/facilityId_tv"
-        app:layout_constraintTop_toBottomOf="@+id/deviceID_tv" />
+        android:text="@string/phone_example_txt"
+        app:layout_constraintStart_toStartOf="@+id/email_txt"
+        app:layout_constraintTop_toBottomOf="@+id/email_txt" />
 
     <TextView
-        android:id="@+id/desc_tv"
+        android:id="@+id/facilityTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -73,7 +74,7 @@
         android:layout_marginBottom="5dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/typeCode_tv" />
+        app:layout_constraintTop_toBottomOf="@+id/mobile_num_txt" />
 
 
     <androidx.viewpager2.widget.ViewPager2
@@ -82,14 +83,15 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/desc_tv" />
+        app:layout_constraintTop_toBottomOf="@+id/facilityTitle" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:tabBackground="@drawable/tab_selector"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/photo_viewpager"
+        app:tabBackground="@drawable/tab_selector"
         app:tabGravity="center"
         app:tabIndicatorHeight="0dp"
         tools:ignore="MissingConstraints" />

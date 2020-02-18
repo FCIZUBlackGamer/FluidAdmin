@@ -105,7 +105,7 @@ public class CodeRepository {
 
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                if (response.code() == Constants.STATE_OK && response.body() != null) {
+                if (response.isSuccessful()) {
                     Log.i(TAG, "delete code response " + response.toString());
                     onDataChangedCallBackListener.onResponse(true);
                 } else

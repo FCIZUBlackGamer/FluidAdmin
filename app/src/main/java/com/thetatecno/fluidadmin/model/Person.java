@@ -21,8 +21,8 @@ public class Person {
     @SerializedName("SEX_CODE")
     @Expose
     private String gender;
-    @SerializedName("ID")
-    @Expose
+//    @SerializedName("ID")
+//    @Expose
     private String id;
     @SerializedName("IMAGE_PATH")
     @Expose

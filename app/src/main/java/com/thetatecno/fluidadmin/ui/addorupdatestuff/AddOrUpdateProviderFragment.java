@@ -1,4 +1,5 @@
-package com.thetatecno.fluidadmin.ui;
+package com.thetatecno.fluidadmin.ui.addorupdatestuff;
+
 
 import android.os.Bundle;
 
@@ -21,18 +22,14 @@ import com.thetatecno.fluidadmin.model.Staff;
 import com.thetatecno.fluidadmin.utils.EnumCode;
 
 
-public class AddOrUpdateAgentFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-
-
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class AddOrUpdateProviderFragment extends Fragment {
     private static String TAG = "AddStaff";
-
+    private static String ARG_CODE_TYPE = "codeType";
     private static String ARG_STAFF = "staff";
-
+    private String codeType;
     EditText idTxt;
     EditText firstNameTxt;
     EditText lastNameTxt;
@@ -45,12 +42,12 @@ public class AddOrUpdateAgentFragment extends Fragment {
     boolean isStaffHasData;
     Staff staff;
 
-    public AddOrUpdateAgentFragment() {
+    public AddOrUpdateProviderFragment() {
         // Required empty public constructor
     }
 
-    public static AddOrUpdateAgentFragment newInstance(Staff staff) {
-        AddOrUpdateAgentFragment fragment = new AddOrUpdateAgentFragment();
+    public static AddOrUpdateProviderFragment newInstance(Staff staff) {
+        AddOrUpdateProviderFragment fragment = new AddOrUpdateProviderFragment();
         Log.i(TAG, "new Instance method");
         Bundle args = new Bundle();
         args.putSerializable(ARG_STAFF, staff);
@@ -71,7 +68,7 @@ public class AddOrUpdateAgentFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_or_update_agent, container, false);
+        return inflater.inflate(R.layout.fragment_add_new_staff, container, false);
     }
 
     @Override
@@ -100,21 +97,23 @@ public class AddOrUpdateAgentFragment extends Fragment {
                     staff.setGender(EnumCode.Gender.F.toString());
                 staff.setEmail(emailTxt.getText().toString());
                 staff.setMobileNumber(phoneTxt.getText().toString());
-                staff.setTypeCode(EnumCode.StaffTypeCode.DSPTCHR.toString());
-
+                if (codeType.equals(EnumCode.UsageType.Agent.toString()))
+                    staff.setTypeCode(EnumCode.StaffTypeCode.DSPTCHR.toString());
+                else
+                    staff.setTypeCode(EnumCode.StaffTypeCode.PRVDR.toString());
 
                 if (!isStaffHasData) {
                     addOrUpdateViewModel.addNewStaff(staff).observe(getActivity(), new Observer<String>() {
                         @Override
                         public void onChanged(String s) {
-                            Log.i("AddOrUpdate", "add agent message" + s);
+                            Log.i("AddOrUpdate", "add staff message" + s);
                         }
                     });
                 } else {
                     addOrUpdateViewModel.updateStaff(staff).observe(getActivity(), new Observer<String>() {
                         @Override
                         public void onChanged(String s) {
-                            Log.i("AddOrUpdate", "Update agent message" + s);
+                            Log.i("AddOrUpdate", "Update staff message" + s);
                         }
                     });
                 }
@@ -151,6 +150,5 @@ public class AddOrUpdateAgentFragment extends Fragment {
             addBtn.setText(getResources().getString(R.string.add_txt));
         }
     }
-
 
 }

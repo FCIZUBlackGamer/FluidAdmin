@@ -5,7 +5,7 @@
     <string name="first_name_ar" translatable="false">الأسم الأول</string>
     <string name="family_name_txt">اسم العائلة</string>
     <string name="family_name_ar_txt" translatable="false">أسم العائلة</string>
-    <string name="language_txt">English</string>
+    <string name="language_txt">الانجليزية</string>
     <string name="language_ar_txt" translatable="false">العربية</string>
 
     <string name="email_txt">الايميل</string>
@@ -28,20 +28,20 @@
 
     <string name="facilty_id">Facilty Id: </string>
     <string name="decsription">الوصف</string>
-    <string name="deviceId">Device Id: </string>
+    <string name="deviceId">رقم الجهاز التعريفي </string>
     <string name="type">النوع:</string>
-    <string name="waitingAreaID">Waiting Area Id: </string>
-    <string name="Agents">Agents</string>
-    <string name="provider">Provider</string>
-    <string name="client">Client</string>
-    <string name="facilty">Facility</string>
+    <string name="waitingAreaID">ؤقم قاعة الانتظار </string>
+    <string name="Agents">عاملين</string>
+    <string name="provider">دكاترة</string>
+    <string name="client">مرضي</string>
+    <string name="facilty">عيادات</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="code">Code</string>
-    <string name="clinic">Clinic</string>
-    <string name="waiting_area">Waiting Area</string>
-    <string name="menu_english_language">English</string>
+    <string name="code">اكواد</string>
+    <string name="clinic">العيادات</string>
+    <string name="waiting_area">قاعات النتظار</string>
+    <string name="menu_english_language">الانجليزية</string>
     <string name="menu_arabic_language">العربية</string>
     <string name="id_txt">ID</string>
     <string name="code_txt">Code:</string>

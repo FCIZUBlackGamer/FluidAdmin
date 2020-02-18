@@ -1,5 +1,4 @@
-package com.thetatecno.fluidadmin.ui;
-
+package com.thetatecno.fluidadmin.ui.addorupdatestuff;
 
 import android.os.Bundle;
 
@@ -22,14 +21,18 @@ import com.thetatecno.fluidadmin.model.Staff;
 import com.thetatecno.fluidadmin.utils.EnumCode;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class AddNewStaffFragment extends Fragment {
+public class AddOrUpdateAgentFragment extends Fragment {
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+
+
+
     private static String TAG = "AddStaff";
-    private static String ARG_CODE_TYPE = "codeType";
+
     private static String ARG_STAFF = "staff";
-    private String codeType;
+
     EditText idTxt;
     EditText firstNameTxt;
     EditText lastNameTxt;
@@ -42,12 +45,12 @@ public class AddNewStaffFragment extends Fragment {
     boolean isStaffHasData;
     Staff staff;
 
-    public AddNewStaffFragment() {
+    public AddOrUpdateAgentFragment() {
         // Required empty public constructor
     }
 
-    public static AddNewStaffFragment newInstance(Staff staff) {
-        AddNewStaffFragment fragment = new AddNewStaffFragment();
+    public static AddOrUpdateAgentFragment newInstance(Staff staff) {
+        AddOrUpdateAgentFragment fragment = new AddOrUpdateAgentFragment();
         Log.i(TAG, "new Instance method");
         Bundle args = new Bundle();
         args.putSerializable(ARG_STAFF, staff);
@@ -68,7 +71,7 @@ public class AddNewStaffFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_new_staff, container, false);
+        return inflater.inflate(R.layout.fragment_add_or_update_agent, container, false);
     }
 
     @Override
@@ -97,23 +100,21 @@ public class AddNewStaffFragment extends Fragment {
                     staff.setGender(EnumCode.Gender.F.toString());
                 staff.setEmail(emailTxt.getText().toString());
                 staff.setMobileNumber(phoneTxt.getText().toString());
-                if (codeType.equals(EnumCode.UsageType.Agent.toString()))
-                    staff.setTypeCode(EnumCode.StaffTypeCode.DSPTCHR.toString());
-                else
-                    staff.setTypeCode(EnumCode.StaffTypeCode.PRVDR.toString());
+                staff.setTypeCode(EnumCode.StaffTypeCode.DSPTCHR.toString());
+
 
                 if (!isStaffHasData) {
                     addOrUpdateViewModel.addNewStaff(staff).observe(getActivity(), new Observer<String>() {
                         @Override
                         public void onChanged(String s) {
-                            Log.i("AddOrUpdate", "add staff message" + s);
+                            Log.i("AddOrUpdate", "add agent message" + s);
                         }
                     });
                 } else {
                     addOrUpdateViewModel.updateStaff(staff).observe(getActivity(), new Observer<String>() {
                         @Override
                         public void onChanged(String s) {
-                            Log.i("AddOrUpdate", "Update staff message" + s);
+                            Log.i("AddOrUpdate", "Update agent message" + s);
                         }
                     });
                 }
@@ -150,5 +151,6 @@ public class AddNewStaffFragment extends Fragment {
             addBtn.setText(getResources().getString(R.string.add_txt));
         }
     }
+
 
 }

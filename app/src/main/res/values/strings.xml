@@ -49,4 +49,12 @@
     <string name="delete_txt">delete</string>
     <string name="link_to_speciality_txt">link to speciality</string>
     <string name="options_menu">⋮</string>
+    <string name="ok_txt_btn">Ok</string>
+    <string name="delete_title_dialog">Do you want to Delete?</string>
+    <string name="name_txt">Name</string>
+    <string name="speciality_txt">Speciality</string>
+    <string name="email_example_txt">momen.shahen2020@gmail.com</string>
+    <string name="exception_glide_txt">Exception while loading image using Glide</string>
+    <string name="phone_example_txt">+201020118856</string>
+    <string name="clinic_example_txt">ENT10</string>
 </resources>

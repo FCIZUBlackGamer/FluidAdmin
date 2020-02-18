@@ -9,13 +9,13 @@
 
     <TextView
         android:id="@+id/codeTxtViewOptions"
-        android:layout_width="21dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:paddingLeft="16dp"
+        android:paddingStart="16dp"
         android:text="@string/options_menu"
         android:textAppearance="?android:textAppearanceLarge"
         app:layout_constraintEnd_toEndOf="parent"
@@ -31,7 +31,7 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/codeTxtViewOptions"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textViewOptions" />
+        app:layout_constraintTop_toTopOf="@+id/codeTxtViewOptions" />
 
     <TextView
         android:layout_marginTop="8dp"

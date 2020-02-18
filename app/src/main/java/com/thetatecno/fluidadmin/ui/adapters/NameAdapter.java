@@ -1,4 +1,4 @@
-package com.thetatecno.fluidadmin.ui;
+package com.thetatecno.fluidadmin.ui.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;

@@ -25,7 +25,7 @@ private static String TAG = FacilityRepository.class.getSimpleName();
         call.enqueue(new Callback<Facilities>() {
             @Override
             public void onResponse(Call<Facilities> call, Response<Facilities> response) {
-                if (response.code() == Constants.STATE_OK && response.body() != null) {
+                if (response.isSuccessful()) {
 
                     if (response.body() != null) {
                         facilitiesMutableLiveData.setValue(response.body());
@@ -101,11 +101,14 @@ private static String TAG = FacilityRepository.class.getSimpleName();
 
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                if (response.code() == Constants.STATE_OK && response.body() != null) {
+                if (response.code() == Constants.STATE_OK) {
                     Log.i(TAG, "delete Facility response " + response.toString());
                     onDataChangedCallBackListener.onResponse(true);
-                } else
+                } else {
+                    Log.i(TAG, "Failed to delete Facility response " + response.toString());
+
                     onDataChangedCallBackListener.onResponse(false);
+                }
             }
 
             @Override

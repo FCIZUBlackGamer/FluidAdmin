@@ -1,4 +1,4 @@
-package com.thetatecno.fluidadmin.ui;
+package com.thetatecno.fluidadmin.ui.addorupdatefacility;
 
 
 import androidx.lifecycle.MutableLiveData;

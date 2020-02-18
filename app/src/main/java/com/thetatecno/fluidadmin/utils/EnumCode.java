@@ -15,7 +15,8 @@ public class EnumCode {
         Agent,
         Provider,
         Facility,
-        Person
+        Person,
+       Code
     }
 
     public enum Gender {

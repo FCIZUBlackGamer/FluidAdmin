@@ -3,9 +3,10 @@ package com.thetatecno.fluidadmin.ui;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.thetatecno.fluidadmin.model.CodeList;
-import com.thetatecno.fluidadmin.model.CustomerList;
-import com.thetatecno.fluidadmin.model.Facilities;
+import com.thetatecno.fluidadmin.OnDataChangedCallBackListener;
+import com.thetatecno.fluidadmin.model.Code;
+import com.thetatecno.fluidadmin.model.Facility;
+import com.thetatecno.fluidadmin.model.Staff;
 import com.thetatecno.fluidadmin.model.StaffData;
 import com.thetatecno.fluidadmin.retrofiteServices.repositories.ClientRepository;
 import com.thetatecno.fluidadmin.retrofiteServices.repositories.CodeRepository;
@@ -17,6 +18,8 @@ public class MainViewModel extends ViewModel {
     CodeRepository codeRepository = new CodeRepository();
     FacilityRepository facilityRepository = new FacilityRepository();
     ClientRepository clientRepository = new ClientRepository();
+    MutableLiveData<String> deletedMessageLiveData = new MutableLiveData<>();
+    String message;
 
 
     public MutableLiveData<StaffData> getStaffDataForAgents(String langId, String typeCode) {
@@ -29,19 +32,63 @@ public class MainViewModel extends ViewModel {
         return staffRepository.getAllStuff(langId, typeCode);
     }
 
-    public MutableLiveData<Facilities> getStaffDataForClinics(String facilityId, String langId, String typeCode) {
+    public MutableLiveData getStaffDataForClinics(String facilityId, String langId, String typeCode) {
 
         return facilityRepository.getAllFacilities(facilityId, langId, typeCode);
     }
 
-    public MutableLiveData<CustomerList> getStaffDataForPerson(String facilityId, String langId) {
+    public MutableLiveData getAllClients(String facilityId, String langId) {
 
         return clientRepository.getAllClients(facilityId, langId);
     }
 
-    public MutableLiveData<CodeList> getStaffDataForCode(String facilityId, String langId) {
+    public MutableLiveData getDataForCode(String facilityId, String langId) {
 
         return codeRepository.getAllCodes(facilityId, langId);
+    }
+
+    public MutableLiveData<String> deleteAgentOrProvider(final Staff staff){
+        staffRepository.deleteStaff(staff.getStaffId(), new OnDataChangedCallBackListener<Boolean>() {
+            @Override
+            public void onResponse(Boolean b) {
+                if(b.booleanValue())
+                    message = "Delete successfully staff "+staff.getFirstName();
+                else
+                    message = "Failed to delete.";
+                deletedMessageLiveData.setValue(message);
+
+            }
+        });
+        return deletedMessageLiveData;
+    }
+    public MutableLiveData<String> deleteCode(final Code code){
+        codeRepository.deleteCode(code.getCodeType(),code.getCode(), new OnDataChangedCallBackListener<Boolean>() {
+            @Override
+            public void onResponse(Boolean b) {
+                if(b)
+                    message = "Delete code successfully "+code.getCode() ;
+
+                else
+                    message = "Failed to delete code "+code.getCode();
+                deletedMessageLiveData.setValue(message);
+
+            }
+        });
+        return deletedMessageLiveData;
+    }
+    public MutableLiveData<String> deleteFacility(final Facility facility){
+        facilityRepository.deleteFacility(facility.getCode(), new OnDataChangedCallBackListener<Boolean>() {
+            @Override
+            public void onResponse(Boolean b) {
+                if(b.booleanValue())
+                    message = "Delete facility successfully" +facility.getCode();
+                else
+                    message = "Failed to delete code "+facility.getCode();
+                deletedMessageLiveData.setValue(message);
+
+            }
+        });
+        return deletedMessageLiveData;
     }
 
 }

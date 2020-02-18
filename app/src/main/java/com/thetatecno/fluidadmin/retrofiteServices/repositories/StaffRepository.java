@@ -111,16 +111,19 @@ public class StaffRepository {
 
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                if (response.code() == Constants.STATE_OK && response.body() != null) {
+                if (response.isSuccessful()) {
                     Log.i(TAG, "deleteStaff: response " + response.toString());
                     onDataChangedCallBackListener.onResponse(true);
-                } else
+                } else {
+                    Log.i(TAG, "deleteStaff: state not ok  response " + response.toString());
                     onDataChangedCallBackListener.onResponse(false);
+                }
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
                 call.cancel();
+                Log.i(TAG, "deleteStaff: onFailure:  " + t.toString());
                 onDataChangedCallBackListener.onResponse(false);
             }
 

@@ -9,6 +9,7 @@ import com.google.android.material.snackbar.Snackbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -18,6 +19,9 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.navigation.NavigationView;
 import com.thetatecno.fluidadmin.R;
+import com.thetatecno.fluidadmin.listeners.OnConfirmDeleteListener;
+import com.thetatecno.fluidadmin.listeners.OnDeleteListener;
+import com.thetatecno.fluidadmin.listeners.OnFragmentInteractionListener;
 import com.thetatecno.fluidadmin.model.Code;
 import com.thetatecno.fluidadmin.model.CodeList;
 import com.thetatecno.fluidadmin.model.CustomerList;
@@ -26,6 +30,10 @@ import com.thetatecno.fluidadmin.model.Facility;
 import com.thetatecno.fluidadmin.model.Person;
 import com.thetatecno.fluidadmin.model.Staff;
 import com.thetatecno.fluidadmin.model.StaffData;
+import com.thetatecno.fluidadmin.ui.addorupdatecode.CodeAddFragment;
+import com.thetatecno.fluidadmin.ui.addorupdatefacility.FacilityAddFragment;
+import com.thetatecno.fluidadmin.ui.addorupdatestuff.AddOrUpdateAgentFragment;
+import com.thetatecno.fluidadmin.ui.addorupdatestuff.AddOrUpdateProviderFragment;
 import com.thetatecno.fluidadmin.utils.Constants;
 import com.thetatecno.fluidadmin.utils.PreferenceController;
 import com.thetatecno.fluidadmin.utils.EnumCode;
@@ -43,18 +51,20 @@ import io.sentry.event.BreadcrumbBuilder;
 import io.sentry.event.UserBuilder;
 
 
-public class HomeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener , OnFragmentInteractionListener {
+public class HomeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, OnFragmentInteractionListener, OnDeleteListener, OnConfirmDeleteListener {
 
     List<Staff> agentList;
     List<Staff> providerList;
     List<Person> personList;
     List<Facility> facilityList;
     List<Code> codeList;
-    static UsageType usageType;
+    static EnumCode.UsageType usageType;
     MainViewModel mainViewModel;
     private static SentryClient sentry;
     NavigationView navigationView;
     static String langId;
+    ConfirmDeleteDialog confirmDeleteDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,10 +87,10 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 public void onChanged(StaffData staffData) {
                     if (staffData != null) {
                         if (staffData.getStaffList() != null) {
-                            usageType = UsageType.Agent;
+                            usageType = EnumCode.UsageType.Agent;
                             agentList = staffData.getStaffList();
                             getSupportFragmentManager().beginTransaction()
-                                    .replace(R.id.nav_host_fragment, MainFragment.setTypeAndData(UsageType.Agent, agentList, null, null, null,null))
+                                    .replace(R.id.nav_host_fragment, MainFragment.setTypeAndData(EnumCode.UsageType.Agent, agentList, null, null, null, null))
                                     .commit();
                         } else {
                             Log.e("Staff List", "Is Null");
@@ -100,34 +110,31 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             public void onClick(View view) {
                 Snackbar.make(view, "" + usageType.toString(), Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                if(usageType == UsageType.Provider) {
+                if (usageType == EnumCode.UsageType.Provider) {
                     getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.nav_host_fragment, AddNewStaffFragment.newInstance(null))
+                            .replace(R.id.nav_host_fragment, AddOrUpdateProviderFragment.newInstance(null))
                             .addToBackStack("AddNewStaffFragment")
                             .commit();
-                }
-                else if(usageType == UsageType.Agent){
+                } else if (usageType == EnumCode.UsageType.Agent) {
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.nav_host_fragment, AddOrUpdateAgentFragment.newInstance(null))
                             .addToBackStack("AddOrUpdateAgentFragment")
                             .commit();
 
-                }
-                else if(usageType == UsageType.Code){
+                } else if (usageType == EnumCode.UsageType.Code) {
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.nav_host_fragment, CodeAddFragment.newInstance(null))
                             .addToBackStack("CodeAddFragment")
 
                             .commit();
-                }
-                else if(usageType == UsageType.Facility){
+                } else if (usageType == EnumCode.UsageType.Facility) {
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.nav_host_fragment, FacilityAddFragment.newInstance(null))
                             .addToBackStack("FacilityAddFragment")
                             .commit();
                 }
 
-             fab.setVisibility(View.GONE);
+                fab.setVisibility(View.GONE);
             }
 
         });
@@ -162,10 +169,10 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                         public void onChanged(StaffData staffData) {
                             if (staffData != null) {
                                 if (staffData.getStaffList() != null) {
-                                    usageType = UsageType.Agent;
+                                    usageType = EnumCode.UsageType.Agent;
                                     agentList = staffData.getStaffList();
                                     getSupportFragmentManager().beginTransaction()
-                                            .replace(R.id.nav_host_fragment, MainFragment.setTypeAndData(UsageType.Agent, agentList, null, null, null,null))
+                                            .replace(R.id.nav_host_fragment, MainFragment.setTypeAndData(EnumCode.UsageType.Agent, agentList, null, null, null, null))
                                             .commit();
                                 } else {
                                     Log.e("Staff List", "Is Null");
@@ -188,10 +195,10 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                         public void onChanged(StaffData staffData) {
                             if (staffData != null) {
                                 if (staffData.getStaffList() != null) {
-                                    usageType = UsageType.Provider;
+                                    usageType = EnumCode.UsageType.Provider;
                                     providerList = staffData.getStaffList();
                                     getSupportFragmentManager().beginTransaction()
-                                            .replace(R.id.nav_host_fragment, MainFragment.setTypeAndData(UsageType.Provider, null, providerList, null, null,null))
+                                            .replace(R.id.nav_host_fragment, MainFragment.setTypeAndData(EnumCode.UsageType.Provider, null, providerList, null, null, null))
                                             .commit();
                                 } else {
                                     Log.e("Staff List", "Is Null");
@@ -210,15 +217,15 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 Sentry.getContext().recordBreadcrumb(new BreadcrumbBuilder().setMessage("User Clicked Client Button From Navigation Drawer").build());
 
                 try {
-                    mainViewModel.getStaffDataForPerson("", langId).observe(this, new Observer<CustomerList>() {
+                    mainViewModel.getAllClients("", langId).observe(this, new Observer<CustomerList>() {
                         @Override
                         public void onChanged(CustomerList customerList) {
                             if (customerList != null) {
                                 if (customerList.getPersonList() != null) {
                                     personList = customerList.getPersonList();
-                                    usageType = UsageType.Person;
+                                    usageType = EnumCode.UsageType.Person;
                                     getSupportFragmentManager().beginTransaction()
-                                            .replace(R.id.nav_host_fragment, MainFragment.setTypeAndData(UsageType.Person, null, null, personList, null,null))
+                                            .replace(R.id.nav_host_fragment, MainFragment.setTypeAndData(EnumCode.UsageType.Person, null, null, personList, null, null))
                                             .commit();
                                 }
                             }
@@ -234,16 +241,16 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             case R.id.code:
                 Sentry.getContext().recordBreadcrumb(new BreadcrumbBuilder().setMessage("User Clicked Code Button From Navigation Drawer").build());
                 try {
-                    mainViewModel.getStaffDataForCode("", langId).observe(this, new Observer<CodeList>() {
+                    mainViewModel.getDataForCode("", langId).observe(this, new Observer<CodeList>() {
                         @Override
                         public void onChanged(CodeList codeList1) {
                             if (codeList1 != null) {
                                 if (codeList1.getCodeList() != null) {
                                     codeList = codeList1.getCodeList();
 
-                                    usageType = UsageType.Code;
+                                    usageType = EnumCode.UsageType.Code;
                                     getSupportFragmentManager().beginTransaction()
-                                            .replace(R.id.nav_host_fragment, MainFragment.setTypeAndData(UsageType.Code, null, null, null, null,codeList))
+                                            .replace(R.id.nav_host_fragment, MainFragment.setTypeAndData(EnumCode.UsageType.Code, null, null, null, null, codeList))
                                             .commit();
                                 }
                             }
@@ -262,10 +269,10 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                         public void onChanged(Facilities facilities) {
                             if (facilities != null) {
                                 if (facilities.getFacilities() != null) {
-                                    usageType = UsageType.Facility;
+                                    usageType = EnumCode.UsageType.Facility;
                                     facilityList = facilities.getFacilities();
                                     getSupportFragmentManager().beginTransaction()
-                                            .replace(R.id.nav_host_fragment, MainFragment.setTypeAndData(UsageType.Facility, null, null, null, facilityList,null))
+                                            .replace(R.id.nav_host_fragment, MainFragment.setTypeAndData(EnumCode.UsageType.Facility, null, null, null, facilityList, null))
                                             .commit();
                                 }
                             }
@@ -287,10 +294,10 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                         public void onChanged(Facilities facilities) {
                             if (facilities != null) {
                                 if (facilities.getFacilities() != null) {
-                                    usageType = UsageType.Facility;
+                                    usageType = EnumCode.UsageType.Facility;
                                     facilityList = facilities.getFacilities();
                                     getSupportFragmentManager().beginTransaction()
-                                            .replace(R.id.nav_host_fragment, MainFragment.setTypeAndData(UsageType.Facility, null, null, null, facilityList,null))
+                                            .replace(R.id.nav_host_fragment, MainFragment.setTypeAndData(EnumCode.UsageType.Facility, null, null, null, facilityList, null))
                                             .commit();
                                 }
                             }
@@ -323,6 +330,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
         }
     }
+
     private void changeLanguage(String language) {
         if (!PreferenceController.getInstance(this).get(PreferenceController.LANGUAGE).equals(language)) {
             if (PreferenceController.getInstance(this).get(PreferenceController.LANGUAGE).equals(Constants.ARABIC)) {
@@ -340,6 +348,47 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     public void onFragmentInteraction() {
-        getSupportFragmentManager().popBackStack("CodeAddFragment",0);
+        getSupportFragmentManager().popBackStack("CodeAddFragment", 0);
+    }
+    @Override
+    public void onDeleteButtonClicked(Object itemClicked) {
+         confirmDeleteDialog = new ConfirmDeleteDialog(this,itemClicked);
+        confirmDeleteDialog.show();
+
+    }
+
+    @Override
+    public void onOkButtonClicked(Object itemDeleted) {
+        if(confirmDeleteDialog.isShowing()){
+            confirmDeleteDialog.dismiss();
+        }
+        if(itemDeleted instanceof Facility) {
+            Log.i("Object", "facility type " + ((Facility) itemDeleted).getCode());
+            mainViewModel.deleteFacility((Facility) itemDeleted).observe(this, new Observer<String>() {
+                @Override
+                public void onChanged(String s) {
+                    Toast.makeText(HomeActivity.this,s,Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+        if(itemDeleted instanceof Staff) {
+            Log.i("Object", "staff type " + ((Staff) itemDeleted).getStaffId());
+            mainViewModel.deleteAgentOrProvider((Staff) itemDeleted).observe(this, new Observer<String>() {
+                @Override
+                public void onChanged(String s) {
+                    Toast.makeText(HomeActivity.this,s,Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+        if(itemDeleted instanceof Code) {
+            Log.i("Object", "code type " + ((Code) itemDeleted).getCode());
+            mainViewModel.deleteCode((Code) itemDeleted).observe(this, new Observer<String>() {
+                @Override
+                public void onChanged(String s) {
+                    Toast.makeText(HomeActivity.this,s,Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
     }
 }

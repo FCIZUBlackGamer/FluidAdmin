@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Staff extends Person implements Serializable {
-    @SerializedName("staffId")
+    @SerializedName("ID")
     @Expose
     private String staffId;
     @SerializedName("specialityCode")

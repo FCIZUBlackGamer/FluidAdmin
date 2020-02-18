@@ -1,7 +1,6 @@
-package com.thetatecno.fluidadmin.ui;
+package com.thetatecno.fluidadmin.ui.addorupdatecode;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +14,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.thetatecno.fluidadmin.R;
+import com.thetatecno.fluidadmin.listeners.OnFragmentInteractionListener;
 import com.thetatecno.fluidadmin.model.Code;
 
 

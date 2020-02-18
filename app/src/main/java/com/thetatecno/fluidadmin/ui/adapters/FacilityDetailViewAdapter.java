@@ -1,4 +1,4 @@
-package com.thetatecno.fluidadmin.ui;
+package com.thetatecno.fluidadmin.ui.adapters;
 
 import android.content.Context;
 import android.util.Log;
@@ -14,7 +14,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.thetatecno.fluidadmin.R;
+import com.thetatecno.fluidadmin.listeners.OnDeleteListener;
 import com.thetatecno.fluidadmin.model.Facility;
+import com.thetatecno.fluidadmin.ui.addorupdatefacility.FacilityAddFragment;
 
 import java.util.List;
 
@@ -26,12 +28,18 @@ public class FacilityDetailViewAdapter extends RecyclerView.Adapter<FacilityDeta
     Context context;
     FragmentManager fragmentManager;
     List<Facility> facilityList;
+    OnDeleteListener listener;
 
 
-    FacilityDetailViewAdapter(Context context, List<Facility> facilityList, FragmentManager fragmentManager) {
+    public FacilityDetailViewAdapter(Context context, List<Facility> facilityList, FragmentManager fragmentManager) {
         this.facilityList = facilityList;
         this.context = context;
         this.fragmentManager = fragmentManager;
+        if (context instanceof OnDeleteListener)
+            listener = (OnDeleteListener) context;
+        else
+            listener = null;
+
     }
 
     @NonNull
@@ -73,14 +81,17 @@ public class FacilityDetailViewAdapter extends RecyclerView.Adapter<FacilityDeta
                             switch (item.getItemId()) {
                                 case R.id.edit:
                                     //handle edit click
-
                                     fragmentManager.beginTransaction()
                                             .replace(R.id.nav_host_fragment, FacilityAddFragment.newInstance(facilityList.get(position)))
                                             .commit();
                                     break;
+
                                 case R.id.delete:
-                                    //handle delete click
+                                    // show delete dialog
+                                    if (listener != null)
+                                        listener.onDeleteButtonClicked(facilityList.get(position));
                                     break;
+
                             }
                             return false;
                         }

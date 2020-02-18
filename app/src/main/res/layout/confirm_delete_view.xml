@@ -16,7 +16,7 @@
         android:textAlignment="center"
         android:textSize="28sp"
         android:gravity="center"
-        android:text="Confirm Delete"
+        android:text="@string/delete_title_dialog"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -35,17 +35,18 @@
         app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
     <Button
-        android:id="@+id/addOrUpdateBtn"
+        android:id="@+id/okBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="44dp"
         android:background="@color/colorPrimary"
-        android:hint="@string/add_txt"
+        android:hint="@string/ok_txt_btn"
         android:paddingStart="40dp"
         android:paddingEnd="40dp"
         android:textColorHint="@color/colorWhite"
-        app:layout_constraintBottom_toBottomOf="@+id/cancel_btn"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="16dp"
         app:layout_constraintStart_toEndOf="@+id/cancel_btn"
         app:layout_constraintTop_toTopOf="@+id/cancel_btn"
         app:layout_constraintVertical_bias="0.0" />

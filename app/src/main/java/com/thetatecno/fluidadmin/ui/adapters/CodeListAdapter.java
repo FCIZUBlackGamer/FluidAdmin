@@ -1,4 +1,4 @@
-package com.thetatecno.fluidadmin.ui;
+package com.thetatecno.fluidadmin.ui.adapters;
 
 import android.content.Context;
 import android.util.Log;
@@ -14,8 +14,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.thetatecno.fluidadmin.R;
+import com.thetatecno.fluidadmin.listeners.OnDeleteListener;
 import com.thetatecno.fluidadmin.model.Code;
-import com.thetatecno.fluidadmin.model.Facility;
+import com.thetatecno.fluidadmin.ui.addorupdatecode.CodeAddFragment;
 
 import java.util.List;
 
@@ -28,12 +29,17 @@ public class CodeListAdapter extends RecyclerView.Adapter<CodeListAdapter.CodeVi
     Context context;
     FragmentManager fragmentManager;
     List<Code> codeList;
+    OnDeleteListener listener;
 
 
-    CodeListAdapter(Context context, List<Code> codeList, FragmentManager fragmentManager) {
+    public CodeListAdapter(Context context, List<Code> codeList, FragmentManager fragmentManager) {
         this.codeList = codeList;
         this.context = context;
         this.fragmentManager = fragmentManager;
+        if (context instanceof OnDeleteListener)
+            listener = (OnDeleteListener) context;
+        else
+            listener = null;
     }
 
     @NonNull
@@ -62,10 +68,8 @@ public class CodeListAdapter extends RecyclerView.Adapter<CodeListAdapter.CodeVi
                 @Override
                 public void onClick(View view) {
 
-                    //will show popup agents_menu here
-                    //creating a popup agents_menu
+
                     PopupMenu popup = new PopupMenu(context, holder.codeDescriptionTxt);
-                    //inflating agents_menu from xml resource
                     popup.inflate(R.menu.default_menu);
                     //adding click listener
                     popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -79,6 +83,9 @@ public class CodeListAdapter extends RecyclerView.Adapter<CodeListAdapter.CodeVi
                                     break;
                                 case R.id.delete:
                                     //handle delete click
+                                    if(listener !=null)
+                                        listener.onDeleteButtonClicked(codeList.get(position));
+
                                     break;
                             }
                             return false;

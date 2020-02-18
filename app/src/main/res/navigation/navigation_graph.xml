@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_graph"
+    app:startDestination="@+id/mainFragment2">
+    <fragment
+        android:id="@+id/addOrUpdateProviderFragment"
+        android:name="com.thetatecno.fluidadmin.ui.addorupdatestuff.AddOrUpdateProviderFragment"
+        android:label="fragment_add_new_staff"
+        tools:layout="@layout/fragment_add_new_staff" >
+        <action
+            android:id="@+id/action_addOrUpdateProviderFragment_to_mainFragment2"
+            app:destination="@id/mainFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/addOrUpdateAgentFragment"
+        android:name="com.thetatecno.fluidadmin.ui.addorupdatestuff.AddOrUpdateAgentFragment"
+        android:label="fragment_add_or_update_agent"
+        tools:layout="@layout/fragment_add_or_update_agent" >
+        <action
+            android:id="@+id/action_addOrUpdateAgentFragment_to_mainFragment2"
+            app:destination="@id/mainFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/codeAddFragment"
+        android:name="com.thetatecno.fluidadmin.ui.addorupdatecode.CodeAddFragment"
+        android:label="code_add_view"
+        tools:layout="@layout/code_add_view" >
+        <action
+            android:id="@+id/action_codeAddFragment_to_mainFragment2"
+            app:destination="@id/mainFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/facilityAddFragment"
+        android:name="com.thetatecno.fluidadmin.ui.addorupdatefacility.FacilityAddFragment"
+        android:label="facility_add_view"
+        tools:layout="@layout/facility_add_view" >
+        <action
+            android:id="@+id/action_facilityAddFragment_to_mainFragment2"
+            app:destination="@id/mainFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/mainFragment2"
+        android:name="com.thetatecno.fluidadmin.ui.MainFragment"
+        android:label="activity_main"
+        tools:layout="@layout/activity_main" >
+        <action
+            android:id="@+id/action_mainFragment2_to_addOrUpdateProviderFragment"
+            app:destination="@id/addOrUpdateProviderFragment" />
+        <action
+            android:id="@+id/action_mainFragment2_to_addOrUpdateAgentFragment"
+            app:destination="@id/addOrUpdateAgentFragment" />
+        <action
+            android:id="@+id/action_mainFragment2_to_codeAddFragment"
+            app:destination="@id/codeAddFragment" />
+        <action
+            android:id="@+id/action_mainFragment2_to_facilityAddFragment"
+            app:destination="@id/facilityAddFragment" />
+    </fragment>
+</navigation>

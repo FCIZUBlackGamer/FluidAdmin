@@ -69,7 +69,7 @@ public class CodeListAdapter extends RecyclerView.Adapter<CodeListAdapter.CodeVi
                 public void onClick(View view) {
 
 
-                    PopupMenu popup = new PopupMenu(context, holder.codeDescriptionTxt);
+                    PopupMenu popup = new PopupMenu(context, holder.codeTextViewOptions);
                     popup.inflate(R.menu.default_menu);
                     //adding click listener
                     popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {

@@ -368,6 +368,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 @Override
                 public void onChanged(String s) {
                     Toast.makeText(HomeActivity.this,s,Toast.LENGTH_SHORT).show();
+
                 }
             });
         }

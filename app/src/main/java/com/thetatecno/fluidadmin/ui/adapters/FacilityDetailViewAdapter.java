@@ -59,11 +59,17 @@ public class FacilityDetailViewAdapter extends RecyclerView.Adapter<FacilityDeta
     public void onBindViewHolder(@NonNull final vHolder holder, final int position) {
 
         try {
-            holder.facilityId_tv.setText(context.getResources().getText(R.string.facilty_id) + " "+facilityList.get(position).getCode());
-            holder.deviceID_tv.setText(context.getResources().getText(R.string.deviceId )+ " "+facilityList.get(position).getDeviceId());
-            holder.typeCode_tv.setText(context.getResources().getText(R.string.type) + " "+facilityList.get(position).getType());
-            holder.waId_tv.setText(context.getResources().getText(R.string.waitingAreaID) + " "+facilityList.get(position).getWaitingAreaID());
-            holder.desc_tv.setText(context.getResources().getText(R.string.decsription) + "\n"+facilityList.get(position).getDescription());
+            holder.facilityId_tv.setText(facilityList.get(position).getCode());
+//            holder.deviceID_tv.setText(context.getResources().getText(R.string.deviceId )+ " "+facilityList.get(position).getDeviceId());
+            holder.typeCode_tv.setText(facilityList.get(position).getType());
+            if(facilityList.get(position).getWaitingAreaID()!=null) {
+                holder.waId_tv.setText(facilityList.get(position).getWaitingAreaID());
+                holder.waId_tv.setVisibility(View.VISIBLE);
+            }
+            else {
+                holder.waId_tv.setVisibility(View.GONE);
+            }
+            holder.desc_tv.setText(facilityList.get(position).getDescription());
 
             holder.textViewOptions.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -114,14 +120,14 @@ public class FacilityDetailViewAdapter extends RecyclerView.Adapter<FacilityDeta
     }
 
     public class vHolder extends RecyclerView.ViewHolder {
-        TextView textViewOptions, facilityId_tv, deviceID_tv, typeCode_tv, desc_tv;
+        TextView textViewOptions, facilityId_tv, typeCode_tv, desc_tv;
         TextView waId_tv;
 
         public vHolder(@NonNull View itemView) {
             super(itemView);
             textViewOptions = itemView.findViewById(R.id.textViewOptions);
             facilityId_tv = itemView.findViewById(R.id.facilityId_tv);
-            deviceID_tv = itemView.findViewById(R.id.deviceID_tv);
+//            deviceID_tv = itemView.findViewById(R.id.deviceID_tv);
             typeCode_tv = itemView.findViewById(R.id.typeCode_tv);
             desc_tv = itemView.findViewById(R.id.desc_tv);
             waId_tv = itemView.findViewById(R.id.waId_tv);

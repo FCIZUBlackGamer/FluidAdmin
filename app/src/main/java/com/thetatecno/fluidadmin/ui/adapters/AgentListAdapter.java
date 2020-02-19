@@ -66,13 +66,14 @@ public class AgentListAdapter extends RecyclerView.Adapter<AgentListAdapter.Agen
         holder.agentPhoneTxt.setText(agentList.get(position).getMobileNumber());
         Glide.with(context).load(agentList.get(position).getImageLink()).into(holder.personImg);
         holder.facilityTitleTxt.setText(R.string.clinics);
-        NameAdapter nameAdapter = new NameAdapter(context, agentList.get(position).getFacilityList(), holder.pager);
-        holder.pager.setAdapter(nameAdapter);
+        FacilitiesForAgentListAdapter facilitiesForAgentListAdapter = new FacilitiesForAgentListAdapter(context, agentList.get(position).getFacilityList());
+        holder.pager.setAdapter(facilitiesForAgentListAdapter);
 
         new TabLayoutMediator(holder.tabLayout, holder.pager,
                 new TabLayoutMediator.TabConfigurationStrategy() {
                     @Override
                     public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
+
                     }
                 }).attach();
 

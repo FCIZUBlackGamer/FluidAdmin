@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    app:cardElevation="@dimen/cardview_default_elevation"
+    app:cardBackgroundColor="@color/colorWhite"
+    app:cardCornerRadius="2dp"
+    android:layout_margin="4dp"
 
+   >
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <ImageView
         android:id="@+id/person_img"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="16dp"
-        android:background="@drawable/ic_account_box_black_24dp"
+        android:background="@drawable/ic_doctor_icon"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/providerTxtViewOption" />
 
@@ -27,20 +34,24 @@
         android:paddingStart="16dp"
         android:paddingEnd="8dp"
         android:text="@string/options_menu"
+
+        android:textColor="@color/colorPrimary"
         android:textAppearance="?android:textAppearanceLarge"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/fullNameTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="@string/name_txt"
-        android:textStyle="bold"
-        android:textSize="24sp"
-        app:layout_constraintStart_toEndOf="@+id/person_img"
-        app:layout_constraintTop_toTopOf="@+id/person_img" />
+        <TextView
+            android:id="@+id/fullNameTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/name_txt"
+            android:textColor="@color/colorPrimary"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/providerTxtViewOption"
+            app:layout_constraintStart_toEndOf="@+id/person_img"
+            app:layout_constraintTop_toTopOf="@+id/person_img" />
 
     <TextView
         android:id="@+id/email_txt"
@@ -69,14 +80,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:drawablePadding="5dp"
         android:layout_marginBottom="8dp"
+        android:drawableStart="@drawable/ic_hospital"
+        android:drawablePadding="5dp"
         android:text="@string/speciality_txt"
-        android:textSize="24sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/mobile_num_txt"
         app:layout_constraintStart_toStartOf="@+id/mobile_num_txt"
         app:layout_constraintTop_toBottomOf="@+id/mobile_num_txt" />
 
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

@@ -12,6 +12,8 @@ import com.thetatecno.fluidadmin.retrofiteServices.repositories.ClientRepository
 import com.thetatecno.fluidadmin.retrofiteServices.repositories.CodeRepository;
 import com.thetatecno.fluidadmin.retrofiteServices.repositories.FacilityRepository;
 import com.thetatecno.fluidadmin.retrofiteServices.repositories.StaffRepository;
+import com.thetatecno.fluidadmin.utils.App;
+import com.thetatecno.fluidadmin.utils.PreferenceController;
 
 public class MainViewModel extends ViewModel {
     StaffRepository staffRepository = new StaffRepository();
@@ -47,44 +49,52 @@ public class MainViewModel extends ViewModel {
         return codeRepository.getAllCodes(facilityId, langId);
     }
 
-    public MutableLiveData<String> deleteAgentOrProvider(final Staff staff){
+    public MutableLiveData<String> deleteAgentOrProvider(final Staff staff) {
         staffRepository.deleteStaff(staff.getStaffId(), new OnDataChangedCallBackListener<Boolean>() {
             @Override
             public void onResponse(Boolean b) {
-                if(b.booleanValue())
-                    message = "Delete successfully staff "+staff.getFirstName();
-                else
+                if (b.booleanValue()) {
+                    message = "Delete successfully staff " + staff.getFirstName();
+                    staffRepository.getAllStuff(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase(), staff.getTypeCode());
+                } else {
                     message = "Failed to delete.";
-                deletedMessageLiveData.setValue(message);
+                    deletedMessageLiveData.setValue(message);
+                }
 
             }
         });
         return deletedMessageLiveData;
     }
-    public MutableLiveData<String> deleteCode(final Code code){
-        codeRepository.deleteCode(code.getCodeType(),code.getCode(), new OnDataChangedCallBackListener<Boolean>() {
+
+    public MutableLiveData<String> deleteCode(final Code code) {
+        codeRepository.deleteCode(code.getCodeType(), code.getCode(), new OnDataChangedCallBackListener<Boolean>() {
             @Override
             public void onResponse(Boolean b) {
-                if(b)
-                    message = "Delete code successfully "+code.getCode() ;
-
-                else
-                    message = "Failed to delete code "+code.getCode();
-                deletedMessageLiveData.setValue(message);
+                if (b) {
+                    message = "Delete code successfully " + code.getCode();
+                    codeRepository.getAllCodes("", PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
+                } else {
+                    message = "Failed to delete code " + code.getCode();
+                    deletedMessageLiveData.setValue(message);
+                }
 
             }
         });
         return deletedMessageLiveData;
     }
-    public MutableLiveData<String> deleteFacility(final Facility facility){
+
+    public MutableLiveData<String> deleteFacility(final Facility facility) {
         facilityRepository.deleteFacility(facility.getCode(), new OnDataChangedCallBackListener<Boolean>() {
             @Override
             public void onResponse(Boolean b) {
-                if(b.booleanValue())
-                    message = "Delete facility successfully" +facility.getCode();
-                else
-                    message = "Failed to delete code "+facility.getCode();
-                deletedMessageLiveData.setValue(message);
+                if (b.booleanValue()) {
+                    message = "Delete facility successfully" + facility.getCode();
+                    facilityRepository.getAllFacilities(facility.getCode(), PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase(),facility.getType());
+                }
+                else {
+                    message = "Failed to delete code " + facility.getCode();
+                    deletedMessageLiveData.setValue(message);
+                }
 
             }
         });

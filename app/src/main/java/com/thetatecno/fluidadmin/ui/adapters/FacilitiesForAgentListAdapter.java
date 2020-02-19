@@ -4,27 +4,25 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager2.widget.ViewPager2;
 
 import com.thetatecno.fluidadmin.R;
 import com.thetatecno.fluidadmin.model.Facility;
 
 import java.util.List;
 
-public class NameAdapter extends RecyclerView.Adapter<NameAdapter.ViewHolder> {
+public class FacilitiesForAgentListAdapter extends RecyclerView.Adapter<FacilitiesForAgentListAdapter.ViewHolder> {
 
     private List<Facility> mData;
     private LayoutInflater mInflater;
-    private ViewPager2 viewPager2;
 
-    public NameAdapter(Context context, List<Facility> data, ViewPager2 viewPager2) {
+
+    public FacilitiesForAgentListAdapter(Context context, List<Facility> data) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
-        this.viewPager2 = viewPager2;
+
     }
 
     @Override
@@ -37,12 +35,10 @@ public class NameAdapter extends RecyclerView.Adapter<NameAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         String facility = mData.get(position).getDescription();
         holder.myTextView.setText(facility);
-//        holder.relativeLayout.setBackgroundColor(Color.parseColor(mData.get(position)));
     }
 
     @Override
     public int getItemCount() {
-//        Log.e("SizeR", mData.size()+"");
         if (mData != null)
             return mData.size();
         else
@@ -52,12 +48,12 @@ public class NameAdapter extends RecyclerView.Adapter<NameAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView myTextView;
-        RelativeLayout relativeLayout;
+
 
         ViewHolder(View itemView) {
             super(itemView);
             myTextView = itemView.findViewById(R.id.tvTitle);
-            relativeLayout = itemView.findViewById(R.id.container);
+
 
 
         }

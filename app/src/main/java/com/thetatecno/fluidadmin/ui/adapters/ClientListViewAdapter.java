@@ -74,7 +74,9 @@ public class ClientListViewAdapter extends RecyclerView.Adapter<ClientListViewAd
 
     @Override
     public int getItemCount() {
+        if(personList!=null && personList.size()>0)
         return personList.size();
+        else return 0;
     }
 
     public class vHolder extends RecyclerView.ViewHolder {

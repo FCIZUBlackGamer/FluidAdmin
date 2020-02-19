@@ -59,10 +59,10 @@ public class CodeListAdapter extends RecyclerView.Adapter<CodeListAdapter.CodeVi
     public void onBindViewHolder(@NonNull final CodeListAdapter.CodeViewHolder holder, final int position) {
 
         try {
-            holder.codeTxt.setText(context.getResources().getText(R.string.code_txt) + " "+codeList.get(position).getCode());
-            holder.codeTypeTxt.setText(context.getResources().getText(R.string.code_type )+ " "+codeList.get(position).getCodeType());
-            holder.userCodeTxt.setText(context.getResources().getText(R.string.user_code_txt) + " "+codeList.get(position).getUserCode());
-            holder.codeDescriptionTxt.setText(context.getResources().getText(R.string.decsription) + " "+codeList.get(position).getDescription());
+            holder.codeTxt.setText(codeList.get(position).getCode());
+            holder.codeTypeTxt.setText(codeList.get(position).getCodeType());
+//            holder.userCodeTxt.setText(context.getResources().getText(R.string.user_code_txt) + " "+codeList.get(position).getUserCode());
+            holder.codeDescriptionTxt.setText(codeList.get(position).getDescription());
 
             holder.codeTextViewOptions.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -109,7 +109,7 @@ public class CodeListAdapter extends RecyclerView.Adapter<CodeListAdapter.CodeVi
     }
 
     public class CodeViewHolder extends RecyclerView.ViewHolder {
-        TextView codeTextViewOptions, codeTxt, codeTypeTxt, userCodeTxt, codeDescriptionTxt;
+        TextView codeTextViewOptions, codeTxt, codeTypeTxt, codeDescriptionTxt;
 
 
         public CodeViewHolder(@NonNull View itemView) {
@@ -117,7 +117,7 @@ public class CodeListAdapter extends RecyclerView.Adapter<CodeListAdapter.CodeVi
             codeTextViewOptions = itemView.findViewById(R.id.codeTxtViewOptions);
             codeTxt = itemView.findViewById(R.id.code_txt);
             codeTypeTxt = itemView.findViewById(R.id.codeType_txt);
-            userCodeTxt = itemView.findViewById(R.id.userCode_txt);
+//            userCodeTxt = itemView.findViewById(R.id.userCode_txt);
             codeDescriptionTxt = itemView.findViewById(R.id.codeDescription);
 
         }

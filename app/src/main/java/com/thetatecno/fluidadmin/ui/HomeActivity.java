@@ -18,6 +18,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.gson.Gson;
 import com.thetatecno.fluidadmin.R;
 import com.thetatecno.fluidadmin.listeners.OnConfirmDeleteListener;
 import com.thetatecno.fluidadmin.listeners.OnDeleteListener;
@@ -79,6 +80,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 new UserBuilder().setUsername("theta").build()
         );
         setContentView(R.layout.activity_home);
+        bundle = new Bundle();
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         checkOnTheCurrentLanguage();
@@ -245,6 +247,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             case R.id.client:
                 Sentry.getContext().recordBreadcrumb(new BreadcrumbBuilder().setMessage("User Clicked Client Button From Navigation Drawer").build());
 
+                Log.e("Client", "Found");
                 try {
                     mainViewModel.getAllClients("", langId).observe(this, new Observer<CustomerList>() {
                         @Override
@@ -253,6 +256,8 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                                 if (customerList.getPersonList() != null) {
                                     personList = customerList.getPersonList();
                                     usageType = EnumCode.UsageType.Person;
+                                    Gson gson = new Gson();
+                                    Log.e("Data", gson.toJson(personList));
                                     bundle.putSerializable("type", (Serializable) EnumCode.UsageType.Person);
                                     bundle.putSerializable("agentList", (Serializable) agentList);
                                     bundle.putSerializable("providerList", (Serializable) providerList);
@@ -260,7 +265,11 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                                     bundle.putSerializable("facilityList", (Serializable) facilityList);
                                     bundle.putSerializable("codeList", (Serializable) codeList);
                                     navController.navigate(R.id.mainFragment2, bundle);
+                                }else {
+                                    Log.e("getPersonList()", "Null");
                                 }
+                            }else {
+                                Log.e("customerList", "Null");
                             }
                         }
                     });

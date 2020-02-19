@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,12 +62,14 @@ public class MainFragment extends Fragment {
         View view = inflater.inflate(R.layout.activity_main, container, false);
         detailsRecycle = view.findViewById(R.id.detailsList);
         detailsRecycle.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        usageType = (EnumCode.UsageType) getArguments().getSerializable("type");
-        agentList = (List<Staff>) getArguments().getSerializable("agentList");
-        providerList = (List<Staff>) getArguments().getSerializable("providerList");
-        personList = (List<Person>) getArguments().getSerializable("personList");
-        facilityList = (List<Facility>) getArguments().getSerializable("facilityList");
-        codeList = (List<Code>) getArguments().getSerializable("codeList");
+        if (getArguments() != null ) {
+            usageType = (EnumCode.UsageType) getArguments().getSerializable("type");
+            agentList = (List<Staff>) getArguments().getSerializable("agentList");
+            providerList = (List<Staff>) getArguments().getSerializable("providerList");
+            personList = (List<Person>) getArguments().getSerializable("personList");
+            facilityList = (List<Facility>) getArguments().getSerializable("facilityList");
+            codeList = (List<Code>) getArguments().getSerializable("codeList");
+        }
         checkWhoIsHere(agentList, providerList, personList, facilityList, codeList);
         navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
         return view;
@@ -89,7 +92,8 @@ public class MainFragment extends Fragment {
         } else if (usageType == EnumCode.UsageType.Provider) {
             providerListAdapter = new ProviderListAdapter(navController, getActivity(), providerList, getActivity().getSupportFragmentManager());
             detailsRecycle.setAdapter(providerListAdapter);
-        } else {
+        } else if (usageType == EnumCode.UsageType.Person) {
+            Log.e("getPersonList()", "Arrived");
             clientListViewAdapter = new ClientListViewAdapter(getActivity(), personList, getActivity().getSupportFragmentManager());
             detailsRecycle.setAdapter(clientListViewAdapter);
         }

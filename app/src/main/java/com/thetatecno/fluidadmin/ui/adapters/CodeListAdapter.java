@@ -19,6 +19,7 @@ import com.thetatecno.fluidadmin.R;
 import com.thetatecno.fluidadmin.listeners.OnDeleteListener;
 import com.thetatecno.fluidadmin.model.Code;
 import com.thetatecno.fluidadmin.ui.addorupdatecode.CodeAddFragment;
+import com.thetatecno.fluidadmin.utils.EnumCode;
 
 import java.io.Serializable;
 import java.util.List;
@@ -45,6 +46,7 @@ public class CodeListAdapter extends RecyclerView.Adapter<CodeListAdapter.CodeVi
         this.codeList = codeList;
         this.context = context;
         navController = navControlle;
+        bundle = new Bundle();
         this.fragmentManager = fragmentManager;
         if (context instanceof OnDeleteListener)
             listener = (OnDeleteListener) context;
@@ -88,6 +90,9 @@ public class CodeListAdapter extends RecyclerView.Adapter<CodeListAdapter.CodeVi
                             switch (item.getItemId()) {
                                 case R.id.edit:
                                     bundle.putSerializable(ARG_CODE, (Serializable) codeList.get(position));
+                                    bundle.putSerializable("type", (Serializable) EnumCode.UsageType.Code);
+                                    bundle.putSerializable("codeList", (Serializable) codeList);
+
                                     navController.navigate(R.id.codeAddFragment, bundle);
 //                                    fragmentManager.beginTransaction()
 //                                            .replace(R.id.nav_host_fragment, CodeAddFragment.newInstance(codeList.get(position)),"CodeAddFragment")

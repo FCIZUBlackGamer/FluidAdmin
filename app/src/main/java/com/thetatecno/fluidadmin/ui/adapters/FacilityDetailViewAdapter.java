@@ -19,6 +19,7 @@ import com.thetatecno.fluidadmin.R;
 import com.thetatecno.fluidadmin.listeners.OnDeleteListener;
 import com.thetatecno.fluidadmin.model.Facility;
 import com.thetatecno.fluidadmin.ui.addorupdatefacility.FacilityAddFragment;
+import com.thetatecno.fluidadmin.utils.EnumCode;
 
 import java.io.Serializable;
 import java.util.List;
@@ -42,6 +43,7 @@ public class FacilityDetailViewAdapter extends RecyclerView.Adapter<FacilityDeta
         this.facilityList = facilityList;
         this.context = context;
         this.fragmentManager = fragmentManager;
+        bundle = new Bundle();
         navController = navControlle;
         if (context instanceof OnDeleteListener)
             listener = (OnDeleteListener) context;
@@ -96,6 +98,9 @@ public class FacilityDetailViewAdapter extends RecyclerView.Adapter<FacilityDeta
                                 case R.id.edit:
                                     //handle edit click
                                     bundle.putSerializable(ARG_FACILITY, (Serializable) facilityList.get(position));
+                                    bundle.putSerializable("type", (Serializable) EnumCode.UsageType.Facility);
+                                    bundle.putSerializable("facilityList", (Serializable) facilityList);
+
                                     navController.navigate(R.id.facilityAddFragment, bundle);
 //                                    fragmentManager.beginTransaction()
 //                                            .replace(R.id.nav_host_fragment, FacilityAddFragment.newInstance(facilityList.get(position)))

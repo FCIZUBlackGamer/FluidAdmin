@@ -2,11 +2,14 @@ package com.thetatecno.fluidadmin.ui.addorupdatestuff;
 
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +22,9 @@ import android.widget.RadioGroup;
 import com.thetatecno.fluidadmin.R;
 import com.thetatecno.fluidadmin.model.Staff;
 import com.thetatecno.fluidadmin.utils.EnumCode;
+
+import java.io.Serializable;
+import java.util.List;
 
 import static com.thetatecno.fluidadmin.utils.Constants.ARG_STAFF;
 
@@ -45,6 +51,9 @@ public class AddOrUpdateAgentFragment extends Fragment {
     AddOrUpdateViewModel addOrUpdateViewModel;
     boolean isStaffHasData;
     Staff staff;
+    List<Staff> agentList;
+    NavController navController;
+    Bundle bundle;
 
     public AddOrUpdateAgentFragment() {
         // Required empty public constructor
@@ -64,7 +73,20 @@ public class AddOrUpdateAgentFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             staff = (Staff) getArguments().getSerializable(ARG_STAFF);
+            agentList = (List<Staff>) getArguments().getSerializable("agentList");
         }
+        navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
+        bundle = new Bundle();
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                // Handle the back button event
+                bundle.putSerializable("type", (Serializable) EnumCode.UsageType.Agent);
+                bundle.putSerializable("agentList", (Serializable) agentList);
+                navController.navigate(R.id.action_addOrUpdateAgentFragment_to_mainFragment2, bundle);
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
 
     }
 

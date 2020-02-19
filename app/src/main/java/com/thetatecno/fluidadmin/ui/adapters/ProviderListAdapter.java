@@ -46,6 +46,7 @@ public class ProviderListAdapter extends RecyclerView.Adapter<ProviderListAdapte
         this.context = context;
         this.providerList = providerList;
         navController = navControlle;
+        bundle = new Bundle();
         this.fragmentManager = fragmentManager;
         if (context instanceof OnDeleteListener)
             listener = (OnDeleteListener) context;
@@ -101,6 +102,7 @@ public class ProviderListAdapter extends RecyclerView.Adapter<ProviderListAdapte
                             case R.id.edit:
                                 //handle edit click
                                 bundle.putSerializable(ARG_STAFF , (Serializable) providerList.get(position));
+                                bundle.putSerializable("providerList", (Serializable) providerList);
                                 navController.navigate(R.id.addOrUpdateProviderFragment, bundle);
 //                                fragmentManager.beginTransaction()
 //                                        .replace(R.id.nav_host_fragment, AddOrUpdateProviderFragment.newInstance(providerList.get(position)))

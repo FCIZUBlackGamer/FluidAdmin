@@ -4,9 +4,12 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +20,11 @@ import android.widget.EditText;
 
 import com.thetatecno.fluidadmin.R;
 import com.thetatecno.fluidadmin.model.Facility;
+import com.thetatecno.fluidadmin.model.Staff;
+import com.thetatecno.fluidadmin.utils.EnumCode;
+
+import java.io.Serializable;
+import java.util.List;
 
 import static com.thetatecno.fluidadmin.utils.Constants.ARG_FACILITY;
 
@@ -34,6 +42,9 @@ public class FacilityAddFragment extends Fragment {
     boolean isDataFound;
     FacilityAddViewModel facilityAddViewModel;
     private OnFragmentInteractionListener mListener;
+    NavController navController;
+    Bundle bundle;
+    List<Facility> facilityList;
 
     public FacilityAddFragment() {
         // Required empty public constructor
@@ -53,8 +64,22 @@ public class FacilityAddFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             facility = (Facility) getArguments().getSerializable(ARG_FACILITY);
+            facilityList = (List<Facility>) getArguments().getSerializable("facilityList");
 
         }
+
+        navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
+        bundle = new Bundle();
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                // Handle the back button event
+                bundle.putSerializable("type", (Serializable) EnumCode.UsageType.Facility);
+                bundle.putSerializable("facilityList", (Serializable) facilityList);
+                navController.navigate(R.id.action_facilityAddFragment_to_mainFragment2, bundle);
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
     @Override

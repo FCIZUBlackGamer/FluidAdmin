@@ -47,6 +47,7 @@ public class AgentListAdapter extends RecyclerView.Adapter<AgentListAdapter.Agen
         this.agentList = agentList;
         this.context = context;
         navController = navControlle;
+        bundle = new Bundle();
         this.fragmentManager = fragmentManager;
         if (context instanceof OnDeleteListener)
             listener = (OnDeleteListener) context;
@@ -107,10 +108,11 @@ public class AgentListAdapter extends RecyclerView.Adapter<AgentListAdapter.Agen
                             case R.id.edit:
                                 //handle edit click
                                 bundle.putSerializable(ARG_STAFF, (Serializable) agentList.get(position));
+                                bundle.putSerializable("agentList", (Serializable) agentList);
                                 navController.navigate(R.id.addOrUpdateAgentFragment, bundle);
-                                fragmentManager.beginTransaction()
-                                        .replace(R.id.nav_host_fragment, AddOrUpdateAgentFragment.newInstance(agentList.get(position)))
-                                        .commit();
+//                                fragmentManager.beginTransaction()
+//                                        .replace(R.id.nav_host_fragment, AddOrUpdateAgentFragment.newInstance(agentList.get(position)))
+//                                        .commit();
                                 break;
                             case R.id.delete:
                                 //show confirmation dialog to delete item

@@ -9,13 +9,21 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.thetatecno.fluidadmin.R;
 import com.thetatecno.fluidadmin.listeners.OnFragmentInteractionListener;
 import com.thetatecno.fluidadmin.model.Code;
+import com.thetatecno.fluidadmin.model.Staff;
+import com.thetatecno.fluidadmin.utils.EnumCode;
+
+import java.io.Serializable;
+import java.util.List;
 
 import static com.thetatecno.fluidadmin.utils.Constants.ARG_CODE;
 
@@ -29,6 +37,9 @@ public class CodeAddFragment extends Fragment {
     Button cancel_btn, addOrUpdateBtn;
     CodeViewModel codeViewModel;
 
+    NavController navController;
+    List<Code> codeList;
+    Bundle bundle;
 
     private OnFragmentInteractionListener mListener;
 
@@ -50,7 +61,22 @@ public class CodeAddFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             code = (Code) getArguments().getSerializable(ARG_CODE);
+            codeList = (List<Code>) getArguments().getSerializable("codeList");
+
         }
+        navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
+        bundle = new Bundle();
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                // Handle the back button event
+                bundle.putSerializable("type", (Serializable) EnumCode.UsageType.Code);
+                bundle.putSerializable("codeList", (Serializable) codeList);
+                navController.navigate(R.id.action_codeAddFragment_to_mainFragment2, bundle);
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
     @Override

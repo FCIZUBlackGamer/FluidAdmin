@@ -21,6 +21,8 @@ import com.thetatecno.fluidadmin.R;
 import com.thetatecno.fluidadmin.model.Staff;
 import com.thetatecno.fluidadmin.utils.EnumCode;
 
+import static com.thetatecno.fluidadmin.utils.Constants.ARG_STAFF;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,7 +30,6 @@ import com.thetatecno.fluidadmin.utils.EnumCode;
 public class AddOrUpdateProviderFragment extends Fragment {
     private static String TAG = "AddStaff";
     private static String ARG_CODE_TYPE = "codeType";
-    private static String ARG_STAFF = "staff";
     private String codeType;
     EditText idTxt;
     EditText firstNameTxt;

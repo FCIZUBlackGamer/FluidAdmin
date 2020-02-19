@@ -1,6 +1,7 @@
 package com.thetatecno.fluidadmin.ui.adapters;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.FragmentManager;
+import androidx.navigation.NavController;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.thetatecno.fluidadmin.R;
@@ -18,11 +20,14 @@ import com.thetatecno.fluidadmin.listeners.OnDeleteListener;
 import com.thetatecno.fluidadmin.model.Facility;
 import com.thetatecno.fluidadmin.ui.addorupdatefacility.FacilityAddFragment;
 
+import java.io.Serializable;
 import java.util.List;
 
 import io.sentry.Sentry;
 import io.sentry.android.AndroidSentryClientFactory;
 import io.sentry.event.UserBuilder;
+
+import static com.thetatecno.fluidadmin.utils.Constants.ARG_FACILITY;
 
 public class FacilityDetailViewAdapter extends RecyclerView.Adapter<FacilityDetailViewAdapter.vHolder> {
     Context context;
@@ -30,11 +35,14 @@ public class FacilityDetailViewAdapter extends RecyclerView.Adapter<FacilityDeta
     List<Facility> facilityList;
     OnDeleteListener listener;
 
+    NavController navController;
+    Bundle bundle;
 
-    public FacilityDetailViewAdapter(Context context, List<Facility> facilityList, FragmentManager fragmentManager) {
+    public FacilityDetailViewAdapter(NavController navControlle, Context context, List<Facility> facilityList, FragmentManager fragmentManager) {
         this.facilityList = facilityList;
         this.context = context;
         this.fragmentManager = fragmentManager;
+        navController = navControlle;
         if (context instanceof OnDeleteListener)
             listener = (OnDeleteListener) context;
         else
@@ -87,9 +95,11 @@ public class FacilityDetailViewAdapter extends RecyclerView.Adapter<FacilityDeta
                             switch (item.getItemId()) {
                                 case R.id.edit:
                                     //handle edit click
-                                    fragmentManager.beginTransaction()
-                                            .replace(R.id.nav_host_fragment, FacilityAddFragment.newInstance(facilityList.get(position)))
-                                            .commit();
+                                    bundle.putSerializable(ARG_FACILITY, (Serializable) facilityList.get(position));
+                                    navController.navigate(R.id.facilityAddFragment, bundle);
+//                                    fragmentManager.beginTransaction()
+//                                            .replace(R.id.nav_host_fragment, FacilityAddFragment.newInstance(facilityList.get(position)))
+//                                            .commit();
                                     break;
 
                                 case R.id.delete:

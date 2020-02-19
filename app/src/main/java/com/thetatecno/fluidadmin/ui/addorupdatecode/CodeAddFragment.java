@@ -17,10 +17,11 @@ import com.thetatecno.fluidadmin.R;
 import com.thetatecno.fluidadmin.listeners.OnFragmentInteractionListener;
 import com.thetatecno.fluidadmin.model.Code;
 
+import static com.thetatecno.fluidadmin.utils.Constants.ARG_CODE;
+
 
 public class CodeAddFragment extends Fragment {
 
-    private static final String ARG_CODE = "code";
 
     private Code code;
     private boolean isCodeNotNull;

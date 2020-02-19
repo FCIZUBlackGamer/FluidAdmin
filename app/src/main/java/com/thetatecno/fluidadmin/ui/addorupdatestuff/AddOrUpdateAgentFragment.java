@@ -20,6 +20,8 @@ import com.thetatecno.fluidadmin.R;
 import com.thetatecno.fluidadmin.model.Staff;
 import com.thetatecno.fluidadmin.utils.EnumCode;
 
+import static com.thetatecno.fluidadmin.utils.Constants.ARG_STAFF;
+
 
 public class AddOrUpdateAgentFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -31,7 +33,6 @@ public class AddOrUpdateAgentFragment extends Fragment {
 
     private static String TAG = "AddStaff";
 
-    private static String ARG_STAFF = "staff";
 
     EditText idTxt;
     EditText firstNameTxt;

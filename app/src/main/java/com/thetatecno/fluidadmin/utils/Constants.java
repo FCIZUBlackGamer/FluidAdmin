@@ -14,7 +14,9 @@ public interface Constants {
     public static final String deviceId = "deviceId";
     public static final String FACILITY_TYPE_CODE_CLINIC = "CLINIC";
     public static final String FACILITY_TYPE_CODE_WAITAREA = "WAITAREA";
-
+    public static final String ARG_FACILITY = "facility";
+    public static final String ARG_CODE = "code";
+    public static String ARG_STAFF = "staff";
 
 
 }

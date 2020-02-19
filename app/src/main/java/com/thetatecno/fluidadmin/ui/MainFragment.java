@@ -3,6 +3,8 @@ package com.thetatecno.fluidadmin.ui;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -40,6 +42,8 @@ public class MainFragment extends Fragment {
     FacilityDetailViewAdapter facilityDetailViewAdapter;
     CodeListAdapter codeListAdapter;
 
+    NavController navController;
+
     public static MainFragment setTypeAndData(EnumCode.UsageType type, @Nullable List<Staff> agentList,
                                               @Nullable List<Staff> providerList,
                                               @Nullable List<Person> personList,
@@ -57,6 +61,14 @@ public class MainFragment extends Fragment {
         View view = inflater.inflate(R.layout.activity_main, container, false);
         detailsRecycle = view.findViewById(R.id.detailsList);
         detailsRecycle.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        usageType = (EnumCode.UsageType) getArguments().getSerializable("type");
+        agentList = (List<Staff>) getArguments().getSerializable("agentList");
+        providerList = (List<Staff>) getArguments().getSerializable("providerList");
+        personList = (List<Person>) getArguments().getSerializable("personList");
+        facilityList = (List<Facility>) getArguments().getSerializable("facilityList");
+        codeList = (List<Code>) getArguments().getSerializable("codeList");
+        checkWhoIsHere(agentList, providerList, personList, facilityList, codeList);
+        navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
         return view;
     }
 
@@ -65,20 +77,19 @@ public class MainFragment extends Fragment {
         super.onStart();
 
         if (usageType == EnumCode.UsageType.Facility) {
-            facilityDetailViewAdapter = new FacilityDetailViewAdapter(getActivity(), facilityList, getActivity().getSupportFragmentManager());
+            facilityDetailViewAdapter = new FacilityDetailViewAdapter(navController, getActivity(), facilityList, getActivity().getSupportFragmentManager());
             detailsRecycle.setAdapter(facilityDetailViewAdapter);
         } else if (usageType == EnumCode.UsageType.Code) {
-            codeListAdapter = new CodeListAdapter(getActivity(), codeList, getActivity().getSupportFragmentManager());
+            codeListAdapter = new CodeListAdapter(navController, getActivity(), codeList, getActivity().getSupportFragmentManager());
             detailsRecycle.setAdapter(codeListAdapter);
         } else if (usageType == EnumCode.UsageType.Agent) {
-            agentListAdapter = new AgentListAdapter(getActivity(), agentList, getActivity().getSupportFragmentManager());
+            agentListAdapter = new AgentListAdapter(navController, getActivity(), agentList, getActivity().getSupportFragmentManager());
             detailsRecycle.setAdapter(agentListAdapter);
 
-        } else if(usageType == EnumCode.UsageType.Provider) {
-            providerListAdapter = new ProviderListAdapter(getActivity(),providerList,getActivity().getSupportFragmentManager());
+        } else if (usageType == EnumCode.UsageType.Provider) {
+            providerListAdapter = new ProviderListAdapter(navController, getActivity(), providerList, getActivity().getSupportFragmentManager());
             detailsRecycle.setAdapter(providerListAdapter);
-        }
-        else {
+        } else {
             clientListViewAdapter = new ClientListViewAdapter(getActivity(), personList, getActivity().getSupportFragmentManager());
             detailsRecycle.setAdapter(clientListViewAdapter);
         }

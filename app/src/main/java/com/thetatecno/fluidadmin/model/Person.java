@@ -3,9 +3,10 @@ package com.thetatecno.fluidadmin.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Person {
+public class Person implements Serializable {
     @SerializedName("FIRST_NAME")
     @Expose
     private String firstName;

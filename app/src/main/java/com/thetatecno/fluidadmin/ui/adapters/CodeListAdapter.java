@@ -1,6 +1,7 @@
 package com.thetatecno.fluidadmin.ui.adapters;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.FragmentManager;
+import androidx.navigation.NavController;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.thetatecno.fluidadmin.R;
@@ -18,11 +20,15 @@ import com.thetatecno.fluidadmin.listeners.OnDeleteListener;
 import com.thetatecno.fluidadmin.model.Code;
 import com.thetatecno.fluidadmin.ui.addorupdatecode.CodeAddFragment;
 
+import java.io.Serializable;
 import java.util.List;
 
 import io.sentry.Sentry;
 import io.sentry.android.AndroidSentryClientFactory;
 import io.sentry.event.UserBuilder;
+
+import static com.thetatecno.fluidadmin.utils.Constants.ARG_CODE;
+import static com.thetatecno.fluidadmin.utils.Constants.ARG_FACILITY;
 
 public class CodeListAdapter extends RecyclerView.Adapter<CodeListAdapter.CodeViewHolder>{
 
@@ -31,10 +37,14 @@ public class CodeListAdapter extends RecyclerView.Adapter<CodeListAdapter.CodeVi
     List<Code> codeList;
     OnDeleteListener listener;
 
+    NavController navController;
+    Bundle bundle;
 
-    public CodeListAdapter(Context context, List<Code> codeList, FragmentManager fragmentManager) {
+
+    public CodeListAdapter(NavController navControlle, Context context, List<Code> codeList, FragmentManager fragmentManager) {
         this.codeList = codeList;
         this.context = context;
+        navController = navControlle;
         this.fragmentManager = fragmentManager;
         if (context instanceof OnDeleteListener)
             listener = (OnDeleteListener) context;
@@ -77,9 +87,11 @@ public class CodeListAdapter extends RecyclerView.Adapter<CodeListAdapter.CodeVi
                         public boolean onMenuItemClick(MenuItem item) {
                             switch (item.getItemId()) {
                                 case R.id.edit:
-                                    fragmentManager.beginTransaction()
-                                            .replace(R.id.nav_host_fragment, CodeAddFragment.newInstance(codeList.get(position)),"CodeAddFragment")
-                                            .commit();
+                                    bundle.putSerializable(ARG_CODE, (Serializable) codeList.get(position));
+                                    navController.navigate(R.id.codeAddFragment, bundle);
+//                                    fragmentManager.beginTransaction()
+//                                            .replace(R.id.nav_host_fragment, CodeAddFragment.newInstance(codeList.get(position)),"CodeAddFragment")
+//                                            .commit();
                                     break;
                                 case R.id.delete:
                                     //handle delete click

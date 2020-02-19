@@ -1,6 +1,7 @@
 package com.thetatecno.fluidadmin.ui.adapters;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.FragmentManager;
+import androidx.navigation.NavController;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -23,21 +25,28 @@ import com.thetatecno.fluidadmin.listeners.OnDeleteListener;
 import com.thetatecno.fluidadmin.model.Staff;
 import com.thetatecno.fluidadmin.ui.addorupdatestuff.AddOrUpdateAgentFragment;
 
+import java.io.Serializable;
 import java.util.List;
 
 import io.sentry.Sentry;
 import io.sentry.android.AndroidSentryClientFactory;
 import io.sentry.event.UserBuilder;
 
+import static com.thetatecno.fluidadmin.utils.Constants.ARG_CODE;
+import static com.thetatecno.fluidadmin.utils.Constants.ARG_STAFF;
+
 public class AgentListAdapter extends RecyclerView.Adapter<AgentListAdapter.AgentListViewHolder> {
     Context context;
     FragmentManager fragmentManager;
     OnDeleteListener listener;
     List<Staff> agentList;
+    NavController navController;
+    Bundle bundle;
 
-    public AgentListAdapter(Context context, @Nullable List<Staff> agentList, FragmentManager fragmentManager) {
+    public AgentListAdapter(NavController navControlle, Context context, @Nullable List<Staff> agentList, FragmentManager fragmentManager) {
         this.agentList = agentList;
         this.context = context;
+        navController = navControlle;
         this.fragmentManager = fragmentManager;
         if (context instanceof OnDeleteListener)
             listener = (OnDeleteListener) context;
@@ -97,6 +106,8 @@ public class AgentListAdapter extends RecyclerView.Adapter<AgentListAdapter.Agen
                                 break;
                             case R.id.edit:
                                 //handle edit click
+                                bundle.putSerializable(ARG_STAFF, (Serializable) agentList.get(position));
+                                navController.navigate(R.id.addOrUpdateAgentFragment, bundle);
                                 fragmentManager.beginTransaction()
                                         .replace(R.id.nav_host_fragment, AddOrUpdateAgentFragment.newInstance(agentList.get(position)))
                                         .commit();

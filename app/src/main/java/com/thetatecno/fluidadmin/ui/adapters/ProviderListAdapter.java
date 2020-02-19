@@ -1,6 +1,7 @@
 package com.thetatecno.fluidadmin.ui.adapters;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.FragmentManager;
+import androidx.navigation.NavController;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -20,11 +22,16 @@ import com.thetatecno.fluidadmin.listeners.OnDeleteListener;
 import com.thetatecno.fluidadmin.model.Staff;
 import com.thetatecno.fluidadmin.ui.addorupdatestuff.AddOrUpdateProviderFragment;
 
+import java.io.Serializable;
 import java.util.List;
 
 import io.sentry.Sentry;
 import io.sentry.android.AndroidSentryClientFactory;
 import io.sentry.event.UserBuilder;
+
+import static com.thetatecno.fluidadmin.utils.Constants.ARG_CODE;
+import static com.thetatecno.fluidadmin.utils.Constants.ARG_FACILITY;
+import static com.thetatecno.fluidadmin.utils.Constants.ARG_STAFF;
 
 public class ProviderListAdapter extends RecyclerView.Adapter<ProviderListAdapter.ProviderListViewHolder>  {
 
@@ -32,10 +39,13 @@ public class ProviderListAdapter extends RecyclerView.Adapter<ProviderListAdapte
     FragmentManager fragmentManager;
     OnDeleteListener listener;
     List<Staff> providerList;
+    NavController navController;
+    Bundle bundle;
 
-    public ProviderListAdapter(Context context, List<Staff> providerList, FragmentManager fragmentManager) {
+    public ProviderListAdapter(NavController navControlle, Context context, List<Staff> providerList, FragmentManager fragmentManager) {
         this.context = context;
         this.providerList = providerList;
+        navController = navControlle;
         this.fragmentManager = fragmentManager;
         if (context instanceof OnDeleteListener)
             listener = (OnDeleteListener) context;
@@ -90,9 +100,11 @@ public class ProviderListAdapter extends RecyclerView.Adapter<ProviderListAdapte
                                 break;
                             case R.id.edit:
                                 //handle edit click
-                                fragmentManager.beginTransaction()
-                                        .replace(R.id.nav_host_fragment, AddOrUpdateProviderFragment.newInstance(providerList.get(position)))
-                                        .commit();
+                                bundle.putSerializable(ARG_STAFF , (Serializable) providerList.get(position));
+                                navController.navigate(R.id.addOrUpdateProviderFragment, bundle);
+//                                fragmentManager.beginTransaction()
+//                                        .replace(R.id.nav_host_fragment, AddOrUpdateProviderFragment.newInstance(providerList.get(position)))
+//                                        .commit();
                                 break;
                             case R.id.delete:
                                 //handle delete click

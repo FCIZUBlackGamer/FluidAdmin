@@ -41,7 +41,10 @@ import com.thetatecno.fluidadmin.utils.EnumCode;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
+import java.io.Serializable;
 import java.util.List;
 
 import io.sentry.Sentry;
@@ -64,6 +67,8 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     NavigationView navigationView;
     static String langId;
     ConfirmDeleteDialog confirmDeleteDialog;
+    NavController navController;
+    Bundle bundle;
 
 
     @Override
@@ -74,12 +79,15 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 new UserBuilder().setUsername("theta").build()
         );
         setContentView(R.layout.activity_home);
+
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         checkOnTheCurrentLanguage();
         navigationView.setNavigationItemSelectedListener(this);
         mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+
         final FloatingActionButton fab = findViewById(R.id.fab);
         try {
             mainViewModel.getStaffDataForAgents(langId, EnumCode.StaffTypeCode.DSPTCHR.toString()).observe(this, new Observer<StaffData>() {
@@ -89,9 +97,14 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                         if (staffData.getStaffList() != null) {
                             usageType = EnumCode.UsageType.Agent;
                             agentList = staffData.getStaffList();
-                            getSupportFragmentManager().beginTransaction()
-                                    .replace(R.id.nav_host_fragment, MainFragment.setTypeAndData(EnumCode.UsageType.Agent, agentList, null, null, null, null))
-                                    .commit();
+                            bundle.putSerializable("type", (Serializable) EnumCode.UsageType.Agent);
+                            bundle.putSerializable("agentList", (Serializable) agentList);
+                            bundle.putSerializable("providerList", (Serializable) providerList);
+                            bundle.putSerializable("personList", (Serializable) personList);
+                            bundle.putSerializable("facilityList", (Serializable) facilityList);
+                            bundle.putSerializable("codeList", (Serializable) codeList);
+                            navController.navigate(R.id.mainFragment2, bundle);
+
                         } else {
                             Log.e("Staff List", "Is Null");
                         }
@@ -111,27 +124,35 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 Snackbar.make(view, "" + usageType.toString(), Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 if (usageType == EnumCode.UsageType.Provider) {
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.nav_host_fragment, AddOrUpdateProviderFragment.newInstance(null))
-                            .addToBackStack("AddNewStaffFragment")
-                            .commit();
+
+                    navController.navigate(R.id.action_mainFragment2_to_addOrUpdateProviderFragment);
+
+//                    getSupportFragmentManager().beginTransaction()
+//                            .replace(R.id.nav_host_fragment, AddOrUpdateProviderFragment.newInstance(null))
+//                            .addToBackStack("AddNewStaffFragment")
+//                            .commit();
                 } else if (usageType == EnumCode.UsageType.Agent) {
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.nav_host_fragment, AddOrUpdateAgentFragment.newInstance(null))
-                            .addToBackStack("AddOrUpdateAgentFragment")
-                            .commit();
+//                    getSupportFragmentManager().beginTransaction()
+//                            .replace(R.id.nav_host_fragment, AddOrUpdateAgentFragment.newInstance(null))
+//                            .addToBackStack("AddOrUpdateAgentFragment")
+//                            .commit();
 
+
+                    navController.navigate(R.id.action_mainFragment2_to_addOrUpdateAgentFragment);
                 } else if (usageType == EnumCode.UsageType.Code) {
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.nav_host_fragment, CodeAddFragment.newInstance(null))
-                            .addToBackStack("CodeAddFragment")
 
-                            .commit();
+                    navController.navigate(R.id.action_mainFragment2_to_codeAddFragment);
+//                    getSupportFragmentManager().beginTransaction()
+//                            .replace(R.id.nav_host_fragment, CodeAddFragment.newInstance(null))
+//                            .addToBackStack("CodeAddFragment")
+//
+//                            .commit();
                 } else if (usageType == EnumCode.UsageType.Facility) {
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.nav_host_fragment, FacilityAddFragment.newInstance(null))
-                            .addToBackStack("FacilityAddFragment")
-                            .commit();
+//                    getSupportFragmentManager().beginTransaction()
+//                            .replace(R.id.nav_host_fragment, FacilityAddFragment.newInstance(null))
+//                            .addToBackStack("FacilityAddFragment")
+//                            .commit();
+                    navController.navigate(R.id.action_mainFragment2_to_facilityAddFragment);
                 }
 
                 fab.setVisibility(View.GONE);
@@ -171,9 +192,13 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                                 if (staffData.getStaffList() != null) {
                                     usageType = EnumCode.UsageType.Agent;
                                     agentList = staffData.getStaffList();
-                                    getSupportFragmentManager().beginTransaction()
-                                            .replace(R.id.nav_host_fragment, MainFragment.setTypeAndData(EnumCode.UsageType.Agent, agentList, null, null, null, null))
-                                            .commit();
+                                    bundle.putSerializable("type", (Serializable) EnumCode.UsageType.Agent);
+                                    bundle.putSerializable("agentList", (Serializable) agentList);
+                                    bundle.putSerializable("providerList", (Serializable) providerList);
+                                    bundle.putSerializable("personList", (Serializable) personList);
+                                    bundle.putSerializable("facilityList", (Serializable) facilityList);
+                                    bundle.putSerializable("codeList", (Serializable) codeList);
+                                    navController.navigate(R.id.mainFragment2, bundle);
                                 } else {
                                     Log.e("Staff List", "Is Null");
                                 }
@@ -197,9 +222,13 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                                 if (staffData.getStaffList() != null) {
                                     usageType = EnumCode.UsageType.Provider;
                                     providerList = staffData.getStaffList();
-                                    getSupportFragmentManager().beginTransaction()
-                                            .replace(R.id.nav_host_fragment, MainFragment.setTypeAndData(EnumCode.UsageType.Provider, null, providerList, null, null, null))
-                                            .commit();
+                                    bundle.putSerializable("type", (Serializable) EnumCode.UsageType.Provider);
+                                    bundle.putSerializable("agentList", (Serializable) agentList);
+                                    bundle.putSerializable("providerList", (Serializable) providerList);
+                                    bundle.putSerializable("personList", (Serializable) personList);
+                                    bundle.putSerializable("facilityList", (Serializable) facilityList);
+                                    bundle.putSerializable("codeList", (Serializable) codeList);
+                                    navController.navigate(R.id.mainFragment2, bundle);
                                 } else {
                                     Log.e("Staff List", "Is Null");
                                 }
@@ -224,9 +253,13 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                                 if (customerList.getPersonList() != null) {
                                     personList = customerList.getPersonList();
                                     usageType = EnumCode.UsageType.Person;
-                                    getSupportFragmentManager().beginTransaction()
-                                            .replace(R.id.nav_host_fragment, MainFragment.setTypeAndData(EnumCode.UsageType.Person, null, null, personList, null, null))
-                                            .commit();
+                                    bundle.putSerializable("type", (Serializable) EnumCode.UsageType.Person);
+                                    bundle.putSerializable("agentList", (Serializable) agentList);
+                                    bundle.putSerializable("providerList", (Serializable) providerList);
+                                    bundle.putSerializable("personList", (Serializable) personList);
+                                    bundle.putSerializable("facilityList", (Serializable) facilityList);
+                                    bundle.putSerializable("codeList", (Serializable) codeList);
+                                    navController.navigate(R.id.mainFragment2, bundle);
                                 }
                             }
                         }
@@ -249,9 +282,13 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                                     codeList = codeList1.getCodeList();
 
                                     usageType = EnumCode.UsageType.Code;
-                                    getSupportFragmentManager().beginTransaction()
-                                            .replace(R.id.nav_host_fragment, MainFragment.setTypeAndData(EnumCode.UsageType.Code, null, null, null, null, codeList))
-                                            .commit();
+                                    bundle.putSerializable("type", (Serializable) EnumCode.UsageType.Code);
+                                    bundle.putSerializable("agentList", (Serializable) agentList);
+                                    bundle.putSerializable("providerList", (Serializable) providerList);
+                                    bundle.putSerializable("personList", (Serializable) personList);
+                                    bundle.putSerializable("facilityList", (Serializable) facilityList);
+                                    bundle.putSerializable("codeList", (Serializable) codeList);
+                                    navController.navigate(R.id.mainFragment2, bundle);
                                 }
                             }
                         }
@@ -271,9 +308,13 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                                 if (facilities.getFacilities() != null) {
                                     usageType = EnumCode.UsageType.Facility;
                                     facilityList = facilities.getFacilities();
-                                    getSupportFragmentManager().beginTransaction()
-                                            .replace(R.id.nav_host_fragment, MainFragment.setTypeAndData(EnumCode.UsageType.Facility, null, null, null, facilityList, null))
-                                            .commit();
+                                    bundle.putSerializable("type", (Serializable) EnumCode.UsageType.Facility);
+                                    bundle.putSerializable("agentList", (Serializable) agentList);
+                                    bundle.putSerializable("providerList", (Serializable) providerList);
+                                    bundle.putSerializable("personList", (Serializable) personList);
+                                    bundle.putSerializable("facilityList", (Serializable) facilityList);
+                                    bundle.putSerializable("codeList", (Serializable) codeList);
+                                    navController.navigate(R.id.mainFragment2, bundle);
                                 }
                             }
                         }
@@ -296,9 +337,13 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                                 if (facilities.getFacilities() != null) {
                                     usageType = EnumCode.UsageType.Facility;
                                     facilityList = facilities.getFacilities();
-                                    getSupportFragmentManager().beginTransaction()
-                                            .replace(R.id.nav_host_fragment, MainFragment.setTypeAndData(EnumCode.UsageType.Facility, null, null, null, facilityList, null))
-                                            .commit();
+                                    bundle.putSerializable("type", (Serializable) EnumCode.UsageType.Facility);
+                                    bundle.putSerializable("agentList", (Serializable) agentList);
+                                    bundle.putSerializable("providerList", (Serializable) providerList);
+                                    bundle.putSerializable("personList", (Serializable) personList);
+                                    bundle.putSerializable("facilityList", (Serializable) facilityList);
+                                    bundle.putSerializable("codeList", (Serializable) codeList);
+                                    navController.navigate(R.id.mainFragment2, bundle);
                                 }
                             }
                         }

@@ -1,4 +1,4 @@
-package com.thetatecno.fluidadmin;
+package com.thetatecno.fluidadmin.listeners;
 
 public interface OnDataChangedCallBackListener<T> {
 

@@ -112,28 +112,32 @@ public class MainFragment extends Fragment {
             personList = null;
             facilityList = null;
             codeList = null;
-        } else if (usageType == EnumCode.UsageType.Provider) {
+        }
+        else if (usageType == EnumCode.UsageType.Provider) {
             providerList = providerList1;
             agentList = null;
             personList = null;
             facilityList = null;
             codeList = null;
 
-        } else if (usageType == EnumCode.UsageType.Person) {
+        }
+        else if (usageType == EnumCode.UsageType.Person) {
             personList = personList1;
             agentList = null;
             providerList = null;
             facilityList = null;
             codeList = null;
 
-        } else if (usageType == EnumCode.UsageType.Facility) {
+        }
+        else if (usageType == EnumCode.UsageType.Facility) {
             facilityList = facilityList1;
             agentList = null;
             providerList = null;
             personList = null;
             codeList = null;
 
-        } else if (usageType == EnumCode.UsageType.Code) {
+        }
+        else if (usageType == EnumCode.UsageType.Code) {
             codeList = codeList1;
             agentList = null;
             providerList = null;

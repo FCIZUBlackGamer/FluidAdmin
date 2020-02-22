@@ -70,10 +70,26 @@ public class AgentListAdapter extends RecyclerView.Adapter<AgentListAdapter.Agen
 
     @Override
     public void onBindViewHolder(@NonNull final AgentListViewHolder holder, final int position) {
+        holder.idTxt.setText(agentList.get(position).getStaffId());
+        if (!agentList.get(position).getFirstName().isEmpty() || !agentList.get(position).getFamilyName().isEmpty()) {
+            holder.fullNameTxt.setText(agentList.get(position).getFirstName() + " " + agentList.get(position).getFamilyName());
+            holder.fullNameTxt.setVisibility(View.VISIBLE);
+        } else {
+            holder.fullNameTxt.setVisibility(View.GONE);
+        }
+        if (!agentList.get(position).getEmail().isEmpty()) {
+            holder.agentEmailTxt.setText(agentList.get(position).getEmail());
+            holder.agentEmailTxt.setVisibility(View.VISIBLE);
 
-        holder.fullNameTxt.setText(agentList.get(position).getFirstName() + " " + agentList.get(position).getFamilyName());
-        holder.agentEmailTxt.setText(agentList.get(position).getEmail());
-        holder.agentPhoneTxt.setText(agentList.get(position).getMobileNumber());
+        } else
+            holder.agentEmailTxt.setVisibility(View.GONE);
+
+        if (!agentList.get(position).getMobileNumber().isEmpty()) {
+            holder.agentPhoneTxt.setText(agentList.get(position).getMobileNumber());
+            holder.agentPhoneTxt.setVisibility(View.VISIBLE);
+        } else {
+            holder.agentPhoneTxt.setVisibility(View.GONE);
+        }
         Glide.with(context).load(agentList.get(position).getImageLink()).into(holder.personImg);
         holder.facilityTitleTxt.setText(R.string.clinics);
         FacilitiesForAgentListAdapter facilitiesForAgentListAdapter = new FacilitiesForAgentListAdapter(context, agentList.get(position).getFacilityList());
@@ -139,6 +155,7 @@ public class AgentListAdapter extends RecyclerView.Adapter<AgentListAdapter.Agen
 
         ImageView personImg;
         TextView agentTextViewOptions, fullNameTxt, agentEmailTxt, agentPhoneTxt;
+        TextView idTxt;
         ViewPager2 pager;
         TabLayout tabLayout;
         TextView facilityTitleTxt;
@@ -148,6 +165,7 @@ public class AgentListAdapter extends RecyclerView.Adapter<AgentListAdapter.Agen
             personImg = itemView.findViewById(R.id.person_img);
             agentTextViewOptions = itemView.findViewById(R.id.agentTextViewOptions);
             fullNameTxt = itemView.findViewById(R.id.fullNameTxt);
+            idTxt = itemView.findViewById(R.id.idTxt);
             agentEmailTxt = itemView.findViewById(R.id.email_txt);
             agentPhoneTxt = itemView.findViewById(R.id.mobile_num_txt);
             pager = itemView.findViewById(R.id.photo_viewpager);

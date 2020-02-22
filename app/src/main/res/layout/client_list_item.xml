@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     app:cardElevation="@dimen/cardview_default_elevation"
     app:cardCornerRadius="4dp"
+    android:layout_margin="4dp"
     app:cardBackgroundColor="@color/colorWhite"
     android:layout_height="wrap_content"
   >
@@ -25,8 +26,8 @@
 
     <TextView
         android:id="@+id/fullNameTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="59dp"
+        android:layout_height="37dp"
         android:layout_marginStart="8dp"
         android:text="@string/name_txt"
         android:textColor="@color/colorPrimary"
@@ -36,15 +37,22 @@
         app:layout_constraintTop_toTopOf="@+id/person_img" />
 
     <TextView
+        android:id="@+id/idTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="@+id/fullNameTxt"
+        app:layout_constraintTop_toBottomOf="@+id/fullNameTxt" />
+
+    <TextView
         android:id="@+id/email_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:drawableStart="@drawable/ic_email_black_24dp"
         android:drawablePadding="5dp"
-        android:layout_marginTop="8dp"
         android:text="@string/email_example_txt"
         app:layout_constraintStart_toStartOf="@+id/fullNameTxt"
-        app:layout_constraintTop_toBottomOf="@+id/fullNameTxt" />
+        app:layout_constraintTop_toBottomOf="@+id/idTxt" />
 
     <TextView
         android:id="@+id/typeCode_tv"

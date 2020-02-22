@@ -1,6 +1,7 @@
 package com.thetatecno.fluidadmin.ui.addorupdatestuff;
 
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
@@ -19,10 +20,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.thetatecno.fluidadmin.R;
+import com.thetatecno.fluidadmin.listeners.OnFragmentInteractionListener;
 import com.thetatecno.fluidadmin.model.Staff;
+import com.thetatecno.fluidadmin.utils.App;
 import com.thetatecno.fluidadmin.utils.EnumCode;
+import com.thetatecno.fluidadmin.utils.PreferenceController;
 
 import java.io.Serializable;
 import java.util.List;
@@ -35,8 +40,6 @@ import static com.thetatecno.fluidadmin.utils.Constants.ARG_STAFF;
  */
 public class AddOrUpdateProviderFragment extends Fragment {
     private static String TAG = "AddStaff";
-    private static String ARG_CODE_TYPE = "codeType";
-    private String codeType;
     EditText idTxt;
     EditText firstNameTxt;
     EditText lastNameTxt;
@@ -48,10 +51,10 @@ public class AddOrUpdateProviderFragment extends Fragment {
     AddOrUpdateViewModel addOrUpdateViewModel;
     boolean isStaffHasData;
     Staff staff;
-
     List<Staff> providerList;
     NavController navController;
     Bundle bundle;
+    OnFragmentInteractionListener onFragmentInteractionListener;
 
     public AddOrUpdateProviderFragment() {
         // Required empty public constructor
@@ -70,18 +73,18 @@ public class AddOrUpdateProviderFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            staff = (Staff) getArguments().getSerializable(ARG_STAFF);
+            if (getArguments().getSerializable(ARG_STAFF) != null) {
+                staff = (Staff) getArguments().getSerializable(ARG_STAFF);
+            }
             providerList = (List<Staff>) getArguments().getSerializable("providerList");
+
         }
         navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
-        bundle = new Bundle();
+
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
             @Override
             public void handleOnBackPressed() {
-                // Handle the back button event
-                bundle.putSerializable("type", (Serializable) EnumCode.UsageType.Provider);
-                bundle.putSerializable("providerList", (Serializable) providerList);
-                navController.navigate(R.id.action_addOrUpdateProviderFragment_to_mainFragment2, bundle);
+                onCancelOrBackBtnPressed();
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
@@ -111,6 +114,7 @@ public class AddOrUpdateProviderFragment extends Fragment {
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                staff.setStaffId(idTxt.getText().toString());
                 staff.setFirstName(firstNameTxt.getText().toString());
                 staff.setFamilyName(lastNameTxt.getText().toString());
                 staff.setStaffId(idTxt.getText().toString());
@@ -121,16 +125,18 @@ public class AddOrUpdateProviderFragment extends Fragment {
                     staff.setGender(EnumCode.Gender.F.toString());
                 staff.setEmail(emailTxt.getText().toString());
                 staff.setMobileNumber(phoneTxt.getText().toString());
-                if (codeType.equals(EnumCode.UsageType.Agent.toString()))
-                    staff.setTypeCode(EnumCode.StaffTypeCode.DSPTCHR.toString());
-                else
-                    staff.setTypeCode(EnumCode.StaffTypeCode.PRVDR.toString());
+                staff.setTypeCode(EnumCode.StaffTypeCode.PRVDR.toString());
+                staff.setLangId(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
 
                 if (!isStaffHasData) {
                     addOrUpdateViewModel.addNewStaff(staff).observe(getActivity(), new Observer<String>() {
                         @Override
                         public void onChanged(String s) {
                             Log.i("AddOrUpdate", "add staff message" + s);
+                            Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
+                            if (s.contains("success"))
+                                onFragmentInteractionListener.onFragmentAddOrUpdateEntity(EnumCode.UsageType.Provider);
+
                         }
                     });
                 } else {
@@ -138,6 +144,9 @@ public class AddOrUpdateProviderFragment extends Fragment {
                         @Override
                         public void onChanged(String s) {
                             Log.i("AddOrUpdate", "Update staff message" + s);
+                            Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
+                            if (s.contains("success"))
+                                onFragmentInteractionListener.onFragmentAddOrUpdateEntity(EnumCode.UsageType.Provider);
                         }
                     });
                 }
@@ -147,14 +156,23 @@ public class AddOrUpdateProviderFragment extends Fragment {
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                onCancelOrBackBtnPressed();
             }
         });
 
     }
 
+    private void onCancelOrBackBtnPressed() {
+        onFragmentInteractionListener.onDisplayAddBtn();
+        bundle = new Bundle();
+        bundle.putSerializable("type", (Serializable) EnumCode.UsageType.Provider);
+        bundle.putSerializable("providerList", (Serializable) providerList);
+        navController.navigate(R.id.action_addOrUpdateProviderFragment_to_mainFragment2, bundle);
+    }
+
     private void updateData() {
         if (staff != null) {
+            idTxt.setText(staff.getStaffId());
             firstNameTxt.setText(staff.getFirstName());
             lastNameTxt.setText(staff.getFamilyName());
             emailTxt.setText(staff.getEmail());
@@ -162,7 +180,7 @@ public class AddOrUpdateProviderFragment extends Fragment {
                 genderRadioGroup.check(R.id.femaleRadioButton);
             else if (staff.getGender().equals(EnumCode.Gender.M.toString()))
                 genderRadioGroup.check(R.id.maleRadioButton);
-            addBtn.setText(getResources().getString(R.string.update_txt));
+            addBtn.setHint(getResources().getString(R.string.update_txt));
             isStaffHasData = true;
 
         } else {
@@ -171,8 +189,26 @@ public class AddOrUpdateProviderFragment extends Fragment {
             firstNameTxt.setText("");
             lastNameTxt.setText("");
             emailTxt.setText("");
-            addBtn.setText(getResources().getString(R.string.add_txt));
+            addBtn.setHint(getResources().getString(R.string.add_txt));
         }
     }
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            onFragmentInteractionListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        onFragmentInteractionListener = null;
+
+    }
 }

@@ -33,7 +33,7 @@ import static com.thetatecno.fluidadmin.utils.Constants.ARG_CODE;
 import static com.thetatecno.fluidadmin.utils.Constants.ARG_FACILITY;
 import static com.thetatecno.fluidadmin.utils.Constants.ARG_STAFF;
 
-public class ProviderListAdapter extends RecyclerView.Adapter<ProviderListAdapter.ProviderListViewHolder>  {
+public class ProviderListAdapter extends RecyclerView.Adapter<ProviderListAdapter.ProviderListViewHolder> {
 
     Context context;
     FragmentManager fragmentManager;
@@ -70,11 +70,31 @@ public class ProviderListAdapter extends RecyclerView.Adapter<ProviderListAdapte
 
     @Override
     public void onBindViewHolder(@NonNull final ProviderListViewHolder holder, final int position) {
-        
-        holder.fullNameTxt.setText(providerList.get(position).getFirstName() + " " + providerList.get(position).getFamilyName());
-        holder.mailTxt.setText(providerList.get(position).getEmail());
-        holder.phoneTxt.setText(providerList.get(position).getMobileNumber());
-        if (providerList.get(position).getImageLink()!=null && !providerList.get(position).getImageLink().isEmpty())
+
+        if (!providerList.get(position).getFirstName().isEmpty() || !providerList.get(position).getFamilyName().isEmpty()) {
+            holder.fullNameTxt.setText(providerList.get(position).getFirstName() + " " + providerList.get(position).getFamilyName());
+            holder.fullNameTxt.setVisibility(View.VISIBLE);
+        } else {
+            holder.fullNameTxt.setVisibility(View.GONE);
+
+        }
+        if (!providerList.get(position).getEmail().isEmpty()) {
+            holder.mailTxt.setText(providerList.get(position).getEmail());
+            holder.mailTxt.setVisibility(View.VISIBLE);
+        } else {
+            holder.mailTxt.setVisibility(View.GONE);
+
+        }
+        if (!providerList.get(position).getMobileNumber().isEmpty()) {
+
+            holder.phoneTxt.setText(providerList.get(position).getMobileNumber());
+            holder.phoneTxt.setVisibility(View.VISIBLE);
+
+        } else {
+            holder.phoneTxt.setVisibility(View.GONE);
+
+        }
+        if (providerList.get(position).getImageLink() != null && !providerList.get(position).getImageLink().isEmpty())
             try {
                 Glide.with(context).load(providerList.get(position).getImageLink()).into(holder.personImg);
             } catch (Exception e) {
@@ -101,16 +121,14 @@ public class ProviderListAdapter extends RecyclerView.Adapter<ProviderListAdapte
                                 break;
                             case R.id.edit:
                                 //handle edit click
-                                bundle.putSerializable(ARG_STAFF , (Serializable) providerList.get(position));
+                                bundle.putSerializable(ARG_STAFF, (Serializable) providerList.get(position));
                                 bundle.putSerializable("providerList", (Serializable) providerList);
                                 navController.navigate(R.id.addOrUpdateProviderFragment, bundle);
-//                                fragmentManager.beginTransaction()
-//                                        .replace(R.id.nav_host_fragment, AddOrUpdateProviderFragment.newInstance(providerList.get(position)))
-//                                        .commit();
+
                                 break;
                             case R.id.delete:
                                 //handle delete click
-                                if(listener !=null)
+                                if (listener != null)
                                     listener.onDeleteButtonClicked(providerList.get(position));
                                 break;
                         }

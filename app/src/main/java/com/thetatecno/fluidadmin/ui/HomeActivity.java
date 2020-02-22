@@ -23,6 +23,7 @@ import com.thetatecno.fluidadmin.R;
 import com.thetatecno.fluidadmin.listeners.OnConfirmDeleteListener;
 import com.thetatecno.fluidadmin.listeners.OnDeleteListener;
 import com.thetatecno.fluidadmin.listeners.OnFragmentInteractionListener;
+import com.thetatecno.fluidadmin.listeners.OnFragmentInteractionWithFacilityTypesListener;
 import com.thetatecno.fluidadmin.model.Code;
 import com.thetatecno.fluidadmin.model.CodeList;
 import com.thetatecno.fluidadmin.model.CustomerList;
@@ -55,7 +56,7 @@ import io.sentry.event.BreadcrumbBuilder;
 import io.sentry.event.UserBuilder;
 
 
-public class HomeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, OnFragmentInteractionListener, OnDeleteListener, OnConfirmDeleteListener {
+public class HomeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, OnFragmentInteractionListener, OnFragmentInteractionWithFacilityTypesListener, OnDeleteListener, OnConfirmDeleteListener {
 
     List<Staff> agentList;
     List<Staff> providerList;
@@ -64,13 +65,12 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     List<Code> codeList;
     static EnumCode.UsageType usageType;
     MainViewModel mainViewModel;
-    private static SentryClient sentry;
     NavigationView navigationView;
     static String langId;
     ConfirmDeleteDialog confirmDeleteDialog;
     NavController navController;
     Bundle bundle;
-
+    FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +90,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         setSupportActionBar(toolbar);
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
 
-        final FloatingActionButton fab = findViewById(R.id.fab);
+        fab = findViewById(R.id.fab);
         try {
             mainViewModel.getStaffDataForAgents(langId, EnumCode.StaffTypeCode.DSPTCHR.toString()).observe(this, new Observer<StaffData>() {
                 @Override
@@ -123,46 +123,30 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                fab.setVisibility(View.GONE);
+
                 Snackbar.make(view, "" + usageType.toString(), Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 if (usageType == EnumCode.UsageType.Provider) {
+                   bundle.putSerializable(Constants.ARG_STAFF,null);
+                    navController.navigate(R.id.action_mainFragment2_to_addOrUpdateProviderFragment,bundle);
 
-                    navController.navigate(R.id.action_mainFragment2_to_addOrUpdateProviderFragment);
-
-//                    getSupportFragmentManager().beginTransaction()
-//                            .replace(R.id.nav_host_fragment, AddOrUpdateProviderFragment.newInstance(null))
-//                            .addToBackStack("AddNewStaffFragment")
-//                            .commit();
                 } else if (usageType == EnumCode.UsageType.Agent) {
-//                    getSupportFragmentManager().beginTransaction()
-//                            .replace(R.id.nav_host_fragment, AddOrUpdateAgentFragment.newInstance(null))
-//                            .addToBackStack("AddOrUpdateAgentFragment")
-//                            .commit();
 
-
-                    navController.navigate(R.id.action_mainFragment2_to_addOrUpdateAgentFragment);
+                    navController.navigate(R.id.action_mainFragment2_to_addOrUpdateAgentFragment,bundle);
                 } else if (usageType == EnumCode.UsageType.Code) {
 
-                    navController.navigate(R.id.action_mainFragment2_to_codeAddFragment);
-//                    getSupportFragmentManager().beginTransaction()
-//                            .replace(R.id.nav_host_fragment, CodeAddFragment.newInstance(null))
-//                            .addToBackStack("CodeAddFragment")
-//
-//                            .commit();
+                    navController.navigate(R.id.action_mainFragment2_to_codeAddFragment,bundle);
                 } else if (usageType == EnumCode.UsageType.Facility) {
-//                    getSupportFragmentManager().beginTransaction()
-//                            .replace(R.id.nav_host_fragment, FacilityAddFragment.newInstance(null))
-//                            .addToBackStack("FacilityAddFragment")
-//                            .commit();
-                    navController.navigate(R.id.action_mainFragment2_to_facilityAddFragment);
+
+                    navController.navigate(R.id.action_mainFragment2_to_facilityAddFragment,bundle);
                 }
 
-                fab.setVisibility(View.GONE);
             }
 
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -173,7 +157,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -183,185 +167,30 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        if(fab.getVisibility() == View.GONE)
+        fab.setVisibility(View.VISIBLE);
         switch (item.getItemId()) {
             case R.id.agents:
-                Sentry.getContext().recordBreadcrumb(new BreadcrumbBuilder().setMessage("User Clicked Agents Button From Navigation Drawer").build());
-                try {
-                    mainViewModel.getStaffDataForAgents(langId, EnumCode.StaffTypeCode.DSPTCHR.toString()).observe(this, new Observer<StaffData>() {
-                        @Override
-                        public void onChanged(StaffData staffData) {
-                            if (staffData != null) {
-                                if (staffData.getStaffList() != null) {
-                                    usageType = EnumCode.UsageType.Agent;
-                                    agentList = staffData.getStaffList();
-                                    bundle.putSerializable("type", (Serializable) EnumCode.UsageType.Agent);
-                                    bundle.putSerializable("agentList", (Serializable) agentList);
-                                    bundle.putSerializable("providerList", (Serializable) providerList);
-                                    bundle.putSerializable("personList", (Serializable) personList);
-                                    bundle.putSerializable("facilityList", (Serializable) facilityList);
-                                    bundle.putSerializable("codeList", (Serializable) codeList);
-                                    navController.navigate(R.id.mainFragment2, bundle);
-                                } else {
-                                    Log.e("Staff List", "Is Null");
-                                }
-                            } else {
-                                Log.e("Staff", "Is Null");
-                            }
-                        }
-                    });
-                } catch (Exception e) {
-                    Sentry.capture(e);
-                }
-
+                loadAgentsData();
                 break;
             case R.id.provider:
-                Sentry.getContext().recordBreadcrumb(new BreadcrumbBuilder().setMessage("User Clicked Provider Button From Navigation Drawer").build());
-                try {
-                    mainViewModel.getStaffDataForProviders(langId, EnumCode.StaffTypeCode.PRVDR.toString()).observe(this, new Observer<StaffData>() {
-                        @Override
-                        public void onChanged(StaffData staffData) {
-                            if (staffData != null) {
-                                if (staffData.getStaffList() != null) {
-                                    usageType = EnumCode.UsageType.Provider;
-                                    providerList = staffData.getStaffList();
-                                    bundle.putSerializable("type", (Serializable) EnumCode.UsageType.Provider);
-                                    bundle.putSerializable("agentList", (Serializable) agentList);
-                                    bundle.putSerializable("providerList", (Serializable) providerList);
-                                    bundle.putSerializable("personList", (Serializable) personList);
-                                    bundle.putSerializable("facilityList", (Serializable) facilityList);
-                                    bundle.putSerializable("codeList", (Serializable) codeList);
-                                    navController.navigate(R.id.mainFragment2, bundle);
-                                } else {
-                                    Log.e("Staff List", "Is Null");
-                                }
-                            } else {
-                                Log.e("Staff", "Is Null");
-                            }
-                        }
-                    });
-                } catch (Exception e) {
-                    Sentry.capture(e);
-                }
-
+                loadProvidersData();
                 break;
             case R.id.client:
-                Sentry.getContext().recordBreadcrumb(new BreadcrumbBuilder().setMessage("User Clicked Client Button From Navigation Drawer").build());
-
-                Log.e("Client", "Found");
-                try {
-                    mainViewModel.getAllClients("", langId).observe(this, new Observer<CustomerList>() {
-                        @Override
-                        public void onChanged(CustomerList customerList) {
-                            if (customerList != null) {
-                                if (customerList.getPersonList() != null) {
-                                    personList = customerList.getPersonList();
-                                    usageType = EnumCode.UsageType.Person;
-                                    Gson gson = new Gson();
-                                    Log.e("Data", gson.toJson(personList));
-                                    bundle.putSerializable("type", (Serializable) EnumCode.UsageType.Person);
-                                    bundle.putSerializable("agentList", (Serializable) agentList);
-                                    bundle.putSerializable("providerList", (Serializable) providerList);
-                                    bundle.putSerializable("personList", (Serializable) personList);
-                                    bundle.putSerializable("facilityList", (Serializable) facilityList);
-                                    bundle.putSerializable("codeList", (Serializable) codeList);
-                                    navController.navigate(R.id.mainFragment2, bundle);
-                                }else {
-                                    Log.e("getPersonList()", "Null");
-                                }
-                            }else {
-                                Log.e("customerList", "Null");
-                            }
-                        }
-                    });
-
-                } catch (Exception e) {
-                    Sentry.capture(e);
-                }
+                loadClientsData();
 
                 break;
 
             case R.id.code:
-                Sentry.getContext().recordBreadcrumb(new BreadcrumbBuilder().setMessage("User Clicked Code Button From Navigation Drawer").build());
-                try {
-                    mainViewModel.getDataForCode("", langId).observe(this, new Observer<CodeList>() {
-                        @Override
-                        public void onChanged(CodeList codeList1) {
-                            if (codeList1 != null) {
-                                if (codeList1.getCodeList() != null) {
-                                    codeList = codeList1.getCodeList();
-
-                                    usageType = EnumCode.UsageType.Code;
-                                    bundle.putSerializable("type", (Serializable) EnumCode.UsageType.Code);
-                                    bundle.putSerializable("agentList", (Serializable) agentList);
-                                    bundle.putSerializable("providerList", (Serializable) providerList);
-                                    bundle.putSerializable("personList", (Serializable) personList);
-                                    bundle.putSerializable("facilityList", (Serializable) facilityList);
-                                    bundle.putSerializable("codeList", (Serializable) codeList);
-                                    navController.navigate(R.id.mainFragment2, bundle);
-                                }
-                            }
-                        }
-                    });
-                } catch (Exception e) {
-                    Sentry.capture(e);
-                }
+                loadCodesData();
                 break;
             case R.id.clinic:
-                Sentry.getContext().recordBreadcrumb(new BreadcrumbBuilder().setMessage("User Clicked Clinic Button From Navigation Drawer").build());
-
-                try {
-                    mainViewModel.getStaffDataForClinics("", langId, EnumCode.ClinicTypeCode.CLINIC.toString()).observe(this, new Observer<Facilities>() {
-                        @Override
-                        public void onChanged(Facilities facilities) {
-                            if (facilities != null) {
-                                if (facilities.getFacilities() != null) {
-                                    usageType = EnumCode.UsageType.Facility;
-                                    facilityList = facilities.getFacilities();
-                                    bundle.putSerializable("type", (Serializable) EnumCode.UsageType.Facility);
-                                    bundle.putSerializable("agentList", (Serializable) agentList);
-                                    bundle.putSerializable("providerList", (Serializable) providerList);
-                                    bundle.putSerializable("personList", (Serializable) personList);
-                                    bundle.putSerializable("facilityList", (Serializable) facilityList);
-                                    bundle.putSerializable("codeList", (Serializable) codeList);
-                                    navController.navigate(R.id.mainFragment2, bundle);
-                                }
-                            }
-                        }
-                    });
-                } catch (Exception e) {
-                    Sentry.capture(e);
-                }
-
+               loadFacilityClinicTypeData();
 
                 break;
 
             case R.id.waiting_area:
-                Sentry.getContext().recordBreadcrumb(new BreadcrumbBuilder().setMessage("User Clicked Waiting Area Button From Navigation Drawer").build());
-
-                try {
-                    mainViewModel.getStaffDataForClinics("", langId, EnumCode.ClinicTypeCode.WAITAREA.toString()).observe(this, new Observer<Facilities>() {
-                        @Override
-                        public void onChanged(Facilities facilities) {
-                            if (facilities != null) {
-                                if (facilities.getFacilities() != null) {
-                                    usageType = EnumCode.UsageType.Facility;
-                                    facilityList = facilities.getFacilities();
-                                    bundle.putSerializable("type", (Serializable) EnumCode.UsageType.Facility);
-                                    bundle.putSerializable("agentList", (Serializable) agentList);
-                                    bundle.putSerializable("providerList", (Serializable) providerList);
-                                    bundle.putSerializable("personList", (Serializable) personList);
-                                    bundle.putSerializable("facilityList", (Serializable) facilityList);
-                                    bundle.putSerializable("codeList", (Serializable) codeList);
-                                    navController.navigate(R.id.mainFragment2, bundle);
-                                }
-                            }
-                        }
-                    });
-                } catch (Exception e) {
-                    Sentry.capture(e);
-                }
-
-
+                loadFaicilityWaitingAreaTypeData();
                 break;
 
             case R.id.language_reference:
@@ -374,6 +203,183 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         return true;
     }
 
+    private void loadFaicilityWaitingAreaTypeData() {
+        Sentry.getContext().recordBreadcrumb(new BreadcrumbBuilder().setMessage("User Clicked Waiting Area Button From Navigation Drawer").build());
+
+        try {
+            mainViewModel.getStaffDataForClinics("", langId, EnumCode.ClinicTypeCode.WAITAREA.toString()).observe(this, new Observer<Facilities>() {
+                @Override
+                public void onChanged(Facilities facilities) {
+                    if (facilities != null) {
+                        if (facilities.getFacilities() != null) {
+                            usageType = EnumCode.UsageType.Facility;
+                            facilityList = facilities.getFacilities();
+                            bundle.putSerializable("type", (Serializable) EnumCode.UsageType.Facility);
+                            bundle.putSerializable("agentList", (Serializable) agentList);
+                            bundle.putSerializable("providerList", (Serializable) providerList);
+                            bundle.putSerializable("personList", (Serializable) personList);
+                            bundle.putSerializable("facilityList", (Serializable) facilityList);
+                            bundle.putSerializable("codeList", (Serializable) codeList);
+                            navController.navigate(R.id.mainFragment2, bundle);
+                        }
+                    }
+                }
+            });
+        } catch (Exception e) {
+            Sentry.capture(e);
+        }
+
+
+    }
+
+    private void loadFacilityClinicTypeData() {
+        Sentry.getContext().recordBreadcrumb(new BreadcrumbBuilder().setMessage("User Clicked Clinic Button From Navigation Drawer").build());
+
+        try {
+            mainViewModel.getStaffDataForClinics("", langId, EnumCode.ClinicTypeCode.CLINIC.toString()).observe(this, new Observer<Facilities>() {
+                @Override
+                public void onChanged(Facilities facilities) {
+                    if (facilities != null) {
+                        if (facilities.getFacilities() != null) {
+                            usageType = EnumCode.UsageType.Facility;
+                            facilityList = facilities.getFacilities();
+                            bundle.putSerializable("type", (Serializable) EnumCode.UsageType.Facility);
+                            bundle.putSerializable("agentList", (Serializable) agentList);
+                            bundle.putSerializable("providerList", (Serializable) providerList);
+                            bundle.putSerializable("personList", (Serializable) personList);
+                            bundle.putSerializable("facilityList", (Serializable) facilityList);
+                            bundle.putSerializable("codeList", (Serializable) codeList);
+                            navController.navigate(R.id.mainFragment2, bundle);
+                        }
+                    }
+                }
+            });
+        } catch (Exception e) {
+            Sentry.capture(e);
+        }
+
+    }
+
+    private void loadCodesData() {
+        Sentry.getContext().recordBreadcrumb(new BreadcrumbBuilder().setMessage("User Clicked Code Button From Navigation Drawer").build());
+        try {
+            mainViewModel.getDataForCode("", langId).observe(this, new Observer<CodeList>() {
+                @Override
+                public void onChanged(CodeList codeList1) {
+                    if (codeList1 != null) {
+                        if (codeList1.getCodeList() != null) {
+                            codeList = codeList1.getCodeList();
+
+                            usageType = EnumCode.UsageType.Code;
+                            bundle.putSerializable("type", EnumCode.UsageType.Code);
+                            bundle.putSerializable("agentList", (Serializable) agentList);
+                            bundle.putSerializable("providerList", (Serializable) providerList);
+                            bundle.putSerializable("personList", (Serializable) personList);
+                            bundle.putSerializable("facilityList", (Serializable) facilityList);
+                            bundle.putSerializable("codeList", (Serializable) codeList);
+                            navController.navigate(R.id.mainFragment2, bundle);
+                        }
+                    }
+                }
+            });
+        } catch (Exception e) {
+            Sentry.capture(e);
+        }
+    }
+
+    private void loadClientsData() {
+        Sentry.getContext().recordBreadcrumb(new BreadcrumbBuilder().setMessage("User Clicked Client Button From Navigation Drawer").build());
+
+        Log.e("Client", "Found");
+        try {
+            mainViewModel.getAllClients("", langId).observe(this, new Observer<CustomerList>() {
+                @Override
+                public void onChanged(CustomerList customerList) {
+                    if (customerList != null) {
+                        if (customerList.getPersonList() != null) {
+                            personList = customerList.getPersonList();
+                            usageType = EnumCode.UsageType.Person;
+                            Gson gson = new Gson();
+                            Log.e("Data", gson.toJson(personList));
+                            bundle.putSerializable("type", (Serializable) EnumCode.UsageType.Person);
+                            bundle.putSerializable("agentList", (Serializable) agentList);
+                            bundle.putSerializable("providerList", (Serializable) providerList);
+                            bundle.putSerializable("personList", (Serializable) personList);
+                            bundle.putSerializable("facilityList", (Serializable) facilityList);
+                            bundle.putSerializable("codeList", (Serializable) codeList);
+                            navController.navigate(R.id.mainFragment2, bundle);
+                        } else {
+                            Log.e("getPersonList()", "Null");
+                        }
+                    } else {
+                        Log.e("customerList", "Null");
+                    }
+                }
+            });
+
+        } catch (Exception e) {
+            Sentry.capture(e);
+        }
+    }
+
+    public void loadAgentsData(){
+        Sentry.getContext().recordBreadcrumb(new BreadcrumbBuilder().setMessage("User Clicked Agents Button From Navigation Drawer").build());
+        try {
+            mainViewModel.getStaffDataForAgents(langId, EnumCode.StaffTypeCode.DSPTCHR.toString()).observe(this, new Observer<StaffData>() {
+                @Override
+                public void onChanged(StaffData staffData) {
+                    if (staffData != null) {
+                        if (staffData.getStaffList() != null) {
+                            usageType = EnumCode.UsageType.Agent;
+                            agentList = staffData.getStaffList();
+                            bundle.putSerializable("type", (Serializable) EnumCode.UsageType.Agent);
+                            bundle.putSerializable("agentList", (Serializable) agentList);
+                            bundle.putSerializable("providerList", (Serializable) providerList);
+                            bundle.putSerializable("personList", (Serializable) personList);
+                            bundle.putSerializable("facilityList", (Serializable) facilityList);
+                            bundle.putSerializable("codeList", (Serializable) codeList);
+                            navController.navigate(R.id.mainFragment2, bundle);
+                        } else {
+                            Log.e("Staff List", "Is Null");
+                        }
+                    } else {
+                        Log.e("Staff", "Is Null");
+                    }
+                }
+            });
+        } catch (Exception e) {
+            Sentry.capture(e);
+        }
+    }
+    public void loadProvidersData(){
+        Sentry.getContext().recordBreadcrumb(new BreadcrumbBuilder().setMessage("User Clicked Provider Button From Navigation Drawer").build());
+        try {
+            mainViewModel.getStaffDataForProviders(langId, EnumCode.StaffTypeCode.PRVDR.toString()).observe(this, new Observer<StaffData>() {
+                @Override
+                public void onChanged(StaffData staffData) {
+                    if (staffData != null) {
+                        if (staffData.getStaffList() != null) {
+                            usageType = EnumCode.UsageType.Provider;
+                            providerList = staffData.getStaffList();
+                            bundle.putSerializable("type", (Serializable) EnumCode.UsageType.Provider);
+                            bundle.putSerializable("agentList", (Serializable) agentList);
+                            bundle.putSerializable("providerList", (Serializable) providerList);
+                            bundle.putSerializable("personList", (Serializable) personList);
+                            bundle.putSerializable("facilityList", (Serializable) facilityList);
+                            bundle.putSerializable("codeList", (Serializable) codeList);
+                            navController.navigate(R.id.mainFragment2, bundle);
+                        } else {
+                            Log.e("Staff List", "Is Null");
+                        }
+                    } else {
+                        Log.e("Staff", "Is Null");
+                    }
+                }
+            });
+        } catch (Exception e) {
+            Sentry.capture(e);
+        }
+    }
     public void checkOnTheCurrentLanguage() {
         langId = PreferenceController.getInstance(this).get(PreferenceController.LANGUAGE).toUpperCase();
         if (PreferenceController.getInstance(this).get(PreferenceController.LANGUAGE).equals(Constants.ARABIC)) {
@@ -400,50 +406,82 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
     }
 
+
     @Override
-    public void onFragmentInteraction() {
-        getSupportFragmentManager().popBackStack("CodeAddFragment", 0);
+    public void onFragmentAddOrUpdateEntity(EnumCode.UsageType usageType) {
+        fab.setVisibility(View.VISIBLE);
+        if(usageType == EnumCode.UsageType.Agent)
+        {
+
+            loadAgentsData();
+
+        }
+        else if(usageType == EnumCode.UsageType.Provider)
+        {
+            loadProvidersData();
+        }
+        else if (usageType == EnumCode.UsageType.Code){
+            loadCodesData();
+        }
+    }
+    @Override
+    public void onAddOrUpdateFacility(EnumCode.ClinicTypeCode clinicTypeCode) {
+        fab.setVisibility(View.VISIBLE);
+     if(clinicTypeCode == EnumCode.ClinicTypeCode.CLINIC){
+         loadFacilityClinicTypeData();
+     }
+     else if (clinicTypeCode.equals(EnumCode.ClinicTypeCode.WAITAREA))
+     {
+         loadFaicilityWaitingAreaTypeData();
+     }
+
     }
     @Override
     public void onDeleteButtonClicked(Object itemClicked) {
-         confirmDeleteDialog = new ConfirmDeleteDialog(this,itemClicked);
+        confirmDeleteDialog = new ConfirmDeleteDialog(this, itemClicked);
         confirmDeleteDialog.show();
 
     }
 
     @Override
     public void onOkButtonClicked(Object itemDeleted) {
-        if(confirmDeleteDialog.isShowing()){
+        if (confirmDeleteDialog.isShowing()) {
             confirmDeleteDialog.dismiss();
         }
-        if(itemDeleted instanceof Facility) {
+        if (itemDeleted instanceof Facility) {
             Log.i("Object", "facility type " + ((Facility) itemDeleted).getCode());
             mainViewModel.deleteFacility((Facility) itemDeleted).observe(this, new Observer<String>() {
                 @Override
                 public void onChanged(String s) {
-                    Toast.makeText(HomeActivity.this,s,Toast.LENGTH_SHORT).show();
+                    Toast.makeText(HomeActivity.this, s, Toast.LENGTH_SHORT).show();
 
                 }
             });
         }
-        if(itemDeleted instanceof Staff) {
+        if (itemDeleted instanceof Staff) {
             Log.i("Object", "staff type " + ((Staff) itemDeleted).getStaffId());
             mainViewModel.deleteAgentOrProvider((Staff) itemDeleted).observe(this, new Observer<String>() {
                 @Override
                 public void onChanged(String s) {
-                    Toast.makeText(HomeActivity.this,s,Toast.LENGTH_SHORT).show();
+                    Toast.makeText(HomeActivity.this, s, Toast.LENGTH_SHORT).show();
                 }
             });
         }
-        if(itemDeleted instanceof Code) {
+        if (itemDeleted instanceof Code) {
             Log.i("Object", "code type " + ((Code) itemDeleted).getCode());
             mainViewModel.deleteCode((Code) itemDeleted).observe(this, new Observer<String>() {
                 @Override
                 public void onChanged(String s) {
-                    Toast.makeText(HomeActivity.this,s,Toast.LENGTH_SHORT).show();
+                    Toast.makeText(HomeActivity.this, s, Toast.LENGTH_SHORT).show();
                 }
             });
         }
 
+    }
+
+
+    @Override
+    public void onDisplayAddBtn() {
+        fab.setVisibility(View.VISIBLE);
     }
 }

@@ -17,11 +17,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.thetatecno.fluidadmin.R;
+import com.thetatecno.fluidadmin.listeners.OnFragmentInteractionWithFacilityTypesListener;
 import com.thetatecno.fluidadmin.model.Facility;
 import com.thetatecno.fluidadmin.model.Staff;
+import com.thetatecno.fluidadmin.utils.App;
 import com.thetatecno.fluidadmin.utils.EnumCode;
+import com.thetatecno.fluidadmin.utils.PreferenceController;
 
 import java.io.Serializable;
 import java.util.List;
@@ -41,7 +45,7 @@ public class FacilityAddFragment extends Fragment {
     Button cancel_btn, addOrUpdateBtn;
     boolean isDataFound;
     FacilityAddViewModel facilityAddViewModel;
-    private OnFragmentInteractionListener mListener;
+    private OnFragmentInteractionWithFacilityTypesListener mListener;
     NavController navController;
     Bundle bundle;
     List<Facility> facilityList;
@@ -59,6 +63,7 @@ public class FacilityAddFragment extends Fragment {
         return fragment;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,14 +74,12 @@ public class FacilityAddFragment extends Fragment {
         }
 
         navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
-        bundle = new Bundle();
+
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
             @Override
             public void handleOnBackPressed() {
                 // Handle the back button event
-                bundle.putSerializable("type", (Serializable) EnumCode.UsageType.Facility);
-                bundle.putSerializable("facilityList", (Serializable) facilityList);
-                navController.navigate(R.id.action_facilityAddFragment_to_mainFragment2, bundle);
+                onCancelOrBackButtonClicked();
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
@@ -111,6 +114,10 @@ public class FacilityAddFragment extends Fragment {
                         @Override
                         public void onChanged(String s) {
                             Log.i("FacilityFragment", "update response message " + s);
+                            Toast.makeText(getActivity(),s,Toast.LENGTH_SHORT);
+                            if(s.contains("successfully"))
+                                onAddOrUpdateClicked();
+
                         }
                     });
                 } else {
@@ -120,6 +127,9 @@ public class FacilityAddFragment extends Fragment {
                         @Override
                         public void onChanged(String s) {
                             Log.i("FacilityFragment", "add response message " + s);
+                            Toast.makeText(getActivity(),s,Toast.LENGTH_SHORT).show();
+                            if(s.contains("successfully"))
+                                onAddOrUpdateClicked();
 
                         }
                     });
@@ -127,7 +137,32 @@ public class FacilityAddFragment extends Fragment {
                 }
             }
         });
+        cancel_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onCancelOrBackButtonClicked();
+            }
+        });
 
+    }
+
+    private void onCancelOrBackButtonClicked() {
+        mListener.onDisplayAddBtn();
+        bundle = new Bundle();
+        bundle.putSerializable("type", (Serializable) EnumCode.UsageType.Facility);
+        bundle.putSerializable("facilityList", (Serializable) facilityList);
+        navController.navigate(R.id.action_facilityAddFragment_to_mainFragment2, bundle);
+
+    }
+
+    void onAddOrUpdateClicked(){
+        if(type_et.getText().toString().equals(EnumCode.ClinicTypeCode.CLINIC.toString())) {
+            mListener.onAddOrUpdateFacility(EnumCode.ClinicTypeCode.CLINIC);
+        }
+        else if (type_et.getText().toString().equals(EnumCode.ClinicTypeCode.WAITAREA.toString()))
+        {
+            mListener.onAddOrUpdateFacility(EnumCode.ClinicTypeCode.WAITAREA);
+        }
     }
 
 
@@ -139,7 +174,7 @@ public class FacilityAddFragment extends Fragment {
             type_et.setText(facility.getType());
             waiting_area_id_et.setText(facility.getWaitingAreaID());
             device_id_et.setText(facility.getDeviceId());
-            addOrUpdateBtn.setText(getResources().getString(R.string.update_txt));
+            addOrUpdateBtn.setHint(getResources().getString(R.string.update_txt));
         } else {
             isDataFound = false;
             facility_id_et.setText("");
@@ -147,7 +182,7 @@ public class FacilityAddFragment extends Fragment {
             type_et.setText("");
             waiting_area_id_et.setText("");
             device_id_et.setText("");
-            addOrUpdateBtn.setText(getResources().getString(R.string.add_txt));
+            addOrUpdateBtn.setHint(getResources().getString(R.string.add_txt));
 
         }
     }
@@ -158,24 +193,21 @@ public class FacilityAddFragment extends Fragment {
         facility.setDeviceId(device_id_et.getText().toString());
         facility.setWaitingAreaID(waiting_area_id_et.getText().toString());
         facility.setType(type_et.getText().toString());
+        facility.setLangId(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
+
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
+
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
+        if (context instanceof OnFragmentInteractionWithFacilityTypesListener) {
+            mListener = (OnFragmentInteractionWithFacilityTypesListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionWithFacilityTypesListener");
+        }
     }
 
     @Override
@@ -184,18 +216,5 @@ public class FacilityAddFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
+
 }

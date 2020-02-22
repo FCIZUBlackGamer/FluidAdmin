@@ -17,6 +17,8 @@ public interface Constants {
     public static final String ARG_FACILITY = "facility";
     public static final String ARG_CODE = "code";
     public static String ARG_STAFF = "staff";
+    public static String ADD_OR_UPDATE_SUCCESS_STATE = "1";
+    public static String ADD_OR_UPDATE_FAIL_STATE = "-1";
 
 
 }

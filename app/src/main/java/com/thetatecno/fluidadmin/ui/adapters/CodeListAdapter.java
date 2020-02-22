@@ -72,8 +72,7 @@ public class CodeListAdapter extends RecyclerView.Adapter<CodeListAdapter.CodeVi
 
         try {
             holder.codeTxt.setText(codeList.get(position).getCode());
-            holder.codeTypeTxt.setText(codeList.get(position).getCodeType());
-//            holder.userCodeTxt.setText(context.getResources().getText(R.string.user_code_txt) + " "+codeList.get(position).getUserCode());
+//            holder.codeTypeTxt.setText(codeList.get(position).getCodeType());
             holder.codeDescriptionTxt.setText(codeList.get(position).getDescription());
 
             holder.codeTextViewOptions.setOnClickListener(new View.OnClickListener() {
@@ -92,11 +91,8 @@ public class CodeListAdapter extends RecyclerView.Adapter<CodeListAdapter.CodeVi
                                     bundle.putSerializable(ARG_CODE, (Serializable) codeList.get(position));
                                     bundle.putSerializable("type", (Serializable) EnumCode.UsageType.Code);
                                     bundle.putSerializable("codeList", (Serializable) codeList);
-
                                     navController.navigate(R.id.codeAddFragment, bundle);
-//                                    fragmentManager.beginTransaction()
-//                                            .replace(R.id.nav_host_fragment, CodeAddFragment.newInstance(codeList.get(position)),"CodeAddFragment")
-//                                            .commit();
+
                                     break;
                                 case R.id.delete:
                                     //handle delete click
@@ -126,14 +122,14 @@ public class CodeListAdapter extends RecyclerView.Adapter<CodeListAdapter.CodeVi
     }
 
     public class CodeViewHolder extends RecyclerView.ViewHolder {
-        TextView codeTextViewOptions, codeTxt, codeTypeTxt, codeDescriptionTxt;
+        TextView codeTextViewOptions, codeTxt, codeDescriptionTxt;
 
 
         public CodeViewHolder(@NonNull View itemView) {
             super(itemView);
             codeTextViewOptions = itemView.findViewById(R.id.codeTxtViewOptions);
             codeTxt = itemView.findViewById(R.id.code_txt);
-            codeTypeTxt = itemView.findViewById(R.id.codeType_txt);
+//            codeTypeTxt = itemView.findViewById(R.id.codeType_txt);
 //            userCodeTxt = itemView.findViewById(R.id.userCode_txt);
             codeDescriptionTxt = itemView.findViewById(R.id.codeDescription);
 

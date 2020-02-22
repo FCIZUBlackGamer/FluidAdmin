@@ -2,11 +2,13 @@ package com.thetatecno.fluidadmin.retrofiteServices.repositories;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
-import com.thetatecno.fluidadmin.OnDataChangedCallBackListener;
+import com.thetatecno.fluidadmin.listeners.OnDataChangedCallBackListener;
 import com.thetatecno.fluidadmin.model.Facilities;
 import com.thetatecno.fluidadmin.model.Facility;
+import com.thetatecno.fluidadmin.model.State;
 import com.thetatecno.fluidadmin.retrofiteServices.interfaces.MyServicesInterface;
 import com.thetatecno.fluidadmin.retrofiteServices.interfaces.RetrofitInstance;
 import com.thetatecno.fluidadmin.utils.Constants;
@@ -46,78 +48,88 @@ private static String TAG = FacilityRepository.class.getSimpleName();
     public void insertFacility(final Facility facility, final OnDataChangedCallBackListener onDataChangedCallBackListener) {
 
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
-        Call<Void> call = myServicesInterface.addFacility(facility);
-        call.enqueue(new Callback<Void>() {
+        Call<State> call = myServicesInterface.addFacility(facility);
+        call.enqueue(new Callback<State>() {
 
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if (response.code() == Constants.STATE_OK && response.body() != null) {
-                    Log.i(TAG, "add Facility response " + response.toString());
-                    onDataChangedCallBackListener.onResponse(true);
+            public void onResponse(@NonNull Call<State> call, @NonNull Response<State> response) {
+                if (response.isSuccessful()) {
+                    Log.i(TAG, "insertFacility: response " + response.toString());
+                    if (response.body().getStatus() != null)
+                        onDataChangedCallBackListener.onResponse(response.body().getStatus());
+
+
                 } else
-                    onDataChangedCallBackListener.onResponse(false);
+                    onDataChangedCallBackListener.onResponse(null);
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(Call<State> call, Throwable t) {
                 call.cancel();
-                onDataChangedCallBackListener.onResponse(false);
+                onDataChangedCallBackListener.onResponse(null);
             }
 
         });
+
 
     }
 
     public void updateFacility(final Facility facility, final OnDataChangedCallBackListener onDataChangedCallBackListener) {
 
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
-        Call<Void> call = myServicesInterface.updateFacility(facility);
-        call.enqueue(new Callback<Void>() {
+        Call<State> call = myServicesInterface.updateFacility(facility);
+        call.enqueue(new Callback<State>() {
 
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if (response.code() == Constants.STATE_OK && response.body() != null) {
-                    Log.i(TAG, "update Facility response " + response.toString());
-                    onDataChangedCallBackListener.onResponse(true);
+            public void onResponse(@NonNull Call<State> call, @NonNull Response<State> response) {
+                if (response.isSuccessful()) {
+                    Log.i(TAG, "updateFacility: response " + response.toString());
+                    if (response.body().getStatus() != null)
+                        onDataChangedCallBackListener.onResponse(response.body().getStatus());
+
+
                 } else
-                    onDataChangedCallBackListener.onResponse(false);
+                    onDataChangedCallBackListener.onResponse(null);
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(Call<State> call, Throwable t) {
                 call.cancel();
-                onDataChangedCallBackListener.onResponse(false);
+                onDataChangedCallBackListener.onResponse(null);
             }
 
         });
+
 
     }
 
     public void deleteFacility(final String facilityId, final OnDataChangedCallBackListener onDataChangedCallBackListener) {
 
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
-        Call<Void> call = myServicesInterface.deleteFacility(facilityId);
-        call.enqueue(new Callback<Void>() {
+        Call<State> call = myServicesInterface.deleteFacility(facilityId);
+        call.enqueue(new Callback<State>() {
 
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if (response.code() == Constants.STATE_OK) {
-                    Log.i(TAG, "delete Facility response " + response.toString());
-                    onDataChangedCallBackListener.onResponse(true);
-                } else {
-                    Log.i(TAG, "Failed to delete Facility response " + response.toString());
+            public void onResponse(@NonNull Call<State> call, @NonNull Response<State> response) {
+                if (response.isSuccessful()) {
+                    Log.i(TAG, "deleteFacility: response " + response.toString());
+                    if (response.body().getStatus() != null)
+                        onDataChangedCallBackListener.onResponse(response.body().getStatus());
 
-                    onDataChangedCallBackListener.onResponse(false);
-                }
+
+                } else
+                    onDataChangedCallBackListener.onResponse(null);
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(Call<State> call, Throwable t) {
                 call.cancel();
-                onDataChangedCallBackListener.onResponse(false);
+                onDataChangedCallBackListener.onResponse(null);
             }
 
         });
 
-    }
+        }
+
+
 }

@@ -1,5 +1,10 @@
 package com.thetatecno.fluidadmin.listeners;
 
-public interface OnFragmentInteractionListener {
-   public void onFragmentInteraction();
+import com.thetatecno.fluidadmin.utils.EnumCode;
+
+public interface OnFragmentInteractionListener extends onDisplayPlusBtnInterface {
+
+    void onFragmentAddOrUpdateEntity(EnumCode.UsageType usageType);
+
+
 }

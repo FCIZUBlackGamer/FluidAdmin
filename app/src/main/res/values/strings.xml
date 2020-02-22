@@ -57,4 +57,6 @@
     <string name="exception_glide_txt">Exception while loading image using Glide</string>
     <string name="phone_example_txt">+201020118856</string>
     <string name="clinic_example_txt">ENT10</string>
+    <string name="male_txt">Male</string>
+    <string name="female_txt">Female</string>
 </resources>

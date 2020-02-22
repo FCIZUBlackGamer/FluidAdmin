@@ -3,21 +3,22 @@ package com.thetatecno.fluidadmin.ui.addorupdatestuff;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.thetatecno.fluidadmin.OnDataChangedCallBackListener;
+import com.thetatecno.fluidadmin.listeners.OnDataChangedCallBackListener;
 import com.thetatecno.fluidadmin.model.Staff;
 import com.thetatecno.fluidadmin.retrofiteServices.repositories.StaffRepository;
+import com.thetatecno.fluidadmin.utils.Constants;
 
 public class AddOrUpdateViewModel extends ViewModel {
     StaffRepository staffRepository = new StaffRepository();
     MutableLiveData<String> addedSuccessLiveData = new MutableLiveData<>();
-    String message ;
+    String message = "" ;
     public MutableLiveData<String> addNewStaff(Staff staff){
-        staffRepository.insertNewStaff(staff, new OnDataChangedCallBackListener<Boolean>() {
+        staffRepository.insertNewStaff(staff, new OnDataChangedCallBackListener<String>() {
             @Override
-            public void onResponse(Boolean b) {
-                if(b.booleanValue())
+            public void onResponse(String b) {
+                if(b.equals(Constants.ADD_OR_UPDATE_SUCCESS_STATE))
                     message = "Added successfully";
-                else
+                else if (b.equals(Constants.ADD_OR_UPDATE_FAIL_STATE))
                     message = "Failed to add.";
                 addedSuccessLiveData.setValue(message);
 
@@ -26,12 +27,12 @@ public class AddOrUpdateViewModel extends ViewModel {
         return addedSuccessLiveData;
     }
     public MutableLiveData<String> updateStaff(Staff staff){
-        staffRepository.updateStaff(staff, new OnDataChangedCallBackListener<Boolean>() {
+        staffRepository.updateStaff(staff, new OnDataChangedCallBackListener<String>() {
             @Override
-            public void onResponse(Boolean b) {
-                if(b.booleanValue())
+            public void onResponse(String b) {
+                if(b.equals(Constants.ADD_OR_UPDATE_SUCCESS_STATE))
                     message = "updated successfully";
-                else
+                else if (b.equals(Constants.ADD_OR_UPDATE_FAIL_STATE))
                     message = "Failed to update.";
                 addedSuccessLiveData.setValue(message);
 

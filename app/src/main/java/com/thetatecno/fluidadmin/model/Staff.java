@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Staff extends Person implements Serializable {
-    @SerializedName("ID")
+    @SerializedName("staffId")
     @Expose
     private String staffId;
     @SerializedName("specialityCode")
@@ -20,10 +20,12 @@ public class Staff extends Person implements Serializable {
     @SerializedName("FACLITIES")
     @Expose
     private List<Facility> facilityList = new ArrayList<>();
-    @SerializedName("SPECIALITY")
+    @SerializedName("speciality")
     @Expose
     private String speciality;
-
+    @SerializedName("langId")
+    @Expose
+    private String langId;
 
     public String getStaffId() {
         return staffId;
@@ -64,4 +66,13 @@ public class Staff extends Person implements Serializable {
     public void setSpeciality(String speciality) {
         this.speciality = speciality;
     }
+
+    public String getLangId() {
+        return langId;
+    }
+
+    public void setLangId(String langId) {
+        this.langId = langId;
+    }
+
 }

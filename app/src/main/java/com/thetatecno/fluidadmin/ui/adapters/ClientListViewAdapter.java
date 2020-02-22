@@ -58,10 +58,36 @@ public class ClientListViewAdapter extends RecyclerView.Adapter<ClientListViewAd
     public void onBindViewHolder(@NonNull final vHolder holder, final int position) {
 
         try {
+            if(!personList.get(position).getId().isEmpty()) {
+                holder.idTxt.setText(personList.get(position).getId());
+                holder.idTxt.setVisibility(View.VISIBLE);
+            }
+            else {
 
-            holder.fullNameTxt.setText(personList.get(position).getFirstName() + " " + personList.get(position).getFamilyName());
-            holder.mailTxt.setText(personList.get(position).getEmail());
-            holder.phoneTxt.setText(personList.get(position).getMobileNumber());
+                holder.idTxt.setVisibility(View.GONE);
+            }
+            if(!personList.get(position).getFirstName().isEmpty() || ! personList.get(position).getFamilyName().isEmpty()) {
+                holder.fullNameTxt.setText(personList.get(position).getFirstName() + " " + personList.get(position).getFamilyName());
+                holder.fullNameTxt.setVisibility(View.VISIBLE);
+            }
+            else {
+                holder.fullNameTxt.setVisibility(View.GONE);
+            }
+            if(!personList.get(position).getEmail().isEmpty()) {
+                holder.mailTxt.setText(personList.get(position).getEmail());
+                holder.mailTxt.setVisibility(View.VISIBLE);
+            }
+            else {
+                holder.mailTxt.setVisibility(View.GONE);
+            }
+            if(!personList.get(position).getMobileNumber().isEmpty()) {
+                holder.phoneTxt.setText(personList.get(position).getMobileNumber());
+                holder.phoneTxt.setVisibility(View.VISIBLE);
+            }
+            else {
+                holder.phoneTxt.setVisibility(View.GONE);
+            }
+
             if (personList.get(position).getImageLink() != null)
                 Glide.with(context).load(personList.get(position).getImageLink()).into(holder.personImg);
         } catch (Exception e) {
@@ -82,6 +108,7 @@ public class ClientListViewAdapter extends RecyclerView.Adapter<ClientListViewAd
     public class vHolder extends RecyclerView.ViewHolder {
         ImageView personImg;
         TextView fullNameTxt, mailTxt, phoneTxt;
+        TextView idTxt;
 
 
         public vHolder(@NonNull View itemView) {
@@ -90,6 +117,7 @@ public class ClientListViewAdapter extends RecyclerView.Adapter<ClientListViewAd
             fullNameTxt = itemView.findViewById(R.id.fullNameTxt);
             mailTxt = itemView.findViewById(R.id.email_txt);
             phoneTxt = itemView.findViewById(R.id.mobile_num_txt);
+            idTxt = itemView.findViewById(R.id.idTxt);
 
         }
     }

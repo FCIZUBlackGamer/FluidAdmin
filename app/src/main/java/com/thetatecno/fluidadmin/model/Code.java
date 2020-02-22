@@ -7,23 +7,34 @@ import java.io.Serializable;
 
 public class Code implements Serializable {
 
-    @SerializedName("CODE_TYPE")
+    @SerializedName("codeType")
     @Expose
     private String codeType;
-    @SerializedName("CODE")
+    @SerializedName("code")
     @Expose
     private String code;
-    @SerializedName("SYSTEM_REQUIRED")
+    @SerializedName("systemRequired")
     @Expose
     private String systemRequired;
 
-    @SerializedName("USER_CODE")
+    @SerializedName("userCode")
     @Expose
     private String userCode;
-    @SerializedName("DESCRIPTION")
+    @SerializedName("description")
     @Expose
     private String description;
 
+    @SerializedName("langId")
+    @Expose
+    private String langId;
+
+    public String getLangId() {
+        return langId;
+    }
+
+    public void setLangId(String langId) {
+        this.langId = langId;
+    }
 
     public String getDescription() {
         return description;

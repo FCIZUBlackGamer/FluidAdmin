@@ -1,17 +1,14 @@
 package com.thetatecno.fluidadmin.retrofiteServices.repositories;
 
 import android.util.Log;
-import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
-import com.google.gson.Gson;
-import com.thetatecno.fluidadmin.OnDataChangedCallBackListener;
-import com.thetatecno.fluidadmin.model.Facilities;
-import com.thetatecno.fluidadmin.model.Facility;
-import com.thetatecno.fluidadmin.model.Person;
+import com.thetatecno.fluidadmin.listeners.OnDataChangedCallBackListener;
 import com.thetatecno.fluidadmin.model.Staff;
 import com.thetatecno.fluidadmin.model.StaffData;
+import com.thetatecno.fluidadmin.model.State;
 import com.thetatecno.fluidadmin.retrofiteServices.interfaces.MyServicesInterface;
 import com.thetatecno.fluidadmin.retrofiteServices.interfaces.RetrofitInstance;
 import com.thetatecno.fluidadmin.utils.Constants;
@@ -53,50 +50,56 @@ public class StaffRepository {
         return facilitiesMutableLiveData;
     }
 
-    public void insertNewStaff(final Staff staff, final OnDataChangedCallBackListener<Boolean> onDataChangedCallBackListener) {
+    public void insertNewStaff(final Staff staff, final OnDataChangedCallBackListener onDataChangedCallBackListener) {
 
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
-        Call<Void> call = myServicesInterface.insertNewStuff(staff);
-        call.enqueue(new Callback<Void>() {
+        Call<State> call = myServicesInterface.insertNewStuff(staff);
+        call.enqueue(new Callback<State>() {
 
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if (response.code() == Constants.STATE_OK && response.body() != null) {
+            public void onResponse(@NonNull Call<State> call, @NonNull Response<State> response) {
+                if (response.isSuccessful()) {
                     Log.i(TAG, "insertNewStaff: response " + response.toString());
-                    onDataChangedCallBackListener.onResponse(true);
+                    if (response.body().getStatus() != null)
+                        onDataChangedCallBackListener.onResponse(response.body().getStatus());
+
+
                 } else
-                    onDataChangedCallBackListener.onResponse(false);
+                    onDataChangedCallBackListener.onResponse(null);
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(Call<State> call, Throwable t) {
                 call.cancel();
-                onDataChangedCallBackListener.onResponse(false);
+                onDataChangedCallBackListener.onResponse(null);
             }
 
         });
-
     }
 
     public void updateStaff(final Staff staff, final OnDataChangedCallBackListener onDataChangedCallBackListener) {
 
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
-        Call<Void> call = myServicesInterface.updateStaff(staff);
-        call.enqueue(new Callback<Void>() {
+        Call<State> call = myServicesInterface.updateStaff(staff);
+        call.enqueue(new Callback<State>() {
 
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if (response.code() == Constants.STATE_OK && response.body() != null) {
-                    Log.i(TAG, "updateStaff: response " + response.toString());
-                    onDataChangedCallBackListener.onResponse(true);
+            public void onResponse(@NonNull Call<State> call, @NonNull Response<State> response) {
+                if (response.isSuccessful()) {
+                    Log.i(TAG, "updateStaff: response " + response.body().getStatus());
+                    if (response.body().getStatus() != null) {
+                        Log.i(TAG, "updateStaff: response " + response.body().getStatus());
+                        onDataChangedCallBackListener.onResponse(response.body().getStatus());
+                    }
+
                 } else
-                    onDataChangedCallBackListener.onResponse(false);
+                    onDataChangedCallBackListener.onResponse(null);
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(Call<State> call, Throwable t) {
                 call.cancel();
-                onDataChangedCallBackListener.onResponse(false);
+                onDataChangedCallBackListener.onResponse(null);
             }
 
         });
@@ -106,25 +109,25 @@ public class StaffRepository {
     public void deleteStaff(final String staffId, final OnDataChangedCallBackListener onDataChangedCallBackListener) {
 
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
-        Call<Void> call = myServicesInterface.deleteStuff(staffId);
-        call.enqueue(new Callback<Void>() {
+        Call<State> call = myServicesInterface.deleteStuff(staffId);
+        call.enqueue(new Callback<State>() {
 
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
+            public void onResponse(@NonNull Call<State> call, @NonNull Response<State> response) {
                 if (response.isSuccessful()) {
                     Log.i(TAG, "deleteStaff: response " + response.toString());
-                    onDataChangedCallBackListener.onResponse(true);
-                } else {
-                    Log.i(TAG, "deleteStaff: state not ok  response " + response.toString());
-                    onDataChangedCallBackListener.onResponse(false);
-                }
+                    if (response.body().getStatus() != null)
+                        onDataChangedCallBackListener.onResponse(response.body().getStatus());
+
+
+                } else
+                    onDataChangedCallBackListener.onResponse(null);
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(Call<State> call, Throwable t) {
                 call.cancel();
-                Log.i(TAG, "deleteStaff: onFailure:  " + t.toString());
-                onDataChangedCallBackListener.onResponse(false);
+                onDataChangedCallBackListener.onResponse(null);
             }
 
         });

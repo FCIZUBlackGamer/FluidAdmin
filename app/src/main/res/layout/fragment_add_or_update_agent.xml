@@ -8,8 +8,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
 
         <ImageView
 
@@ -24,7 +23,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/idEdtTxt"
+            android:id="@+id/agentIdEdtTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -46,9 +45,9 @@
             android:text="@string/id_txt"
             android:textColor="@color/colorPrimary"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/idEdtTxt"
+            app:layout_constraintBottom_toBottomOf="@id/agentIdEdtTxt"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/idEdtTxt" />
+            app:layout_constraintTop_toTopOf="@id/agentIdEdtTxt" />
 
         <TextView
             android:id="@+id/first_name_txt"
@@ -61,7 +60,7 @@
             android:text="@string/first_name"
             android:textColor="@color/colorPrimary"
             app:layout_constraintStart_toStartOf="@+id/staffId"
-            app:layout_constraintTop_toBottomOf="@+id/idEdtTxt" />
+            app:layout_constraintTop_toBottomOf="@id/agentIdEdtTxt" />
 
         <EditText
             android:id="@+id/first_name_edt_txt"
@@ -175,11 +174,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:layout_marginBottom="32dp"
             android:background="@color/colorAccent"
             android:hint="@string/cancel_btn_txt"
             android:paddingStart="32dp"
             android:paddingEnd="32dp"
-            android:layout_marginBottom="32dp"
             android:textColorHint="@color/colorWhite"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/gender_txt"
@@ -218,7 +217,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:checked="true"
-                android:text="Female"
+                android:text="@string/female_txt"
                 tools:layout_editor_absoluteX="136dp"
                 tools:layout_editor_absoluteY="154dp" />
 
@@ -226,7 +225,7 @@
                 android:id="@+id/maleRadioButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Female"
+                android:text="@string/male_txt"
                 tools:layout_editor_absoluteX="136dp"
                 tools:layout_editor_absoluteY="154dp" />
 

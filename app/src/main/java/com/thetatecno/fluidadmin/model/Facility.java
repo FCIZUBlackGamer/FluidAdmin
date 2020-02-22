@@ -6,25 +6,36 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
 public class Facility implements Serializable {
-    @SerializedName("WAITING_AREA_ID")
+    @SerializedName("waitingAreaId")
     @Expose
     private String waitingAreaID;
 
-    @SerializedName("TYPE_CODE")
+    @SerializedName("typeCode")
     @Expose
     private String type;
 
-    @SerializedName("ID")
+    @SerializedName("id")
     @Expose
     private String code;
 
-    @SerializedName("DESCRIPTION")
+    @SerializedName("description")
     @Expose
     private String description;
 
     @SerializedName("deviceId")
     @Expose
     private String deviceId;
+    @SerializedName("langId")
+    @Expose
+    private String langId;
+
+    public String getLangId() {
+        return langId;
+    }
+
+    public void setLangId(String langId) {
+        this.langId = langId;
+    }
 
     public String getCode() {
         return code;

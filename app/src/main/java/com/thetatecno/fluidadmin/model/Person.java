@@ -7,27 +7,27 @@ import java.io.Serializable;
 import java.util.List;
 
 public class Person implements Serializable {
-    @SerializedName("FIRST_NAME")
+    @SerializedName("firstName")
     @Expose
-    private String firstName;
-    @SerializedName("FAMILY_NAME")
+    private String firstName = "";
+    @SerializedName("familyName")
     @Expose
-    private String familyName;
-    @SerializedName("EMAIL")
+    private String familyName = "";
+    @SerializedName("email")
     @Expose
-    private String email;
-    @SerializedName("PHONE")
+    private String email = "";
+    @SerializedName("mobile")
     @Expose
-    private String mobileNumber;
-    @SerializedName("SEX_CODE")
+    private String mobileNumber = "";
+    @SerializedName("gender")
     @Expose
-    private String gender;
-//    @SerializedName("ID")
-//    @Expose
-    private String id;
-    @SerializedName("IMAGE_PATH")
+    private String gender = "";
+    @SerializedName("id")
     @Expose
-    String imageLink;
+    private String id = "";
+    @SerializedName("imageFile")
+    @Expose
+    String imageLink = "";
 
     public String getImageLink() {
         return imageLink;

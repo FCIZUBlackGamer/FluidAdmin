@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_graph"
-    app:startDestination="@+id/mainFragment2">
+    app:startDestination="@id/agentListFragment">
     <fragment
         android:id="@+id/addOrUpdateProviderFragment"
         android:name="com.thetatecno.fluidadmin.ui.addorupdatestuff.AddOrUpdateProviderFragment"
@@ -12,6 +12,12 @@
         <action
             android:id="@+id/action_addOrUpdateProviderFragment_to_mainFragment2"
             app:destination="@id/mainFragment2" />
+        <action
+            android:id="@+id/action_addOrUpdateProviderFragment_to_providerListFragment"
+            app:popUpTo="@id/providerListFragment"
+            app:popUpToInclusive="true"
+            app:destination="@id/providerListFragment"
+            />
     </fragment>
     <fragment
         android:id="@+id/addOrUpdateAgentFragment"
@@ -19,8 +25,10 @@
         android:label="fragment_add_or_update_agent"
         tools:layout="@layout/fragment_add_or_update_agent" >
         <action
-            android:id="@+id/action_addOrUpdateAgentFragment_to_mainFragment2"
-            app:destination="@id/mainFragment2" />
+            android:id="@+id/action_addOrUpdateAgentFragment_to_agentListFragment"
+            app:popUpTo="@id/agentListFragment"
+            app:popUpToInclusive="true"
+            app:destination="@id/agentListFragment" />
     </fragment>
     <fragment
         android:id="@+id/codeAddFragment"
@@ -56,6 +64,42 @@
             app:destination="@id/codeAddFragment" />
         <action
             android:id="@+id/action_mainFragment2_to_facilityAddFragment"
+            app:destination="@id/facilityAddFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/agentListFragment"
+        android:name="com.thetatecno.fluidadmin.ui.AgentListFragment"
+        android:label="fragment_agent_list"
+        tools:layout="@layout/fragment_agent_list" >
+        <action
+            android:id="@+id/action_agentListFragment_to_addOrUpdateAgentFragment"
+            app:destination="@id/addOrUpdateAgentFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/providerListFragment"
+        android:name="com.thetatecno.fluidadmin.ui.ProviderListFragment"
+        android:label="fragment_provider_list"
+        tools:layout="@layout/fragment_provider_list" >
+        <action
+            android:id="@+id/action_providerListFragment_to_addOrUpdateProviderFragment"
+            app:destination="@id/addOrUpdateProviderFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/facilityListWaitingAreaTypeFragment"
+        android:name="com.thetatecno.fluidadmin.ui.FacilityListWaitingAreaTypeFragment"
+        android:label="fragment_facility_list_waiting_area_type"
+        tools:layout="@layout/fragment_facility_list_waiting_area_type" >
+        <action
+            android:id="@+id/action_facilityListWaitingAreaTypeFragment_to_facilityAddFragment"
+            app:destination="@id/facilityAddFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/facilityListClinicTypeFragment"
+        android:name="com.thetatecno.fluidadmin.ui.FacilityListClinicTypeFragment"
+        android:label="fragment_facility_list_clinic_type"
+        tools:layout="@layout/fragment_facility_list_clinic_type" >
+        <action
+            android:id="@+id/action_facilityListClinicTypeFragment_to_facilityAddFragment"
             app:destination="@id/facilityAddFragment" />
     </fragment>
 </navigation>

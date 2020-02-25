@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
 import android.util.Log;
@@ -90,7 +91,7 @@ public class AddOrUpdateAgentFragment extends Fragment {
         bundle = new Bundle();
         bundle.putSerializable("type", EnumCode.UsageType.Agent);
         bundle.putSerializable("agentList", (Serializable) agentList);
-        navController.navigate(R.id.action_addOrUpdateAgentFragment_to_mainFragment2, bundle);
+        navController.navigate(R.id.action_addOrUpdateAgentFragment_to_agentListFragment);
     }
 
 
@@ -137,8 +138,12 @@ public class AddOrUpdateAgentFragment extends Fragment {
                         public void onChanged(String s) {
                             Log.i("AddOrUpdate", "add agent message" + s);
                             Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
-                            if (s.contains("success"))
-                                listener.onFragmentAddOrUpdateEntity(EnumCode.UsageType.Agent);
+                            if (s.contains("success")) {
+//                                listener.onFragmentAddOrUpdateEntity(EnumCode.UsageType.Agent);
+                                navController.navigate(R.id.action_addOrUpdateAgentFragment_to_agentListFragment);
+
+                            }
+
 
                         }
                     });
@@ -149,7 +154,7 @@ public class AddOrUpdateAgentFragment extends Fragment {
                             Log.i("AddOrUpdate", "Update agent message" + s);
                             Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
                             if (s.contains("success"))
-                                listener.onFragmentAddOrUpdateEntity(EnumCode.UsageType.Agent);
+                                navController.navigate(R.id.action_addOrUpdateAgentFragment_to_agentListFragment);
 
                         }
                     });

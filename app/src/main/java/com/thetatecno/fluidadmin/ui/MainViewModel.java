@@ -38,7 +38,7 @@ public class MainViewModel extends ViewModel {
         return staffRepository.getAllStuff(langId, typeCode);
     }
 
-    public MutableLiveData getStaffDataForClinics(String facilityId, String langId, String typeCode) {
+    public MutableLiveData getFacilityDataForClinics(String facilityId, String langId, String typeCode) {
 
         return facilityRepository.getAllFacilities(facilityId, langId, typeCode);
     }

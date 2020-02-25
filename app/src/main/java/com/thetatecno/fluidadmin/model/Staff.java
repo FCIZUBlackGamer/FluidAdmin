@@ -1,5 +1,8 @@
 package com.thetatecno.fluidadmin.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -7,7 +10,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Staff extends Person implements Serializable {
+public class Staff extends Person implements Parcelable {
     @SerializedName("staffId")
     @Expose
     private String staffId;
@@ -26,6 +29,26 @@ public class Staff extends Person implements Serializable {
     @SerializedName("langId")
     @Expose
     private String langId;
+
+    public Staff(Parcel in) {
+        staffId = in.readString();
+        specialityCode = in.readString();
+        typeCode = in.readString();
+        speciality = in.readString();
+        langId = in.readString();
+    }
+
+    public static final Creator<Staff> CREATOR = new Creator<Staff>() {
+        @Override
+        public Staff createFromParcel(Parcel in) {
+            return new Staff(in);
+        }
+
+        @Override
+        public Staff[] newArray(int size) {
+            return new Staff[size];
+        }
+    };
 
     public String getStaffId() {
         return staffId;
@@ -73,6 +96,22 @@ public class Staff extends Person implements Serializable {
 
     public void setLangId(String langId) {
         this.langId = langId;
+    }
+public  Staff(){
+
+}
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(staffId);
+        dest.writeString(specialityCode);
+        dest.writeString(typeCode);
+        dest.writeString(speciality);
+        dest.writeString(langId);
     }
 
 }

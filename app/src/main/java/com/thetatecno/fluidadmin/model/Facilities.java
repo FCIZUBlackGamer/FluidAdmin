@@ -9,6 +9,9 @@ public class Facilities {
     @SerializedName("data")
     @Expose
     private List<Facility> facilities = null;
+    @SerializedName("status")
+    @Expose
+    private String status;
 
     public List<Facility> getFacilities() {
         return facilities;
@@ -16,5 +19,14 @@ public class Facilities {
 
     public void setFacilities(List<Facility> data) {
         this.facilities = data;
+    }
+
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

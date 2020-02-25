@@ -22,7 +22,7 @@ import com.thetatecno.fluidadmin.model.Staff;
 import com.thetatecno.fluidadmin.ui.adapters.AgentListAdapter;
 import com.thetatecno.fluidadmin.ui.adapters.ClientListViewAdapter;
 import com.thetatecno.fluidadmin.ui.adapters.CodeListAdapter;
-import com.thetatecno.fluidadmin.ui.adapters.FacilityDetailViewAdapter;
+import com.thetatecno.fluidadmin.ui.adapters.FacilityListAdapter;
 import com.thetatecno.fluidadmin.ui.adapters.ProviderListAdapter;
 import com.thetatecno.fluidadmin.utils.EnumCode;
 
@@ -40,7 +40,7 @@ public class MainFragment extends Fragment {
     ClientListViewAdapter clientListViewAdapter;
     AgentListAdapter agentListAdapter;
     ProviderListAdapter providerListAdapter;
-    FacilityDetailViewAdapter facilityDetailViewAdapter;
+    FacilityListAdapter facilityListAdapter;
     CodeListAdapter codeListAdapter;
 
     NavController navController;
@@ -80,8 +80,8 @@ public class MainFragment extends Fragment {
         super.onStart();
 
         if (usageType == EnumCode.UsageType.Facility) {
-            facilityDetailViewAdapter = new FacilityDetailViewAdapter(navController, getActivity(), facilityList, getActivity().getSupportFragmentManager());
-            detailsRecycle.setAdapter(facilityDetailViewAdapter);
+            facilityListAdapter = new FacilityListAdapter(navController, getActivity(), facilityList, getActivity().getSupportFragmentManager());
+            detailsRecycle.setAdapter(facilityListAdapter);
         } else if (usageType == EnumCode.UsageType.Code) {
             codeListAdapter = new CodeListAdapter(navController, getActivity(), codeList, getActivity().getSupportFragmentManager());
             detailsRecycle.setAdapter(codeListAdapter);

@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.thetatecno.fluidadmin.R;
 import com.thetatecno.fluidadmin.listeners.OnDeleteListener;
 import com.thetatecno.fluidadmin.model.Facility;
-import com.thetatecno.fluidadmin.ui.addorupdatefacility.FacilityAddFragment;
 import com.thetatecno.fluidadmin.utils.EnumCode;
 
 import java.io.Serializable;
@@ -30,7 +29,7 @@ import io.sentry.event.UserBuilder;
 
 import static com.thetatecno.fluidadmin.utils.Constants.ARG_FACILITY;
 
-public class FacilityDetailViewAdapter extends RecyclerView.Adapter<FacilityDetailViewAdapter.vHolder> {
+public class FacilityListAdapter extends RecyclerView.Adapter<FacilityListAdapter.vHolder> {
     Context context;
     FragmentManager fragmentManager;
     List<Facility> facilityList;
@@ -39,7 +38,7 @@ public class FacilityDetailViewAdapter extends RecyclerView.Adapter<FacilityDeta
     NavController navController;
     Bundle bundle;
 
-    public FacilityDetailViewAdapter(NavController navControlle, Context context, List<Facility> facilityList, FragmentManager fragmentManager) {
+    public FacilityListAdapter(NavController navControlle, Context context, List<Facility> facilityList, FragmentManager fragmentManager) {
         this.facilityList = facilityList;
         this.context = context;
         this.fragmentManager = fragmentManager;

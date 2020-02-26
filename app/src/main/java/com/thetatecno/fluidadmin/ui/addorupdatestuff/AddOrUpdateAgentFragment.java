@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -25,6 +26,7 @@ import android.widget.Toast;
 import com.thetatecno.fluidadmin.R;
 import com.thetatecno.fluidadmin.listeners.OnFragmentInteractionListener;
 import com.thetatecno.fluidadmin.model.Staff;
+import com.thetatecno.fluidadmin.ui.HomeActivity;
 import com.thetatecno.fluidadmin.utils.App;
 import com.thetatecno.fluidadmin.utils.EnumCode;
 import com.thetatecno.fluidadmin.utils.PreferenceController;
@@ -50,7 +52,6 @@ public class AddOrUpdateAgentFragment extends Fragment {
     List<Staff> agentList;
     NavController navController;
     Bundle bundle;
-    OnFragmentInteractionListener listener;
 
     private static String TAG = "AddStaff";
 
@@ -87,7 +88,7 @@ public class AddOrUpdateAgentFragment extends Fragment {
     }
 
     void onCancelOrBackButtonPressed() {
-        listener.onDisplayAddBtn();
+
         bundle = new Bundle();
         bundle.putSerializable("type", EnumCode.UsageType.Agent);
         bundle.putSerializable("agentList", (Serializable) agentList);
@@ -105,6 +106,7 @@ public class AddOrUpdateAgentFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         idTxt = view.findViewById(R.id.agentIdEdtTxt);
         firstNameTxt = view.findViewById(R.id.first_name_edt_txt);
         lastNameTxt = view.findViewById(R.id.family_name_edt_txt);
@@ -173,6 +175,7 @@ public class AddOrUpdateAgentFragment extends Fragment {
 
     private void updateData() {
         if (staff != null) {
+            navController.getCurrentDestination().setLabel("update agent");
             idTxt.setText(staff.getStaffId());
             firstNameTxt.setText(staff.getFirstName());
             lastNameTxt.setText(staff.getFamilyName());
@@ -186,6 +189,8 @@ public class AddOrUpdateAgentFragment extends Fragment {
             isStaffHasData = true;
 
         } else {
+            navController.getCurrentDestination().setLabel("add agent");
+            getActivity().setTitle(navController.getCurrentDestination().getLabel());
             staff = new Staff();
             isStaffHasData = false;
             firstNameTxt.setText("");
@@ -198,15 +203,13 @@ public class AddOrUpdateAgentFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener)
-            listener = (OnFragmentInteractionListener) context;
+
 
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        listener = null;
     }
 
 

@@ -5,20 +5,20 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/agents"
+            android:id="@+id/agentList"
             android:icon="@drawable/ic_menu_camera"
             android:title="@string/Agents" />
         <item
-            android:id="@+id/provider"
+            android:id="@+id/providerList"
             android:icon="@drawable/ic_menu_gallery"
             android:title="@string/provider" />
         <item
-            android:id="@+id/client"
+            android:id="@+id/clientList"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="@string/client" />
 
         <item
-            android:id="@+id/code"
+            android:id="@+id/codeList"
             android:icon="@drawable/ic_menu_manage"
             android:title="@string/code" />
 
@@ -30,12 +30,12 @@
         android:title="Facility">
         <menu>
             <item
-                android:id="@+id/clinic"
+                android:id="@+id/clinicList"
                 android:icon="@drawable/ic_phone"
                 android:title="@string/clinic" />
 
             <item
-                android:id="@+id/waiting_area"
+                android:id="@+id/waiting_areaList"
                 android:icon="@drawable/ic_ambulance"
                 android:title="@string/waiting_area" />
         </menu>

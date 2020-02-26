@@ -55,7 +55,7 @@ public class ClientListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        clientListRecyclerView = view.findViewById(R.id.providerRecyclerView);
+        clientListRecyclerView = view.findViewById(R.id.clientListView);
         navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
         clientListViewModel = ViewModelProviders.of(this).get(ClientListViewModel.class);
         clientListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));

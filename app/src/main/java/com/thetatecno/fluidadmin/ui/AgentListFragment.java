@@ -1,6 +1,7 @@
 package com.thetatecno.fluidadmin.ui;
 
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,11 +14,13 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.thetatecno.fluidadmin.R;
 import com.thetatecno.fluidadmin.model.Staff;
 import com.thetatecno.fluidadmin.model.StaffData;
@@ -26,6 +29,7 @@ import com.thetatecno.fluidadmin.utils.App;
 import com.thetatecno.fluidadmin.utils.EnumCode;
 import com.thetatecno.fluidadmin.utils.PreferenceController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,21 +37,16 @@ import java.util.List;
  */
 public class AgentListFragment extends Fragment {
     NavController navController;
-    List<Staff> agentList ;
+     List<Staff> agentList ;
     final String TAG = AgentListFragment.class.getSimpleName();
+    RecyclerView agentListRecyclerView;
+    FloatingActionButton addNewAgentFab;
+    AgentListAdapter agentListAdapter;
+    StaffListViewModel staffListViewModel;
     public AgentListFragment() {
         // Required empty public constructor
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.i(TAG,"onCreate");
-    }
-
-    RecyclerView agentListRecyclerView;
-    AgentListAdapter agentListAdapter;
-    StaffListViewModel staffListViewModel;
     public static AgentListFragment newInstance() {
         Bundle args = new Bundle();
         AgentListFragment fragment = new AgentListFragment();
@@ -65,54 +64,15 @@ public class AgentListFragment extends Fragment {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        Log.i(TAG,"onPause");
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.i(TAG,"onResume");
-
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.i(TAG,"onStart");
-
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.i(TAG,"onStop");
-
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Log.i(TAG,"onSaveInstanceState");
-
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.i(TAG,"onDestroy");
-    }
-
-    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         Log.i(TAG,"onViewCreated");
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
         agentListRecyclerView = view.findViewById(R.id.agentsListRecyclerView);
+        addNewAgentFab = view.findViewById(R.id.fab);
         staffListViewModel = ViewModelProviders.of(this).get(StaffListViewModel.class);
         agentListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        if(agentList == null)
         staffListViewModel.getStaffData(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase(),EnumCode.StaffTypeCode.DSPTCHR.toString()).observe(this, new Observer<StaffData>() {
             @Override
             public void onChanged(StaffData staffData) {
@@ -127,6 +87,19 @@ public class AgentListFragment extends Fragment {
                 } else {
                     Log.e("Staff", "Is Null");
                 }
+            }
+        });
+        else
+        {
+            agentListAdapter = new AgentListAdapter(navController,getContext(),agentList,getActivity().getSupportFragmentManager());
+            agentListRecyclerView.setAdapter(agentListAdapter);
+
+        }
+        addNewAgentFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    navController.navigate(R.id.action_agentListFragment_to_addOrUpdateAgentFragment);
+
             }
         });
 

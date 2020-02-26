@@ -30,9 +30,9 @@
     <string name="code_type">Code Type</string>
     <string name="waitingAreaID">Waiting Area Id: </string>
     <string name="Agents">Agents</string>
-    <string name="provider">Provider</string>
-    <string name="client">Client</string>
-    <string name="facilty">Facility</string>
+    <string name="provider">Providers</string>
+    <string name="client">Clients</string>
+    <string name="facilty">Facilities</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.thetatecno.fluidadmin.R;
 import com.thetatecno.fluidadmin.model.Facilities;
 import com.thetatecno.fluidadmin.model.Facility;
@@ -36,6 +37,8 @@ public class FacilityListClinicTypeFragment extends Fragment {
     List<Facility> facilityList;
     FacilityListViewModel facilityListViewModel;
     NavController navController;
+    FloatingActionButton addNewFacilityFab;
+    private  final String ARG_CLINIC_TYPE = "clinic_type";
 
     public FacilityListClinicTypeFragment() {
         // Required empty public constructor
@@ -54,7 +57,7 @@ public class FacilityListClinicTypeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         facilityListClinicRecyclerView = view.findViewById(R.id.facilityListClinicRecyclerView);
         navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
-
+        addNewFacilityFab = view.findViewById(R.id.fab);
         facilityListClinicRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         facilityListViewModel = ViewModelProviders.of(this).get(FacilityListViewModel.class);
         facilityListViewModel.getFacilityDataForClinics("",
@@ -65,10 +68,19 @@ public class FacilityListClinicTypeFragment extends Fragment {
                 if (facilities != null) {
                     if (facilities.getFacilities() != null) {
                         facilityList = facilities.getFacilities();
-                        facilityListAdapter = new FacilityListAdapter(navController,getContext().getApplicationContext(),facilityList,getActivity().getSupportFragmentManager());
+                        facilityListAdapter = new FacilityListAdapter(navController,getContext(),facilityList,getActivity().getSupportFragmentManager());
                         facilityListClinicRecyclerView.setAdapter(facilityListAdapter);
                     }
                 }
+            }
+        });
+        addNewFacilityFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                            bundle.putSerializable(ARG_CLINIC_TYPE, (Serializable) EnumCode.ClinicTypeCode.CLINIC);
+
+                            navController.navigate(R.id.action_facilityListClinicTypeFragment_to_facilityAddFragment, bundle);
             }
         });
     }

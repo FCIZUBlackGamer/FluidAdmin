@@ -146,14 +146,14 @@ public class CodeAddFragment extends Fragment {
             userCodeEditTxt.setText(code.getUserCode());
             codeDescriptionEditTxt.setText(code.getDescription());
             codeTypeEditTxt.setText(code.getCodeType());
-            addOrUpdateBtn.setText(getResources().getString(R.string.update_txt));
+            addOrUpdateBtn.setHint(getResources().getString(R.string.update_txt));
         } else {
             isCodeNotNull = false;
             codeIdEditTxt.setText("");
             userCodeEditTxt.setText("");
             codeDescriptionEditTxt.setText("");
             codeTypeEditTxt.setText("");
-            addOrUpdateBtn.setText(getResources().getString(R.string.add_txt));
+            addOrUpdateBtn.setHint(getResources().getString(R.string.add_txt));
         }
     }
 
@@ -172,24 +172,18 @@ public class CodeAddFragment extends Fragment {
         if (mListener != null) {
             mListener.onFragmentAddOrUpdateEntity(EnumCode.UsageType.Code);
         }
+        navController.navigate(R.id.action_codeAddFragment_to_codeListFragment);
+
     }
     void onBackOrCancelBtnPressed(){
-        mListener.onDisplayAddBtn();
-        bundle = new Bundle();
-        bundle.putSerializable("type", (Serializable) EnumCode.UsageType.Code);
-        bundle.putSerializable("codeList", (Serializable) codeList);
-        navController.navigate(R.id.action_codeAddFragment_to_mainFragment2, bundle);
+
+        navController.navigate(R.id.action_codeAddFragment_to_codeListFragment);
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+
     }
 
     @Override

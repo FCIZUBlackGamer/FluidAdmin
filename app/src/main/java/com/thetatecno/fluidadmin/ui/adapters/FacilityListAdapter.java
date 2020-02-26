@@ -101,9 +101,7 @@ public class FacilityListAdapter extends RecyclerView.Adapter<FacilityListAdapte
                                     bundle.putSerializable("facilityList", (Serializable) facilityList);
 
                                     navController.navigate(R.id.facilityAddFragment, bundle);
-//                                    fragmentManager.beginTransaction()
-//                                            .replace(R.id.nav_host_fragment, FacilityAddFragment.newInstance(facilityList.get(position)))
-//                                            .commit();
+
                                     break;
 
                                 case R.id.delete:
@@ -141,7 +139,6 @@ public class FacilityListAdapter extends RecyclerView.Adapter<FacilityListAdapte
             super(itemView);
             textViewOptions = itemView.findViewById(R.id.textViewOptions);
             facilityId_tv = itemView.findViewById(R.id.facilityId_tv);
-//            deviceID_tv = itemView.findViewById(R.id.deviceID_tv);
             typeCode_tv = itemView.findViewById(R.id.typeCode_tv);
             desc_tv = itemView.findViewById(R.id.desc_tv);
             waId_tv = itemView.findViewById(R.id.waId_tv);

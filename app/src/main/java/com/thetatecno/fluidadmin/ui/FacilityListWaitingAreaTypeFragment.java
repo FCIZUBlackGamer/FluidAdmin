@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.thetatecno.fluidadmin.R;
 import com.thetatecno.fluidadmin.model.Facilities;
 import com.thetatecno.fluidadmin.model.Facility;
@@ -33,6 +34,7 @@ public class FacilityListWaitingAreaTypeFragment extends Fragment {
 
 
     RecyclerView facilityWaitingAreaTypeListRecyclerView;
+    FloatingActionButton addNewFacilityFab;
     FacilityListAdapter facilityListAdapter;
     List<Facility> facilityList;
     FacilityListViewModel facilityListViewModel;
@@ -55,7 +57,7 @@ public class FacilityListWaitingAreaTypeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         facilityWaitingAreaTypeListRecyclerView = view.findViewById(R.id.facilityWaitingAreaTypeListRecyclerView);
         navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
-
+        addNewFacilityFab = view.findViewById(R.id.fab);
         facilityWaitingAreaTypeListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         facilityListViewModel = ViewModelProviders.of(this).get(FacilityListViewModel.class);
         facilityListViewModel.getFacilityDataForClinics("",
@@ -66,12 +68,19 @@ public class FacilityListWaitingAreaTypeFragment extends Fragment {
                 if (facilities != null) {
                     if (facilities.getFacilities() != null) {
                         facilityList = facilities.getFacilities();
-                        facilityListAdapter = new FacilityListAdapter(navController,getContext().getApplicationContext(),facilityList,getActivity().getSupportFragmentManager());
+                        facilityListAdapter = new FacilityListAdapter(navController,getContext(),facilityList,getActivity().getSupportFragmentManager());
                         facilityWaitingAreaTypeListRecyclerView.setAdapter(facilityListAdapter);
                     }
                 }
             }
         });
+      addNewFacilityFab.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+              navController.navigate(R.id.action_facilityListWaitingAreaTypeFragment_to_facilityAddFragment);
+          }
+      });
     }
+
 
 }

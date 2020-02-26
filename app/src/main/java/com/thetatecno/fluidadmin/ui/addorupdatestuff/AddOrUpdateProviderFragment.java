@@ -53,8 +53,6 @@ public class AddOrUpdateProviderFragment extends Fragment {
     Staff staff;
     List<Staff> providerList;
     NavController navController;
-    Bundle bundle;
-    OnFragmentInteractionListener onFragmentInteractionListener;
 
     public AddOrUpdateProviderFragment() {
         // Required empty public constructor
@@ -135,7 +133,7 @@ public class AddOrUpdateProviderFragment extends Fragment {
                             Log.i("AddOrUpdate", "add staff message" + s);
                             Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
                             if (s.contains("success"))
-                                onFragmentInteractionListener.onFragmentAddOrUpdateEntity(EnumCode.UsageType.Provider);
+                                onAddOrUpdateData();
 
                         }
                     });
@@ -146,7 +144,7 @@ public class AddOrUpdateProviderFragment extends Fragment {
                             Log.i("AddOrUpdate", "Update staff message" + s);
                             Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
                             if (s.contains("success"))
-                                onFragmentInteractionListener.onFragmentAddOrUpdateEntity(EnumCode.UsageType.Provider);
+                                onAddOrUpdateData();
                         }
                     });
                 }
@@ -162,12 +160,14 @@ public class AddOrUpdateProviderFragment extends Fragment {
 
     }
 
+    private void onAddOrUpdateData() {
+        navController.navigate(R.id.action_addOrUpdateProviderFragment_to_providerListFragment);
+    }
+
     private void onCancelOrBackBtnPressed() {
-        onFragmentInteractionListener.onDisplayAddBtn();
-        bundle = new Bundle();
-        bundle.putSerializable("type", (Serializable) EnumCode.UsageType.Provider);
-        bundle.putSerializable("providerList", (Serializable) providerList);
-        navController.navigate(R.id.action_addOrUpdateProviderFragment_to_mainFragment2, bundle);
+
+
+        navController.navigate(R.id.action_addOrUpdateProviderFragment_to_providerListFragment);
     }
 
     private void updateData() {
@@ -193,22 +193,5 @@ public class AddOrUpdateProviderFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            onFragmentInteractionListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
 
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        onFragmentInteractionListener = null;
-
-    }
 }

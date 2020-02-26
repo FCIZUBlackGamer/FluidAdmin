@@ -18,11 +18,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.thetatecno.fluidadmin.R;
 import com.thetatecno.fluidadmin.model.Staff;
 import com.thetatecno.fluidadmin.model.StaffData;
 import com.thetatecno.fluidadmin.ui.adapters.ProviderListAdapter;
 import com.thetatecno.fluidadmin.utils.App;
+import com.thetatecno.fluidadmin.utils.Constants;
 import com.thetatecno.fluidadmin.utils.EnumCode;
 import com.thetatecno.fluidadmin.utils.PreferenceController;
 
@@ -34,6 +36,7 @@ import java.util.List;
 public class ProviderListFragment extends Fragment {
     List<Staff> providerList;
     RecyclerView providerListRecyclerView;
+    FloatingActionButton addNewProviderFab;
     ProviderListAdapter providerListAdapter;
     StaffListViewModel providerListViewModel;
     NavController navController;
@@ -55,6 +58,7 @@ public class ProviderListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         providerListRecyclerView = view.findViewById(R.id.providerRecyclerView);
         navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
+        addNewProviderFab = view.findViewById(R.id.fab);
         providerListViewModel = ViewModelProviders.of(this).get(StaffListViewModel.class);
         providerListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         providerListViewModel.getStaffData(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase(), EnumCode.StaffTypeCode.PRVDR.toString()).observe(this, new Observer<StaffData>() {
@@ -63,7 +67,7 @@ public class ProviderListFragment extends Fragment {
                 if (staffData != null) {
                     if (staffData.getStaffList() != null) {
                         providerList = staffData.getStaffList();
-                        providerListAdapter = new ProviderListAdapter(navController,getContext(),providerList,getActivity().getSupportFragmentManager());
+                        providerListAdapter = new ProviderListAdapter(navController, getContext(), providerList, getActivity().getSupportFragmentManager());
                         providerListRecyclerView.setAdapter(providerListAdapter);
                     } else {
                         Log.e("Staff List", "Is Null");
@@ -73,7 +77,14 @@ public class ProviderListFragment extends Fragment {
                 }
             }
         });
-
+        addNewProviderFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(Constants.ARG_STAFF, null);
+                navController.navigate(R.id.action_providerListFragment_to_addOrUpdateProviderFragment, bundle);
+            }
+        });
 
     }
 }

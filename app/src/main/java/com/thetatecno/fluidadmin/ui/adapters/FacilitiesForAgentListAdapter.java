@@ -22,7 +22,6 @@ public class FacilitiesForAgentListAdapter extends RecyclerView.Adapter<Faciliti
     public FacilitiesForAgentListAdapter(Context context, List<Facility> data) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
-
     }
 
     @Override
@@ -53,7 +52,6 @@ public class FacilitiesForAgentListAdapter extends RecyclerView.Adapter<Faciliti
         ViewHolder(View itemView) {
             super(itemView);
             myTextView = itemView.findViewById(R.id.tvTitle);
-
 
 
         }

@@ -6,8 +6,10 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -95,14 +97,33 @@ public class AgentListAdapter extends RecyclerView.Adapter<AgentListAdapter.Agen
         FacilitiesForAgentListAdapter facilitiesForAgentListAdapter = new FacilitiesForAgentListAdapter(context, agentList.get(position).getFacilityList());
         holder.pager.setAdapter(facilitiesForAgentListAdapter);
 
-        new TabLayoutMediator(holder.tabLayout, holder.pager,
-                new TabLayoutMediator.TabConfigurationStrategy() {
-                    @Override
-                    public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
-
+        holder.nextBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                holder.previousBtn.setVisibility(View.VISIBLE);
+                if (holder.pager.getCurrentItem() < agentList.get(position).getFacilityList().size()) {
+                    holder.pager.setCurrentItem(holder.pager.getCurrentItem() + 1);
+                    if (holder.pager.getCurrentItem() == agentList.get(position).getFacilityList().size()-1){
+                        holder.nextBtn.setVisibility(View.GONE);
                     }
-                }).attach();
+                }
+            }
+        });
 
+        holder.previousBtn.setVisibility(View.GONE);
+
+        holder.previousBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                holder.nextBtn.setVisibility(View.VISIBLE);
+                if (holder.pager.getCurrentItem() > 0) {
+                    holder.pager.setCurrentItem(holder.pager.getCurrentItem() - 1);
+                    if (holder.pager.getCurrentItem() == 0) {
+                        holder.previousBtn.setVisibility(View.GONE);
+                    }
+                }
+            }
+        });
 
         holder.agentTextViewOptions.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -157,8 +178,8 @@ public class AgentListAdapter extends RecyclerView.Adapter<AgentListAdapter.Agen
         TextView agentTextViewOptions, fullNameTxt, agentEmailTxt, agentPhoneTxt;
         TextView idTxt;
         ViewPager2 pager;
-        TabLayout tabLayout;
         TextView facilityTitleTxt;
+        Button previousBtn, nextBtn;
 
         public AgentListViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -169,7 +190,8 @@ public class AgentListAdapter extends RecyclerView.Adapter<AgentListAdapter.Agen
             agentEmailTxt = itemView.findViewById(R.id.email_txt);
             agentPhoneTxt = itemView.findViewById(R.id.mobile_num_txt);
             pager = itemView.findViewById(R.id.photo_viewpager);
-            tabLayout = itemView.findViewById(R.id.tab_layout);
+            previousBtn = itemView.findViewById(R.id.previous_btn);
+            nextBtn = itemView.findViewById(R.id.next_btn);
             facilityTitleTxt = itemView.findViewById(R.id.facilityTitle);
         }
     }

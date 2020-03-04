@@ -23,9 +23,9 @@ public class CodeRepository {
     MutableLiveData<CodeList> codesMutableLiveData = new MutableLiveData<>();
     private static String TAG = CodeRepository.class.getSimpleName();
 
-    public MutableLiveData getAllCodes(final String facilityId, final String langId) {
+    public MutableLiveData getAllCodes(final String code, final String langId) {
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
-        Call<CodeList> call = myServicesInterface.getCodes(facilityId, langId);
+        Call<CodeList> call = myServicesInterface.getCodes(code, langId);
         call.enqueue(new Callback<CodeList>() {
             @Override
             public void onResponse(Call<CodeList> call, Response<CodeList> response) {

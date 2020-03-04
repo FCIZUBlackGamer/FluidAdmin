@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel;
 import com.thetatecno.fluidadmin.listeners.OnDataChangedCallBackListener;
 import com.thetatecno.fluidadmin.model.Code;
 import com.thetatecno.fluidadmin.model.Facility;
+import com.thetatecno.fluidadmin.model.FacilityCodes;
 import com.thetatecno.fluidadmin.model.Staff;
 import com.thetatecno.fluidadmin.model.StaffData;
 import com.thetatecno.fluidadmin.retrofiteServices.repositories.ClientRepository;
@@ -57,11 +58,11 @@ public class MainViewModel extends ViewModel {
         staffRepository.deleteStaff(staff.getStaffId(), new OnDataChangedCallBackListener<String>() {
             @Override
             public void onResponse(String b) {
-                Log.i(TAG,"delete state "+b);
+                Log.i(TAG, "delete state " + b);
                 if (b.equals(Constants.ADD_OR_UPDATE_SUCCESS_STATE)) {
                     message = "Delete successfully staff " + staff.getFirstName();
-                    staffRepository.getAllStuff(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase(), staff.getTypeCode());
-                } else if (b.equals(Constants.ADD_OR_UPDATE_FAIL_STATE)){
+                    deletedMessageLiveData.setValue(message);
+                } else if (b.equals(Constants.ADD_OR_UPDATE_FAIL_STATE)) {
                     message = "Failed to delete.";
                     deletedMessageLiveData.setValue(message);
                 }
@@ -95,9 +96,8 @@ public class MainViewModel extends ViewModel {
             public void onResponse(String b) {
                 if (b.equals(Constants.ADD_OR_UPDATE_SUCCESS_STATE)) {
                     message = "Delete facility successfully" + facility.getCode();
-                    facilityRepository.getAllFacilities(facility.getCode(), PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase(),facility.getType());
-                }
-                else if(b.equals(Constants.ADD_OR_UPDATE_FAIL_STATE)) {
+                    facilityRepository.getAllFacilities(facility.getCode(), PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase(), facility.getType());
+                } else if (b.equals(Constants.ADD_OR_UPDATE_FAIL_STATE)) {
                     message = "Failed to delete code " + facility.getCode();
                     deletedMessageLiveData.setValue(message);
                 }
@@ -105,6 +105,15 @@ public class MainViewModel extends ViewModel {
             }
         });
         return deletedMessageLiveData;
+    }
+
+    public void linkToFacility(String staffId, FacilityCodes facilityCodes, final OnDataChangedCallBackListener<String> onDataChangedCallBackListener) {
+        facilityRepository.linkToFacility(staffId, facilityCodes, new OnDataChangedCallBackListener<String>() {
+            @Override
+            public void onResponse(String b) {
+                onDataChangedCallBackListener.onResponse(b);
+            }
+        });
     }
 
 }

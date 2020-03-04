@@ -1,7 +1,6 @@
-package com.thetatecno.fluidadmin.ui;
+package com.thetatecno.fluidadmin.ui.stafflist;
 
 
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,7 +13,6 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +27,6 @@ import com.thetatecno.fluidadmin.utils.App;
 import com.thetatecno.fluidadmin.utils.EnumCode;
 import com.thetatecno.fluidadmin.utils.PreferenceController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

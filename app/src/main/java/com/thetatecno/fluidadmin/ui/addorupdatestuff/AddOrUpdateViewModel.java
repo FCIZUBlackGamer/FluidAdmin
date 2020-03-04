@@ -4,12 +4,15 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.thetatecno.fluidadmin.listeners.OnDataChangedCallBackListener;
+import com.thetatecno.fluidadmin.model.CodeList;
 import com.thetatecno.fluidadmin.model.Staff;
+import com.thetatecno.fluidadmin.retrofiteServices.repositories.CodeRepository;
 import com.thetatecno.fluidadmin.retrofiteServices.repositories.StaffRepository;
 import com.thetatecno.fluidadmin.utils.Constants;
 
 public class AddOrUpdateViewModel extends ViewModel {
     StaffRepository staffRepository = new StaffRepository();
+    CodeRepository codeRepository = new CodeRepository();
     MutableLiveData<String> addedSuccessLiveData = new MutableLiveData<>();
     String message = "" ;
     public MutableLiveData<String> addNewStaff(Staff staff){
@@ -40,4 +43,5 @@ public class AddOrUpdateViewModel extends ViewModel {
         });
         return addedSuccessLiveData;
     }
+
 }

@@ -24,8 +24,11 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.thetatecno.fluidadmin.R;
 import com.thetatecno.fluidadmin.listeners.OnDeleteListener;
+import com.thetatecno.fluidadmin.listeners.OnLinkToFacilityClickedListener;
 import com.thetatecno.fluidadmin.model.Staff;
 import com.thetatecno.fluidadmin.ui.addorupdatestuff.AddOrUpdateAgentFragment;
+import com.thetatecno.fluidadmin.utils.Constants;
+import com.thetatecno.fluidadmin.utils.EnumCode;
 
 import java.io.Serializable;
 import java.util.List;
@@ -41,6 +44,7 @@ public class AgentListAdapter extends RecyclerView.Adapter<AgentListAdapter.Agen
     Context context;
     FragmentManager fragmentManager;
     OnDeleteListener listener;
+    OnLinkToFacilityClickedListener onLinkToFacilityClickedListener;
     List<Staff> agentList;
     NavController navController;
     Bundle bundle;
@@ -51,10 +55,14 @@ public class AgentListAdapter extends RecyclerView.Adapter<AgentListAdapter.Agen
         navController = navControlle;
         bundle = new Bundle();
         this.fragmentManager = fragmentManager;
-        if (context instanceof OnDeleteListener)
+        if (context instanceof OnDeleteListener) {
             listener = (OnDeleteListener) context;
-        else
+            onLinkToFacilityClickedListener = (OnLinkToFacilityClickedListener) context;
+        }
+        else {
             listener = null;
+            onLinkToFacilityClickedListener = null;
+        }
 
     }
 
@@ -92,8 +100,22 @@ public class AgentListAdapter extends RecyclerView.Adapter<AgentListAdapter.Agen
         } else {
             holder.agentPhoneTxt.setVisibility(View.GONE);
         }
-        Glide.with(context).load(agentList.get(position).getImageLink()).into(holder.personImg);
-        holder.facilityTitleTxt.setText(R.string.clinics);
+        if(!agentList.get(position).getImageLink().isEmpty()) {
+            Glide.with(context).load(agentList.get(position).getImageLink()).into(holder.personImg);
+        }
+        else{
+            if(!agentList.get(position).getGender().isEmpty()) {
+                if (agentList.get(position).getGender().equals(EnumCode.Gender.M.toString())) {
+                    holder.personImg.setImageResource(R.drawable.man);
+                } else if(agentList.get(position).getGender().equals(EnumCode.Gender.F.toString())){
+                    holder.personImg.setImageResource(R.drawable.ic_girl);
+                }
+            }
+            else {
+                holder.personImg.setImageResource(R.drawable.man);
+            }
+        }
+
         FacilitiesForAgentListAdapter facilitiesForAgentListAdapter = new FacilitiesForAgentListAdapter(context, agentList.get(position).getFacilityList());
         holder.pager.setAdapter(facilitiesForAgentListAdapter);
 
@@ -141,15 +163,16 @@ public class AgentListAdapter extends RecyclerView.Adapter<AgentListAdapter.Agen
                         switch (item.getItemId()) {
                             case R.id.linkToFacility:
                                 //TODO: show dialog with facilities
+                                if(onLinkToFacilityClickedListener !=null)
+                                onLinkToFacilityClickedListener.onShowDialogLinkToFacility(agentList.get(position));
+
                                 break;
                             case R.id.edit:
                                 //handle edit click
                                 bundle.putSerializable(ARG_STAFF, (Serializable) agentList.get(position));
                                 bundle.putSerializable("agentList", (Serializable) agentList);
                                 navController.navigate(R.id.addOrUpdateAgentFragment, bundle);
-//                                fragmentManager.beginTransaction()
-//                                        .replace(R.id.nav_host_fragment, AddOrUpdateAgentFragment.newInstance(agentList.get(position)))
-//                                        .commit();
+
                                 break;
                             case R.id.delete:
                                 //show confirmation dialog to delete item

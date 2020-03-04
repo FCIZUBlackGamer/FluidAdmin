@@ -12,14 +12,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/person_img"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="16dp"
-        android:background="@drawable/ic_clinic"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textViewOptions" />
 
     <TextView
         android:id="@+id/textViewOptions"
@@ -41,22 +33,16 @@
         android:id="@+id/facilityId_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
         android:text="@string/clinic_example_txt"
-        android:textSize="24sp"
-        android:textStyle="bold"
         android:textColor="@color/colorPrimary"
-        app:layout_constraintStart_toEndOf="@+id/person_img"
-        app:layout_constraintTop_toTopOf="@+id/person_img" />
+        android:textSize="@dimen/name_txt_size"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/textViewOptions"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textViewOptions" />
 
-<!--    <TextView-->
-<!--        android:id="@+id/deviceID_tv"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:drawablePadding="5dp"-->
-<!--        android:text="@string/deviceId"-->
-<!--        app:layout_constraintStart_toStartOf="@+id/facilityId_tv"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/person_img" />-->
+
 
     <TextView
         android:id="@+id/typeCode_tv"
@@ -86,7 +72,6 @@
         android:layout_marginBottom="8dp"
         android:drawablePadding="5dp"
         android:text="@string/decsription"
-        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/facilityId_tv"
         app:layout_constraintTop_toBottomOf="@+id/waId_tv" />

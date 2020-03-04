@@ -1,4 +1,4 @@
-package com.thetatecno.fluidadmin.ui;
+package com.thetatecno.fluidadmin.ui.clientList;
 
 
 import android.os.Bundle;
@@ -21,11 +21,8 @@ import android.view.ViewGroup;
 import com.thetatecno.fluidadmin.R;
 import com.thetatecno.fluidadmin.model.CustomerList;
 import com.thetatecno.fluidadmin.model.Person;
-import com.thetatecno.fluidadmin.model.StaffData;
 import com.thetatecno.fluidadmin.ui.adapters.ClientListViewAdapter;
-import com.thetatecno.fluidadmin.ui.adapters.ProviderListAdapter;
 import com.thetatecno.fluidadmin.utils.App;
-import com.thetatecno.fluidadmin.utils.EnumCode;
 import com.thetatecno.fluidadmin.utils.PreferenceController;
 
 import java.util.List;

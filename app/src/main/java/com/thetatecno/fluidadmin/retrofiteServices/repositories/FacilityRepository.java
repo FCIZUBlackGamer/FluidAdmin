@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.thetatecno.fluidadmin.listeners.OnDataChangedCallBackListener;
 import com.thetatecno.fluidadmin.model.Facilities;
 import com.thetatecno.fluidadmin.model.Facility;
+import com.thetatecno.fluidadmin.model.FacilityCodes;
 import com.thetatecno.fluidadmin.model.State;
 import com.thetatecno.fluidadmin.retrofiteServices.interfaces.MyServicesInterface;
 import com.thetatecno.fluidadmin.retrofiteServices.interfaces.RetrofitInstance;
@@ -19,11 +20,11 @@ import retrofit2.Response;
 
 public class FacilityRepository {
     MutableLiveData<Facilities> facilitiesMutableLiveData = new MutableLiveData<>();
-private static String TAG = FacilityRepository.class.getSimpleName();
+    private static String TAG = FacilityRepository.class.getSimpleName();
 
-    public MutableLiveData getAllFacilities(final String facilityId, final String langId,final String typeCode) {
+    public MutableLiveData getAllFacilities(final String facilityId, final String langId, final String typeCode) {
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
-        Call<Facilities> call = myServicesInterface.getFacilities(facilityId, langId,typeCode);
+        Call<Facilities> call = myServicesInterface.getFacilities(facilityId, langId, typeCode);
         call.enqueue(new Callback<Facilities>() {
             @Override
             public void onResponse(Call<Facilities> call, Response<Facilities> response) {
@@ -129,7 +130,35 @@ private static String TAG = FacilityRepository.class.getSimpleName();
 
         });
 
-        }
+    }
+
+    public void linkToFacility(final String facilityId, FacilityCodes facilityCodes, final OnDataChangedCallBackListener<String> onDataChangedCallBackListener) {
+
+        MyServicesInterface myServicesInterface = RetrofitInstance.getService();
+        Call<State> call = myServicesInterface.addToFacilities(facilityId, facilityCodes);
+        call.enqueue(new Callback<State>() {
+
+            @Override
+            public void onResponse(@NonNull Call<State> call, @NonNull Response<State> response) {
+                if (response.isSuccessful()) {
+                    Log.i(TAG, "linkToFacility: response " + response.toString());
+                    if (response.body().getStatus() != null)
+                        onDataChangedCallBackListener.onResponse(response.body().getStatus());
+
+
+                } else
+                    onDataChangedCallBackListener.onResponse(null);
+            }
+
+            @Override
+            public void onFailure(Call<State> call, Throwable t) {
+                call.cancel();
+                onDataChangedCallBackListener.onResponse(null);
+            }
+
+        });
+
+    }
 
 
 }

@@ -1,4 +1,4 @@
-package com.thetatecno.fluidadmin.ui;
+package com.thetatecno.fluidadmin.ui.facilityList;
 
 
 import android.os.Bundle;
@@ -61,8 +61,7 @@ public class FacilityListClinicTypeFragment extends Fragment {
         facilityListClinicRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         facilityListViewModel = ViewModelProviders.of(this).get(FacilityListViewModel.class);
         facilityListViewModel.getFacilityDataForClinics("",
-                PreferenceController.getInstance(getContext()).get(PreferenceController.LANGUAGE).toUpperCase(),
-                EnumCode.ClinicTypeCode.CLINIC.toString()).observe(this, new Observer<Facilities>() {
+                PreferenceController.getInstance(getContext()).get(PreferenceController.LANGUAGE).toUpperCase()).observe(this, new Observer<Facilities>() {
             @Override
             public void onChanged(Facilities facilities) {
                 if (facilities != null) {

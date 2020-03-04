@@ -8,7 +8,7 @@
         android:id="@+id/addOrUpdateProviderFragment"
         android:name="com.thetatecno.fluidadmin.ui.addorupdatestuff.AddOrUpdateProviderFragment"
         android:label="add or update provider"
-        tools:layout="@layout/fragment_add_new_staff" >
+        tools:layout="@layout/fragment_or_update_provider" >
 
         <action
             android:id="@+id/action_addOrUpdateProviderFragment_to_providerListFragment"
@@ -57,7 +57,7 @@
 
     <fragment
         android:id="@id/agentList"
-        android:name="com.thetatecno.fluidadmin.ui.AgentListFragment"
+        android:name="com.thetatecno.fluidadmin.ui.stafflist.AgentListFragment"
         android:label="@string/Agents"
         tools:layout="@layout/fragment_agent_list" >
         <action
@@ -66,7 +66,7 @@
     </fragment>
     <fragment
         android:id="@id/providerList"
-        android:name="com.thetatecno.fluidadmin.ui.ProviderListFragment"
+        android:name="com.thetatecno.fluidadmin.ui.stafflist.ProviderListFragment"
         android:label="@string/provider"
         tools:layout="@layout/fragment_provider_list" >
         <action
@@ -75,7 +75,7 @@
     </fragment>
     <fragment
         android:id="@+id/waiting_areaList"
-        android:name="com.thetatecno.fluidadmin.ui.FacilityListWaitingAreaTypeFragment"
+        android:name="com.thetatecno.fluidadmin.ui.facilityList.FacilityListWaitingAreaTypeFragment"
         android:label="@string/facilty"
         tools:layout="@layout/fragment_facility_list_waiting_area_type" >
         <action
@@ -84,7 +84,7 @@
     </fragment>
     <fragment
         android:id="@+id/clinicList"
-        android:name="com.thetatecno.fluidadmin.ui.FacilityListClinicTypeFragment"
+        android:name="com.thetatecno.fluidadmin.ui.facilityList.FacilityListClinicTypeFragment"
         android:label="@string/facilty"
         tools:layout="@layout/fragment_facility_list_clinic_type" >
         <action
@@ -93,12 +93,12 @@
     </fragment>
     <fragment
         android:id="@+id/clientList"
-        android:name="com.thetatecno.fluidadmin.ui.ClientListFragment"
+        android:name="com.thetatecno.fluidadmin.ui.clientList.ClientListFragment"
         android:label="@string/client"
         tools:layout="@layout/fragment_client_list" />
     <fragment
         android:id="@+id/codeList"
-        android:name="com.thetatecno.fluidadmin.ui.CodeListFragment"
+        android:name="com.thetatecno.fluidadmin.ui.codeList.CodeListFragment"
         android:label="@string/code"
         tools:layout="@layout/fragment_code_list" >
         <action

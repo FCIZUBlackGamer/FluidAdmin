@@ -14,33 +14,33 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <ImageView
-        android:id="@+id/person_img"
+        android:id="@+id/clientImg"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/ic_account_box_black_24dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 
     <TextView
         android:id="@+id/fullNameTxt"
-        android:layout_width="59dp"
-        android:layout_height="37dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="@string/name_txt"
         android:textColor="@color/colorPrimary"
-        android:textSize="24sp"
+        android:textSize="@dimen/name_txt_size"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/person_img"
-        app:layout_constraintTop_toTopOf="@+id/person_img" />
+        app:layout_constraintStart_toEndOf="@+id/clientImg"
+        app:layout_constraintTop_toTopOf="@+id/clientImg" />
 
     <TextView
         android:id="@+id/idTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:textStyle="bold"
+        android:text="id"
         app:layout_constraintStart_toStartOf="@+id/fullNameTxt"
         app:layout_constraintTop_toBottomOf="@+id/fullNameTxt" />
 

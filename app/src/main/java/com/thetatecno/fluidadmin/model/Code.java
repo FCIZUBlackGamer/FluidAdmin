@@ -1,5 +1,7 @@
 package com.thetatecno.fluidadmin.model;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -75,6 +77,10 @@ public class Code implements Serializable {
     public void setSystemRequired(String systemRequired) {
         this.systemRequired = systemRequired;
     }
-
-
+// TODO : for arrayadapter to use it in spinner
+    @NonNull
+    @Override
+    public String toString() {
+        return code;
+    }
 }

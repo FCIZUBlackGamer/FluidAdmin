@@ -1,15 +1,20 @@
 package com.thetatecno.fluidadmin.retrofiteServices.interfaces;
 
+import androidx.cardview.widget.CardView;
+
 import com.thetatecno.fluidadmin.model.Code;
 import com.thetatecno.fluidadmin.model.CodeList;
 import com.thetatecno.fluidadmin.model.CustomerList;
 import com.thetatecno.fluidadmin.model.Facilities;
 import com.thetatecno.fluidadmin.model.Facility;
+import com.thetatecno.fluidadmin.model.FacilityCodes;
 import com.thetatecno.fluidadmin.model.Person;
 import com.thetatecno.fluidadmin.model.Staff;
 import com.thetatecno.fluidadmin.model.StaffData;
 import com.thetatecno.fluidadmin.model.State;
 import com.thetatecno.fluidadmin.utils.Constants;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -60,4 +65,7 @@ public interface MyServicesInterface {
 
     @GET("/ords/fluid/api/client")
     Call<CustomerList> getAllClients(@Query("clientId")String clientId, @Query("langId") String langId);
+
+    @PUT("/ords/fluid/api/addAgentFacilities")
+    Call<State> addToFacilities(@Query("staffId")String staffId, @Body FacilityCodes facilityCodes);
 }

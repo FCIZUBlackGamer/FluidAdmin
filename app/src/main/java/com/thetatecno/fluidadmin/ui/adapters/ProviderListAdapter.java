@@ -21,6 +21,7 @@ import com.thetatecno.fluidadmin.R;
 import com.thetatecno.fluidadmin.listeners.OnDeleteListener;
 import com.thetatecno.fluidadmin.model.Staff;
 import com.thetatecno.fluidadmin.ui.addorupdatestuff.AddOrUpdateProviderFragment;
+import com.thetatecno.fluidadmin.utils.EnumCode;
 
 import java.io.Serializable;
 import java.util.List;
@@ -94,12 +95,23 @@ public class ProviderListAdapter extends RecyclerView.Adapter<ProviderListAdapte
             holder.phoneTxt.setVisibility(View.GONE);
 
         }
-        if (providerList.get(position).getImageLink() != null && !providerList.get(position).getImageLink().isEmpty())
-            try {
-                Glide.with(context).load(providerList.get(position).getImageLink()).into(holder.personImg);
-            } catch (Exception e) {
-                Toast.makeText(context, context.getResources().getString(R.string.exception_glide_txt), Toast.LENGTH_SHORT).show();
+        if (providerList.get(position).getImageLink() != null && !providerList.get(position).getImageLink().isEmpty()) {
+
+            Glide.with(context).load(providerList.get(position).getImageLink()).into(holder.personImg);
+        }
+        else{
+            if(!providerList.get(position).getGender().isEmpty()) {
+                if (providerList.get(position).getGender().equals(EnumCode.Gender.M.toString())) {
+                    holder.personImg.setImageResource(R.drawable.man);
+                } else if(providerList.get(position).getGender().equals(EnumCode.Gender.F.toString())){
+                    holder.personImg.setImageResource(R.drawable.ic_girl);
+                }
             }
+            else {
+                holder.personImg.setImageResource(R.drawable.man);
+            }
+        }
+
         holder.specialityTxt.setText(providerList.get(position).getSpeciality());
 
         holder.textViewOptions.setOnClickListener(new View.OnClickListener() {
@@ -116,9 +128,7 @@ public class ProviderListAdapter extends RecyclerView.Adapter<ProviderListAdapte
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
-                            case R.id.add:
-                                //handle add click
-                                break;
+
                             case R.id.edit:
                                 //handle edit click
                                 bundle.putSerializable(ARG_STAFF, (Serializable) providerList.get(position));

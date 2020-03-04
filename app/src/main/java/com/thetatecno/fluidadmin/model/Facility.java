@@ -29,6 +29,16 @@ public class Facility implements Serializable {
     @Expose
     private String langId;
 
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
+
+    private boolean isSelected ;
+
     public String getLangId() {
         return langId;
     }

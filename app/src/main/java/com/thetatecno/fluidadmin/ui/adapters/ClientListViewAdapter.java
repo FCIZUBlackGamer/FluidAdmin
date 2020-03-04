@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.thetatecno.fluidadmin.R;
 import com.thetatecno.fluidadmin.listeners.OnDeleteListener;
 import com.thetatecno.fluidadmin.model.Person;
+import com.thetatecno.fluidadmin.utils.EnumCode;
 
 import java.util.List;
 
@@ -88,8 +89,20 @@ public class ClientListViewAdapter extends RecyclerView.Adapter<ClientListViewAd
                 holder.phoneTxt.setVisibility(View.GONE);
             }
 
-            if (personList.get(position).getImageLink() != null)
+            if (!personList.get(position).getImageLink().isEmpty())
                 Glide.with(context).load(personList.get(position).getImageLink()).into(holder.personImg);
+            else{
+                if(!personList.get(position).getGender().isEmpty()) {
+                    if (personList.get(position).getGender().equals(EnumCode.Gender.M.toString())) {
+                        holder.personImg.setImageResource(R.drawable.man);
+                    } else if(personList.get(position).getGender().equals(EnumCode.Gender.F.toString())){
+                        holder.personImg.setImageResource(R.drawable.ic_girl);
+                    }
+                }
+                else {
+                    holder.personImg.setImageResource(R.drawable.man);
+                }
+            }
         } catch (Exception e) {
             Sentry.capture(e);
         }
@@ -113,7 +126,7 @@ public class ClientListViewAdapter extends RecyclerView.Adapter<ClientListViewAd
 
         public vHolder(@NonNull View itemView) {
             super(itemView);
-            personImg = itemView.findViewById(R.id.person_img);
+            personImg = itemView.findViewById(R.id.clientImg);
             fullNameTxt = itemView.findViewById(R.id.fullNameTxt);
             mailTxt = itemView.findViewById(R.id.email_txt);
             phoneTxt = itemView.findViewById(R.id.mobile_num_txt);

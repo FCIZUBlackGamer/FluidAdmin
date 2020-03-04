@@ -119,7 +119,6 @@ public class StaffRepository {
                     if (response.body().getStatus() != null)
                         onDataChangedCallBackListener.onResponse(response.body().getStatus());
 
-
                 } else
                     onDataChangedCallBackListener.onResponse(null);
             }

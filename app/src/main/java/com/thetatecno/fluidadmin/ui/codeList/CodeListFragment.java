@@ -1,4 +1,4 @@
-package com.thetatecno.fluidadmin.ui;
+package com.thetatecno.fluidadmin.ui.codeList;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -21,6 +21,7 @@ import com.thetatecno.fluidadmin.R;
 import com.thetatecno.fluidadmin.model.Code;
 import com.thetatecno.fluidadmin.model.CodeList;
 import com.thetatecno.fluidadmin.ui.adapters.CodeListAdapter;
+import com.thetatecno.fluidadmin.ui.stafflist.AgentListFragment;
 import com.thetatecno.fluidadmin.utils.App;
 import com.thetatecno.fluidadmin.utils.PreferenceController;
 

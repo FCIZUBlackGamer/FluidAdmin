@@ -1,4 +1,4 @@
-package com.thetatecno.fluidadmin.ui;
+package com.thetatecno.fluidadmin.ui.dialogs;
 
 import android.app.Dialog;
 import android.content.Context;

@@ -3,7 +3,5 @@
 
     <item android:title="@string/edit_txt" android:id="@+id/edit"/>
 
-    <item android:title="@string/link_to_speciality_txt" android:id="@+id/add"/>
-
     <item android:title="@string/delete_txt" android:id="@+id/delete"/>
 </menu>

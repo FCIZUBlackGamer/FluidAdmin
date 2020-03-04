@@ -1,7 +1,6 @@
 package com.thetatecno.fluidadmin.ui.addorupdatestuff;
 
 
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
@@ -17,19 +16,23 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.thetatecno.fluidadmin.R;
-import com.thetatecno.fluidadmin.listeners.OnFragmentInteractionListener;
+import com.thetatecno.fluidadmin.model.Code;
+import com.thetatecno.fluidadmin.model.CodeList;
 import com.thetatecno.fluidadmin.model.Staff;
+import com.thetatecno.fluidadmin.ui.codeList.CodeListViewModel;
 import com.thetatecno.fluidadmin.utils.App;
 import com.thetatecno.fluidadmin.utils.EnumCode;
 import com.thetatecno.fluidadmin.utils.PreferenceController;
 
-import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.thetatecno.fluidadmin.utils.Constants.ARG_STAFF;
@@ -51,8 +54,10 @@ public class AddOrUpdateProviderFragment extends Fragment {
     AddOrUpdateViewModel addOrUpdateViewModel;
     boolean isStaffHasData;
     Staff staff;
-    List<Staff> providerList;
+    Spinner specialitySpinner;
     NavController navController;
+    CodeListViewModel codeListViewModel;
+    ArrayList<Code> specialityCodes;
 
     public AddOrUpdateProviderFragment() {
         // Required empty public constructor
@@ -74,7 +79,6 @@ public class AddOrUpdateProviderFragment extends Fragment {
             if (getArguments().getSerializable(ARG_STAFF) != null) {
                 staff = (Staff) getArguments().getSerializable(ARG_STAFF);
             }
-            providerList = (List<Staff>) getArguments().getSerializable("providerList");
 
         }
         navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
@@ -93,7 +97,7 @@ public class AddOrUpdateProviderFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_new_staff, container, false);
+        return inflater.inflate(R.layout.fragment_or_update_provider, container, false);
     }
 
     @Override
@@ -107,7 +111,10 @@ public class AddOrUpdateProviderFragment extends Fragment {
         genderRadioGroup = view.findViewById(R.id.genderRadioGroup);
         addBtn = view.findViewById(R.id.addOrUpdateBtn);
         cancelBtn = view.findViewById(R.id.cancel_btn);
+        specialitySpinner = view.findViewById(R.id.specialitySpinner);
         addOrUpdateViewModel = ViewModelProviders.of(this).get(AddOrUpdateViewModel.class);
+        codeListViewModel = ViewModelProviders.of(this).get(CodeListViewModel.class);
+        getspecialityCodes();
         updateData();
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,7 +132,7 @@ public class AddOrUpdateProviderFragment extends Fragment {
                 staff.setMobileNumber(phoneTxt.getText().toString());
                 staff.setTypeCode(EnumCode.StaffTypeCode.PRVDR.toString());
                 staff.setLangId(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
-
+                staff.setSpecialityCode(specialitySpinner.getSelectedItem().toString());
                 if (!isStaffHasData) {
                     addOrUpdateViewModel.addNewStaff(staff).observe(getActivity(), new Observer<String>() {
                         @Override
@@ -160,6 +167,37 @@ public class AddOrUpdateProviderFragment extends Fragment {
 
     }
 
+    private void getspecialityCodes() {
+        String languageId = PreferenceController.getInstance(getContext()).get(PreferenceController.LANGUAGE).toUpperCase();
+        codeListViewModel.getDataForCode("", languageId).observe(this, new Observer<CodeList>() {
+            @Override
+            public void onChanged(CodeList codeList) {
+                if (codeList.getCodeList() != null) {
+                   specialityCodes = new ArrayList<>();
+                    for(Code code :codeList.getCodeList()){
+                        if(code.getCodeType().equals("STFFGRP"))
+                      specialityCodes.add(code);
+                    }
+                    if(specialityCodes.size()>0){
+                        ArrayAdapter<Code> adapter =
+                                new ArrayAdapter<Code>(getContext(), R.layout.simple_spinner_dropdown_item, specialityCodes);
+                        adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
+
+                        specialitySpinner.setAdapter(adapter);
+                         if(staff!=null)
+                        if(staff.getSpeciality()!=null) {
+                            for (int i = 0; i < specialityCodes.size(); i++) {
+                                if (specialityCodes.get(i).getCode().equals(staff.getSpecialityCode())) {
+                                    specialitySpinner.setSelection(i);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
     private void onAddOrUpdateData() {
         navController.navigate(R.id.action_addOrUpdateProviderFragment_to_providerListFragment);
     }
@@ -182,6 +220,8 @@ public class AddOrUpdateProviderFragment extends Fragment {
                 genderRadioGroup.check(R.id.maleRadioButton);
             addBtn.setHint(getResources().getString(R.string.update_txt));
             isStaffHasData = true;
+
+
 
         } else {
             staff = new Staff();

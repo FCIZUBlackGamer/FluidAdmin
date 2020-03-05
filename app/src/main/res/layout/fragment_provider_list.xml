@@ -5,12 +5,16 @@
     android:layout_height="match_parent"
     tools:context=".ui.stafflist.ProviderListFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/providerSwipeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/providerRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"

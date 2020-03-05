@@ -21,25 +21,14 @@
             android:id="@+id/codeList"
             android:icon="@drawable/ic_menu_manage"
             android:title="@string/code" />
-
+        <item
+            android:id="@+id/facility"
+            android:checkableBehavior="single"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Facility"/>
     </group>
-    <item
-        android:id="@+id/facility"
-        android:checkableBehavior="single"
-        android:icon="@drawable/ic_menu_manage"
-        android:title="Facility">
-        <menu>
-            <item
-                android:id="@+id/clinicList"
-                android:icon="@drawable/ic_phone"
-                android:title="@string/clinic" />
 
-            <item
-                android:id="@+id/waiting_areaList"
-                android:icon="@drawable/ic_ambulance"
-                android:title="@string/waiting_area" />
-        </menu>
-    </item>
+
     <item android:title="@string/menu_english_language"
         android:id="@+id/language_reference"
         android:icon="@drawable/ic_language"/>

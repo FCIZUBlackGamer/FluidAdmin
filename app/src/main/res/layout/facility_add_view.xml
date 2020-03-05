@@ -11,18 +11,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:text="@string/facilty_id"
         app:layout_constraintBottom_toBottomOf="@+id/facility_id_et"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/facility_id_et" />
 
     <EditText
         android:id="@+id/facility_id_et"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:ems="10"
+        android:layout_marginTop="32dp"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView2"
@@ -58,15 +57,35 @@
         app:layout_constraintStart_toStartOf="@+id/textView3"
         app:layout_constraintTop_toBottomOf="@+id/desc_et" />
 
-    <EditText
-        android:id="@+id/type_et"
+
+    <RadioGroup
+        android:id="@+id/typeRadioGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="@+id/textView4"
         app:layout_constraintStart_toStartOf="@+id/desc_et"
-        app:layout_constraintTop_toTopOf="@+id/textView4" />
+        app:layout_constraintTop_toTopOf="@+id/textView4">
+
+        <RadioButton
+            android:id="@+id/clinicTyperadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:checked="true"
+            android:text="@string/room_txt"
+            tools:layout_editor_absoluteX="136dp"
+            tools:layout_editor_absoluteY="154dp" />
+
+        <RadioButton
+            android:id="@+id/waitingAreaTypeRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/waiting_area"
+            tools:layout_editor_absoluteX="136dp"
+            tools:layout_editor_absoluteY="154dp" />
+
+    </RadioGroup>
 
     <TextView
         android:id="@+id/textView5"
@@ -75,17 +94,40 @@
         android:layout_marginTop="16dp"
         android:text="@string/waitingAreaID"
         app:layout_constraintStart_toStartOf="@+id/textView4"
-        app:layout_constraintTop_toBottomOf="@+id/type_et" />
+        app:layout_constraintTop_toBottomOf="@+id/typeRadioGroup" />
 
-    <EditText
-        android:id="@+id/waiting_area_id_et"
-        android:layout_width="wrap_content"
+
+    <RelativeLayout
+        android:id="@+id/waitingAreaLayoutSpinner"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
+        android:background="@drawable/spinner_background"
+        android:orientation="horizontal"
+        android:weightSum="3"
         app:layout_constraintBottom_toBottomOf="@+id/textView5"
-        app:layout_constraintStart_toStartOf="@+id/type_et"
-        app:layout_constraintTop_toTopOf="@+id/textView5" />
+        app:layout_constraintStart_toStartOf="@+id/typeRadioGroup"
+        app:layout_constraintTop_toTopOf="@+id/textView5">
+
+        <Spinner
+            android:id="@+id/waitingAreaSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:spinnerMode="dropdown" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_arrow_drop_down_black_24dp" />
+
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/textView6"
@@ -94,17 +136,49 @@
         android:layout_marginTop="16dp"
         android:text="@string/deviceId"
         app:layout_constraintStart_toStartOf="@+id/textView5"
-        app:layout_constraintTop_toBottomOf="@+id/waiting_area_id_et" />
+        app:layout_constraintTop_toBottomOf="@+id/waitingAreaLayoutSpinner" />
 
-    <EditText
-        android:id="@+id/device_id_et"
-        android:layout_width="wrap_content"
+<!--    <EditText-->
+<!--        android:id="@+id/device_id_et"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:ems="10"-->
+<!--        android:inputType="textPersonName"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/textView6"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/waitingAreaLayoutSpinner"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/textView6" />-->
+    <RelativeLayout
+        android:id="@+id/deviceIdRelativeLayout"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
+        android:background="@drawable/spinner_background"
+        android:orientation="horizontal"
+        android:weightSum="3"
         app:layout_constraintBottom_toBottomOf="@+id/textView6"
-        app:layout_constraintStart_toStartOf="@+id/waiting_area_id_et"
-        app:layout_constraintTop_toTopOf="@+id/textView6" />
+        app:layout_constraintStart_toStartOf="@+id/waitingAreaLayoutSpinner"
+        app:layout_constraintTop_toTopOf="@+id/textView6">
+
+        <Spinner
+            android:id="@+id/deviceIdSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:spinnerMode="dropdown" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_arrow_drop_down_black_24dp" />
+
+    </RelativeLayout>
+    
 
     <Button
         android:id="@+id/cancel_btn"
@@ -117,14 +191,14 @@
         android:textColorHint="@color/colorWhite"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView6"
-        app:layout_constraintTop_toBottomOf="@+id/device_id_et"
+        app:layout_constraintTop_toBottomOf="@+id/deviceIdRelativeLayout"
         app:layout_constraintVertical_bias="0.501" />
 
     <Button
         android:id="@+id/addOrUpdateBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="44dp"
+        android:layout_marginStart="16dp"
         android:background="@color/colorPrimary"
         android:hint="@string/add_txt"
         android:paddingStart="40dp"

@@ -44,9 +44,9 @@
     <string name="id_txt">ID</string>
     <string name="code_txt">Code:</string>
     <string name="user_code_txt">User Code:</string>
-    <string name="edit_txt">edit</string>
-    <string name="link_to_facility_txt">link to facility</string>
-    <string name="delete_txt">delete</string>
+    <string name="edit_txt">Update</string>
+    <string name="link_to_facility_txt">Facilities</string>
+    <string name="delete_txt">Remove</string>
     <string name="link_to_speciality_txt">link to speciality</string>
     <string name="options_menu">⋮</string>
     <string name="ok_txt_btn">Ok</string>
@@ -62,4 +62,5 @@
     <string name="choose_facilities">choose facilities to be linked</string>
 
     <string name="link_btn_txt">Link</string>
+    <string name="room_txt">Room</string>
 </resources>

@@ -18,7 +18,6 @@
             android:layout_marginTop="64dp"
             android:src="@drawable/ic_girl"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -26,12 +25,12 @@
             android:id="@+id/idEdtTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="20dp"
-            android:layout_marginEnd="56dp"
             android:ems="10"
             android:hint="@string/id_txt"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/addProfileImg"
+            app:layout_constraintStart_toEndOf="@+id/family_name_txt"
             app:layout_constraintTop_toBottomOf="@+id/addProfileImg" />
 
         <TextView
@@ -71,8 +70,8 @@
             android:inputType="textPersonName"
             android:paddingStart="5dp"
             app:layout_constraintBottom_toBottomOf="@+id/first_name_txt"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/first_name_txt"
+            app:layout_constraintEnd_toEndOf="@+id/idEdtTxt"
+            app:layout_constraintStart_toStartOf="@+id/idEdtTxt"
             app:layout_constraintTop_toTopOf="@+id/first_name_txt" />
 
         <TextView

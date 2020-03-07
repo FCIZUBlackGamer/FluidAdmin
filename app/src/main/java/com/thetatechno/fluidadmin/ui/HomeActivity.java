@@ -236,7 +236,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     public void getFacilities() {
-        facilityListViewModel.getFacilityDataForClinics("", PreferenceController.getInstance(getApplicationContext()).get(PreferenceController.LANGUAGE).toUpperCase()).observe(this, new Observer<Facilities>() {
+        facilityListViewModel.getFacilityDataForClinics("").observe(this, new Observer<Facilities>() {
             @Override
             public void onChanged(Facilities facilities) {
                 if (facilities.getFacilities() != null) {

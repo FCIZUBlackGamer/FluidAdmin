@@ -60,8 +60,7 @@ public class FacilityListFragment extends Fragment {
         addNewFacilityFab = view.findViewById(R.id.fab);
         facilityListClinicRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         facilityListViewModel = ViewModelProviders.of(this).get(FacilityListViewModel.class);
-        facilityListViewModel.getFacilityDataForClinics("",
-                PreferenceController.getInstance(getContext()).get(PreferenceController.LANGUAGE).toUpperCase()).observe(this, new Observer<Facilities>() {
+        facilityListViewModel.getFacilityDataForClinics("").observe(this, new Observer<Facilities>() {
             @Override
             public void onChanged(Facilities facilities) {
                 if (facilities != null) {

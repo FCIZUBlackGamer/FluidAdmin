@@ -11,7 +11,7 @@ public class Facilities {
     private List<Facility> facilities = null;
     @SerializedName("status")
     @Expose
-    private String status;
+    private String status = "";
 
     public List<Facility> getFacilities() {
         return facilities;

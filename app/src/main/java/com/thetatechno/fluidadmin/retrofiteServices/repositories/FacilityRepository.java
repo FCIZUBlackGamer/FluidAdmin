@@ -23,7 +23,7 @@ public class FacilityRepository {
 
     public MutableLiveData getAllFacilities(final String facilityId, final String langId) {
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
-        Call<Facilities> call = myServicesInterface.getFacilities(facilityId, langId, "");
+        Call<Facilities> call = myServicesInterface.getAllFacilities(facilityId, langId);
         call.enqueue(new Callback<Facilities>() {
             @Override
             public void onResponse(Call<Facilities> call, Response<Facilities> response) {
@@ -44,7 +44,29 @@ public class FacilityRepository {
         });
         return facilitiesMutableLiveData;
     }
+    public void getAllWaitListFacilities(final String facilityId, final String langId, final String typeCode, final OnDataChangedCallBackListener<Facilities> onDataChangedCallBackListener) {
+        MyServicesInterface myServicesInterface = RetrofitInstance.getService();
+        Call<Facilities> call = myServicesInterface.getAllWaitingListFacilities(facilityId, langId,typeCode);
+        call.enqueue(new Callback<Facilities>() {
+            @Override
+            public void onResponse(Call<Facilities> call, Response<Facilities> response) {
+                if (response.isSuccessful()) {
 
+                    if (response.body() != null) {
+                        onDataChangedCallBackListener.onResponse(response.body());
+
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Facilities> call, Throwable t) {
+                onDataChangedCallBackListener.onResponse(null);
+
+            }
+        });
+
+    }
     public void insertFacility(final Facility facility, final OnDataChangedCallBackListener onDataChangedCallBackListener) {
 
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();

@@ -23,7 +23,10 @@ public interface MyServicesInterface {
 
 
     @GET("/ords/fluid/api/facility")
-    Call<Facilities> getFacilities(@Query(Constants.FACILITY_ID) String facilityId, @Query(Constants.LANG_ID) String langId, @Query(Constants.FACILITY_TYPE_CODE) String typeCode);
+    Call<Facilities> getAllWaitingListFacilities(@Query(Constants.FACILITY_ID) String facilityId, @Query(Constants.LANG_ID) String langId, @Query(Constants.FACILITY_TYPE_CODE) String typeCode);
+
+    @GET("/ords/fluid/api/facility")
+    Call<Facilities> getAllFacilities(@Query(Constants.FACILITY_ID) String facilityId, @Query(Constants.LANG_ID) String langId);
 
     @POST("/ords/fluid/api/facility")
     Call<State> addFacility(@Body Facility facility);
@@ -56,11 +59,11 @@ public interface MyServicesInterface {
     Call<State> updateStaff(@Body Staff staff);
 
     @DELETE("/ords/fluid/api/staff")
-    Call<State> deleteStuff(@Query("staffId")String staffId);
+    Call<State> deleteStuff(@Query("staffId") String staffId);
 
     @GET("/ords/fluid/api/client")
-    Call<CustomerList> getAllClients(@Query("clientId")String clientId, @Query("langId") String langId);
+    Call<CustomerList> getAllClients(@Query("clientId") String clientId, @Query("langId") String langId);
 
     @PUT("/ords/fluid/api/addAgentFacilities")
-    Call<State> addToFacilities(@Query("staffId")String staffId, @Body FacilityCodes facilityCodes);
+    Call<State> addToFacilities(@Query("staffId") String staffId, @Body FacilityCodes facilityCodes);
 }

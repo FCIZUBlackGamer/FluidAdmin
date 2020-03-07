@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -29,18 +30,16 @@ import java.util.List;
 import static com.thetatechno.fluidadmin.utils.Constants.ARG_CODE;
 
 
-public class CodeAddFragment extends Fragment {
+public class CodeAddFragment extends DialogFragment {
 
 
     private Code code;
     private boolean isCodeNotNull;
-    EditText codeIdEditTxt, codeDescriptionEditTxt, codeTypeEditTxt, userCodeEditTxt;
+    EditText codeIdEditTxt, codeDescriptionEditTxt;
     Button cancel_btn, addOrUpdateBtn;
     CodeViewModel codeViewModel;
-
     NavController navController;
     List<Code> codeList;
-    Bundle bundle;
 
     private OnFragmentInteractionListener mListener;
 
@@ -133,10 +132,10 @@ public class CodeAddFragment extends Fragment {
     }
     private  void  getDataFromUi(){
         code.setCode(codeIdEditTxt.getText().toString());
-        code.setCodeType(codeTypeEditTxt.getText().toString());
         code.setDescription(codeDescriptionEditTxt.getText().toString());
-        code.setUserCode(userCodeEditTxt.getText().toString());
-        code.setSystemRequired("");
+        code.setSystemRequired("Y");
+        code.setUserCode(codeIdEditTxt.getText().toString());
+        code.setCodeType(EnumCode.Code.STFFGRP.toString());
         code.setLangId(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
 
     }
@@ -145,16 +144,12 @@ public class CodeAddFragment extends Fragment {
         if (code != null) {
             isCodeNotNull = true;
             codeIdEditTxt.setText(code.getCode());
-            userCodeEditTxt.setText(code.getUserCode());
             codeDescriptionEditTxt.setText(code.getDescription());
-            codeTypeEditTxt.setText(code.getCodeType());
             addOrUpdateBtn.setHint(getResources().getString(R.string.update_txt));
         } else {
             isCodeNotNull = false;
             codeIdEditTxt.setText("");
-            userCodeEditTxt.setText("");
             codeDescriptionEditTxt.setText("");
-            codeTypeEditTxt.setText("");
             addOrUpdateBtn.setHint(getResources().getString(R.string.add_txt));
         }
     }
@@ -162,8 +157,6 @@ public class CodeAddFragment extends Fragment {
     private void initViews(View view) {
         codeIdEditTxt = view.findViewById(R.id.code_id_et);
         codeDescriptionEditTxt = view.findViewById(R.id.desc_et);
-        codeTypeEditTxt = view.findViewById(R.id.type_et);
-        userCodeEditTxt = view.findViewById(R.id.user_code_et);
         cancel_btn = view.findViewById(R.id.cancel_btn);
         addOrUpdateBtn = view.findViewById(R.id.addOrUpdateCodeBtn);
 

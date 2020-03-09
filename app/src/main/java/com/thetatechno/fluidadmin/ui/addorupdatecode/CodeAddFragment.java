@@ -1,16 +1,22 @@
 package com.thetatechno.fluidadmin.ui.addorupdatecode;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -76,6 +82,8 @@ public class CodeAddFragment extends DialogFragment {
         requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -130,6 +138,7 @@ public class CodeAddFragment extends DialogFragment {
         });
         return view;
     }
+
     private  void  getDataFromUi(){
         code.setCode(codeIdEditTxt.getText().toString());
         code.setDescription(codeDescriptionEditTxt.getText().toString());
@@ -138,6 +147,17 @@ public class CodeAddFragment extends DialogFragment {
         code.setCodeType(EnumCode.Code.STFFGRP.toString());
         code.setLangId(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Window window = getDialog().getWindow();
+        if(window == null) return;
+        WindowManager.LayoutParams params = window.getAttributes();
+        params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        params.height = ViewGroup.LayoutParams.WRAP_CONTENT;;
+        window.setAttributes(params);
     }
 
     private void updateViewWithData() {
@@ -171,8 +191,9 @@ public class CodeAddFragment extends DialogFragment {
 
     }
     void onBackOrCancelBtnPressed(){
+//        navController.navigate(R.id.action_codeAddFragment_to_codeListFragment);
+        dismiss();
 
-        navController.navigate(R.id.action_codeAddFragment_to_codeListFragment);
     }
 
     @Override

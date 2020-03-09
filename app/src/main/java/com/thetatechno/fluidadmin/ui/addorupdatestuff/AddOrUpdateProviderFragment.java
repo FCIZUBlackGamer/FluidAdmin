@@ -29,6 +29,7 @@ import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.model.Code;
 import com.thetatechno.fluidadmin.model.CodeList;
 import com.thetatechno.fluidadmin.model.Staff;
+import com.thetatechno.fluidadmin.ui.HomeActivity;
 import com.thetatechno.fluidadmin.ui.codeList.CodeListViewModel;
 import com.thetatechno.fluidadmin.utils.App;
 import com.thetatechno.fluidadmin.utils.Constants;
@@ -101,6 +102,17 @@ public class AddOrUpdateProviderFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_or_update_provider, container, false);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(staff.getStaffId()!=null){
+            ((HomeActivity)getActivity()).getSupportActionBar().setTitle("Update Provider");
+        }else {
+
+            ((HomeActivity)getActivity()).getSupportActionBar().setTitle("Add Provider");
+        }
     }
 
     @Override

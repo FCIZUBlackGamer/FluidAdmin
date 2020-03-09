@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:padding="8dp"
     android:id="@+id/arrive_or_checkin_list_dialog"
-    android:layout_height="500dp">
+    android:layout_height="550dp">
 <SearchView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -30,6 +30,8 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="16dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
       >
         <Button
             android:layout_width="0dp"
@@ -39,6 +41,7 @@
             android:textColorHint="@color/colorWhite"
             android:background="@color/colorAccent"
             android:layout_marginStart="16dp"
+            android:padding="16dp"
             android:layout_marginEnd="16dp"
             android:id="@+id/cancel_btn"/>
 
@@ -47,6 +50,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:hint="@string/link_btn_txt"

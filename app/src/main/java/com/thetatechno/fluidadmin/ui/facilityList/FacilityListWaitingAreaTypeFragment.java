@@ -53,7 +53,7 @@ public class FacilityListWaitingAreaTypeFragment extends Fragment {
 //        addNewFacilityFab = view.findViewById(R.id.fab);
 //        facilityWaitingAreaTypeListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
 //        facilityListViewModel = ViewModelProviders.of(this).get(FacilityListViewModel.class);
-//        facilityListViewModel.getFacilityDataForClinics("",
+//        facilityListViewModel.getAllFacilities("",
 //                PreferenceController.getInstance(getContext()).get(PreferenceController.LANGUAGE).toUpperCase(),
 //                EnumCode.ClinicTypeCode.WAITAREA.toString()).observe(this, new Observer<Facilities>() {
 //            @Override

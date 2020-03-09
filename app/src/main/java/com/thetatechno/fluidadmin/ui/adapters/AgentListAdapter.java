@@ -85,7 +85,7 @@ public class AgentListAdapter extends RecyclerView.Adapter<AgentListAdapter.Agen
             holder.fullNameTxt.setVisibility(View.GONE);
         }
         if (!agentList.get(position).getEmail().isEmpty()) {
-            holder.agentEmailTxt.setText(agentList.get(position).getEmail());
+            holder.agentEmailTxt.setText(agentList.get(position).getEmail().toLowerCase());
             holder.agentEmailTxt.setVisibility(View.VISIBLE);
 
         } else

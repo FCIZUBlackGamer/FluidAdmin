@@ -44,7 +44,7 @@ public class FacilityRepository {
         });
         return facilitiesMutableLiveData;
     }
-    public void getAllWaitListFacilities(final String facilityId, final String langId, final String typeCode, final OnDataChangedCallBackListener<Facilities> onDataChangedCallBackListener) {
+    public void getFacilityListForSpecificType(final String facilityId, final String langId, final String typeCode, final OnDataChangedCallBackListener<Facilities> onDataChangedCallBackListener) {
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
         Call<Facilities> call = myServicesInterface.getAllWaitingListFacilities(facilityId, langId,typeCode);
         call.enqueue(new Callback<Facilities>() {

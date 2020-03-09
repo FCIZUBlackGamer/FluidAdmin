@@ -4,9 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginBottom="4dp"
+    app:cardCornerRadius="2dp"
     app:cardElevation="@dimen/cardview_default_elevation"
-    app:contentPadding="2dp"
-    app:cardCornerRadius="2dp">
+    app:contentPadding="2dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -14,8 +18,8 @@
 
         <ImageView
             android:id="@+id/person_img"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:layout_marginStart="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/agentTextViewOptions" />
@@ -30,9 +34,9 @@
             android:layout_marginEnd="16dp"
             android:paddingStart="16dp"
             android:paddingEnd="8dp"
-            android:textColor="@color/colorPrimary"
             android:text="@string/options_menu"
             android:textAppearance="?android:textAppearanceLarge"
+            android:textColor="@color/colorPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -53,10 +57,9 @@
             android:id="@+id/idTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="32dp"
             android:layout_marginTop="4dp"
             android:text="staffId"
-            android:textSize="18sp"
             app:layout_constraintStart_toEndOf="@+id/person_img"
             app:layout_constraintTop_toBottomOf="@+id/fullNameTxt" />
 
@@ -64,10 +67,12 @@
             android:id="@+id/email_txt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="8dp"
             android:drawableStart="@drawable/ic_email_black_24dp"
             android:drawablePadding="5dp"
             android:text="@string/email_example_txt"
-            app:layout_constraintStart_toStartOf="@+id/idTxt"
+            app:layout_constraintStart_toEndOf="@+id/person_img"
             app:layout_constraintTop_toBottomOf="@+id/idTxt" />
 
         <TextView
@@ -75,7 +80,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:drawableStart="@drawable/ic_phone_black_24dp"
+            android:drawableStart="@drawable/ic_phone"
             android:drawablePadding="5dp"
             android:text="@string/phone_example_txt"
             app:layout_constraintStart_toStartOf="@+id/email_txt"

@@ -22,6 +22,7 @@ import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.model.Code;
 import com.thetatechno.fluidadmin.model.CodeList;
 import com.thetatechno.fluidadmin.ui.adapters.CodeListAdapter;
+import com.thetatechno.fluidadmin.ui.addorupdatecode.CodeAddFragment;
 import com.thetatechno.fluidadmin.ui.stafflist.AgentListFragment;
 import com.thetatechno.fluidadmin.utils.App;
 import com.thetatechno.fluidadmin.utils.EnumCode;
@@ -105,7 +106,9 @@ public class CodeListFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                navController.navigate(R.id.action_codeListFragment_to_codeAddFragment);
+               navController.navigate(R.id.action_codeListFragment_to_codeAddFragment);
+//                CodeAddFragment codeAddFragment = CodeAddFragment.newInstance(null);
+//                codeAddFragment.show(getActivity().getSupportFragmentManager(),CodeAddFragment.class.getSimpleName());
 
             }
         });

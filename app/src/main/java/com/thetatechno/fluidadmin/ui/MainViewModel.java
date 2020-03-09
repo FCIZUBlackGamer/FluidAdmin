@@ -17,6 +17,7 @@ import com.thetatechno.fluidadmin.retrofiteServices.repositories.FacilityReposit
 import com.thetatechno.fluidadmin.retrofiteServices.repositories.StaffRepository;
 import com.thetatechno.fluidadmin.utils.App;
 import com.thetatechno.fluidadmin.utils.Constants;
+import com.thetatechno.fluidadmin.utils.EnumCode;
 import com.thetatechno.fluidadmin.utils.PreferenceController;
 
 public class MainViewModel extends ViewModel {
@@ -24,43 +25,16 @@ public class MainViewModel extends ViewModel {
     StaffRepository staffRepository = new StaffRepository();
     CodeRepository codeRepository = new CodeRepository();
     FacilityRepository facilityRepository = new FacilityRepository();
-    ClientRepository clientRepository = new ClientRepository();
     MutableLiveData<String> deletedMessageLiveData = new MutableLiveData<>();
     String message;
-
-
-    public MutableLiveData<StaffData> getStaffDataForAgents(String langId, String typeCode) {
-
-        return staffRepository.getAllStuff(langId, typeCode);
-    }
-
-    public MutableLiveData<StaffData> getStaffDataForProviders(String langId, String typeCode) {
-
-        return staffRepository.getAllStuff(langId, typeCode);
-    }
-
-    public MutableLiveData getFacilityDataForClinics(String facilityId, String langId) {
-
-        return facilityRepository.getAllFacilities(facilityId, langId);
-    }
-
-    public MutableLiveData getAllClients(String facilityId, String langId) {
-
-        return clientRepository.getAllClients(facilityId, langId);
-    }
-
-    public MutableLiveData getDataForCode(String facilityId, String langId) {
-
-        return codeRepository.getAllCodes(facilityId, langId);
-    }
 
     public MutableLiveData<String> deleteAgentOrProvider(final Staff staff) {
         staffRepository.deleteStaff(staff.getStaffId(), new OnDataChangedCallBackListener<String>() {
             @Override
             public void onResponse(String b) {
-                Log.i(TAG, "delete state " + b);
+                Log.i(TAG, "deleteAgentOrProvider: delete state " + b);
                 if (b.equals(Constants.ADD_OR_UPDATE_SUCCESS_STATE)) {
-                    message = "Delete successfully staff " + staff.getFirstName();
+                    message = "Delete successfully " + staff.getFirstName();
                     deletedMessageLiveData.setValue(message);
                 } else if (b.equals(Constants.ADD_OR_UPDATE_FAIL_STATE)) {
                     message = "Failed to delete.";
@@ -77,9 +51,13 @@ public class MainViewModel extends ViewModel {
         codeRepository.deleteCode(code.getCodeType(), code.getCode(), new OnDataChangedCallBackListener<String>() {
             @Override
             public void onResponse(String b) {
+                Log.i(TAG, "deleteCode: delete state " + b);
+
                 if (b.equals(Constants.ADD_OR_UPDATE_SUCCESS_STATE)) {
                     message = "Delete code successfully " + code.getCode();
-                    codeRepository.getAllCodes("", PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
+//                    codeRepository.getAllCodes(EnumCode.Code.STFFGRP.toString(), PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
+                    deletedMessageLiveData.setValue(message);
+
                 } else if (b.equals(Constants.ADD_OR_UPDATE_FAIL_STATE)) {
                     message = "Failed to delete code " + code.getCode();
                     deletedMessageLiveData.setValue(message);
@@ -94,11 +72,15 @@ public class MainViewModel extends ViewModel {
         facilityRepository.deleteFacility(facility.getCode(), new OnDataChangedCallBackListener<String>() {
             @Override
             public void onResponse(String b) {
+                Log.i(TAG, "deleteFacility: delete state " + b);
+
                 if (b.equals(Constants.ADD_OR_UPDATE_SUCCESS_STATE)) {
                     message = "Delete facility successfully" + facility.getCode();
-                    facilityRepository.getAllFacilities(facility.getCode(), PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
+//                    facilityRepository.getAllFacilities(facility.getCode(), PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
+                    deletedMessageLiveData.setValue(message);
+
                 } else if (b.equals(Constants.ADD_OR_UPDATE_FAIL_STATE)) {
-                    message = "Failed to delete code " + facility.getCode();
+                    message = "Failed to delete facility " + facility.getCode();
                     deletedMessageLiveData.setValue(message);
                 }
 

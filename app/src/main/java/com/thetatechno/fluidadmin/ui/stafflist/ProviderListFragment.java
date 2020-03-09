@@ -83,8 +83,10 @@ public class ProviderListFragment extends Fragment {
         providerSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                providerSwipeLayout.setRefreshing(false);
+                providerSwipeLayout.setRefreshing(true);
                 providerListViewModel.getStaffData(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase(), EnumCode.StaffTypeCode.PRVDR.toString());
+                providerSwipeLayout.setRefreshing(false);
+
             }
         });
 

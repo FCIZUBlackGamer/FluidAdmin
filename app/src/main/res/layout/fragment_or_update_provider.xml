@@ -120,7 +120,6 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/email_prompt"
-
             android:inputType="textEmailAddress"
             app:layout_constraintBottom_toBottomOf="@+id/email_txt"
             app:layout_constraintEnd_toEndOf="@+id/family_name_edt_txt"
@@ -215,7 +214,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:checked="true"
-                android:text="Female"
+                android:text="@string/female_txt"
                 tools:layout_editor_absoluteX="136dp"
                 tools:layout_editor_absoluteY="154dp" />
 
@@ -223,7 +222,7 @@
                 android:id="@+id/maleRadioButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Female"
+                android:text="@string/male_txt"
                 tools:layout_editor_absoluteX="136dp"
                 tools:layout_editor_absoluteY="154dp" />
 
@@ -257,7 +256,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_gravity="center"
-                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
                 android:background="@android:color/transparent"
                 android:gravity="center"
                 android:spinnerMode="dropdown" />
@@ -265,7 +264,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_arrow_drop_down_black_24dp" />

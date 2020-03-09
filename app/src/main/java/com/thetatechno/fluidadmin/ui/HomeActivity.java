@@ -144,9 +144,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     public void onOkButtonClicked(final Object itemDeleted) {
-        if (confirmDeleteDialog.isShowing()) {
-            confirmDeleteDialog.dismiss();
-        }
+
         if (itemDeleted instanceof Facility) {
             Log.i("Object", "facility type " + ((Facility) itemDeleted).getCode());
             mainViewModel.deleteFacility((Facility) itemDeleted).observe(this, new Observer<String>() {
@@ -190,6 +188,9 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                     navigateToCodeList();
                 }
             });
+        }
+        if (confirmDeleteDialog.isShowing()) {
+            confirmDeleteDialog.dismiss();
         }
 
     }
@@ -236,7 +237,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     public void getFacilities() {
-        facilityListViewModel.getFacilityDataForClinics("").observe(this, new Observer<Facilities>() {
+        facilityListViewModel.getFacilityDataForClinicType("").observe(this, new Observer<Facilities>() {
             @Override
             public void onChanged(Facilities facilities) {
                 if (facilities.getFacilities() != null) {
@@ -307,6 +308,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 new NavOptions.Builder()
                         .setPopUpTo(R.id.codeList,
                                 true).build());
+
     }
 
     @Override
@@ -317,7 +319,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 Log.i(TAG, b);
                 if (facilitiesListDialog.isShowing()) {
                     facilitiesListDialog.dismiss();
-                    facilitiesListDialog = null;
                     navigateToAgentList();
                 }
 

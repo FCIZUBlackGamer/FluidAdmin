@@ -7,7 +7,6 @@
     <fragment
         android:id="@+id/addOrUpdateProviderFragment"
         android:name="com.thetatechno.fluidadmin.ui.addorupdatestuff.AddOrUpdateProviderFragment"
-        android:label="add or update provider"
         tools:layout="@layout/fragment_or_update_provider" >
 
         <action
@@ -20,29 +19,26 @@
     <fragment
         android:id="@+id/addOrUpdateAgentFragment"
         android:name="com.thetatechno.fluidadmin.ui.addorupdatestuff.AddOrUpdateAgentFragment"
-        android:label="add or update agent"
-        tools:layout="@layout/fragment_add_or_update_agent" >
+        tools:layout="@layout/fragment_add_or_update_agent">
         <action
             android:id="@+id/action_addOrUpdateAgentFragment_to_agentListFragment"
             app:destination="@+id/agentList"
             app:popUpTo="@id/agentList"
             app:popUpToInclusive="true" />
     </fragment>
-    <fragment
+    <dialog
         android:id="@+id/codeAddFragment"
         android:name="com.thetatechno.fluidadmin.ui.addorupdatecode.CodeAddFragment"
-        android:label="add or update code"
         tools:layout="@layout/code_add_view" >
 
         <action
             android:id="@+id/action_codeAddFragment_to_codeListFragment"
             app:destination="@id/codeList"
             app:popUpTo="@+id/codeList" />
-    </fragment>
+    </dialog>
     <fragment
         android:id="@+id/facilityAddFragment"
         android:name="com.thetatechno.fluidadmin.ui.addorupdatefacility.FacilityAddFragment"
-        android:label="add or update facility"
         tools:layout="@layout/facility_add_view" >
 
         <action

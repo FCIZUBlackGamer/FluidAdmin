@@ -23,7 +23,6 @@ import com.thetatechno.fluidadmin.model.Facilities;
 import com.thetatechno.fluidadmin.model.Facility;
 import com.thetatechno.fluidadmin.ui.adapters.FacilityListAdapter;
 import com.thetatechno.fluidadmin.utils.EnumCode;
-import com.thetatechno.fluidadmin.utils.PreferenceController;
 
 import java.io.Serializable;
 import java.util.List;
@@ -60,7 +59,7 @@ public class FacilityListFragment extends Fragment {
         addNewFacilityFab = view.findViewById(R.id.fab);
         facilityListClinicRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         facilityListViewModel = ViewModelProviders.of(this).get(FacilityListViewModel.class);
-        facilityListViewModel.getFacilityDataForClinics("").observe(this, new Observer<Facilities>() {
+        facilityListViewModel.getAllFacilities("").observe(this, new Observer<Facilities>() {
             @Override
             public void onChanged(Facilities facilities) {
                 if (facilities != null) {

@@ -22,6 +22,7 @@ import androidx.navigation.Navigation;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.model.Code;
 import com.thetatechno.fluidadmin.model.Facility;
+import com.thetatechno.fluidadmin.ui.HomeActivity;
 import com.thetatechno.fluidadmin.ui.facilityList.FacilityListViewModel;
 import com.thetatechno.fluidadmin.utils.App;
 import com.thetatechno.fluidadmin.utils.EnumCode;
@@ -199,7 +200,17 @@ facilityListViewModel.getFacilityDataForWaitingAreaList("").observe(this, new Ob
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
 
+        if(facility.getCode()!=null){
+            ((HomeActivity)getActivity()).getSupportActionBar().setTitle("Update Provider");
+        }else {
+
+            ((HomeActivity)getActivity()).getSupportActionBar().setTitle("Add Provider");
+        }
+    }
     private void updateData() {
         if (facility != null) {
             isDataFound = true;
@@ -213,15 +224,12 @@ facilityListViewModel.getFacilityDataForWaitingAreaList("").observe(this, new Ob
                 facilityTypeRadioGroup.check(R.id.waitingAreaTypeRadioButton);
                 waitingAreaSpinner.setEnabled(false);
             }
-
             addOrUpdateBtn.setHint(getResources().getString(R.string.update_txt));
 
         } else {
             isDataFound = false;
             facility_id_et.setText("");
             desc_et.setText("");
-
-
             addOrUpdateBtn.setHint(getResources().getString(R.string.add_txt));
 
         }

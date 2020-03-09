@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="250dp">
 
     <TextView
         android:id="@+id/textView2"
@@ -49,37 +49,43 @@
         app:layout_constraintStart_toStartOf="@+id/code_id_et"
         app:layout_constraintTop_toTopOf="@+id/textView3" />
 
-
-    <Button
-        android:id="@+id/cancel_btn"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginBottom="32dp"
-        android:background="@color/colorAccent"
-        android:hint="@string/cancel_btn_txt"
-        android:paddingStart="32dp"
-        android:paddingEnd="32dp"
-        android:textColorHint="@color/colorWhite"
+        android:orientation="horizontal"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView3"
-        app:layout_constraintTop_toBottomOf="@+id/desc_et" />
+android:weightSum="2"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/desc_et">
 
-    <Button
-        android:id="@+id/addOrUpdateCodeBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:background="@color/colorPrimary"
-        android:hint="@string/add_txt"
-        android:paddingStart="40dp"
-        android:paddingEnd="40dp"
-        android:textColorHint="@color/colorWhite"
-        app:layout_constraintBottom_toBottomOf="@+id/cancel_btn"
-        app:layout_constraintEnd_toEndOf="@+id/desc_et"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/cancel_btn"
-        app:layout_constraintTop_toTopOf="@+id/cancel_btn"
-        app:layout_constraintVertical_bias="0.0" />
+        <Button
+            android:id="@+id/cancel_btn"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="8dp"
+            android:background="@color/colorAccent"
+            android:hint="@string/cancel_btn_txt"
+            android:layout_marginEnd="8dp"
+            android:textColorHint="@color/colorWhite" />
+
+        <Button
+            android:id="@+id/addOrUpdateCodeBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:background="@color/colorPrimary"
+            android:hint="@string/add_txt"
+            android:textColorHint="@color/colorWhite" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

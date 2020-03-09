@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.model.Staff;
+import com.thetatechno.fluidadmin.ui.HomeActivity;
 import com.thetatechno.fluidadmin.utils.App;
 import com.thetatechno.fluidadmin.utils.Constants;
 import com.thetatechno.fluidadmin.utils.EnumCode;
@@ -100,6 +101,7 @@ public class AddOrUpdateAgentFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         return inflater.inflate(R.layout.fragment_add_or_update_agent, container, false);
     }
 
@@ -177,9 +179,20 @@ public class AddOrUpdateAgentFragment extends Fragment {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(staff.getStaffId()!=null){
+            ((HomeActivity)getActivity()).getSupportActionBar().setTitle("update agent");
+        }else {
+
+            ((HomeActivity)getActivity()).getSupportActionBar().setTitle("add agent");
+        }
+    }
+
     private void updateData() {
         if (staff != null) {
-            navController.getCurrentDestination().setLabel("update agent");
+
             idTxt.setText(staff.getStaffId());
             firstNameTxt.setText(staff.getFirstName());
             lastNameTxt.setText(staff.getFamilyName());
@@ -207,11 +220,11 @@ public class AddOrUpdateAgentFragment extends Fragment {
                 else {
                     addProfileImg.setImageResource(R.drawable.man);
                 }
+
             }
 
         } else {
-            navController.getCurrentDestination().setLabel("add agent");
-            getActivity().setTitle(navController.getCurrentDestination().getLabel());
+
             staff = new Staff();
             isStaffHasData = false;
             firstNameTxt.setText("");
@@ -219,6 +232,8 @@ public class AddOrUpdateAgentFragment extends Fragment {
             emailTxt.setText("");
             addBtn.setHint(getResources().getString(R.string.add_txt));
             addProfileImg.setImageResource(R.drawable.man);
+//            navController.getCurrentDestination().setLabel("add agent");
+//           getActivity().setTitle("add agent");
         }
     }
 

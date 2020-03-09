@@ -98,7 +98,10 @@ public class AgentListFragment extends Fragment {
         agentSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                agentSwipeLayout.setRefreshing(true);
                 staffListViewModel.getStaffData(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase(), EnumCode.StaffTypeCode.DSPTCHR.toString());
+                agentSwipeLayout.setRefreshing(false);
+
             }
         });
         addNewAgentFab.setOnClickListener(new View.OnClickListener() {

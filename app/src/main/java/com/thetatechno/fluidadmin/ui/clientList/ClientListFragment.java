@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -14,28 +15,30 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.model.CustomerList;
 import com.thetatechno.fluidadmin.model.Person;
-import com.thetatechno.fluidadmin.ui.adapters.ClientListViewAdapter;
-import com.thetatechno.fluidadmin.utils.App;
-import com.thetatechno.fluidadmin.utils.PreferenceController;
 
 import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ClientListFragment extends Fragment {
+public class ClientListFragment extends Fragment implements SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener {
 
     List<Person> clientList;
     RecyclerView clientListRecyclerView;
     ClientListViewAdapter clientListViewAdapter;
     ClientListViewModel clientListViewModel;
 SwipeRefreshLayout clientSwipeLayout;
+SearchView searchView;
+static final String TAG = ClientListFragment.class.getSimpleName();
     public ClientListFragment() {
         // Required empty public constructor
     }
@@ -55,7 +58,8 @@ SwipeRefreshLayout clientSwipeLayout;
         clientListViewModel = ViewModelProviders.of(this).get(ClientListViewModel.class);
         clientListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         clientSwipeLayout = view.findViewById(R.id.clientSwipeLayout);
-        clientListViewModel.getAllClients("",PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase()).observe(this, new Observer<CustomerList>() {
+        setHasOptionsMenu(true);
+        clientListViewModel.getAllClients("").observe(this, new Observer<CustomerList>() {
             @Override
             public void onChanged(CustomerList customerList) {
                 if (customerList != null) {
@@ -65,10 +69,10 @@ SwipeRefreshLayout clientSwipeLayout;
                         clientListRecyclerView.setAdapter(clientListViewAdapter);
                         clientSwipeLayout.setRefreshing(false);
                     } else {
-                        Log.e("Staff List", "Is Null");
+                        Log.e(TAG, "clientList Is Null");
                     }
                 } else {
-                    Log.e("Staff", "Is Null");
+                    Log.e(TAG, "no data returns");
                 }
             }
         });
@@ -76,7 +80,42 @@ SwipeRefreshLayout clientSwipeLayout;
             @Override
             public void onRefresh() {
                 clientSwipeLayout.setRefreshing(true);
+                clientListViewModel.getAllClients("");
+                clientSwipeLayout.setRefreshing(false);
             }
         });
+    }
+    @Override
+    public boolean onMenuItemActionExpand(MenuItem item) {
+
+        return true;
+    }
+
+    @Override
+    public boolean onMenuItemActionCollapse(MenuItem item) {
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        clientListViewAdapter.getFilter().filter(query);
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        clientListViewAdapter.getFilter().filter(newText);
+        return false;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+
+        inflater.inflate(R.menu.home,menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        searchView = (SearchView) searchItem.getActionView();
+        searchView.setOnQueryTextListener(this);
+        searchView.setQueryHint("Search");
+        super.onCreateOptionsMenu(menu, inflater);
     }
 }

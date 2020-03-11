@@ -1,4 +1,4 @@
-package com.thetatechno.fluidadmin.ui.adapters;
+package com.thetatechno.fluidadmin.ui.stafflist.agentList;
 
 import android.content.Context;
 import android.view.LayoutInflater;

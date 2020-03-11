@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
 import android.util.Log;
@@ -37,6 +38,7 @@ import com.thetatechno.fluidadmin.utils.EnumCode;
 import com.thetatechno.fluidadmin.utils.PreferenceController;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.thetatechno.fluidadmin.utils.Constants.ARG_STAFF;
 
@@ -59,8 +61,8 @@ public class AddOrUpdateProviderFragment extends Fragment {
     Staff staff;
     Spinner specialitySpinner;
     NavController navController;
-    CodeListViewModel codeListViewModel;
-    ArrayList<Code> specialityCodes;
+
+    ArrayList<String> specialityCodes;
     ImageView addProfileImage;
 
     public AddOrUpdateProviderFragment() {
@@ -85,7 +87,7 @@ public class AddOrUpdateProviderFragment extends Fragment {
             }
 
         }
-        navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
+        navController = Navigation.findNavController((HomeActivity) getActivity(), R.id.nav_host_fragment);
 
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
             @Override
@@ -101,17 +103,17 @@ public class AddOrUpdateProviderFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_or_update_provider, container, false);
+        return inflater.inflate(R.layout.fragment_add_or_update_provider, container, false);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if(staff.getStaffId()!=null){
-            ((HomeActivity)getActivity()).getSupportActionBar().setTitle("Update Provider");
-        }else {
+        if (staff.getStaffId() != null) {
+            ((HomeActivity) getActivity()).getSupportActionBar().setTitle("Update Provider");
+        } else {
 
-            ((HomeActivity)getActivity()).getSupportActionBar().setTitle("Add Provider");
+            ((HomeActivity) getActivity()).getSupportActionBar().setTitle("Add Provider");
         }
     }
 
@@ -129,12 +131,9 @@ public class AddOrUpdateProviderFragment extends Fragment {
         addProfileImage = view.findViewById(R.id.addProfileImg);
         specialitySpinner = view.findViewById(R.id.specialitySpinner);
         addOrUpdateViewModel = ViewModelProviders.of(this).get(AddOrUpdateViewModel.class);
-        codeListViewModel = ViewModelProviders.of(this).get(CodeListViewModel.class);
         getspecialityCodes();
         updateData();
-        if (this.getArguments() != null) {
-            idTxt.setEnabled(false);
-        }
+
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -156,7 +155,7 @@ public class AddOrUpdateProviderFragment extends Fragment {
                     addOrUpdateViewModel.addNewStaff(staff).observe(getActivity(), new Observer<String>() {
                         @Override
                         public void onChanged(String s) {
-                            Log.i("AddOrUpdate", "add staff message" + s);
+                            Log.i(TAG, "add staff message" + s);
                             Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
                             if (s.contains("success"))
                                 onAddOrUpdateData();
@@ -167,10 +166,12 @@ public class AddOrUpdateProviderFragment extends Fragment {
                     addOrUpdateViewModel.updateStaff(staff).observe(getActivity(), new Observer<String>() {
                         @Override
                         public void onChanged(String s) {
-                            Log.i("AddOrUpdate", "Update staff message" + s);
+                            Log.i(TAG, "Update staff message" + s);
                             Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
-                            if (s.contains("success"))
+                            if (s.contains("success")) {
                                 onAddOrUpdateData();
+                            }
+
                         }
                     });
                 }
@@ -187,49 +188,45 @@ public class AddOrUpdateProviderFragment extends Fragment {
     }
 
     private void getspecialityCodes() {
-        String languageId = PreferenceController.getInstance(getContext()).get(PreferenceController.LANGUAGE).toUpperCase();
-        codeListViewModel.getDataForCode("", languageId).observe(this, new Observer<CodeList>() {
+        addOrUpdateViewModel.getSpecialities().observe(this, new Observer<List<String>>() {
             @Override
-            public void onChanged(CodeList codeList) {
-                if (codeList.getCodeList() != null) {
-                   specialityCodes = new ArrayList<>();
-                    for(Code code :codeList.getCodeList()){
-                        if(code.getCodeType().equals("STFFGRP"))
-                      specialityCodes.add(code);
-                    }
-                    if(specialityCodes.size()>0){
-                        ArrayAdapter<Code> adapter =
-                                new ArrayAdapter<Code>(getContext(), R.layout.simple_spinner_dropdown_item, specialityCodes);
-                        adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
-
-                        specialitySpinner.setAdapter(adapter);
-                         if(staff!=null)
-                        if(staff.getSpeciality()!=null) {
+            public void onChanged(List<String> codeList) {
+                if (codeList.size() > 0) {
+                    specialityCodes = (ArrayList<String>) codeList;
+                    ArrayAdapter<String> adapter =
+                            new ArrayAdapter<String>(getContext(), R.layout.simple_spinner_dropdown_item, specialityCodes);
+                    adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
+                    specialitySpinner.setAdapter(adapter);
+                    if (staff != null)
+                        if (staff.getSpeciality() != null) {
                             for (int i = 0; i < specialityCodes.size(); i++) {
-                                if (specialityCodes.get(i).getCode().equals(staff.getSpecialityCode())) {
+                                if (specialityCodes.get(i).equals(staff.getSpecialityCode())) {
                                     specialitySpinner.setSelection(i);
                                 }
                             }
                         }
-                    }
+
                 }
             }
         });
     }
 
     private void onAddOrUpdateData() {
-        navController.navigate(R.id.action_addOrUpdateProviderFragment_to_providerListFragment);
-    }
+        navController.navigate(R.id.providerList, null,
+                new NavOptions.Builder()
+                        .setPopUpTo(R.id.providerList,
+                                true).build());
+
+           }
 
     private void onCancelOrBackBtnPressed() {
-
-
-        navController.navigate(R.id.action_addOrUpdateProviderFragment_to_providerListFragment);
+        navController.popBackStack();
     }
 
     private void updateData() {
         if (staff != null) {
             idTxt.setText(staff.getStaffId());
+            idTxt.setEnabled(false);
             firstNameTxt.setText(staff.getFirstName());
             lastNameTxt.setText(staff.getFamilyName());
             emailTxt.setText(staff.getEmail());
@@ -239,26 +236,24 @@ public class AddOrUpdateProviderFragment extends Fragment {
                 genderRadioGroup.check(R.id.maleRadioButton);
             addBtn.setHint(getResources().getString(R.string.update_txt));
             isStaffHasData = true;
-            if(!staff.getImageLink().isEmpty()){
-                Glide.with(this).load(Constants.BASE_URL+Constants.BASE_EXTENSION_FOR_PHOTOS+staff.getImageLink())
+            if (!staff.getImageLink().isEmpty()) {
+                Glide.with(this).load(Constants.BASE_URL + Constants.BASE_EXTENSION_FOR_PHOTOS + staff.getImageLink())
                         .circleCrop()
                         .into(addProfileImage);
-            }
-            else {
-                if(!staff.getGender().isEmpty()) {
+            } else {
+                if (!staff.getGender().isEmpty()) {
                     if (staff.getGender().equals(EnumCode.Gender.M.toString())) {
                         addProfileImage.setImageResource(R.drawable.man);
-                    } else if(staff.getGender().equals(EnumCode.Gender.F.toString())){
+                    } else if (staff.getGender().equals(EnumCode.Gender.F.toString())) {
                         addProfileImage.setImageResource(R.drawable.ic_girl);
                     }
-                }
-                else {
+                } else {
                     addProfileImage.setImageResource(R.drawable.man);
                 }
             }
 
-
         } else {
+            idTxt.setEnabled(true);
             staff = new Staff();
             isStaffHasData = false;
             firstNameTxt.setText("");

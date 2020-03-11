@@ -3,6 +3,7 @@ package com.thetatechno.fluidadmin.retrofiteServices.interfaces;
 import com.thetatechno.fluidadmin.model.Code;
 import com.thetatechno.fluidadmin.model.CodeList;
 import com.thetatechno.fluidadmin.model.CustomerList;
+import com.thetatechno.fluidadmin.model.DeviceListData;
 import com.thetatechno.fluidadmin.model.Facilities;
 import com.thetatechno.fluidadmin.model.Facility;
 import com.thetatechno.fluidadmin.model.FacilityCodes;
@@ -66,4 +67,10 @@ public interface MyServicesInterface {
 
     @PUT("/ords/fluid/api/addAgentFacilities")
     Call<State> addToFacilities(@Query("staffId") String staffId, @Body FacilityCodes facilityCodes);
+
+    @GET("/ords/fluid/api/device")
+    Call<DeviceListData> getAllDevicesList();
+
+    @GET("/ords/fluid/api/device")
+    Call<DeviceListData> getSpecificDeviceData(@Query("deviceId") String deviceId);
 }

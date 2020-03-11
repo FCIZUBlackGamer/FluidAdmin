@@ -16,7 +16,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name="com.thetatechno.fluidadmin.ui.HomeActivity"
-            android:label="@string/title_activity_home"
+            android:label="@string/app_name"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>

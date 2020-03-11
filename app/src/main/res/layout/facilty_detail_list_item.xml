@@ -13,8 +13,19 @@
     android:layout_height="match_parent">
 
 
+    <ImageView
+        android:id="@+id/facilityImgView"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="16dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
     <TextView
-        android:id="@+id/textViewOptions"
+        android:id="@+id/facilityTextViewOptions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -29,52 +40,39 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <TextView
-        android:id="@+id/facilityId_tv"
+        android:id="@+id/facilityIdTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/clinic_example_txt"
+        app:layout_constraintStart_toStartOf="@id/facilityDescriptionTxt"
+        app:layout_constraintTop_toBottomOf="@id/facilityDescriptionTxt" />
+
+    <TextView
+        android:id="@+id/waitingAreaIdTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:drawablePadding="5dp"
+        android:text="@string/waitingAreaID"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/facilityIdTxt"
+        app:layout_constraintTop_toBottomOf="@+id/facilityIdTxt" />
+
+    <TextView
+        android:id="@+id/facilityDescriptionTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="@string/clinic_example_txt"
+        android:drawablePadding="5dp"
+        android:text="@string/decsription"
         android:textColor="@color/colorPrimary"
         android:textSize="@dimen/name_txt_size"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/textViewOptions"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textViewOptions" />
-
-
-
-    <TextView
-        android:id="@+id/typeCode_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:drawablePadding="5dp"
-        android:text="@string/type"
-        app:layout_constraintStart_toStartOf="@+id/facilityId_tv"
-        app:layout_constraintTop_toBottomOf="@+id/facilityId_tv" />
-
-    <TextView
-        android:id="@+id/waId_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:drawablePadding="5dp"
-        android:text="@string/waitingAreaID"
-        app:layout_constraintStart_toStartOf="@+id/facilityId_tv"
-        app:layout_constraintTop_toBottomOf="@+id/typeCode_tv" />
-
-    <TextView
-        android:id="@+id/desc_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:drawablePadding="5dp"
-        android:text="@string/decsription"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/facilityId_tv"
-        app:layout_constraintTop_toBottomOf="@+id/waId_tv" />
+        app:layout_constraintBottom_toBottomOf="@+id/facilityTextViewOptions"
+        app:layout_constraintStart_toEndOf="@+id/facilityImgView"
+        app:layout_constraintTop_toTopOf="@+id/facilityTextViewOptions" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

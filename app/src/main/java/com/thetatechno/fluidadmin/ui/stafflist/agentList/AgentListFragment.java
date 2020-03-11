@@ -1,4 +1,4 @@
-package com.thetatechno.fluidadmin.ui.stafflist;
+package com.thetatechno.fluidadmin.ui.stafflist.agentList;
 
 
 import android.os.Bundle;
@@ -23,7 +23,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.model.Staff;
 import com.thetatechno.fluidadmin.model.StaffData;
-import com.thetatechno.fluidadmin.ui.adapters.AgentListAdapter;
+import com.thetatechno.fluidadmin.ui.stafflist.StaffListViewModel;
 import com.thetatechno.fluidadmin.utils.App;
 import com.thetatechno.fluidadmin.utils.EnumCode;
 import com.thetatechno.fluidadmin.utils.PreferenceController;
@@ -83,10 +83,10 @@ public class AgentListFragment extends Fragment {
                             agentListAdapter = new AgentListAdapter(navController, getContext(), agentList, getActivity().getSupportFragmentManager());
                             agentListRecyclerView.setAdapter(agentListAdapter);
                         } else {
-                            Log.e("Staff List", "Is Null");
+                            Log.e(TAG, "agentList Is Null");
                         }
-                    } else {
-                        Log.e("Staff", "Is Null");
+                    }else{
+                        Log.e(TAG, "no data returns");
                     }
                 }
             });

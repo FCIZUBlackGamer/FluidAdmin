@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/addOrUpdateProviderFragment"
         android:name="com.thetatechno.fluidadmin.ui.addorupdatestuff.AddOrUpdateProviderFragment"
-        tools:layout="@layout/fragment_or_update_provider" >
+        tools:layout="@layout/fragment_add_or_update_provider" >
 
         <action
             android:id="@+id/action_addOrUpdateProviderFragment_to_providerListFragment"
@@ -48,8 +48,8 @@
     </fragment>
 
     <fragment
-        android:id="@id/agentList"
-        android:name="com.thetatechno.fluidadmin.ui.stafflist.AgentListFragment"
+        android:id="@+id/agentList"
+        android:name="com.thetatechno.fluidadmin.ui.stafflist.agentList.AgentListFragment"
         android:label="@string/Agents"
         tools:layout="@layout/fragment_agent_list" >
         <action
@@ -57,8 +57,8 @@
             app:destination="@+id/addOrUpdateAgentFragment" />
     </fragment>
     <fragment
-        android:id="@id/providerList"
-        android:name="com.thetatechno.fluidadmin.ui.stafflist.ProviderListFragment"
+        android:id="@+id/providerList"
+        android:name="com.thetatechno.fluidadmin.ui.stafflist.providerList.ProviderListFragment"
         android:label="@string/provider"
         tools:layout="@layout/fragment_provider_list" >
         <action

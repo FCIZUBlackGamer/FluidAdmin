@@ -1,4 +1,4 @@
-package com.thetatechno.fluidadmin.ui.stafflist;
+package com.thetatechno.fluidadmin.ui.stafflist.providerList;
 
 
 import android.os.Bundle;
@@ -23,7 +23,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.model.Staff;
 import com.thetatechno.fluidadmin.model.StaffData;
-import com.thetatechno.fluidadmin.ui.adapters.ProviderListAdapter;
+import com.thetatechno.fluidadmin.ui.stafflist.StaffListViewModel;
 import com.thetatechno.fluidadmin.utils.App;
 import com.thetatechno.fluidadmin.utils.Constants;
 import com.thetatechno.fluidadmin.utils.EnumCode;
@@ -35,14 +35,14 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class ProviderListFragment extends Fragment {
-    List<Staff> providerList;
-    RecyclerView providerListRecyclerView;
-    FloatingActionButton addNewProviderFab;
-    ProviderListAdapter providerListAdapter;
-    StaffListViewModel providerListViewModel;
-    NavController navController;
-    SwipeRefreshLayout providerSwipeLayout;
-
+   private List<Staff> providerList;
+    private RecyclerView providerListRecyclerView;
+    private FloatingActionButton addNewProviderFab;
+    private ProviderListAdapter providerListAdapter;
+    private StaffListViewModel providerListViewModel;
+    private NavController navController;
+    private SwipeRefreshLayout providerSwipeLayout;
+    static final private String TAG = ProviderListFragment.class.getSimpleName();
     public ProviderListFragment() {
         // Required empty public constructor
     }
@@ -73,10 +73,10 @@ public class ProviderListFragment extends Fragment {
                         providerListAdapter = new ProviderListAdapter(navController, getContext(), providerList, getActivity().getSupportFragmentManager());
                         providerListRecyclerView.setAdapter(providerListAdapter);
                     } else {
-                        Log.e("Staff List", "Is Null");
+                        Log.e(TAG, "provider List Is Null");
                     }
-                } else {
-                    Log.e("Staff", "Is Null");
+                }else{
+                    Log.e(TAG, "no data returns");
                 }
             }
         });

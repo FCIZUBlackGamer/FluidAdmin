@@ -5,10 +5,7 @@
     android:padding="8dp"
     android:id="@+id/arrive_or_checkin_list_dialog"
     android:layout_height="550dp">
-<SearchView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/searchForSpecificFacility"/>
+
     <TextView
         android:layout_margin="16dp"
         android:layout_width="match_parent"
@@ -17,7 +14,11 @@
         android:textStyle="bold"
         android:textColor="@color/colorPrimary"
         android:text="@string/choose_facilities" />
+    <SearchView
 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/searchForSpecificFacility"/>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/facilityListView"
         android:layout_width="match_parent"

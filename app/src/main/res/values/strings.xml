@@ -65,4 +65,5 @@
     <string name="room_txt">Room</string>
     <string name="female_txt">Female</string>
     <string name="description_hint">description</string>
+    <string name="action_search">search</string>
 </resources>

@@ -13,6 +13,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +22,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.model.Facilities;
 import com.thetatechno.fluidadmin.model.Facility;
-import com.thetatechno.fluidadmin.ui.adapters.FacilityListAdapter;
 import com.thetatechno.fluidadmin.utils.EnumCode;
 
 import java.io.Serializable;
@@ -38,6 +38,7 @@ public class FacilityListFragment extends Fragment {
     NavController navController;
     FloatingActionButton addNewFacilityFab;
     private  final String ARG_CLINIC_TYPE = "clinic_type";
+    final String TAG = FacilityListFragment.class.getSimpleName();
 
     public FacilityListFragment() {
         // Required empty public constructor
@@ -65,11 +66,17 @@ public class FacilityListFragment extends Fragment {
                 if (facilities != null) {
                     if (facilities.getFacilities() != null) {
                         facilityList = facilities.getFacilities();
-                        facilityListAdapter = new FacilityListAdapter(navController,getContext(),facilityList,getActivity().getSupportFragmentManager());
+                        facilityListAdapter = new FacilityListAdapter(navController, getContext(), facilityList, getActivity().getSupportFragmentManager());
                         facilityListClinicRecyclerView.setAdapter(facilityListAdapter);
+
+                    } else {
+                        Log.e(TAG, "facilityList Is Null");
+                    }
+                }else{
+                        Log.e(TAG, "no data returns");
                     }
                 }
-            }
+
         });
         addNewFacilityFab.setOnClickListener(new View.OnClickListener() {
             @Override

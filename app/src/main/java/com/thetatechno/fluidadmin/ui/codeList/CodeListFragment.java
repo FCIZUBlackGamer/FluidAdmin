@@ -21,19 +21,16 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.model.Code;
 import com.thetatechno.fluidadmin.model.CodeList;
-import com.thetatechno.fluidadmin.ui.adapters.CodeListAdapter;
-import com.thetatechno.fluidadmin.ui.addorupdatecode.CodeAddFragment;
-import com.thetatechno.fluidadmin.ui.stafflist.AgentListFragment;
 import com.thetatechno.fluidadmin.utils.App;
 import com.thetatechno.fluidadmin.utils.EnumCode;
 import com.thetatechno.fluidadmin.utils.PreferenceController;
 
 import java.util.List;
 
-public class CodeListFragment extends Fragment {
+public class CodeListFragment extends Fragment{
     NavController navController;
     List<Code> codeList;
-    final String TAG = AgentListFragment.class.getSimpleName();
+    final String TAG = CodeListFragment.class.getSimpleName();
     RecyclerView codeListRecyclerView;
     FloatingActionButton addNewCodeFab;
     CodeListAdapter codeListAdapter;
@@ -88,10 +85,10 @@ public class CodeListFragment extends Fragment {
                             codeListRecyclerView.setAdapter(codeListAdapter);
                             codeSwipeRefreshLayout.setRefreshing(false);
                         } else {
-                            Log.e("Staff List", "Is Null");
+                            Log.e(TAG, "codeList Is Null");
                         }
                     } else {
-                        Log.e("Staff", "Is Null");
+                        Log.e(TAG, "no data returns");
                     }
                 }
             });
@@ -100,6 +97,7 @@ public class CodeListFragment extends Fragment {
            public void onRefresh() {
                codeSwipeRefreshLayout.setRefreshing(true);
                codeListViewModel.getDataForCode(EnumCode.Code.STFFGRP.toString(), PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
+
            }
        });
         addNewCodeFab.setOnClickListener(new View.OnClickListener() {
@@ -107,12 +105,13 @@ public class CodeListFragment extends Fragment {
             public void onClick(View v) {
 
                navController.navigate(R.id.action_codeListFragment_to_codeAddFragment);
-//                CodeAddFragment codeAddFragment = CodeAddFragment.newInstance(null);
-//                codeAddFragment.show(getActivity().getSupportFragmentManager(),CodeAddFragment.class.getSimpleName());
+
 
             }
         });
 
     }
+
+
 
 }

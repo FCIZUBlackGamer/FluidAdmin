@@ -77,10 +77,5 @@ public class Code implements Serializable {
     public void setSystemRequired(String systemRequired) {
         this.systemRequired = systemRequired;
     }
-// TODO : for arrayadapter to use it in spinner
-    @NonNull
-    @Override
-    public String toString() {
-        return code;
-    }
+
 }

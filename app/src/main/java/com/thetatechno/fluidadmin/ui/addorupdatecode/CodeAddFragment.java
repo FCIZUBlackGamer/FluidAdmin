@@ -108,7 +108,6 @@ public class CodeAddFragment extends DialogFragment {
                         public void onChanged(String s) {
                             Toast.makeText(getActivity(),s,Toast.LENGTH_SHORT).show();
                             Log.i("CodeFragment","updateCode message "+ s);
-
                             if(s.contains("successfully"))
                             onButtonPressed();
 
@@ -191,7 +190,6 @@ public class CodeAddFragment extends DialogFragment {
 
     }
     void onBackOrCancelBtnPressed(){
-//        navController.navigate(R.id.action_codeAddFragment_to_codeListFragment);
         dismiss();
 
     }

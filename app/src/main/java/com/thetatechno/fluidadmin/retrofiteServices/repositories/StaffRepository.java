@@ -33,17 +33,17 @@ public class StaffRepository {
                         facilitiesMutableLiveData.setValue(response.body());
 
                     }else {
-                        Log.e("Res", "No Data for body");
+                        Log.e(TAG, "No Data for body");
                     }
-                }else {
-                    Log.e("Res", "No Data");
+                } else if(response.code() == 404) {
+                    Log.e(TAG, " server error 404 not found ");
                 }
             }
 
             @Override
             public void onFailure(Call<StaffData> call, Throwable t) {
                 facilitiesMutableLiveData.setValue(null);
-                Log.e("Error", t.getMessage());
+                Log.e(TAG, t.getMessage());
 
             }
         });
@@ -59,9 +59,11 @@ public class StaffRepository {
             @Override
             public void onResponse(@NonNull Call<State> call, @NonNull Response<State> response) {
                 if (response.isSuccessful()) {
-                    Log.i(TAG, "insertNewStaff: response " + response.toString());
-                    if (response.body().getStatus() != null)
+
+                    if (response.body().getStatus() != null) {
                         onDataChangedCallBackListener.onResponse(response.body().getStatus());
+                        Log.i(TAG, "insertNewStaff: response " + response.body().getStatus());
+                    }
 
 
                 } else

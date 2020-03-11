@@ -1,4 +1,4 @@
-package com.thetatechno.fluidadmin.ui.adapters;
+package com.thetatechno.fluidadmin.ui.stafflist.providerList;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -80,6 +80,7 @@ public class ProviderListAdapter extends RecyclerView.Adapter<ProviderListAdapte
             holder.fullNameTxt.setVisibility(View.GONE);
 
         }
+        holder.providerIdTxt.setText(providerList.get(position).getStaffId());
         if (!providerList.get(position).getEmail().isEmpty()) {
             holder.mailTxt.setText(providerList.get(position).getEmail());
             holder.mailTxt.setVisibility(View.VISIBLE);
@@ -163,6 +164,7 @@ public class ProviderListAdapter extends RecyclerView.Adapter<ProviderListAdapte
         ImageView personImg;
         TextView textViewOptions, fullNameTxt, mailTxt, phoneTxt;
         TextView specialityTxt;
+        TextView providerIdTxt;
 
         public ProviderListViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -172,6 +174,7 @@ public class ProviderListAdapter extends RecyclerView.Adapter<ProviderListAdapte
             mailTxt = itemView.findViewById(R.id.email_txt);
             phoneTxt = itemView.findViewById(R.id.mobile_num_txt);
             specialityTxt = itemView.findViewById(R.id.speciality_txt);
+            providerIdTxt = itemView.findViewById(R.id.providerId);
         }
     }
 }

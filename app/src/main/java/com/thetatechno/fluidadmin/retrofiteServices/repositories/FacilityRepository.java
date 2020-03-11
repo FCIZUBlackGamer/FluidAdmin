@@ -28,7 +28,6 @@ public class FacilityRepository {
             @Override
             public void onResponse(Call<Facilities> call, Response<Facilities> response) {
                 if (response.isSuccessful()) {
-
                     if (response.body() != null) {
                         facilitiesMutableLiveData.setValue(response.body());
 

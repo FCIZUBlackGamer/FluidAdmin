@@ -9,10 +9,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+
         android:gravity="center"
-        android:background="#D6D6D6"
+        android:background="#95D6D6D6"
         android:textColor="@color/colorWhite"
         tools:text="item" />
 

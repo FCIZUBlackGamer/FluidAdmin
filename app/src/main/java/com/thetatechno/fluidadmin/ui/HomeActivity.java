@@ -4,7 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -60,6 +63,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     FacilitiesListDialog facilitiesListDialog;
     private static final String TAG = HomeActivity.class.getSimpleName();
     List<Facility> facilityList = new ArrayList<>();
+//    MenuItem searchMenuItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +94,11 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         NavigationUI.setupWithNavController(navigationView, navController);
         checkOnTheCurrentLanguage();
         navigationView.setNavigationItemSelectedListener(this);
+
+//        if( searchMenuItem != null ){
+//            if(searchMenuItem.isVisible())
+//            disableSearchView();
+//        }
         getFacilities();
     }
 
@@ -121,6 +130,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private void changeLanguage(String language) {
+
         if (!PreferenceController.getInstance(this).get(PreferenceController.LANGUAGE).equals(language)) {
             if (PreferenceController.getInstance(this).get(PreferenceController.LANGUAGE).equals(Constants.ARABIC)) {
                 PreferenceController.getInstance(this).persist(PreferenceController.LANGUAGE, Constants.ENGLISH);
@@ -195,16 +205,15 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
     }
 
-
+    int id ;
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
         item.setChecked(true);
 
-
         drawer.closeDrawers();
 
-        int id = item.getItemId();
+        id = item.getItemId();
 
         switch (id) {
 
@@ -224,6 +233,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 break;
             case R.id.clientList:
                 navigateToClientList();
+
                 break;
 
             case R.id.facility:
@@ -273,6 +283,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     public void navigateToAgentList() {
+//        disableSearchView();
         navController.navigate(R.id.agentList, null,
                 new NavOptions.Builder()
                         .setPopUpTo(R.id.agentList,
@@ -281,6 +292,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     public void navigateToProviderList() {
+//        disableSearchView();
         navController.navigate(R.id.providerList, null,
                 new NavOptions.Builder()
                         .setPopUpTo(R.id.providerList,
@@ -289,6 +301,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     public void navigateToClientList() {
+//        enableSearchView();
         navController.navigate(R.id.clientList, null,
                 new NavOptions.Builder()
                         .setPopUpTo(R.id.clientList,
@@ -297,13 +310,15 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     public void navigateToClinicTypeList() {
+//        disableSearchView();
         navController.navigate(R.id.facility, null,
                 new NavOptions.Builder()
-                        .setPopUpTo(R.id.clientList,
+                        .setPopUpTo(R.id.facility,
                                 true).build());
     }
 
     public void navigateToCodeList() {
+//        disableSearchView();
         navController.navigate(R.id.codeList, null,
                 new NavOptions.Builder()
                         .setPopUpTo(R.id.codeList,
@@ -316,7 +331,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         mainViewModel.linkToFacility(staffId, facilityCodes, new OnDataChangedCallBackListener<String>() {
             @Override
             public void onResponse(String b) {
-                Log.i(TAG, b);
+                Log.i(TAG,"onConfirmLinkToFacility: status "+  b);
                 if (facilitiesListDialog.isShowing()) {
                     facilitiesListDialog.dismiss();
                     navigateToAgentList();
@@ -325,4 +340,20 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             }
         });
     }
+//
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//         getMenuInflater().inflate(R.menu.home, menu);
+//         searchMenuItem = menu.getItem(0);
+//
+//        return true;
+//    }
+//    void enableSearchView(){
+//        searchMenuItem.setVisible(true);
+//    }
+//    void disableSearchView(){
+//        searchMenuItem.setVisible(false);
+//    }
+
 }

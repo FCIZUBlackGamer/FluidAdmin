@@ -90,10 +90,8 @@ public class AddOrUpdateAgentFragment extends Fragment {
 
     void onCancelOrBackButtonPressed() {
 
-        bundle = new Bundle();
-        bundle.putSerializable("type", EnumCode.UsageType.Agent);
-        bundle.putSerializable("agentList", (Serializable) agentList);
-        navController.navigate(R.id.action_addOrUpdateAgentFragment_to_agentListFragment);
+//        navController.navigate(R.id.action_addOrUpdateAgentFragment_to_agentListFragment);
+        navController.popBackStack();
     }
 
 
@@ -144,9 +142,7 @@ public class AddOrUpdateAgentFragment extends Fragment {
                             Log.i("AddOrUpdate", "add agent message" + s);
                             Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
                             if (s.contains("success")) {
-//                                listener.onFragmentAddOrUpdateEntity(EnumCode.UsageType.Agent);
-                                navController.navigate(R.id.action_addOrUpdateAgentFragment_to_agentListFragment);
-
+                                onAddOrUpdateSuccessfully();
                             }
 
 
@@ -159,8 +155,7 @@ public class AddOrUpdateAgentFragment extends Fragment {
                             Log.i("AddOrUpdate", "Update agent message" + s);
                             Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
                             if (s.contains("success"))
-                                navController.navigate(R.id.action_addOrUpdateAgentFragment_to_agentListFragment);
-
+                                onAddOrUpdateSuccessfully();
                         }
                     });
                 }
@@ -176,6 +171,10 @@ public class AddOrUpdateAgentFragment extends Fragment {
                 onCancelOrBackButtonPressed();
             }
         });
+
+    }
+    private void onAddOrUpdateSuccessfully(){
+        navController.navigate(R.id.action_addOrUpdateAgentFragment_to_agentListFragment);
 
     }
 

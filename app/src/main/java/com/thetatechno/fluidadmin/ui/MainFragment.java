@@ -19,11 +19,11 @@ import com.thetatechno.fluidadmin.model.Code;
 import com.thetatechno.fluidadmin.model.Facility;
 import com.thetatechno.fluidadmin.model.Person;
 import com.thetatechno.fluidadmin.model.Staff;
-import com.thetatechno.fluidadmin.ui.adapters.AgentListAdapter;
-import com.thetatechno.fluidadmin.ui.adapters.ClientListViewAdapter;
-import com.thetatechno.fluidadmin.ui.adapters.CodeListAdapter;
-import com.thetatechno.fluidadmin.ui.adapters.FacilityListAdapter;
-import com.thetatechno.fluidadmin.ui.adapters.ProviderListAdapter;
+import com.thetatechno.fluidadmin.ui.stafflist.agentList.AgentListAdapter;
+import com.thetatechno.fluidadmin.ui.clientList.ClientListViewAdapter;
+import com.thetatechno.fluidadmin.ui.codeList.CodeListAdapter;
+import com.thetatechno.fluidadmin.ui.facilityList.FacilityListAdapter;
+import com.thetatechno.fluidadmin.ui.stafflist.providerList.ProviderListAdapter;
 import com.thetatechno.fluidadmin.utils.EnumCode;
 
 import java.util.List;

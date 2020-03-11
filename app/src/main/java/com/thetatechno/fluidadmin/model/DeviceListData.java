@@ -1,0 +1,28 @@
+package com.thetatechno.fluidadmin.model;
+
+import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
+
+public class DeviceListData {
+    @SerializedName("data")
+    List<Device> deviceList = null;
+    @SerializedName("status")
+    String status;
+
+    public List<Device> getDeviceList() {
+        return deviceList;
+    }
+
+    public void setDeviceList(List<Device> deviceList) {
+        this.deviceList = deviceList;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+}

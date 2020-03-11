@@ -48,6 +48,29 @@ public class CodeRepository {
         });
         return codesMutableLiveData;
     }
+    public void getAllCodes(final String codeType, final String langId,final OnDataChangedCallBackListener<CodeList> onDataChangedCallBackListener) {
+        MyServicesInterface myServicesInterface = RetrofitInstance.getService();
+        Call<CodeList> call = myServicesInterface.getCodes(codeType, langId);
+        call.enqueue(new Callback<CodeList>() {
+            @Override
+            public void onResponse(Call<CodeList> call, Response<CodeList> response) {
+                if (response.code() == Constants.STATE_OK && response.body() != null) {
+                    Log.i(TAG, "get All codes response " + response.toString());
+                    if (response.body() != null) {
+                        onDataChangedCallBackListener.onResponse(response.body());
+
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CodeList> call, Throwable t) {
+                onDataChangedCallBackListener.onResponse(null);
+
+            }
+        });
+
+    }
 
     public void insertCode(final Code code, final OnDataChangedCallBackListener onDataChangedCallBackListener) {
 

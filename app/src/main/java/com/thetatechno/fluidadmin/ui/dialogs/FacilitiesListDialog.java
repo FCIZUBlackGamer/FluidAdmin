@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,6 +26,7 @@ public class FacilitiesListDialog extends Dialog {
     Context context;
     Button linkBtn, cancelBtn;
     String staffId ;
+    SearchView searchForSpecificFacilityView;
     OnConfirmLinkToFacilityListener onConfirmLinkToFacilityListener;
 
     public FacilityListDialogAdapter alertDialogAdapter;
@@ -47,6 +49,7 @@ public class FacilitiesListDialog extends Dialog {
 
         appointmentListRecyclerView = findViewById(R.id.facilityListView);
         alertDialogAdapter = new FacilityListDialogAdapter(context, appointmentList);
+        searchForSpecificFacilityView = findViewById(R.id.searchForSpecificFacility);
         appointmentListRecyclerView.setAdapter(alertDialogAdapter);
         appointmentListRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         linkBtn = findViewById(R.id.link_btn);
@@ -54,7 +57,7 @@ public class FacilitiesListDialog extends Dialog {
         linkBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dismiss();
+
                 FacilityCodes facilityCodes = new FacilityCodes();
                 List<String> selectedFacility = new ArrayList<>();
                 appointmentList = alertDialogAdapter.getFacilityList();
@@ -71,6 +74,20 @@ public class FacilitiesListDialog extends Dialog {
             @Override
             public void onClick(View v) {
                 dismiss();
+            }
+        });
+        searchForSpecificFacilityView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                alertDialogAdapter.getFilter().filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                alertDialogAdapter.getFilter().filter(newText);
+
+                return false;
             }
         });
 

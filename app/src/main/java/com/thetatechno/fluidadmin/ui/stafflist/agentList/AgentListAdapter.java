@@ -1,8 +1,10 @@
-package com.thetatechno.fluidadmin.ui.adapters;
+package com.thetatechno.fluidadmin.ui.stafflist.agentList;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -112,9 +114,19 @@ public class AgentListAdapter extends RecyclerView.Adapter<AgentListAdapter.Agen
                 holder.personImg.setImageResource(R.drawable.man);
             }
         }
+        if(agentList.get(position).getFacilityList()!=null){
+            FacilitiesForAgentListAdapter facilitiesForAgentListAdapter = new FacilitiesForAgentListAdapter(context, agentList.get(position).getFacilityList());
+            holder.pager.setAdapter(facilitiesForAgentListAdapter);
+            holder.nextBtn.setVisibility(View.VISIBLE);
+            holder.pager.setVisibility(View.VISIBLE);
+        }
 
-        FacilitiesForAgentListAdapter facilitiesForAgentListAdapter = new FacilitiesForAgentListAdapter(context, agentList.get(position).getFacilityList());
-        holder.pager.setAdapter(facilitiesForAgentListAdapter);
+        else {
+
+            holder.nextBtn.setVisibility(View.INVISIBLE);
+            holder.pager.setVisibility(View.INVISIBLE);
+
+        }
 
 
         holder.pager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {

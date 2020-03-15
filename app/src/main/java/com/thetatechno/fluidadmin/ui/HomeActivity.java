@@ -139,7 +139,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             }
             finish();
             startActivity(new Intent(this, HomeActivity.class));
-            // recreate();
 
         }
 
@@ -161,9 +160,8 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 @Override
                 public void onChanged(String s) {
                     Toast.makeText(HomeActivity.this, s, Toast.LENGTH_SHORT).show();
-                    if (((Facility) itemDeleted).getType().equals(EnumCode.ClinicTypeCode.CLINIC.toString())) {
                         navigateToClinicTypeList();
-                    }
+
 
 
                 }
@@ -283,7 +281,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     public void navigateToAgentList() {
-//        disableSearchView();
         navController.navigate(R.id.agentList, null,
                 new NavOptions.Builder()
                         .setPopUpTo(R.id.agentList,
@@ -292,7 +289,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     public void navigateToProviderList() {
-//        disableSearchView();
         navController.navigate(R.id.providerList, null,
                 new NavOptions.Builder()
                         .setPopUpTo(R.id.providerList,
@@ -301,7 +297,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     public void navigateToClientList() {
-//        enableSearchView();
+
         navController.navigate(R.id.clientList, null,
                 new NavOptions.Builder()
                         .setPopUpTo(R.id.clientList,
@@ -310,7 +306,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     public void navigateToClinicTypeList() {
-//        disableSearchView();
         navController.navigate(R.id.facility, null,
                 new NavOptions.Builder()
                         .setPopUpTo(R.id.facility,
@@ -318,7 +313,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     public void navigateToCodeList() {
-//        disableSearchView();
         navController.navigate(R.id.codeList, null,
                 new NavOptions.Builder()
                         .setPopUpTo(R.id.codeList,

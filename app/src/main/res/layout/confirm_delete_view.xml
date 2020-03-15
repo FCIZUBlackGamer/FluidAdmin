@@ -35,7 +35,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleTxt">
 
-        <TextView
+        <Button
             android:layout_weight="1"
             android:id="@+id/cancel_btn"
             android:layout_width="0dp"
@@ -43,8 +43,8 @@
             android:layout_marginEnd="8dp"
             android:layout_marginStart="40dp"
             android:hint="@string/cancel_btn_txt"
-
-            android:textColorHint="@color/colorAccent" />
+            android:background="@color/colorAccent"
+            android:textColorHint="@color/colorWhite" />
 
         <Button
             android:id="@+id/okBtn"

@@ -69,7 +69,7 @@
         android:id="@+id/facility"
         android:name="com.thetatechno.fluidadmin.ui.facilityList.FacilityListFragment"
         android:label="@string/facilty"
-        tools:layout="@layout/fragment_facility_list_clinic_type" >
+        tools:layout="@layout/fragment_facility_list" >
         <action
             android:id="@+id/action_facilityListFragment_to_facilityAddFragment"
             app:destination="@id/facilityAddFragment" />

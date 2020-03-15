@@ -2,7 +2,6 @@ package com.thetatechno.fluidadmin.ui.facilityList;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,10 +34,8 @@ public class FacilityListAdapter extends RecyclerView.Adapter<FacilityListAdapte
     FragmentManager fragmentManager;
     List<Facility> facilityList;
     OnDeleteListener listener;
-
     NavController navController;
     Bundle bundle;
-
     public FacilityListAdapter(NavController navControlle, Context context, List<Facility> facilityList, FragmentManager fragmentManager) {
         this.facilityList = facilityList;
         this.context = context;
@@ -68,17 +65,24 @@ public class FacilityListAdapter extends RecyclerView.Adapter<FacilityListAdapte
     @Override
     public void onBindViewHolder(@NonNull final vHolder holder, final int position) {
 
+      if(position < facilityList.size())
         try {
+            holder.itemView.setVisibility(View.VISIBLE);
             holder.facilityIdTxt.setText(facilityList.get(position).getCode());
-//            holder.deviceID_tv.setText(context.getResources().getText(R.string.deviceId )+ " "+facilityList.get(position).getDeviceId());
-            if(facilityList.get(position).getWaitingAreaID()!=null) {
-                holder.waitingAreaIdTxt.setText(facilityList.get(position).getWaitingAreaID());
-                holder.waitingAreaIdTxt.setVisibility(View.VISIBLE);
+            if(facilityList.get(position).getType().equals(EnumCode.ClinicTypeCode.CLINIC.toString()) && facilityList.get(position).getWaitingAreaId()!=null) {
+                holder.waitingAreaOrDeviceDescriptionTxt.setText(facilityList.get(position).getWaitingAreaDescription());
+                holder.waitingAreaOrDeviceDescriptionTxt.setVisibility(View.VISIBLE);
 
             }
-            else {
-                holder.waitingAreaIdTxt.setVisibility(View.GONE);
+            else if(facilityList.get(position).getType().equals(EnumCode.ClinicTypeCode.WAITAREA.toString()) && facilityList.get(position).getDeviceId()!=null)
+            {
+                holder.waitingAreaOrDeviceDescriptionTxt.setText(facilityList.get(position).getDeviceDescription());
+                holder.waitingAreaOrDeviceDescriptionTxt.setVisibility(View.VISIBLE);
             }
+            else {
+                holder.waitingAreaOrDeviceDescriptionTxt.setVisibility(View.GONE);
+            }
+            holder.facilityTextViewOptions.setText(context.getResources().getString(R.string.options_menu));
             holder.facilityDescriptionTxt.setText(facilityList.get(position).getDescription());
             if(facilityList.get(position).getType().equals(EnumCode.ClinicTypeCode.CLINIC.toString())){
                 holder.facilityImgView.setImageResource(R.drawable.ic_clinic);
@@ -130,16 +134,22 @@ public class FacilityListAdapter extends RecyclerView.Adapter<FacilityListAdapte
             Sentry.capture(e);
         }
 
+      else if(position== facilityList.size()) {
+
+          holder.itemView.setVisibility(View.INVISIBLE);
+
+      }
     }
+
   
     @Override
     public int getItemCount() {
-        return facilityList.size();
+        return facilityList.size()+1;
     }
 
     public class vHolder extends RecyclerView.ViewHolder {
         TextView facilityTextViewOptions, facilityIdTxt, facilityDescriptionTxt;
-        TextView waitingAreaIdTxt;
+        TextView waitingAreaOrDeviceDescriptionTxt;
         ImageView facilityImgView;
 
         public vHolder(@NonNull View itemView) {
@@ -147,7 +157,7 @@ public class FacilityListAdapter extends RecyclerView.Adapter<FacilityListAdapte
             facilityTextViewOptions = itemView.findViewById(R.id.facilityTextViewOptions);
             facilityIdTxt = itemView.findViewById(R.id.facilityIdTxt);
             facilityDescriptionTxt = itemView.findViewById(R.id.facilityDescriptionTxt);
-            waitingAreaIdTxt = itemView.findViewById(R.id.waitingAreaIdTxt);
+            waitingAreaOrDeviceDescriptionTxt = itemView.findViewById(R.id.waitingAreaOrDeviceDescriptionTxt);
             facilityImgView = itemView.findViewById(R.id.facilityImgView);
         }
     }

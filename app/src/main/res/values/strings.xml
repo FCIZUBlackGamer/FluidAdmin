@@ -59,11 +59,13 @@
     <string name="clinic_example_txt">ENT10</string>
     <string name="male_txt">Male</string>
     <string name="speciality_txt">Speciality</string>
-    <string name="choose_facilities">choose facilities to be linked</string>
+    <string name="choose_facilities">Select Facilities</string>
 
     <string name="link_btn_txt">Link</string>
     <string name="room_txt">Room</string>
     <string name="female_txt">Female</string>
     <string name="description_hint">description</string>
     <string name="action_search">search</string>
+    <string name="update_specialilty_title">Update Speciality</string>
+    <string name="add_specialilty_title">Add New Speciality</string>
 </resources>

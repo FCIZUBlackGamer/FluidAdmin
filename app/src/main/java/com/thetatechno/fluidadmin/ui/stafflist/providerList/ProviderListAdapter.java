@@ -72,92 +72,96 @@ public class ProviderListAdapter extends RecyclerView.Adapter<ProviderListAdapte
 
     @Override
     public void onBindViewHolder(@NonNull final ProviderListViewHolder holder, final int position) {
+if(position <providerList.size()) {
+    holder.itemView.setVisibility(View.VISIBLE);
 
-        if (!providerList.get(position).getFirstName().isEmpty() || !providerList.get(position).getFamilyName().isEmpty()) {
-            holder.fullNameTxt.setText(providerList.get(position).getFirstName() + " " + providerList.get(position).getFamilyName());
-            holder.fullNameTxt.setVisibility(View.VISIBLE);
-        } else {
-            holder.fullNameTxt.setVisibility(View.GONE);
+    if (!providerList.get(position).getFirstName().isEmpty() || !providerList.get(position).getFamilyName().isEmpty()) {
+        holder.fullNameTxt.setText(providerList.get(position).getFirstName() + " " + providerList.get(position).getFamilyName());
+        holder.fullNameTxt.setVisibility(View.VISIBLE);
+    } else {
+        holder.fullNameTxt.setVisibility(View.GONE);
 
-        }
-        holder.providerIdTxt.setText(providerList.get(position).getStaffId());
-        if (!providerList.get(position).getEmail().isEmpty()) {
-            holder.mailTxt.setText(providerList.get(position).getEmail());
-            holder.mailTxt.setVisibility(View.VISIBLE);
-        } else {
-            holder.mailTxt.setVisibility(View.GONE);
+    }
+    holder.providerIdTxt.setText(providerList.get(position).getStaffId());
+    if (!providerList.get(position).getEmail().isEmpty()) {
+        holder.mailTxt.setText(providerList.get(position).getEmail());
+        holder.mailTxt.setVisibility(View.VISIBLE);
+    } else {
+        holder.mailTxt.setVisibility(View.GONE);
 
-        }
-        if (!providerList.get(position).getMobileNumber().isEmpty()) {
+    }
+    if (!providerList.get(position).getMobileNumber().isEmpty()) {
 
-            holder.phoneTxt.setText(providerList.get(position).getMobileNumber());
-            holder.phoneTxt.setVisibility(View.VISIBLE);
+        holder.phoneTxt.setText(providerList.get(position).getMobileNumber());
+        holder.phoneTxt.setVisibility(View.VISIBLE);
 
-        } else {
-            holder.phoneTxt.setVisibility(View.GONE);
+    } else {
+        holder.phoneTxt.setVisibility(View.GONE);
 
-        }
-        if (providerList.get(position).getImageLink() != null && !providerList.get(position).getImageLink().isEmpty()) {
+    }
+    if (providerList.get(position).getImageLink() != null && !providerList.get(position).getImageLink().isEmpty()) {
 
-            Glide.with(context).load(Constants.BASE_URL+Constants.BASE_EXTENSION_FOR_PHOTOS+providerList.get(position).getImageLink())
-                    .circleCrop()
-                    .into(holder.personImg);
-        }
-        else{
-            if(!providerList.get(position).getGender().isEmpty()) {
-                if (providerList.get(position).getGender().equals(EnumCode.Gender.M.toString())) {
-                    holder.personImg.setImageResource(R.drawable.man);
-                } else if(providerList.get(position).getGender().equals(EnumCode.Gender.F.toString())){
-                    holder.personImg.setImageResource(R.drawable.ic_girl);
-                }
-            }
-            else {
+        Glide.with(context).load(Constants.BASE_URL + Constants.BASE_EXTENSION_FOR_PHOTOS + providerList.get(position).getImageLink())
+                .circleCrop()
+                .into(holder.personImg);
+    } else {
+        if (!providerList.get(position).getGender().isEmpty()) {
+            if (providerList.get(position).getGender().equals(EnumCode.Gender.M.toString())) {
                 holder.personImg.setImageResource(R.drawable.man);
+            } else if (providerList.get(position).getGender().equals(EnumCode.Gender.F.toString())) {
+                holder.personImg.setImageResource(R.drawable.ic_girl);
             }
+        } else {
+            holder.personImg.setImageResource(R.drawable.man);
         }
+    }
 
-        holder.specialityTxt.setText(providerList.get(position).getSpeciality());
+    holder.specialityTxt.setText(providerList.get(position).getSpeciality());
 
-        holder.textViewOptions.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+    holder.textViewOptions.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
 
-                //will show popup agents_menu here
-                //creating a popup agents_menu
-                PopupMenu popup = new PopupMenu(context, holder.textViewOptions);
-                //inflating agents_menu from xml resource
-                popup.inflate(R.menu.providers_menu);
-                //adding click listener
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
+            //will show popup agents_menu here
+            //creating a popup agents_menu
+            PopupMenu popup = new PopupMenu(context, holder.textViewOptions);
+            //inflating agents_menu from xml resource
+            popup.inflate(R.menu.providers_menu);
+            //adding click listener
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    switch (item.getItemId()) {
 
-                            case R.id.edit:
-                                //handle edit click
-                                bundle.putSerializable(ARG_STAFF, (Serializable) providerList.get(position));
-                                bundle.putSerializable("providerList", (Serializable) providerList);
-                                navController.navigate(R.id.addOrUpdateProviderFragment, bundle);
+                        case R.id.edit:
+                            //handle edit click
+                            bundle.putSerializable(ARG_STAFF, (Serializable) providerList.get(position));
+                            bundle.putSerializable("providerList", (Serializable) providerList);
+                            navController.navigate(R.id.addOrUpdateProviderFragment, bundle);
 
-                                break;
-                            case R.id.delete:
-                                //handle delete click
-                                if (listener != null)
-                                    listener.onDeleteButtonClicked(providerList.get(position));
-                                break;
-                        }
-                        return false;
+                            break;
+                        case R.id.delete:
+                            //handle delete click
+                            if (listener != null)
+                                listener.onDeleteButtonClicked(providerList.get(position));
+                            break;
                     }
-                });
-                //displaying the popup
-                popup.show();
-            }
-        });
+                    return false;
+                }
+            });
+            //displaying the popup
+            popup.show();
+        }
+    });
+}
+else if(position == providerList.size()){
+    holder.itemView.setVisibility(View.INVISIBLE);
+}
     }
 
     @Override
     public int getItemCount() {
-        return providerList.size();
+        return providerList.size()+1;
     }
 
     class ProviderListViewHolder extends RecyclerView.ViewHolder {

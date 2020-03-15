@@ -11,7 +11,7 @@ public class Device {
     String id;
     @SerializedName("DESCRIPTION")
     @Expose
-    String description;
+    String description = "";
 
     public String getId() {
         return id;

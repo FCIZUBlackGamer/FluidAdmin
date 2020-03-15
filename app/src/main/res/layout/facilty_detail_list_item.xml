@@ -18,7 +18,6 @@
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginStart="16dp"
-
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -45,17 +44,15 @@
         android:id="@+id/facilityIdTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/clinic_example_txt"
         app:layout_constraintStart_toStartOf="@id/facilityDescriptionTxt"
         app:layout_constraintTop_toBottomOf="@id/facilityDescriptionTxt" />
 
     <TextView
-        android:id="@+id/waitingAreaIdTxt"
+        android:id="@+id/waitingAreaOrDeviceDescriptionTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:drawablePadding="5dp"
-        android:text="@string/waitingAreaID"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/facilityIdTxt"
         app:layout_constraintTop_toBottomOf="@+id/facilityIdTxt" />
@@ -66,7 +63,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:drawablePadding="5dp"
-        android:text="@string/decsription"
         android:textColor="@color/colorPrimary"
         android:textSize="@dimen/name_txt_size"
         android:textStyle="bold"

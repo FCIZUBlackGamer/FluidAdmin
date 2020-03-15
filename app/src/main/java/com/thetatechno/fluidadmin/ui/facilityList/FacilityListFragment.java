@@ -12,6 +12,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,6 +38,7 @@ public class FacilityListFragment extends Fragment {
     FacilityListViewModel facilityListViewModel;
     NavController navController;
     FloatingActionButton addNewFacilityFab;
+    SwipeRefreshLayout facilitySwipeLayout;
     private  final String ARG_CLINIC_TYPE = "clinic_type";
     final String TAG = FacilityListFragment.class.getSimpleName();
 
@@ -49,7 +51,7 @@ public class FacilityListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_facility_list_clinic_type, container, false);
+        return inflater.inflate(R.layout.fragment_facility_list, container, false);
     }
 
     @Override
@@ -58,6 +60,7 @@ public class FacilityListFragment extends Fragment {
         facilityListClinicRecyclerView = view.findViewById(R.id.facilityListClinicRecyclerView);
         navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
         addNewFacilityFab = view.findViewById(R.id.fab);
+        facilitySwipeLayout = view.findViewById(R.id.facilitySwipeLayout);
         facilityListClinicRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         facilityListViewModel = ViewModelProviders.of(this).get(FacilityListViewModel.class);
         facilityListViewModel.getAllFacilities("").observe(this, new Observer<Facilities>() {
@@ -85,6 +88,14 @@ public class FacilityListFragment extends Fragment {
                             bundle.putSerializable(ARG_CLINIC_TYPE, (Serializable) EnumCode.ClinicTypeCode.CLINIC);
 
                             navController.navigate(R.id.action_facilityListFragment_to_facilityAddFragment, bundle);
+            }
+        });
+        facilitySwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                facilitySwipeLayout.setRefreshing(true);
+                facilityListViewModel.getAllFacilities("");
+                facilitySwipeLayout.setRefreshing(false);
             }
         });
     }

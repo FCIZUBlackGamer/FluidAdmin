@@ -6,10 +6,13 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
 public class Facility implements Serializable {
-    @SerializedName("waitingAreaId")
+    @SerializedName("waitingAreaDescription")
     @Expose
-    private String waitingAreaID;
-
+    private String waitingAreaDescription;
+    @SerializedName("waitingAreaId")
+    private String waitingAreaId;
+    @SerializedName("deviceDescription")
+    private String deviceDescription;
     @SerializedName("typeCode")
     @Expose
     private String type;
@@ -25,9 +28,11 @@ public class Facility implements Serializable {
     @SerializedName("deviceId")
     @Expose
     private String deviceId;
+
     @SerializedName("langId")
     @Expose
     private String langId;
+    private boolean isSelected;
 
     public boolean isSelected() {
         return isSelected;
@@ -37,7 +42,6 @@ public class Facility implements Serializable {
         isSelected = selected;
     }
 
-    private boolean isSelected ;
 
     public String getLangId() {
         return langId;
@@ -71,15 +75,6 @@ public class Facility implements Serializable {
         this.type = type;
     }
 
-
-    public String getWaitingAreaID() {
-        return waitingAreaID;
-    }
-
-    public void setWaitingAreaID(String waitingAreaID) {
-        this.waitingAreaID = waitingAreaID;
-    }
-
     public String getDeviceId() {
         return deviceId;
     }
@@ -87,4 +82,29 @@ public class Facility implements Serializable {
     public void setDeviceId(String deviceId) {
         this.deviceId = deviceId;
     }
+
+    public String getWaitingAreaDescription() {
+        return waitingAreaDescription;
+    }
+
+    public void setWaitingAreaDescription(String waitingAreaDescription) {
+        this.waitingAreaDescription = waitingAreaDescription;
+    }
+
+    public String getWaitingAreaId() {
+        return waitingAreaId;
+    }
+
+    public void setWaitingAreaId(String waitingAreaId) {
+        this.waitingAreaId = waitingAreaId;
+    }
+
+    public String getDeviceDescription() {
+        return deviceDescription;
+    }
+
+    public void setDeviceDescription(String deviceDescription) {
+        this.deviceDescription = deviceDescription;
+    }
+
 }

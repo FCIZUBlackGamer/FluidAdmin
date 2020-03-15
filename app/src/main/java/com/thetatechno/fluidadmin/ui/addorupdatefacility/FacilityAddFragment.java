@@ -168,9 +168,9 @@ public class FacilityAddFragment extends Fragment {
                     waitingAreaSpinner.setAdapter(adapter);
 
                     if (facility != null)
-                        if (facility.getWaitingAreaID() != null) {
+                        if (facility.getWaitingAreaId() != null) {
                             for (int i = 0; i < waitAreaList.size(); i++) {
-                                if (waitAreaList.get(i).equals(facility.getWaitingAreaID())) {
+                                if (waitAreaList.get(i).equals(facility.getWaitingAreaId())) {
                                     waitingAreaSpinner.setSelection(i);
                                 }
                             }
@@ -266,7 +266,7 @@ public class FacilityAddFragment extends Fragment {
 
         facility.setLangId(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
         if (id == facilityTypeRadioGroup.getCheckedRadioButtonId())
-            facility.setWaitingAreaID(waitingAreaSpinner.getSelectedItem().toString());
+            facility.setWaitingAreaId(waitingAreaSpinner.getSelectedItem().toString());
     }
 
 

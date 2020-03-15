@@ -68,44 +68,51 @@ public class CodeListAdapter extends RecyclerView.Adapter<CodeListAdapter.CodeVi
     @Override
     public void onBindViewHolder(@NonNull final CodeListAdapter.CodeViewHolder holder, final int position) {
 
+
         try {
-            holder.codeTxt.setText(codeList.get(position).getCode());
+
+            if(position <codeList.size()) {
+                holder.itemView.setVisibility(View.VISIBLE);
+                holder.codeTxt.setText(codeList.get(position).getCode());
 //            holder.codeTypeTxt.setText(codeList.get(position).getCodeType());
-            holder.codeDescriptionTxt.setText(codeList.get(position).getDescription());
+                holder.codeDescriptionTxt.setText(codeList.get(position).getDescription());
 
-            holder.codeTextViewOptions.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+                holder.codeTextViewOptions.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
 
 
-                    PopupMenu popup = new PopupMenu(context, holder.codeTextViewOptions);
-                    popup.inflate(R.menu.default_menu);
-                    //adding click listener
-                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            switch (item.getItemId()) {
-                                case R.id.edit:
-                                    bundle.putSerializable(ARG_CODE, (Serializable) codeList.get(position));
-                                    bundle.putSerializable("type", (Serializable) EnumCode.UsageType.Code);
-                                    bundle.putSerializable("codeList", (Serializable) codeList);
-                                    navController.navigate(R.id.codeAddFragment, bundle);
+                        PopupMenu popup = new PopupMenu(context, holder.codeTextViewOptions);
+                        popup.inflate(R.menu.default_menu);
+                        //adding click listener
+                        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                            @Override
+                            public boolean onMenuItemClick(MenuItem item) {
+                                switch (item.getItemId()) {
+                                    case R.id.edit:
+                                        bundle.putSerializable(ARG_CODE, (Serializable) codeList.get(position));
+                                        bundle.putSerializable("type", (Serializable) EnumCode.UsageType.Code);
+                                        bundle.putSerializable("codeList", (Serializable) codeList);
+                                        navController.navigate(R.id.codeAddFragment, bundle);
 
-                                    break;
-                                case R.id.delete:
-                                    //handle delete click
-                                    if(listener !=null)
-                                        listener.onDeleteButtonClicked(codeList.get(position));
+                                        break;
+                                    case R.id.delete:
+                                        //handle delete click
+                                        if (listener != null)
+                                            listener.onDeleteButtonClicked(codeList.get(position));
 
-                                    break;
+                                        break;
+                                }
+                                return false;
                             }
-                            return false;
-                        }
-                    });
-                    //displaying the popup
-                    popup.show();
-                }
-            });
+                        });
+                        //displaying the popup
+                        popup.show();
+                    }
+                });
+            }else if(position == codeList.size()){
+holder.itemView.setVisibility(View.INVISIBLE);
+            }
 
         }catch (Exception e){
             Sentry.capture(e);
@@ -116,7 +123,7 @@ public class CodeListAdapter extends RecyclerView.Adapter<CodeListAdapter.CodeVi
     @Override
     public int getItemCount() {
 
-        return codeList.size();
+        return codeList.size()+1;
     }
 
     public class CodeViewHolder extends RecyclerView.ViewHolder {

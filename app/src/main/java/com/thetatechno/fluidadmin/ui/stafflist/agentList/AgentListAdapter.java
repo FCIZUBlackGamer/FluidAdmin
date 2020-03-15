@@ -79,157 +79,161 @@ public class AgentListAdapter extends RecyclerView.Adapter<AgentListAdapter.Agen
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onBindViewHolder(@NonNull final AgentListViewHolder holder, final int position) {
-        holder.idTxt.setText(agentList.get(position).getStaffId());
-        if (!agentList.get(position).getFirstName().isEmpty() || !agentList.get(position).getFamilyName().isEmpty()) {
-            holder.fullNameTxt.setText(agentList.get(position).getFirstName() + " " + agentList.get(position).getFamilyName());
-            holder.fullNameTxt.setVisibility(View.VISIBLE);
-        } else {
-            holder.fullNameTxt.setVisibility(View.GONE);
-        }
-        if (!agentList.get(position).getEmail().isEmpty()) {
-            holder.agentEmailTxt.setText(agentList.get(position).getEmail().toLowerCase());
-            holder.agentEmailTxt.setVisibility(View.VISIBLE);
-
-        } else
-            holder.agentEmailTxt.setVisibility(View.GONE);
-
-        if (!agentList.get(position).getMobileNumber().isEmpty()) {
-            holder.agentPhoneTxt.setText(agentList.get(position).getMobileNumber());
-            holder.agentPhoneTxt.setVisibility(View.VISIBLE);
-        } else {
-            holder.agentPhoneTxt.setVisibility(View.GONE);
-        }
-        if (!agentList.get(position).getImageLink().isEmpty()) {
-            Glide.with(context).load(Constants.BASE_URL + Constants.BASE_EXTENSION_FOR_PHOTOS + agentList.get(position).getImageLink())
-                    .circleCrop()
-                    .into(holder.personImg);
-        } else {
-            if (!agentList.get(position).getGender().isEmpty()) {
-                if (agentList.get(position).getGender().equals(EnumCode.Gender.M.toString())) {
-                    holder.personImg.setImageResource(R.drawable.man);
-                } else if (agentList.get(position).getGender().equals(EnumCode.Gender.F.toString())) {
-                    holder.personImg.setImageResource(R.drawable.ic_girl);
-                }
+        if(position < agentList.size()) {
+            holder.itemView.setVisibility(View.VISIBLE);
+            holder.idTxt.setText(agentList.get(position).getStaffId());
+            if (!agentList.get(position).getFirstName().isEmpty() || !agentList.get(position).getFamilyName().isEmpty()) {
+                holder.fullNameTxt.setText(agentList.get(position).getFirstName() + " " + agentList.get(position).getFamilyName());
+                holder.fullNameTxt.setVisibility(View.VISIBLE);
             } else {
-                holder.personImg.setImageResource(R.drawable.man);
+                holder.fullNameTxt.setVisibility(View.GONE);
             }
-        }
-        if(agentList.get(position).getFacilityList()!=null){
-            FacilitiesForAgentListAdapter facilitiesForAgentListAdapter = new FacilitiesForAgentListAdapter(context, agentList.get(position).getFacilityList());
-            holder.pager.setAdapter(facilitiesForAgentListAdapter);
-            holder.nextBtn.setVisibility(View.VISIBLE);
-            holder.pager.setVisibility(View.VISIBLE);
-        }
+            if (!agentList.get(position).getEmail().isEmpty()) {
+                holder.agentEmailTxt.setText(agentList.get(position).getEmail().toLowerCase());
+                holder.agentEmailTxt.setVisibility(View.VISIBLE);
 
-        else {
+            } else
+                holder.agentEmailTxt.setVisibility(View.GONE);
 
-            holder.nextBtn.setVisibility(View.INVISIBLE);
-            holder.pager.setVisibility(View.INVISIBLE);
-
-        }
-
-
-        holder.pager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageScrolled(int vposition, float positionOffset, int positionOffsetPixels) {
-                super.onPageScrolled(vposition, positionOffset, positionOffsetPixels);
+            if (!agentList.get(position).getMobileNumber().isEmpty()) {
+                holder.agentPhoneTxt.setText(agentList.get(position).getMobileNumber());
+                holder.agentPhoneTxt.setVisibility(View.VISIBLE);
+            } else {
+                holder.agentPhoneTxt.setVisibility(View.GONE);
             }
-
-            @Override
-            public void onPageSelected(int vposition) {
-                super.onPageSelected(vposition);
-                if (holder.pager.getCurrentItem() == agentList.get(position).getFacilityList().size() - 1) {
-                    holder.nextBtn.setVisibility(View.GONE);
-                    holder.previousBtn.setVisibility(View.VISIBLE);
-                } else if (holder.pager.getCurrentItem() > 0 && holder.pager.getCurrentItem() < agentList.get(position).getFacilityList().size()) {
-                    holder.previousBtn.setVisibility(View.VISIBLE);
-                    holder.nextBtn.setVisibility(View.VISIBLE);
-
-                } else if (holder.pager.getCurrentItem() == 0) {
-                    holder.previousBtn.setVisibility(View.GONE);
-                    holder.nextBtn.setVisibility(View.VISIBLE);
+            if (!agentList.get(position).getImageLink().isEmpty()) {
+                Glide.with(context).load(Constants.BASE_URL + Constants.BASE_EXTENSION_FOR_PHOTOS + agentList.get(position).getImageLink())
+                        .circleCrop()
+                        .into(holder.personImg);
+            } else {
+                if (!agentList.get(position).getGender().isEmpty()) {
+                    if (agentList.get(position).getGender().equals(EnumCode.Gender.M.toString())) {
+                        holder.personImg.setImageResource(R.drawable.man);
+                    } else if (agentList.get(position).getGender().equals(EnumCode.Gender.F.toString())) {
+                        holder.personImg.setImageResource(R.drawable.ic_girl);
+                    }
+                } else {
+                    holder.personImg.setImageResource(R.drawable.man);
                 }
             }
+            if (agentList.get(position).getFacilityList() != null) {
+                FacilitiesForAgentListAdapter facilitiesForAgentListAdapter = new FacilitiesForAgentListAdapter(context, agentList.get(position).getFacilityList());
+                holder.pager.setAdapter(facilitiesForAgentListAdapter);
+                holder.nextBtn.setVisibility(View.VISIBLE);
+                holder.pager.setVisibility(View.VISIBLE);
+            } else {
 
-            @Override
-            public void onPageScrollStateChanged(int state) {
-                super.onPageScrollStateChanged(state);
+                holder.nextBtn.setVisibility(View.INVISIBLE);
+                holder.pager.setVisibility(View.INVISIBLE);
+
             }
-        });
-        holder.nextBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                holder.previousBtn.setVisibility(View.VISIBLE);
-                if (holder.pager.getCurrentItem() < agentList.get(position).getFacilityList().size()) {
-                    holder.pager.setCurrentItem(holder.pager.getCurrentItem() + 1);
+
+
+            holder.pager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+                @Override
+                public void onPageScrolled(int vposition, float positionOffset, int positionOffsetPixels) {
+                    super.onPageScrolled(vposition, positionOffset, positionOffsetPixels);
+                }
+
+                @Override
+                public void onPageSelected(int vposition) {
+                    super.onPageSelected(vposition);
                     if (holder.pager.getCurrentItem() == agentList.get(position).getFacilityList().size() - 1) {
                         holder.nextBtn.setVisibility(View.GONE);
-                    }
-                }
-            }
-        });
+                        holder.previousBtn.setVisibility(View.VISIBLE);
+                    } else if (holder.pager.getCurrentItem() > 0 && holder.pager.getCurrentItem() < agentList.get(position).getFacilityList().size()) {
+                        holder.previousBtn.setVisibility(View.VISIBLE);
+                        holder.nextBtn.setVisibility(View.VISIBLE);
 
-        holder.previousBtn.setVisibility(View.GONE);
-
-        holder.previousBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                holder.nextBtn.setVisibility(View.VISIBLE);
-                if (holder.pager.getCurrentItem() > 0) {
-                    holder.pager.setCurrentItem(holder.pager.getCurrentItem() - 1);
-                    if (holder.pager.getCurrentItem() == 0) {
+                    } else if (holder.pager.getCurrentItem() == 0) {
                         holder.previousBtn.setVisibility(View.GONE);
+                        holder.nextBtn.setVisibility(View.VISIBLE);
                     }
                 }
-            }
-        });
 
-        holder.agentTextViewOptions.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                //will show popup agents_menu here
-                //creating a popup agents_menu
-                PopupMenu popup = new PopupMenu(context, holder.agentTextViewOptions);
-                //inflating agents_menu from xml resource
-                popup.inflate(R.menu.agents_menu);
-                //adding click listener
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.linkToFacility:
-                                //TODO: show dialog with facilities
-                                if (onLinkToFacilityClickedListener != null)
-                                    onLinkToFacilityClickedListener.onShowDialogLinkToFacility(agentList.get(position));
-
-                                break;
-                            case R.id.edit:
-                                //handle edit click
-                                bundle.putSerializable(ARG_STAFF, (Serializable) agentList.get(position));
-                                bundle.putSerializable("agentList", (Serializable) agentList);
-                                navController.navigate(R.id.addOrUpdateAgentFragment, bundle);
-
-                                break;
-                            case R.id.delete:
-                                //show confirmation dialog to delete item
-                                if (listener != null)
-                                    listener.onDeleteButtonClicked(agentList.get(position));
-                                break;
+                @Override
+                public void onPageScrollStateChanged(int state) {
+                    super.onPageScrollStateChanged(state);
+                }
+            });
+            holder.nextBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    holder.previousBtn.setVisibility(View.VISIBLE);
+                    if (holder.pager.getCurrentItem() < agentList.get(position).getFacilityList().size()) {
+                        holder.pager.setCurrentItem(holder.pager.getCurrentItem() + 1);
+                        if (holder.pager.getCurrentItem() == agentList.get(position).getFacilityList().size() - 1) {
+                            holder.nextBtn.setVisibility(View.GONE);
                         }
-                        return false;
                     }
-                });
-                //displaying the popup
-                popup.show();
+                }
+            });
 
-            }
-        });
+            holder.previousBtn.setVisibility(View.GONE);
+
+            holder.previousBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    holder.nextBtn.setVisibility(View.VISIBLE);
+                    if (holder.pager.getCurrentItem() > 0) {
+                        holder.pager.setCurrentItem(holder.pager.getCurrentItem() - 1);
+                        if (holder.pager.getCurrentItem() == 0) {
+                            holder.previousBtn.setVisibility(View.GONE);
+                        }
+                    }
+                }
+            });
+
+            holder.agentTextViewOptions.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    //will show popup agents_menu here
+                    //creating a popup agents_menu
+                    PopupMenu popup = new PopupMenu(context, holder.agentTextViewOptions);
+                    //inflating agents_menu from xml resource
+                    popup.inflate(R.menu.agents_menu);
+                    //adding click listener
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            switch (item.getItemId()) {
+                                case R.id.linkToFacility:
+                                    //TODO: show dialog with facilities
+                                    if (onLinkToFacilityClickedListener != null)
+                                        onLinkToFacilityClickedListener.onShowDialogLinkToFacility(agentList.get(position));
+
+                                    break;
+                                case R.id.edit:
+                                    //handle edit click
+                                    bundle.putSerializable(ARG_STAFF, (Serializable) agentList.get(position));
+                                    bundle.putSerializable("agentList", (Serializable) agentList);
+                                    navController.navigate(R.id.addOrUpdateAgentFragment, bundle);
+
+                                    break;
+                                case R.id.delete:
+                                    //show confirmation dialog to delete item
+                                    if (listener != null)
+                                        listener.onDeleteButtonClicked(agentList.get(position));
+                                    break;
+                            }
+                            return false;
+                        }
+                    });
+                    //displaying the popup
+                    popup.show();
+
+                }
+            });
+        }
+        else if(position == agentList.size()){
+            holder.itemView.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return agentList.size();
+        return agentList.size()+1;
     }
 
     class AgentListViewHolder extends RecyclerView.ViewHolder {

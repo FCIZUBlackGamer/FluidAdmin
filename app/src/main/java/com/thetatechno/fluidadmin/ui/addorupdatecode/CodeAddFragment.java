@@ -1,5 +1,6 @@
 package com.thetatechno.fluidadmin.ui.addorupdatecode;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
@@ -46,7 +48,7 @@ public class CodeAddFragment extends DialogFragment {
     CodeViewModel codeViewModel;
     NavController navController;
     List<Code> codeList;
-
+    TextView titleTxt;
     private OnFragmentInteractionListener mListener;
 
     public CodeAddFragment() {
@@ -165,11 +167,14 @@ public class CodeAddFragment extends DialogFragment {
             codeIdEditTxt.setText(code.getCode());
             codeDescriptionEditTxt.setText(code.getDescription());
             addOrUpdateBtn.setHint(getResources().getString(R.string.update_txt));
+            titleTxt.setText(getResources().getString(R.string.update_specialilty_title));
         } else {
             isCodeNotNull = false;
             codeIdEditTxt.setText("");
             codeDescriptionEditTxt.setText("");
             addOrUpdateBtn.setHint(getResources().getString(R.string.add_txt));
+            titleTxt.setText(getResources().getString(R.string.add_specialilty_title));
+
         }
     }
 
@@ -178,6 +183,7 @@ public class CodeAddFragment extends DialogFragment {
         codeDescriptionEditTxt = view.findViewById(R.id.desc_et);
         cancel_btn = view.findViewById(R.id.cancel_btn);
         addOrUpdateBtn = view.findViewById(R.id.addOrUpdateCodeBtn);
+        titleTxt = view.findViewById(R.id.titleTxt);
 
     }
 

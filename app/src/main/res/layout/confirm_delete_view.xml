@@ -12,8 +12,8 @@
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
         android:layout_marginTop="16dp"
-        android:drawableStart="@drawable/ic_delete_forever_red_24dp"
         android:gravity="center"
+        android:textColor="@android:color/black"
         android:text="@string/delete_title_dialog"
         android:textAlignment="center"
         android:textSize="20sp"
@@ -35,27 +35,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleTxt">
 
-        <Button
+        <TextView
             android:layout_weight="1"
             android:id="@+id/cancel_btn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="40dp"
-            android:hint="@string/cancel_btn_txt"
-            android:background="@color/colorAccent"
-            android:textColorHint="@color/colorWhite" />
+            android:text="@string/cancel_btn_txt"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccent"
+ />
 
-        <Button
+        <TextView
+            android:textAlignment="center"
             android:id="@+id/okBtn"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:background="@color/colorPrimary"
-            android:hint="@string/ok_txt_btn"
+            android:text="@string/ok_txt_btn"
             android:layout_marginEnd="40dp"
-            android:textColorHint="@color/colorWhite"
+            android:textColor="@color/colorPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
     </LinearLayout>

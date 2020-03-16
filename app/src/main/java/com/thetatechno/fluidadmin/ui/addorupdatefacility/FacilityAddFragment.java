@@ -8,7 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -23,6 +25,7 @@ import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.model.Code;
 import com.thetatechno.fluidadmin.model.Device;
 import com.thetatechno.fluidadmin.model.Facility;
+import com.thetatechno.fluidadmin.model.Staff;
 import com.thetatechno.fluidadmin.ui.HomeActivity;
 import com.thetatechno.fluidadmin.ui.facilityList.FacilityListViewModel;
 import com.thetatechno.fluidadmin.utils.App;
@@ -36,16 +39,19 @@ import static com.thetatechno.fluidadmin.utils.Constants.ARG_FACILITY;
 
 public class FacilityAddFragment extends Fragment {
     private Facility facility;
-    EditText facility_id_et, desc_et;
-    Button cancel_btn, addOrUpdateBtn;
+    EditText facilityIdEditTxt, facilityDescriptionEditTxt;
+    Button cancelBtn, addOrUpdateBtn;
     boolean isDataFound;
     FacilityAddViewModel facilityAddViewModel;
     NavController navController;
     Spinner deviceIdSpinner, waitingAreaSpinner;
     RadioGroup facilityTypeRadioGroup;
     final static String TAG = "FacilityAddFragment";
-
-
+    ArrayAdapter<Facility> waitingAreaListAdapter;
+    List<Facility> waitAreaDescriptionList;
+    List<String> devicesDescriptionList;
+    RelativeLayout waitingAreaSpinnerLayout;
+    RelativeLayout deviceSpinnerLayout;
     public FacilityAddFragment() {
         // Required empty public constructor
     }
@@ -87,20 +93,8 @@ public class FacilityAddFragment extends Fragment {
         View view = inflater.inflate(R.layout.facility_add_view, container, false);
         facilityAddViewModel = ViewModelProviders.of(this).get(FacilityAddViewModel.class);
         initViews(view);
-        return view;
-    }
-
-    private void initViews(View view) {
-
-        facility_id_et = view.findViewById(R.id.facility_id_et);
-        desc_et = view.findViewById(R.id.desc_et);
-        facilityTypeRadioGroup = view.findViewById(R.id.typeRadioGroup);
-        waitingAreaSpinner = view.findViewById(R.id.waitingAreaSpinner);
-        deviceIdSpinner = view.findViewById(R.id.deviceIdSpinner);
-        cancel_btn = view.findViewById(R.id.cancel_btn);
-        addOrUpdateBtn = view.findViewById(R.id.addOrUpdateBtn);
-        getWaitingAreaIdList();
-        displayDeviceIds();
+        getWaitingAreaDescriptionList();
+        getDevicesListDescription();
         updateData();
         facilityTypeRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -115,31 +109,53 @@ public class FacilityAddFragment extends Fragment {
                 }
             }
         });
+        return view;
+    }
+
+    private void initViews(View view) {
+
+        facilityIdEditTxt = view.findViewById(R.id.facility_id_et);
+        facilityDescriptionEditTxt = view.findViewById(R.id.desc_et);
+        facilityTypeRadioGroup = view.findViewById(R.id.typeRadioGroup);
+        waitingAreaSpinner = view.findViewById(R.id.waitingAreaSpinner);
+        deviceIdSpinner = view.findViewById(R.id.deviceIdSpinner);
+        cancelBtn = view.findViewById(R.id.cancel_btn);
+        addOrUpdateBtn = view.findViewById(R.id.addOrUpdateBtn);
+        waitingAreaSpinnerLayout = view.findViewById(R.id.waitingAreaLayoutSpinner);
+        deviceSpinnerLayout = view.findViewById(R.id.deviceIdRelativeLayout);
+
+
         addOrUpdateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getData();
                 if (isDataFound) {
 
-                    facilityAddViewModel.updateFacility(facility,deviceIdSpinner.getSelectedItem().toString()).observe(getActivity(), new Observer<String>() {
+                    facilityAddViewModel.updateFacility(facility,deviceIdSpinner.getSelectedItem().toString(),waitingAreaSpinner.getSelectedItem().toString()).observe(getActivity(), new Observer<String>() {
                         @Override
                         public void onChanged(String s) {
                             Log.i(TAG, "update response message " + s);
-                            Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT);
-                            if (s.contains("successfully"))
+                            if(!s.isEmpty())
+                                Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT);
+                            if (s.contains("success")) {
                                 onAddOrUpdateClicked();
+                            }
+
 
                         }
                     });
                 } else {
 
-                    facilityAddViewModel.addNewFacility(facility).observe(getActivity(), new Observer<String>() {
+                    facilityAddViewModel.addNewFacility(facility,deviceIdSpinner.getSelectedItem().toString(),waitingAreaSpinner.getSelectedItem().toString()).observe(getActivity(), new Observer<String>() {
                         @Override
                         public void onChanged(String s) {
                             Log.i(TAG, "add response message " + s);
+                            if(!s.isEmpty())
                             Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
-                            if (s.contains("successfully"))
+                            if (s.contains("successfully")) {
                                 onAddOrUpdateClicked();
+                            }
+
 
                         }
                     });
@@ -147,7 +163,7 @@ public class FacilityAddFragment extends Fragment {
                 }
             }
         });
-        cancel_btn.setOnClickListener(new View.OnClickListener() {
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onCancelOrBackButtonClicked();
@@ -156,21 +172,20 @@ public class FacilityAddFragment extends Fragment {
 
     }
 
-    private void getWaitingAreaIdList() {
-        facilityAddViewModel.getFacilityDataForWaitingAreaList("").observe(this, new Observer<List<String>>() {
+    private void getWaitingAreaDescriptionList() {
+        facilityAddViewModel.getFacilityDataForWaitingAreaList("").observe(this, new Observer<List<Facility>>() {
             @Override
-            public void onChanged(List<String> waitAreaList) {
+            public void onChanged(List<Facility> waitAreaList) {
                 if (waitAreaList.size() > 0) {
-                    ArrayAdapter<String> adapter =
-                            new ArrayAdapter<String>(getContext(), R.layout.simple_spinner_dropdown_item, waitAreaList);
-                    adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
-
-                    waitingAreaSpinner.setAdapter(adapter);
-
+                    waitAreaDescriptionList = waitAreaList;
+                    waitingAreaListAdapter =
+                            new ArrayAdapter<>(getContext(), R.layout.simple_spinner_dropdown_item, waitAreaDescriptionList);
+                    waitingAreaListAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
+                    waitingAreaSpinner.setAdapter(waitingAreaListAdapter);
                     if (facility != null)
                         if (facility.getWaitingAreaId() != null) {
-                            for (int i = 0; i < waitAreaList.size(); i++) {
-                                if (waitAreaList.get(i).equals(facility.getWaitingAreaId())) {
+                            for (int i = 0; i < waitAreaDescriptionList.size(); i++) {
+                                if (waitAreaDescriptionList.get(i).getDescription().equals(facility.getWaitingAreaDescription())) {
                                     waitingAreaSpinner.setSelection(i);
                                 }
                             }
@@ -179,21 +194,21 @@ public class FacilityAddFragment extends Fragment {
             }
         });
     }
-    private void displayDeviceIds(){
-        facilityAddViewModel.getDevicesList().observe(this, new Observer<List<Device>>() {
+    private void getDevicesListDescription(){
+        facilityAddViewModel.getDevicesList().observe(this, new Observer<List<String>>() {
             @Override
-            public void onChanged(List<Device> deviceList) {
+            public void onChanged(List<String> deviceList) {
                 if (deviceList.size() > 0) {
-                    ArrayAdapter<Device> adapter =
-                            new ArrayAdapter<Device>(getContext(), R.layout.simple_spinner_dropdown_item, deviceList);
+                    devicesDescriptionList = deviceList;
+                    ArrayAdapter<String> adapter =
+                            new ArrayAdapter<>(getContext(), R.layout.simple_spinner_dropdown_item, devicesDescriptionList);
                     adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
-
                     deviceIdSpinner.setAdapter(adapter);
 
                     if (facility != null)
                         if (facility.getDeviceId() != null) {
-                            for (int i = 0; i < deviceList.size(); i++) {
-                                if (deviceList.get(i).getId().equals(facility.getDeviceId())) {
+                            for (int i = 0; i < devicesDescriptionList.size(); i++) {
+                                if (devicesDescriptionList.get(i).equals(facility.getDeviceDescription())) {
                                     deviceIdSpinner.setSelection(i);
                                 }
                             }
@@ -229,9 +244,9 @@ public class FacilityAddFragment extends Fragment {
     private void updateData() {
         if (facility != null) {
             isDataFound = true;
-            facility_id_et.setText(facility.getCode());
-            facility_id_et.setEnabled(false);
-            desc_et.setText(facility.getDescription());
+            facilityIdEditTxt.setText(facility.getCode());
+            facilityIdEditTxt.setEnabled(false);
+            facilityDescriptionEditTxt.setText(facility.getDescription());
             if (facility.getType().equals(EnumCode.ClinicTypeCode.CLINIC.toString())) {
                 facilityTypeRadioGroup.check(R.id.clinicTyperadioButton);
                 deviceIdSpinner.setEnabled(false);
@@ -246,18 +261,20 @@ public class FacilityAddFragment extends Fragment {
         } else {
             isDataFound = false;
             facility = new Facility();
-            facility_id_et.setText("");
-            facility_id_et.setEnabled(true);
-
-            desc_et.setText("");
+            facilityIdEditTxt.setText("");
+            facilityIdEditTxt.setEnabled(true);
+            facilityDescriptionEditTxt.setText("");
             addOrUpdateBtn.setHint(getResources().getString(R.string.add_txt));
+            waitingAreaSpinner.setEnabled(false);
+
+            deviceIdSpinner.setEnabled(false);
 
         }
     }
 
     private void getData() {
-        facility.setCode(facility_id_et.getText().toString());
-        facility.setDescription(desc_et.getText().toString());
+        facility.setCode(facilityIdEditTxt.getText().toString());
+        facility.setDescription(facilityDescriptionEditTxt.getText().toString());
         int id = facilityTypeRadioGroup.getCheckedRadioButtonId();
         if (id == R.id.clinicTyperadioButton)
             facility.setType(EnumCode.ClinicTypeCode.CLINIC.toString());

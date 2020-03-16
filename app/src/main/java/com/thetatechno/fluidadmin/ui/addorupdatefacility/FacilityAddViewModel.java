@@ -1,6 +1,8 @@
 package com.thetatechno.fluidadmin.ui.addorupdatefacility;
 
 
+import android.widget.LinearLayout;
+
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -24,19 +26,26 @@ public class FacilityAddViewModel extends ViewModel {
     private MutableLiveData<String> facilityAddOrUpdateMessage = new MutableLiveData<>();
     private FacilityRepository facilityRepository = new FacilityRepository();
     private DeviceRepository deviceRepository = new DeviceRepository();
-    private MutableLiveData<List<String>> facilitiesWaitListStringMutableLiveData = new MutableLiveData<List<String>>();
-    private MutableLiveData<List<Device>> devicesStringMutableLiveData = new MutableLiveData<List<Device>>();
-    private String message;
-    List<Device> deviceList  = new ArrayList<>();
+    private MutableLiveData<List<Facility>> facilitiesWaitListStringMutableLiveData = new MutableLiveData<List<Facility>>();
+    private MutableLiveData<List<String>> devicesStringMutableLiveData = new MutableLiveData<List<String>>();
+    private String message = "";
+    List<Device> deviceList = new ArrayList<>();
+    List<Facility> facilities = new ArrayList<>();
 
-    public MutableLiveData<String> addNewFacility(Facility facility) {
+    public MutableLiveData<String> addNewFacility(Facility facility, String deviceDescription, String waitingAreaDescription) {
+        if (!getDeviceID(deviceDescription).isEmpty())
+            facility.setDeviceId(getDeviceID(deviceDescription));
+        if (!getWaitingAreaCode(waitingAreaDescription).isEmpty())
+            facility.setWaitingAreaId(getWaitingAreaCode(waitingAreaDescription));
+
         facilityRepository.insertFacility(facility, new OnDataChangedCallBackListener<String>() {
             @Override
             public void onResponse(String b) {
-                if (b.equals(Constants.ADD_OR_UPDATE_SUCCESS_STATE))
+                if (Integer.parseInt(b) > 0) {
                     message = "Added facility successfully";
-                else if (b.equals(Constants.ADD_OR_UPDATE_FAIL_STATE))
+                } else if (b.equals(Constants.ADD_DELETE_OR_UPDATE_FAIL_STATE)) {
                     message = "Failed to add facility.";
+                }
                 facilityAddOrUpdateMessage.setValue(message);
 
             }
@@ -44,42 +53,61 @@ public class FacilityAddViewModel extends ViewModel {
         return facilityAddOrUpdateMessage;
     }
 
-    public MutableLiveData<String> updateFacility(Facility facility,String deviceDescription) {
-        facility.setDeviceId(getDeviceID(deviceDescription));
+    public MutableLiveData<String> updateFacility(Facility facility, String deviceDescription, String waitingAreaDescription) {
+        if (!getDeviceID(deviceDescription).isEmpty())
+            facility.setDeviceId(getDeviceID(deviceDescription));
+        if (!getWaitingAreaCode(waitingAreaDescription).isEmpty())
+            facility.setWaitingAreaId(getWaitingAreaCode(waitingAreaDescription));
         facilityRepository.updateFacility(facility, new OnDataChangedCallBackListener<String>() {
             @Override
             public void onResponse(String b) {
-                if (b.equals(Constants.ADD_OR_UPDATE_SUCCESS_STATE))
+                if (Integer.parseInt(b) > 0) {
+
                     message = "updated facility successfully";
-                else if (b.equals(Constants.ADD_OR_UPDATE_FAIL_STATE))
+                } else if (b.equals(Constants.ADD_DELETE_OR_UPDATE_FAIL_STATE)) {
                     message = "Failed to update facility.";
+                }
                 facilityAddOrUpdateMessage.setValue(message);
 
             }
         });
         return facilityAddOrUpdateMessage;
     }
-    private String getDeviceID(String deviceDescription){
-        if(!deviceDescription.isEmpty()){
 
-            for(Device device : deviceList){
-                if(device.getDescription().equals(deviceDescription))
+    private String getDeviceID(String deviceDescription) {
+        if (!deviceDescription.isEmpty()) {
+
+            for (Device device : deviceList) {
+                if (device.getDescription().equals(deviceDescription))
                     return device.getId();
             }
         }
         return "";
     }
 
-    public MutableLiveData<List<String>> getFacilityDataForWaitingAreaList(String facilityId) {
+    private String getWaitingAreaCode(String waitingAreaDescription) {
+        if (!waitingAreaDescription.isEmpty()) {
+
+            for (Facility facility : facilities) {
+                if (facility.getWaitingAreaDescription() != null && facility.getWaitingAreaDescription().equals(waitingAreaDescription))
+                    return facility.getWaitingAreaId();
+            }
+        }
+        return "";
+    }
+
+    public MutableLiveData<List<Facility>> getFacilityDataForWaitingAreaList(String facilityId) {
 
         facilityRepository.getFacilityListForSpecificType(facilityId, PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase(), EnumCode.ClinicTypeCode.WAITAREA.toString(), new OnDataChangedCallBackListener<Facilities>() {
             @Override
             public void onResponse(Facilities facilitiesListResponse) {
                 if (facilitiesListResponse != null) {
-                    if (!facilitiesListResponse.getFacilities().equals(null)) {
-                        List<String> waitListIds = new ArrayList<>();
+                    if (facilitiesListResponse.getFacilities() != null) {
+                        facilities = facilitiesListResponse.getFacilities();
+                        List<Facility> waitListIds = new ArrayList<>();
+                        waitListIds.add(new Facility());
                         for (Facility facility : facilitiesListResponse.getFacilities()) {
-                            waitListIds.add(facility.getCode());
+                                waitListIds.add(facility);
                         }
                         facilitiesWaitListStringMutableLiveData.setValue(waitListIds);
                     } else {
@@ -96,17 +124,18 @@ public class FacilityAddViewModel extends ViewModel {
 
     }
 
-    public MutableLiveData<List<Device>> getDevicesList() {
+    public MutableLiveData<List<String>> getDevicesList() {
 
         deviceRepository.getAllDevices(new OnDataChangedCallBackListener<DeviceListData>() {
             @Override
             public void onResponse(DeviceListData devicesListResponse) {
                 if (devicesListResponse != null) {
-                    if (devicesListResponse.getDeviceList()!=null) {
+                    if (devicesListResponse.getDeviceList() != null) {
                         deviceList = devicesListResponse.getDeviceList();
-                        List<Device> deviceListIds = new ArrayList<>();
+                        List<String> deviceListIds = new ArrayList<>();
+                        deviceListIds.add("");
                         for (Device device : devicesListResponse.getDeviceList()) {
-                            deviceListIds.add(device);
+                            deviceListIds.add(device.getDescription());
                         }
                         devicesStringMutableLiveData.setValue(deviceListIds);
                     } else {

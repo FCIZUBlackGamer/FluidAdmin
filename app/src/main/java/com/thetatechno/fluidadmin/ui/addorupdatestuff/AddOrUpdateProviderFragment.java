@@ -27,11 +27,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.thetatechno.fluidadmin.R;
-import com.thetatechno.fluidadmin.model.Code;
-import com.thetatechno.fluidadmin.model.CodeList;
 import com.thetatechno.fluidadmin.model.Staff;
 import com.thetatechno.fluidadmin.ui.HomeActivity;
-import com.thetatechno.fluidadmin.ui.codeList.CodeListViewModel;
 import com.thetatechno.fluidadmin.utils.App;
 import com.thetatechno.fluidadmin.utils.Constants;
 import com.thetatechno.fluidadmin.utils.EnumCode;
@@ -56,13 +53,13 @@ public class AddOrUpdateProviderFragment extends Fragment {
     RadioGroup genderRadioGroup;
     Button addBtn;
     Button cancelBtn;
-    AddOrUpdateViewModel addOrUpdateViewModel;
+    AddOrUpdateProviderViewModel addOrUpdateViewModel;
     boolean isStaffHasData;
     Staff staff;
     Spinner specialitySpinner;
     NavController navController;
 
-    ArrayList<String> specialityCodes;
+    ArrayList<String> specialitiesList;
     ImageView addProfileImage;
 
     public AddOrUpdateProviderFragment() {
@@ -130,8 +127,8 @@ public class AddOrUpdateProviderFragment extends Fragment {
         cancelBtn = view.findViewById(R.id.cancel_btn);
         addProfileImage = view.findViewById(R.id.addProfileImg);
         specialitySpinner = view.findViewById(R.id.specialitySpinner);
-        addOrUpdateViewModel = ViewModelProviders.of(this).get(AddOrUpdateViewModel.class);
-        getspecialityCodes();
+        addOrUpdateViewModel = ViewModelProviders.of(this).get(AddOrUpdateProviderViewModel.class);
+        getSpecialitiesList();
         updateData();
 
         addBtn.setOnClickListener(new View.OnClickListener() {
@@ -152,24 +149,27 @@ public class AddOrUpdateProviderFragment extends Fragment {
                 staff.setLangId(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
                 staff.setSpecialityCode(specialitySpinner.getSelectedItem().toString());
                 if (!isStaffHasData) {
-                    addOrUpdateViewModel.addNewStaff(staff).observe(getActivity(), new Observer<String>() {
+                    addOrUpdateViewModel.addNewProvider(staff,specialitySpinner.getSelectedItem().toString()).observe(getActivity(), new Observer<String>() {
                         @Override
                         public void onChanged(String s) {
                             Log.i(TAG, "add staff message" + s);
-                            Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
-                            if (s.contains("success"))
+                            if (s.contains("success")) {
+                                Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
                                 onAddOrUpdateData();
+
+                            }
 
                         }
                     });
                 } else {
-                    addOrUpdateViewModel.updateStaff(staff).observe(getActivity(), new Observer<String>() {
+                    addOrUpdateViewModel.updateProvider(staff,specialitySpinner.getSelectedItem().toString()).observe(getActivity(), new Observer<String>() {
                         @Override
                         public void onChanged(String s) {
                             Log.i(TAG, "Update staff message" + s);
-                            Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
                             if (s.contains("success")) {
                                 onAddOrUpdateData();
+                                Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
+
                             }
 
                         }
@@ -187,20 +187,20 @@ public class AddOrUpdateProviderFragment extends Fragment {
 
     }
 
-    private void getspecialityCodes() {
+    private void getSpecialitiesList() {
         addOrUpdateViewModel.getSpecialities().observe(this, new Observer<List<String>>() {
             @Override
             public void onChanged(List<String> codeList) {
                 if (codeList.size() > 0) {
-                    specialityCodes = (ArrayList<String>) codeList;
+                    specialitiesList = (ArrayList<String>) codeList;
                     ArrayAdapter<String> adapter =
-                            new ArrayAdapter<String>(getContext(), R.layout.simple_spinner_dropdown_item, specialityCodes);
+                            new ArrayAdapter<String>(getContext(), R.layout.simple_spinner_dropdown_item, specialitiesList);
                     adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
                     specialitySpinner.setAdapter(adapter);
                     if (staff != null)
                         if (staff.getSpeciality() != null) {
-                            for (int i = 0; i < specialityCodes.size(); i++) {
-                                if (specialityCodes.get(i).equals(staff.getSpecialityCode())) {
+                            for (int i = 0; i < specialitiesList.size(); i++) {
+                                if (specialitiesList.get(i).equals(staff.getSpecialityCode())) {
                                     specialitySpinner.setSelection(i);
                                 }
                             }

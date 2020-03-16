@@ -31,7 +31,6 @@ import com.thetatechno.fluidadmin.utils.Constants;
 import com.thetatechno.fluidadmin.utils.EnumCode;
 import com.thetatechno.fluidadmin.utils.PreferenceController;
 
-import java.io.Serializable;
 import java.util.List;
 
 import static com.thetatechno.fluidadmin.utils.Constants.ARG_STAFF;
@@ -77,7 +76,6 @@ public class AddOrUpdateAgentFragment extends Fragment {
             agentList = (List<Staff>) getArguments().getSerializable("agentList");
         }
         navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
-
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
             @Override
             public void handleOnBackPressed() {
@@ -89,8 +87,6 @@ public class AddOrUpdateAgentFragment extends Fragment {
     }
 
     void onCancelOrBackButtonPressed() {
-
-//        navController.navigate(R.id.action_addOrUpdateAgentFragment_to_agentListFragment);
         navController.popBackStack();
     }
 
@@ -136,20 +132,24 @@ public class AddOrUpdateAgentFragment extends Fragment {
                 staff.setLangId(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
 
                 if (!isStaffHasData) {
-                    addOrUpdateViewModel.addNewStaff(staff).observe(getActivity(), new Observer<String>() {
+                    addOrUpdateViewModel.addNewAgent(staff).observe(getActivity(), new Observer<String>() {
                         @Override
                         public void onChanged(String s) {
                             Log.i("AddOrUpdate", "add agent message" + s);
-                            Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
                             if (s.contains("success")) {
                                 onAddOrUpdateSuccessfully();
+                                Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
+
+                            }
+                            else if(s.contains("Failed")) {
+                                Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
                             }
 
 
                         }
                     });
                 } else {
-                    addOrUpdateViewModel.updateStaff(staff).observe(getActivity(), new Observer<String>() {
+                    addOrUpdateViewModel.updateAgent(staff).observe(getActivity(), new Observer<String>() {
                         @Override
                         public void onChanged(String s) {
                             Log.i("AddOrUpdate", "Update agent message" + s);
@@ -173,7 +173,8 @@ public class AddOrUpdateAgentFragment extends Fragment {
         });
 
     }
-    private void onAddOrUpdateSuccessfully(){
+
+    private void onAddOrUpdateSuccessfully() {
         navController.navigate(R.id.action_addOrUpdateAgentFragment_to_agentListFragment);
 
     }
@@ -181,11 +182,11 @@ public class AddOrUpdateAgentFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if(staff.getStaffId()!=null){
-            ((HomeActivity)getActivity()).getSupportActionBar().setTitle("update agent");
-        }else {
+        if (staff.getStaffId() != null) {
+            ((HomeActivity) getActivity()).getSupportActionBar().setTitle("update agent");
+        } else {
 
-            ((HomeActivity)getActivity()).getSupportActionBar().setTitle("add agent");
+            ((HomeActivity) getActivity()).getSupportActionBar().setTitle("add agent");
         }
     }
 
@@ -203,20 +204,18 @@ public class AddOrUpdateAgentFragment extends Fragment {
                 genderRadioGroup.check(R.id.maleRadioButton);
             addBtn.setHint(getResources().getString(R.string.update_txt));
             isStaffHasData = true;
-            if(!staff.getImageLink().isEmpty()){
-                Glide.with(this).load(Constants.BASE_URL+Constants.BASE_EXTENSION_FOR_PHOTOS+staff.getImageLink())
+            if (!staff.getImageLink().isEmpty()) {
+                Glide.with(this).load(Constants.BASE_URL + Constants.BASE_EXTENSION_FOR_PHOTOS + staff.getImageLink())
                         .circleCrop()
                         .into(addProfileImg);
-            }
-            else {
-                if(!staff.getGender().isEmpty()) {
+            } else {
+                if (!staff.getGender().isEmpty()) {
                     if (staff.getGender().equals(EnumCode.Gender.M.toString())) {
                         addProfileImg.setImageResource(R.drawable.man);
-                    } else if(staff.getGender().equals(EnumCode.Gender.F.toString())){
+                    } else if (staff.getGender().equals(EnumCode.Gender.F.toString())) {
                         addProfileImg.setImageResource(R.drawable.ic_girl);
                     }
-                }
-                else {
+                } else {
                     addProfileImg.setImageResource(R.drawable.man);
                 }
 
@@ -231,22 +230,7 @@ public class AddOrUpdateAgentFragment extends Fragment {
             emailTxt.setText("");
             addBtn.setHint(getResources().getString(R.string.add_txt));
             addProfileImg.setImageResource(R.drawable.man);
-//            navController.getCurrentDestination().setLabel("add agent");
-//           getActivity().setTitle("add agent");
         }
     }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-
-
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
-
 
 }

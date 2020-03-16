@@ -39,7 +39,7 @@ public class FacilityListDialogAdapter extends RecyclerView.Adapter<FacilityList
     @Override
     public void onBindViewHolder(@NonNull final myViewHolder holder, final int position) {
         final Facility facility = filteredFacilityList.get(position);
-        holder.FacilityNameTxt.setText(facility.getCode());
+        holder.FacilityNameTxt.setText(facility.getDescription());
         if (facility.isSelected())
             holder.facilityCheckBox.setChecked(true);
         else {
@@ -75,7 +75,7 @@ public class FacilityListDialogAdapter extends RecyclerView.Adapter<FacilityList
                 } else {
                     List<Facility> filteredList = new ArrayList<>();
                     for (Facility facility : facilityList) {
-                        if (facility.getCode().contains(charSequenceString)) {
+                        if (facility.getDescription().contains(charSequenceString)) {
                             filteredList.add(facility);
                         }
                         filteredFacilityList = filteredList;

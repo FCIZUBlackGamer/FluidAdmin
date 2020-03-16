@@ -28,7 +28,6 @@ public class FacilitiesListDialog extends Dialog {
     String staffId ;
     SearchView searchForSpecificFacilityView;
     OnConfirmLinkToFacilityListener onConfirmLinkToFacilityListener;
-
     public FacilityListDialogAdapter alertDialogAdapter;
     RecyclerView appointmentListRecyclerView;
 

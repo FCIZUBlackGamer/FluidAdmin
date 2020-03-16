@@ -30,7 +30,6 @@
         android:id="@+id/codeAddFragment"
         android:name="com.thetatechno.fluidadmin.ui.addorupdatecode.CodeAddFragment"
         tools:layout="@layout/code_add_view" >
-
         <action
             android:id="@+id/action_codeAddFragment_to_codeListFragment"
             app:destination="@id/codeList"

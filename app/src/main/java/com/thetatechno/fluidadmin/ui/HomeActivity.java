@@ -1,16 +1,21 @@
 package com.thetatechno.fluidadmin.ui;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
+import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.view.GravityCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -61,9 +66,9 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     private AppBarConfiguration mAppBarConfiguration;
     DrawerLayout drawer;
     FacilitiesListDialog facilitiesListDialog;
+    AlertDialog alertDialog;
     private static final String TAG = HomeActivity.class.getSimpleName();
     List<Facility> facilityList = new ArrayList<>();
-//    MenuItem searchMenuItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,12 +99,8 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         NavigationUI.setupWithNavController(navigationView, navController);
         checkOnTheCurrentLanguage();
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.getMenu().getItem(0).setChecked(false);
 
-//        if( searchMenuItem != null ){
-//            if(searchMenuItem.isVisible())
-//            disableSearchView();
-//        }
-        getFacilities();
     }
 
     @Override
@@ -144,10 +145,28 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
     }
 
+
     @Override
-    public void onDeleteButtonClicked(Object itemClicked) {
-        confirmDeleteDialog = new ConfirmDeleteDialog(this, itemClicked);
-        confirmDeleteDialog.show();
+    public void onDeleteButtonClicked(final Object itemClicked) {
+//        confirmDeleteDialog = new ConfirmDeleteDialog(this, itemClicked);
+//        confirmDeleteDialog.show();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.delete_title_dialog);
+        builder.setPositiveButton(R.string.delete_txt, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                onOkButtonClicked(itemClicked);
+            }
+        });
+        builder.setNegativeButton(R.string.cancel_btn_txt, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                alertDialog.dismiss();
+            }
+        });
+
+        alertDialog = builder.create();
+        alertDialog.show();
 
     }
 
@@ -197,8 +216,8 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 }
             });
         }
-        if (confirmDeleteDialog.isShowing()) {
-            confirmDeleteDialog.dismiss();
+        if (alertDialog.isShowing()) {
+            alertDialog.dismiss();
         }
 
     }
@@ -206,13 +225,10 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     int id ;
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-        item.setChecked(true);
-
+        item.isChecked();
+        item.setChecked(false);
         drawer.closeDrawers();
-
         id = item.getItemId();
-
         switch (id) {
 
             case R.id.language_reference:
@@ -238,8 +254,8 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 navigateToClinicTypeList();
                 break;
 
-
         }
+
         return true;
 
     }
@@ -258,6 +274,9 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     public void buildLinkToFacilityDialog(final Staff staff) {
         if (facilityList.size() == 0) {
             getFacilities();
+        }
+        else {
+            facilityListViewModel.getFacilityDataForClinicType("");
         }
 
         List<Facility> facilityArrayList = facilityList;

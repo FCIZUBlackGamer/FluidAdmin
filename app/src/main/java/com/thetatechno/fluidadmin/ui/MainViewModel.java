@@ -10,15 +10,10 @@ import com.thetatechno.fluidadmin.model.Code;
 import com.thetatechno.fluidadmin.model.Facility;
 import com.thetatechno.fluidadmin.model.FacilityCodes;
 import com.thetatechno.fluidadmin.model.Staff;
-import com.thetatechno.fluidadmin.model.StaffData;
-import com.thetatechno.fluidadmin.retrofiteServices.repositories.ClientRepository;
 import com.thetatechno.fluidadmin.retrofiteServices.repositories.CodeRepository;
 import com.thetatechno.fluidadmin.retrofiteServices.repositories.FacilityRepository;
 import com.thetatechno.fluidadmin.retrofiteServices.repositories.StaffRepository;
-import com.thetatechno.fluidadmin.utils.App;
 import com.thetatechno.fluidadmin.utils.Constants;
-import com.thetatechno.fluidadmin.utils.EnumCode;
-import com.thetatechno.fluidadmin.utils.PreferenceController;
 
 public class MainViewModel extends ViewModel {
     final static String TAG = MainViewModel.class.getSimpleName();
@@ -33,10 +28,10 @@ public class MainViewModel extends ViewModel {
             @Override
             public void onResponse(String b) {
                 Log.i(TAG, "deleteAgentOrProvider: delete state " + b);
-                if (b.equals(Constants.ADD_OR_UPDATE_SUCCESS_STATE)) {
+                if (b.equals(Constants.DELETE_SUCCESS_STATE)) {
                     message = "Delete successfully " + staff.getFirstName();
                     deletedMessageLiveData.setValue(message);
-                } else if (b.equals(Constants.ADD_OR_UPDATE_FAIL_STATE)) {
+                } else if (b.equals(Constants.ADD_DELETE_OR_UPDATE_FAIL_STATE)) {
                     message = "Failed to delete.";
                     deletedMessageLiveData.setValue(message);
                 }
@@ -53,12 +48,12 @@ public class MainViewModel extends ViewModel {
             public void onResponse(String b) {
                 Log.i(TAG, "deleteCode: delete state " + b);
 
-                if (b.equals(Constants.ADD_OR_UPDATE_SUCCESS_STATE)) {
+                if (b.equals(Constants.DELETE_SUCCESS_STATE)) {
                     message = "Delete code successfully " + code.getCode();
 //                    codeRepository.getAllCodes(EnumCode.Code.STFFGRP.toString(), PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
                     deletedMessageLiveData.setValue(message);
 
-                } else if (b.equals(Constants.ADD_OR_UPDATE_FAIL_STATE)) {
+                } else if (b.equals(Constants.ADD_DELETE_OR_UPDATE_FAIL_STATE)) {
                     message = "Failed to delete code " + code.getCode();
                     deletedMessageLiveData.setValue(message);
                 }
@@ -74,12 +69,12 @@ public class MainViewModel extends ViewModel {
             public void onResponse(String b) {
                 Log.i(TAG, "deleteFacility: delete state " + b);
 
-                if (b.equals(Constants.ADD_OR_UPDATE_SUCCESS_STATE)) {
+                if (b.equals(Constants.DELETE_SUCCESS_STATE)) {
                     message = "Delete facility successfully" + facility.getCode();
 //                    facilityRepository.getAllFacilities(facility.getCode(), PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
                     deletedMessageLiveData.setValue(message);
 
-                } else if (b.equals(Constants.ADD_OR_UPDATE_FAIL_STATE)) {
+                } else if (b.equals(Constants.ADD_DELETE_OR_UPDATE_FAIL_STATE)) {
                     message = "Failed to delete facility " + facility.getCode();
                     deletedMessageLiveData.setValue(message);
                 }

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
@@ -16,8 +17,8 @@ import com.thetatechno.fluidadmin.listeners.OnConfirmDeleteListener;
 public class ConfirmDeleteDialog extends Dialog {
     OnConfirmDeleteListener listener;
     Context context;
-    Button okButton;
-    Button cancelButton;
+    TextView okButton;
+    TextView cancelButton;
     Object object;
     public ConfirmDeleteDialog(@NonNull Context context,Object object) {
         super(context);

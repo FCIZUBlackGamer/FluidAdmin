@@ -10,16 +10,10 @@ public interface Constants {
     public static final String BASE_EXTENSION_FOR_PHOTOS = "/i/";
     public static final String LANG_ID = "langId";
     public static final String FACILITY_TYPE_CODE = "typeCode";
-    public static final String FACILITY_DESCRIPTION = "description";
-    public static final String waitingAreaId = "waitingAreaId";
-    public static final String deviceId = "deviceId";
-    public static final String FACILITY_TYPE_CODE_CLINIC = "CLINIC";
-    public static final String FACILITY_TYPE_CODE_WAITAREA = "WAITAREA";
     public static final String ARG_FACILITY = "facility";
     public static final String ARG_CODE = "code";
     public static String ARG_STAFF = "staff";
-    public static String ADD_OR_UPDATE_SUCCESS_STATE = "1";
-    public static String ADD_OR_UPDATE_FAIL_STATE = "-1";
-
+    public static String ADD_DELETE_OR_UPDATE_FAIL_STATE = "-1";
+public static String DELETE_SUCCESS_STATE = "1";
 
 }

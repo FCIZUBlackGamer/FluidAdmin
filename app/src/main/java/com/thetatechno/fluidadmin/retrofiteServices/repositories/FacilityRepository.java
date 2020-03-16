@@ -76,9 +76,10 @@ public class FacilityRepository {
             public void onResponse(@NonNull Call<State> call, @NonNull Response<State> response) {
                 if (response.isSuccessful()) {
                     Log.i(TAG, "insertFacility: response " + response.toString());
-                    if (response.body().getStatus() != null)
+                    if (response.body().getStatus() != null) {
                         onDataChangedCallBackListener.onResponse(response.body().getStatus());
-
+                        Log.i(TAG, "insertFacility: status " + response.body().getStatus());
+                    }
 
                 } else
                     onDataChangedCallBackListener.onResponse(null);

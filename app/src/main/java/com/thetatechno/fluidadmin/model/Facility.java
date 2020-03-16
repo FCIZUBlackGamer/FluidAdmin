@@ -1,5 +1,7 @@
 package com.thetatechno.fluidadmin.model;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -10,7 +12,7 @@ public class Facility implements Serializable {
     @Expose
     private String waitingAreaDescription;
     @SerializedName("waitingAreaId")
-    private String waitingAreaId;
+    private String waitingAreaId = "";
     @SerializedName("deviceDescription")
     private String deviceDescription;
     @SerializedName("typeCode")
@@ -19,11 +21,11 @@ public class Facility implements Serializable {
 
     @SerializedName("id")
     @Expose
-    private String code;
+    private String code = "";
 
     @SerializedName("description")
     @Expose
-    private String description;
+    private String description = "";
 
     @SerializedName("deviceId")
     @Expose
@@ -107,4 +109,9 @@ public class Facility implements Serializable {
         this.deviceDescription = deviceDescription;
     }
 
+    @NonNull
+    @Override
+    public String toString() {
+        return getDescription();
+    }
 }

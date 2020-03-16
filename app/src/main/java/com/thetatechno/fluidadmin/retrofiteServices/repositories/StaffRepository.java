@@ -89,9 +89,9 @@ public class StaffRepository {
             @Override
             public void onResponse(@NonNull Call<State> call, @NonNull Response<State> response) {
                 if (response.isSuccessful()) {
-                    Log.i(TAG, "updateStaff: response " + response.body().getStatus());
+                    Log.i(TAG, "updateAgent: response " + response.body().getStatus());
                     if (response.body().getStatus() != null) {
-                        Log.i(TAG, "updateStaff: response " + response.body().getStatus());
+                        Log.i(TAG, "updateAgent: response " + response.body().getStatus());
                         onDataChangedCallBackListener.onResponse(response.body().getStatus());
                     }
 

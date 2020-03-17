@@ -20,7 +20,7 @@
         <item
             android:id="@+id/codeList"
             android:icon="@drawable/ic_menu_manage"
-            android:title="@string/code" />
+            android:title="@string/id" />
         <item
             android:id="@+id/facility"
             android:checkableBehavior="single"

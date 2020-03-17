@@ -33,7 +33,7 @@ public class FacilityListViewModel extends ViewModel {
                     if (!facilitiesListResponse.getFacilities().equals(null)) {
                         List<String> waitListIds = new ArrayList<>();
                         for (Facility facility : facilitiesListResponse.getFacilities()) {
-                            waitListIds.add(facility.getCode());
+                            waitListIds.add(facility.getId());
                         }
                         facilitiesWaitListStringMutableLiveData.setValue(waitListIds);
                     } else {

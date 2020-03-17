@@ -33,23 +33,23 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AgentListFragment extends Fragment {
+public class AgentList extends Fragment {
     NavController navController;
     List<Staff> agentList;
-    final String TAG = AgentListFragment.class.getSimpleName();
+    final String TAG = AgentList.class.getSimpleName();
     RecyclerView agentListRecyclerView;
     FloatingActionButton addNewAgentFab;
     AgentListAdapter agentListAdapter;
     StaffListViewModel staffListViewModel;
     SwipeRefreshLayout agentSwipeLayout;
 
-    public AgentListFragment() {
+    public AgentList() {
         // Required empty public constructor
     }
 
-    public static AgentListFragment newInstance() {
+    public static AgentList newInstance() {
         Bundle args = new Bundle();
-        AgentListFragment fragment = new AgentListFragment();
+        AgentList fragment = new AgentList();
         fragment.setArguments(args);
         return fragment;
     }
@@ -107,7 +107,7 @@ public class AgentListFragment extends Fragment {
         addNewAgentFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                navController.navigate(R.id.action_agentListFragment_to_addOrUpdateAgentFragment);
+                navController.navigate(R.id.action_agentList_to_addOrUpdateAgentFragment);
 
             }
         });

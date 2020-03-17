@@ -84,10 +84,7 @@ public class FacilityListFragment extends Fragment {
         addNewFacilityFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                            bundle.putSerializable(ARG_CLINIC_TYPE, (Serializable) EnumCode.ClinicTypeCode.CLINIC);
-
-                            navController.navigate(R.id.action_facilityListFragment_to_facilityAddFragment, bundle);
+                            navController.navigate(R.id.action_facilityListFragment_to_facilityAddFragment);
             }
         });
         facilitySwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

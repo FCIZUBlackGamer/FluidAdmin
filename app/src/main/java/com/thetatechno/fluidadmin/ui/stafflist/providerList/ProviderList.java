@@ -34,7 +34,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ProviderListFragment extends Fragment {
+public class ProviderList extends Fragment {
    private List<Staff> providerList;
     private RecyclerView providerListRecyclerView;
     private FloatingActionButton addNewProviderFab;
@@ -42,8 +42,8 @@ public class ProviderListFragment extends Fragment {
     private StaffListViewModel providerListViewModel;
     private NavController navController;
     private SwipeRefreshLayout providerSwipeLayout;
-    static final private String TAG = ProviderListFragment.class.getSimpleName();
-    public ProviderListFragment() {
+    static final private String TAG = ProviderList.class.getSimpleName();
+    public ProviderList() {
         // Required empty public constructor
     }
 

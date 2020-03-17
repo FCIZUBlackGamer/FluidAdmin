@@ -21,7 +21,7 @@ public class Facility implements Serializable {
 
     @SerializedName("id")
     @Expose
-    private String code = "";
+    private String id = "";
 
     @SerializedName("description")
     @Expose
@@ -53,12 +53,12 @@ public class Facility implements Serializable {
         this.langId = langId;
     }
 
-    public String getCode() {
-        return code;
+    public String getId() {
+        return id;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getDescription() {

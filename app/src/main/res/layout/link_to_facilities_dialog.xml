@@ -43,7 +43,7 @@
             android:background="@color/colorAccent"
             android:layout_marginStart="16dp"
             android:padding="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="8dp"
             android:id="@+id/cancel_btn"/>
 
         <Button
@@ -53,7 +53,7 @@
             android:layout_weight="1"
             android:paddingTop="16dp"
             android:paddingBottom="16dp"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="8dp"
             android:layout_marginEnd="16dp"
             android:hint="@string/link_btn_txt"
             android:textColorHint="@color/colorWhite"

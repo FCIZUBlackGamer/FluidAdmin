@@ -50,6 +50,8 @@
             android:textColor="@color/colorPrimary"
             android:textSize="16sp"
             android:textStyle="bold"
+            android:paddingStart="5dp"
+            android:paddingEnd="4dp"
             app:layout_constraintStart_toEndOf="@+id/person_img"
             app:layout_constraintTop_toTopOf="@+id/person_img" />
 
@@ -58,7 +60,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="staffId"
+            android:text="@string/agent_id"
+            android:paddingEnd="4dp"
+            android:paddingStart="5dp"
             app:layout_constraintStart_toStartOf="@+id/fullNameTxt"
             app:layout_constraintTop_toBottomOf="@+id/fullNameTxt" />
 
@@ -66,12 +70,13 @@
             android:id="@+id/email_txt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
             android:layout_marginTop="8dp"
             android:drawableStart="@drawable/ic_email_black_24dp"
             android:drawablePadding="5dp"
+            android:paddingStart="3.5dp"
+            android:paddingEnd="4dp"
             android:text="@string/email_example_txt"
-            app:layout_constraintStart_toEndOf="@+id/person_img"
+            app:layout_constraintStart_toStartOf="@+id/fullNameTxt"
             app:layout_constraintTop_toBottomOf="@+id/idTxt" />
 
         <TextView

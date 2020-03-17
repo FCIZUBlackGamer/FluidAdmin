@@ -38,7 +38,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="code">التخصصات</string>
+    <string name="id">التخصصات</string>
     <string name="clinic">العيادات</string>
     <string name="waiting_area">قاعات النتظار</string>
     <string name="menu_english_language">الانجليزية</string>

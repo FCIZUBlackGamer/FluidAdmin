@@ -49,6 +49,8 @@
             android:text="@string/name_txt"
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/name_txt_size"
+            android:paddingStart="4.5dp"
+            android:paddingEnd="4dp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/providerTxtViewOption"
             app:layout_constraintStart_toEndOf="@+id/person_img"
@@ -61,6 +63,8 @@
             android:layout_marginTop="4dp"
             android:drawableStart="@drawable/ic_email_black_24dp"
             android:drawablePadding="5dp"
+            android:paddingStart="3.5dp"
+            android:paddingEnd="4dp"
             android:text="@string/email_example_txt"
             app:layout_constraintStart_toStartOf="@+id/fullNameTxt"
             app:layout_constraintTop_toBottomOf="@id/providerId" />
@@ -83,6 +87,8 @@
             android:layout_marginTop="4dp"
             android:layout_marginBottom="8dp"
             android:text="@string/speciality_txt"
+            android:paddingStart="4.5dp"
+            android:paddingEnd="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/mobile_num_txt"
             app:layout_constraintTop_toBottomOf="@+id/mobile_num_txt" />
@@ -93,6 +99,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:text="@string/id_txt"
+            android:paddingStart="4.5dp"
+            android:paddingEnd="4dp"
             app:layout_constraintStart_toStartOf="@+id/fullNameTxt"
             app:layout_constraintTop_toBottomOf="@+id/fullNameTxt" />
 

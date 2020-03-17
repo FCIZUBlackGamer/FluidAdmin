@@ -62,7 +62,7 @@ public class FacilitiesListDialog extends Dialog {
                 appointmentList = alertDialogAdapter.getFacilityList();
                 for (Facility facility : appointmentList) {
                     if(facility.isSelected())
-                    selectedFacility.add(facility.getCode());
+                    selectedFacility.add(facility.getId());
                 }
                 facilityCodes.setSelectedFacilities(selectedFacility);
                 onConfirmLinkToFacilityListener.onConfirmLinkToFacility(staffId,facilityCodes);

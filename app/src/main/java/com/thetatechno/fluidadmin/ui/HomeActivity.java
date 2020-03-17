@@ -4,14 +4,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
-import android.text.InputType;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -57,19 +51,21 @@ import io.sentry.event.UserBuilder;
 
 
 public class HomeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, OnDeleteListener, OnConfirmDeleteListener, OnLinkToFacilityClickedListener, OnConfirmLinkToFacilityListener {
-    MainViewModel mainViewModel;
-    FacilityListViewModel facilityListViewModel;
-    NavigationView navigationView;
-    ConfirmDeleteDialog confirmDeleteDialog;
-    NavController navController;
-    Bundle bundle;
+    private MainViewModel mainViewModel;
+    private FacilityListViewModel facilityListViewModel;
+    private NavigationView navigationView;
+    private ConfirmDeleteDialog confirmDeleteDialog;
+    private  NavController navController;
+    private  Bundle bundle;
     private AppBarConfiguration mAppBarConfiguration;
-    DrawerLayout drawer;
-    FacilitiesListDialog facilitiesListDialog;
-    AlertDialog alertDialog;
+    private DrawerLayout drawer;
+    private FacilitiesListDialog facilitiesListDialog;
+    private AlertDialog alertDialog;
     private static final String TAG = HomeActivity.class.getSimpleName();
-    List<Facility> facilityList = new ArrayList<>();
-
+    private  List<Facility> facilityList = new ArrayList<>();
+    private   String deleteStaffMessage = "";
+    private   String deleteCodeMessage = "";
+    private  String deleteFacilityMessage ="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,6 +96,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         checkOnTheCurrentLanguage();
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.getMenu().getItem(0).setChecked(false);
+
 
     }
 
@@ -174,47 +171,27 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     public void onOkButtonClicked(final Object itemDeleted) {
 
         if (itemDeleted instanceof Facility) {
-            Log.i("Object", "facility type " + ((Facility) itemDeleted).getCode());
-            mainViewModel.deleteFacility((Facility) itemDeleted).observe(this, new Observer<String>() {
-                @Override
-                public void onChanged(String s) {
-                    Toast.makeText(HomeActivity.this, s, Toast.LENGTH_SHORT).show();
-                        navigateToClinicTypeList();
-
-
-
-                }
-            });
+            Log.i("Object", "facility type " + ((Facility) itemDeleted).getId());
+            if(deleteFacilityMessage.isEmpty())
+           deleteFacility((Facility)itemDeleted);
+            else
+                mainViewModel.deleteFacility((Facility)itemDeleted);
 
 
         }
         if (itemDeleted instanceof Staff) {
             Log.i("Object", "staff type " + ((Staff) itemDeleted).getStaffId());
-            mainViewModel.deleteAgentOrProvider((Staff) itemDeleted).observe(this, new Observer<String>() {
-                @Override
-                public void onChanged(String s) {
-                    if (((Staff) itemDeleted).getTypeCode().equals(EnumCode.StaffTypeCode.DSPTCHR.toString())) {
-                        navigateToAgentList();
-                        Toast.makeText(HomeActivity.this, s, Toast.LENGTH_SHORT).show();
-
-                    } else if (((Staff) itemDeleted).getTypeCode().equals(EnumCode.StaffTypeCode.PRVDR.toString())) {
-                        navigateToProviderList();
-                        Toast.makeText(HomeActivity.this, s, Toast.LENGTH_SHORT).show();
-
-                    }
-                }
-            });
+            if (deleteStaffMessage.isEmpty())
+            deleteAgentOrProvider((Staff) itemDeleted);
+            else
+                mainViewModel.deleteAgentOrProvider((Staff)itemDeleted);
         }
         if (itemDeleted instanceof Code) {
             Log.i("Object", "code type " + ((Code) itemDeleted).getCode());
-            mainViewModel.deleteCode((Code) itemDeleted).observe(this, new Observer<String>() {
-                @Override
-                public void onChanged(String s) {
-                    Toast.makeText(HomeActivity.this, s, Toast.LENGTH_SHORT).show();
-
-                    navigateToCodeList();
-                }
-            });
+            if(deleteCodeMessage.isEmpty())
+           deleteCode((Code)itemDeleted);
+            else
+                mainViewModel.deleteCode((Code)itemDeleted);
         }
         if (alertDialog.isShowing()) {
             alertDialog.dismiss();
@@ -353,20 +330,44 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             }
         });
     }
-//
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//         getMenuInflater().inflate(R.menu.home, menu);
-//         searchMenuItem = menu.getItem(0);
-//
-//        return true;
-//    }
-//    void enableSearchView(){
-//        searchMenuItem.setVisible(true);
-//    }
-//    void disableSearchView(){
-//        searchMenuItem.setVisible(false);
-//    }
 
+private void deleteAgentOrProvider( final Staff itemDeleted){
+    mainViewModel.deleteAgentOrProvider( itemDeleted).observe(this, new Observer<String>() {
+        @Override
+        public void onChanged(String s) {
+            deleteStaffMessage = s;
+            if ( itemDeleted.getTypeCode().equals(EnumCode.StaffTypeCode.DSPTCHR.toString())) {
+                navigateToAgentList();
+                Toast.makeText(HomeActivity.this, deleteStaffMessage, Toast.LENGTH_SHORT).show();
+            } else if ( itemDeleted.getTypeCode().equals(EnumCode.StaffTypeCode.PRVDR.toString())) {
+                navigateToProviderList();
+                Toast.makeText(HomeActivity.this, deleteStaffMessage, Toast.LENGTH_SHORT).show();
+
+            }
+        }
+    });
+}
+private void deleteFacility(Facility facility){
+    mainViewModel.deleteFacility(facility).observe(this, new Observer<String>() {
+        @Override
+        public void onChanged(String s) {
+            deleteFacilityMessage = s;
+            Toast.makeText(HomeActivity.this, deleteCodeMessage, Toast.LENGTH_SHORT).show();
+            navigateToClinicTypeList();
+        }
+    });
+
+
+}
+private void deleteCode(Code code){
+    mainViewModel.deleteCode(code).observe(this, new Observer<String>() {
+        @Override
+        public void onChanged(String s) {
+            deleteCodeMessage = s;
+            Toast.makeText(HomeActivity.this, deleteCodeMessage, Toast.LENGTH_SHORT).show();
+
+            navigateToCodeList();
+        }
+    });
+}
 }

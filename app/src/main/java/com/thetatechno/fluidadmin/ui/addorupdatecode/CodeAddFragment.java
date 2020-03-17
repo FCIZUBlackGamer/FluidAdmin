@@ -33,6 +33,7 @@ import androidx.navigation.Navigation;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.listeners.OnFragmentInteractionListener;
 import com.thetatechno.fluidadmin.model.Code;
+import com.thetatechno.fluidadmin.ui.HomeActivity;
 import com.thetatechno.fluidadmin.utils.App;
 import com.thetatechno.fluidadmin.utils.EnumCode;
 import com.thetatechno.fluidadmin.utils.PreferenceController;
@@ -126,6 +127,7 @@ public class CodeAddFragment extends DialogFragment {
                             Log.i("CodeFragment", "updateCode message " + s);
                             if (s.contains("successfully"))
                                 onButtonPressed();
+
                         }
                     });
                 }
@@ -170,10 +172,7 @@ public class CodeAddFragment extends DialogFragment {
         }
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed() {
-        navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
-//        navController.navigate(R.id.action_codeAddFragment_to_codeListFragment);
         navController.navigate(R.id.codeList, null,
                 new NavOptions.Builder()
                         .setPopUpTo(R.id.codeList,

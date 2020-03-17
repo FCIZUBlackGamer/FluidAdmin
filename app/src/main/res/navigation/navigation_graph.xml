@@ -20,11 +20,13 @@
         android:id="@+id/addOrUpdateAgentFragment"
         android:name="com.thetatechno.fluidadmin.ui.addorupdatestuff.AddOrUpdateAgentFragment"
         tools:layout="@layout/fragment_add_or_update_agent">
+
+
         <action
-            android:id="@+id/action_addOrUpdateAgentFragment_to_agentListFragment"
-            app:destination="@+id/agentList"
+            android:id="@+id/action_addOrUpdateAgentFragment_to_agentList"
+            app:destination="@id/agentList"
             app:popUpTo="@id/agentList"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="true"/>
     </fragment>
     <dialog
         android:id="@+id/codeAddFragment"
@@ -48,16 +50,17 @@
 
     <fragment
         android:id="@+id/agentList"
-        android:name="com.thetatechno.fluidadmin.ui.stafflist.agentList.AgentListFragment"
+        android:name="com.thetatechno.fluidadmin.ui.stafflist.agentList.AgentList"
         android:label="@string/Agents"
         tools:layout="@layout/fragment_agent_list" >
+
         <action
-            android:id="@+id/action_agentListFragment_to_addOrUpdateAgentFragment"
-            app:destination="@+id/addOrUpdateAgentFragment" />
+            android:id="@+id/action_agentList_to_addOrUpdateAgentFragment"
+            app:destination="@id/addOrUpdateAgentFragment" />
     </fragment>
     <fragment
         android:id="@+id/providerList"
-        android:name="com.thetatechno.fluidadmin.ui.stafflist.providerList.ProviderListFragment"
+        android:name="com.thetatechno.fluidadmin.ui.stafflist.providerList.ProviderList"
         android:label="@string/provider"
         tools:layout="@layout/fragment_provider_list" >
         <action
@@ -69,6 +72,7 @@
         android:name="com.thetatechno.fluidadmin.ui.facilityList.FacilityListFragment"
         android:label="@string/facilty"
         tools:layout="@layout/fragment_facility_list" >
+
         <action
             android:id="@+id/action_facilityListFragment_to_facilityAddFragment"
             app:destination="@id/facilityAddFragment" />
@@ -81,7 +85,7 @@
     <fragment
         android:id="@+id/codeList"
         android:name="com.thetatechno.fluidadmin.ui.codeList.CodeListFragment"
-        android:label="@string/code"
+        android:label="@string/id"
         tools:layout="@layout/fragment_code_list" >
         <action
             android:id="@+id/action_codeListFragment_to_codeAddFragment"

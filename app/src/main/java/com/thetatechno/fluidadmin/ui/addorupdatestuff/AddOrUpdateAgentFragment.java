@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
 import android.util.Log;
@@ -23,6 +24,7 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.navigation.NavigationView;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.model.Staff;
 import com.thetatechno.fluidadmin.ui.HomeActivity;
@@ -36,7 +38,7 @@ import java.util.List;
 import static com.thetatechno.fluidadmin.utils.Constants.ARG_STAFF;
 
 
-public class AddOrUpdateAgentFragment extends Fragment {
+public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickListener {
     EditText idTxt;
     EditText firstNameTxt;
     EditText lastNameTxt;
@@ -114,69 +116,36 @@ public class AddOrUpdateAgentFragment extends Fragment {
         addProfileImg = view.findViewById(R.id.addProfileImg);
         addOrUpdateViewModel = ViewModelProviders.of(this).get(AddOrUpdateViewModel.class);
         updateData();
-        addBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                staff.setStaffId(idTxt.getText().toString());
-                staff.setFirstName(firstNameTxt.getText().toString());
-                staff.setFamilyName(lastNameTxt.getText().toString());
-                staff.setStaffId(idTxt.getText().toString());
-                int id = genderRadioGroup.getCheckedRadioButtonId();
-                if (id == R.id.maleRadioButton)
-                    staff.setGender(EnumCode.Gender.M.toString());
-                else if (id == R.id.femaleRadioButton)
-                    staff.setGender(EnumCode.Gender.F.toString());
-                staff.setEmail(emailTxt.getText().toString());
-                staff.setMobileNumber(phoneTxt.getText().toString());
-                staff.setTypeCode(EnumCode.StaffTypeCode.DSPTCHR.toString());
-                staff.setLangId(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
-
-                if (!isStaffHasData) {
-                    addOrUpdateViewModel.addNewAgent(staff).observe(getActivity(), new Observer<String>() {
-                        @Override
-                        public void onChanged(String s) {
-                            Log.i("AddOrUpdate", "add agent message" + s);
-                            if (s.contains("success")) {
-                                onAddOrUpdateSuccessfully();
-                                Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
-
-                            }
-                            else if(s.contains("Failed")) {
-                                Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
-                            }
-
-
-                        }
-                    });
-                } else {
-                    addOrUpdateViewModel.updateAgent(staff).observe(getActivity(), new Observer<String>() {
-                        @Override
-                        public void onChanged(String s) {
-                            Log.i("AddOrUpdate", "Update agent message" + s);
-                            Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
-                            if (s.contains("success"))
-                                onAddOrUpdateSuccessfully();
-                        }
-                    });
-                }
-            }
-        });
+        addBtn.setOnClickListener(this);
 
         if (this.getArguments() != null) {
             idTxt.setEnabled(false);
         }
-        cancelBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onCancelOrBackButtonPressed();
-            }
-        });
+        cancelBtn.setOnClickListener(this);
 
     }
 
-    private void onAddOrUpdateSuccessfully() {
-        navController.navigate(R.id.action_addOrUpdateAgentFragment_to_agentListFragment);
+    private void getDataFromUi() {
+        staff.setStaffId(idTxt.getText().toString());
+        staff.setFirstName(firstNameTxt.getText().toString());
+        staff.setFamilyName(lastNameTxt.getText().toString());
+        staff.setStaffId(idTxt.getText().toString());
+        int id = genderRadioGroup.getCheckedRadioButtonId();
+        if (id == R.id.maleRadioButton)
+            staff.setGender(EnumCode.Gender.M.toString());
+        else if (id == R.id.femaleRadioButton)
+            staff.setGender(EnumCode.Gender.F.toString());
+        staff.setEmail(emailTxt.getText().toString());
+        staff.setMobileNumber(phoneTxt.getText().toString());
+        staff.setTypeCode(EnumCode.StaffTypeCode.DSPTCHR.toString());
+        staff.setLangId(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
+    }
 
+    private void onAddOrUpdateSuccessfully() {
+        navController.navigate(R.id.agentList, null,
+                new NavOptions.Builder()
+                        .setPopUpTo(R.id.agentList,
+                                true).build());
     }
 
     @Override
@@ -233,4 +202,43 @@ public class AddOrUpdateAgentFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onClick(final View v) {
+        switch (v.getId()) {
+            case R.id.addOrUpdateBtn:
+                getDataFromUi();
+                if (!isStaffHasData) {
+                    addOrUpdateViewModel.addNewAgent(staff).observe(getActivity(), new Observer<String>() {
+                        @Override
+                        public void onChanged(String s) {
+                            Log.i("AddOrUpdate", "add agent message" + s);
+                            if (s.contains("success")) {
+                                onAddOrUpdateSuccessfully();
+                                Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
+
+                            } else if (s.contains("Failed")) {
+                                Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
+                            }
+
+
+                        }
+                    });
+                } else {
+                    addOrUpdateViewModel.updateAgent(staff).observe(getActivity(), new Observer<String>() {
+                        @Override
+                        public void onChanged(String s) {
+                            Log.i("AddOrUpdate", "Update agent message" + s);
+                            Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
+                            if (s.contains("success"))
+                                navController = Navigation.findNavController(v);
+                                onAddOrUpdateSuccessfully();
+                        }
+                    });
+                }
+                break;
+            case R.id.cancel_btn:
+                onCancelOrBackButtonPressed();
+                break;
+        }
+    }
 }

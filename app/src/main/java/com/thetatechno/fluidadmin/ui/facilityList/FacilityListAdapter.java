@@ -68,7 +68,7 @@ public class FacilityListAdapter extends RecyclerView.Adapter<FacilityListAdapte
       if(position < facilityList.size())
         try {
             holder.itemView.setVisibility(View.VISIBLE);
-            holder.facilityIdTxt.setText(facilityList.get(position).getCode());
+            holder.facilityIdTxt.setText(facilityList.get(position).getId());
             if(facilityList.get(position).getType().equals(EnumCode.ClinicTypeCode.CLINIC.toString()) && facilityList.get(position).getWaitingAreaId()!=null) {
                 holder.waitingAreaOrDeviceDescriptionTxt.setText(facilityList.get(position).getWaitingAreaDescription());
                 holder.waitingAreaOrDeviceDescriptionTxt.setVisibility(View.VISIBLE);

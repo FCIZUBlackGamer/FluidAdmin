@@ -43,7 +43,7 @@
     <string name="menu_english_language">English</string>
     <string name="menu_arabic_language">Arabic</string>
     <string name="id_txt">ID</string>
-    <string name="code_txt">Code:</string>
+    <string name="code_txt">Code</string>
     <string name="user_code_txt">User Code:</string>
     <string name="edit_txt">Update</string>
     <string name="link_to_facility_txt">Facilities</string>
@@ -61,7 +61,7 @@
     <string name="speciality_txt">Speciality</string>
     <string name="choose_facilities">Select Facilities</string>
 
-    <string name="link_btn_txt">Link</string>
+    <string name="link_btn_txt">LINK</string>
     <string name="room_txt">Room</string>
     <string name="female_txt">Female</string>
     <string name="description_hint">description</string>
@@ -71,4 +71,13 @@
     <string name="add_facility">Add Facility</string>
     <string name="update_facility">Update Facility</string>
     <string name="agent_id">id</string>
+
+    <string name="error_message_for_number">Enter a valid number</string>
+    <string name="error_message_for_email">Enter a Valid Email</string>
+    <string name="first_name_error_message">First Name is required Field</string>
+    <string name="family_name_error_message">Family Name is required Field</string>
+    <string name="choose_speciality_error_message">Please choose speciality</string>
+    <string name="id_error_message">Id is required Field</string>
+    <string name="choose_facility_type_error">Select Facility Type</string>
+    <string name="description_error_message">Description is required field</string>
 </resources>

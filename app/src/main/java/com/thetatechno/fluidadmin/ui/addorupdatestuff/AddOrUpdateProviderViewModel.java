@@ -1,8 +1,10 @@
 package com.thetatechno.fluidadmin.ui.addorupdatestuff;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.listeners.OnDataChangedCallBackListener;
 import com.thetatechno.fluidadmin.model.Code;
 import com.thetatechno.fluidadmin.model.CodeList;
@@ -13,6 +15,7 @@ import com.thetatechno.fluidadmin.utils.App;
 import com.thetatechno.fluidadmin.utils.Constants;
 import com.thetatechno.fluidadmin.utils.EnumCode;
 import com.thetatechno.fluidadmin.utils.PreferenceController;
+import com.thetatechno.fluidadmin.utils.Validation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +26,13 @@ public class AddOrUpdateProviderViewModel extends ViewModel {
     private CodeRepository codeRepository = new CodeRepository();
     private MutableLiveData<String> addedSuccessLiveData = new MutableLiveData<>();
     private MutableLiveData<List<String>> specialtiesMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<String> emailMessageLiveData = new MutableLiveData<>();
+    private MutableLiveData<String> firstNameValidateMessageLiveData = new MutableLiveData<>();
+    private MutableLiveData<String> lastNameValidateMessageLiveData = new MutableLiveData<>();
+    private MutableLiveData<String> phoneNumberValidateMessageLiveData = new MutableLiveData<>();
+    private MutableLiveData<String> idValidateMessageLiveData = new MutableLiveData<>();
     private String message = "";
+    private String firstNameValidateMessage, familyNameValidateMessage, emailValidateMessage, specialityValidateMessage, idValidateMessage, phoneNumberMessage;
     private List<Code> specialityCodeList = new ArrayList<>();
 
     public MutableLiveData<String> addNewProvider(Staff staff, String specialityDescription) {
@@ -98,6 +107,119 @@ public class AddOrUpdateProviderViewModel extends ViewModel {
             }
         });
         return specialtiesMutableLiveData;
+    }
+
+    private boolean isValidEmail(String email) {
+        if (!Validation.isValidEmail(email))
+            return false;
+        else
+            return true;
+    }
+
+    private boolean isValidPassword(String password) {
+        if (!Validation.isValidPassword(password))
+            return false;
+        else
+            return true;
+
+    }
+
+    private boolean isValidFirstName(String firstName) {
+        if (!Validation.isValidForName(firstName.trim()))
+            return false;
+        else
+            return true;
+
+    }
+
+    private boolean isValidFamilyName(String familyName) {
+        if (!Validation.isValidForName(familyName))
+            return false;
+        else
+            return true;
+
+    }
+
+    private boolean isValidPhoneNumber(String phoneNumber) {
+        if (!Validation.isValidPhoneNumber(phoneNumber))
+            return false;
+        else
+            return true;
+
+    }
+
+    private boolean isValidForID(String id) {
+        if (!Validation.isValidForId(id))
+            return false;
+        else
+            return true;
+
+    }
+
+
+    public String validateEmail(String email) {
+        if (isValidEmail(email)) {
+            emailValidateMessage = "";
+        } else {
+            emailValidateMessage = App.getContext().getResources().getString(R.string.error_message_for_email);
+        }
+
+        return emailValidateMessage;
+    }
+
+    public String validatePhoneNumber(String phoneNumber) {
+        if (isValidPhoneNumber(phoneNumber)) {
+            phoneNumberMessage = "";
+
+        } else {
+            phoneNumberMessage = App.getContext().getResources().getString(R.string.error_message_for_number);
+        }
+        return phoneNumberMessage;
+    }
+
+    public String validateFirstName(String firstName) {
+        if (isValidFirstName(firstName)) {
+            firstNameValidateMessage = "";
+
+        } else {
+            firstNameValidateMessage = App.getContext().getResources().getString(R.string.first_name_error_message);
+        }
+        return firstNameValidateMessage;
+    }
+
+    public String validateFamilyName(String familyName) {
+        if (isValidFamilyName(familyName)) {
+            familyNameValidateMessage = "";
+        } else {
+            familyNameValidateMessage = App.getContext().getResources().getString(R.string.family_name_error_message);
+        }
+        return familyNameValidateMessage;
+    }
+
+    public String validateSpeciality(String speciality) {
+        if (isValidSpeciality(speciality)) {
+            specialityValidateMessage = "";
+        } else {
+            specialityValidateMessage = App.getContext().getResources().getString(R.string.choose_speciality_error_message);
+        }
+        return specialityValidateMessage;
+    }
+
+    private boolean isValidSpeciality(String speciality) {
+        if (Validation.isValidForSpeciality(speciality))
+            return true;
+        else
+            return false;
+    }
+
+    public String validateId(String customerId) {
+        if (isValidForID(customerId)) {
+            idValidateMessage = "";
+
+        } else {
+            idValidateMessage = App.getContext().getResources().getString(R.string.id_error_message);
+        }
+        return idValidateMessage;
     }
 
 }

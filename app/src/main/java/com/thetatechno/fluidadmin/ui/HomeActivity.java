@@ -2,10 +2,12 @@ package com.thetatechno.fluidadmin.ui;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -41,6 +43,8 @@ import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -243,19 +247,28 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             public void onChanged(Facilities facilities) {
                 if (facilities.getFacilities() != null) {
                     facilityList = facilities.getFacilities();
+                    checkAllFacilitiesThatLinkedToStaffAndShowDialog(staff);
+
+
                 }
             }
         });
     }
-
-    public void buildLinkToFacilityDialog(final Staff staff) {
+Staff staff;
+    public void buildLinkToFacilityDialog(Staff staff) {
+            this.staff = staff;
         if (facilityList.size() == 0) {
             getFacilities();
+
         }
         else {
             facilityListViewModel.getFacilityDataForClinicType("");
         }
 
+
+    }
+
+    private void checkAllFacilitiesThatLinkedToStaffAndShowDialog(@NotNull Staff staff) {
         List<Facility> facilityArrayList = facilityList;
         if (staff.getFacilityList() != null)
             for (int i = 0; i < staff.getFacilityList().size(); i++) {
@@ -267,6 +280,11 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             }
         facilitiesListDialog = new FacilitiesListDialog(HomeActivity.this, facilityArrayList, staff.getStaffId());
         facilitiesListDialog.show();
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+       facilitiesListDialog.getWindow().setLayout(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        }
+
 
     }
 

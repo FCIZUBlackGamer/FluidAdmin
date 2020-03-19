@@ -48,11 +48,15 @@ public class CodeAddFragment extends DialogFragment {
 
     private Code code;
     EditText codeIdEditTxt, codeDescriptionEditTxt;
+    String idTxt, descriptionTxt;
     CodeViewModel codeViewModel;
     NavController navController;
     List<Code> codeList;
     AlertDialog.Builder builder;
-    private OnFragmentInteractionListener mListener;
+    AlertDialog dialog;
+    private String idValidateMessage, descriptionValidateMessage;
+    Context context;
+
 
     public CodeAddFragment() {
         // Required empty public constructor
@@ -83,79 +87,105 @@ public class CodeAddFragment extends DialogFragment {
         requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
-    Context context;
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-         builder = new AlertDialog.Builder(getActivity(),R.style.AlertDialogTheme);
+        builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.code_add_view, null);
         navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
-       codeViewModel = ViewModelProviders.of(this).get(CodeViewModel.class);
+        codeViewModel = ViewModelProviders.of(this).get(CodeViewModel.class);
         context = getContext();
         builder.setTitle(getResources().getString(R.string.add_specialilty_title));
         builder.setView(view);
-        if(code == null) {
+        if (code == null) {
             builder.setPositiveButton(R.string.add_txt, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    code = new Code();
-                    getDataFromUi();
-                    codeViewModel.addNewCode(code).observe(getActivity(), new Observer<String>() {
-                        @Override
-                        public void onChanged(String s) {
-                            Log.i("CodeFragment", "addNewCode message " + s);
-                            Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
-                            if (s.contains("success"))
-                                onButtonPressed();
-                        }
-                    });
+
                 }
 
             });
-        }
-        else  {
+        } else {
             builder.setPositiveButton(R.string.update_txt, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(final DialogInterface dialog, int which) {
-                    getDataFromUi();
-                    codeViewModel.updateCode(code).observe(getActivity(), new Observer<String>() {
-                        @Override
-                        public void onChanged(String s) {
-                            if(s!=null)
-                                Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
-                            Log.i("CodeFragment", "updateCode message " + s);
-                            if (s.contains("successfully"))
-                                onButtonPressed();
 
-                        }
-                    });
                 }
             });
         }
         builder.setNegativeButton(R.string.cancel_btn_txt, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                  onBackOrCancelBtnPressed();
+                onBackOrCancelBtnPressed();
             }
         });
-      codeIdEditTxt = view.findViewById(R.id.code_id_et);
-      codeDescriptionEditTxt = view.findViewById(R.id.desc_et);
+        codeIdEditTxt = view.findViewById(R.id.code_id_et);
+        codeDescriptionEditTxt = view.findViewById(R.id.desc_et);
         updateViewWithData();
-        return builder.create();
+        dialog = builder.create();
+        return dialog;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Button button = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        if(button.getText().toString().equals(getResources().getString(R.string.add_txt))){
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    code = new Code();
+                    getDataFromUi();
+                    if (isDataValid()) {
+                        fillCodeObjectWithUiData();
+                        codeViewModel.addNewCode(code).observe(getActivity(), new Observer<String>() {
+                            @Override
+                            public void onChanged(String s) {
+                                Log.i("CodeFragment", "addNewCode message " + s);
+                                Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
+                                if (s.contains("success"))
+                                    onButtonPressed();
+                            }
+                        });
+                    }
+                }
+            });
+        }
+        else if (button.getText().toString().equals(getResources().getString(R.string.update_txt))){
+            getDataFromUi();
+            if (isDataValid()) {
+                fillCodeObjectWithUiData();
+                codeViewModel.updateCode(code).observe(getActivity(), new Observer<String>() {
+                    @Override
+                    public void onChanged(String s) {
+                        if (s != null)
+                            Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
+                        Log.i("CodeFragment", "updateCode message " + s);
+                        if (s.contains("successfully"))
+                            onButtonPressed();
+
+                    }
+                });
+            }
+        }
+    }
 
     private void getDataFromUi() {
-        code.setCode(codeIdEditTxt.getText().toString());
-        code.setDescription(codeDescriptionEditTxt.getText().toString());
-        code.setSystemRequired("Y");
-        code.setUserCode(codeIdEditTxt.getText().toString());
-        code.setCodeType(EnumCode.Code.STFFGRP.toString());
-        code.setLangId(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
+        idTxt = codeIdEditTxt.getText().toString();
+        descriptionTxt = codeDescriptionEditTxt.getText().toString();
 
     }
 
+    private void fillCodeObjectWithUiData() {
+        code.setCode(idTxt);
+        code.setDescription(descriptionTxt);
+        code.setSystemRequired("Y");
+        code.setUserCode(idTxt);
+        code.setCodeType(EnumCode.Code.STFFGRP.toString());
+        code.setLangId(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
+    }
 
     private void updateViewWithData() {
         if (code != null) {
@@ -186,5 +216,42 @@ public class CodeAddFragment extends DialogFragment {
     }
 
 
+    private boolean isDataValid() {
+        if (isIdValid(idTxt) && isDescriptionValid(descriptionTxt))
+            return true;
+        else
+            return false;
+    }
+
+    private boolean isIdValid(String id) {
+        idValidateMessage = codeViewModel.validateId(id);
+        if (idValidateMessage.isEmpty())
+            return true;
+        else {
+            codeIdEditTxt.setError(idValidateMessage);
+            requestFocus(codeIdEditTxt);
+            return false;
+        }
+
+    }
+
+    private boolean isDescriptionValid(String description) {
+        descriptionValidateMessage = codeViewModel.validateDescription(description);
+        if (descriptionValidateMessage.isEmpty())
+
+            return true;
+        else {
+            codeDescriptionEditTxt.setError(descriptionValidateMessage);
+            requestFocus(codeDescriptionEditTxt);
+            return false;
+        }
+
+    }
+
+    public void requestFocus(View view) {
+        if (view.requestFocus()) {
+            getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        }
+    }
 
 }

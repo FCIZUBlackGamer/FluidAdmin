@@ -1,6 +1,5 @@
 package com.thetatechno.fluidadmin.ui.addorupdatestuff;
 
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
@@ -17,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -24,7 +24,6 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.google.android.material.navigation.NavigationView;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.model.Staff;
 import com.thetatechno.fluidadmin.ui.HomeActivity;
@@ -39,11 +38,11 @@ import static com.thetatechno.fluidadmin.utils.Constants.ARG_STAFF;
 
 
 public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickListener {
-    EditText idTxt;
-    EditText firstNameTxt;
-    EditText lastNameTxt;
-    EditText emailTxt;
-    EditText phoneTxt;
+    EditText agentIdEditTxt;
+    EditText agentFirstNameEditTxt;
+    EditText agentLastNameEditTxt;
+    EditText agentEmailEditTxt;
+    EditText agentNumberEditTxt;
     RadioGroup genderRadioGroup;
     Button addBtn;
     Button cancelBtn;
@@ -53,21 +52,14 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
     Staff staff;
     List<Staff> agentList;
     NavController navController;
-    Bundle bundle;
-
+    String addNewAgentMessage;
+    String updateAgentMessage;
+    String idTxt, firstNameTxt, lastNameTxt, emailTxt, phoneTxt;
+    String idValidateMessage, firstNameValidateMessage, lastNameValidateMessage, emailValidateMessage, phoneValidateMessage;
     private static String TAG = "AddStaff";
 
     public AddOrUpdateAgentFragment() {
 
-    }
-
-    public static AddOrUpdateAgentFragment newInstance(Staff staff) {
-        AddOrUpdateAgentFragment fragment = new AddOrUpdateAgentFragment();
-        Log.i(TAG, "new Instance method");
-        Bundle args = new Bundle();
-        args.putSerializable(ARG_STAFF, staff);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
@@ -97,46 +89,44 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
         return inflater.inflate(R.layout.fragment_add_or_update_agent, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        idTxt = view.findViewById(R.id.agentIdEdtTxt);
-        firstNameTxt = view.findViewById(R.id.first_name_edt_txt);
-        lastNameTxt = view.findViewById(R.id.family_name_edt_txt);
-        emailTxt = view.findViewById(R.id.emailEditTxt);
-        phoneTxt = view.findViewById(R.id.mobile_num_Edt_txt);
-        genderRadioGroup = view.findViewById(R.id.genderRadioGroup);
-        addBtn = view.findViewById(R.id.addOrUpdateBtn);
-        cancelBtn = view.findViewById(R.id.cancel_btn);
-        addProfileImg = view.findViewById(R.id.addProfileImg);
+        initiateView(view);
         addOrUpdateViewModel = ViewModelProviders.of(this).get(AddOrUpdateViewModel.class);
         updateData();
         addBtn.setOnClickListener(this);
-
-        if (this.getArguments() != null) {
-            idTxt.setEnabled(false);
-        }
         cancelBtn.setOnClickListener(this);
 
     }
 
+    private void initiateView(View view) {
+        agentIdEditTxt = view.findViewById(R.id.agentIdEdtTxt);
+        agentFirstNameEditTxt = view.findViewById(R.id.first_name_edt_txt);
+        agentLastNameEditTxt = view.findViewById(R.id.family_name_edt_txt);
+        agentEmailEditTxt = view.findViewById(R.id.emailEditTxt);
+        agentNumberEditTxt = view.findViewById(R.id.mobile_num_Edt_txt);
+        genderRadioGroup = view.findViewById(R.id.genderRadioGroup);
+        addBtn = view.findViewById(R.id.addOrUpdateBtn);
+        cancelBtn = view.findViewById(R.id.cancel_btn);
+        addProfileImg = view.findViewById(R.id.addProfileImg);
+    }
+
     private void getDataFromUi() {
-        staff.setStaffId(idTxt.getText().toString());
-        staff.setFirstName(firstNameTxt.getText().toString());
-        staff.setFamilyName(lastNameTxt.getText().toString());
-        staff.setStaffId(idTxt.getText().toString());
+        staff.setStaffId(agentIdEditTxt.getText().toString());
+        staff.setFirstName(agentFirstNameEditTxt.getText().toString());
+        staff.setFamilyName(agentLastNameEditTxt.getText().toString());
+        staff.setStaffId(agentIdEditTxt.getText().toString());
         int id = genderRadioGroup.getCheckedRadioButtonId();
         if (id == R.id.maleRadioButton)
             staff.setGender(EnumCode.Gender.M.toString());
         else if (id == R.id.femaleRadioButton)
             staff.setGender(EnumCode.Gender.F.toString());
-        staff.setEmail(emailTxt.getText().toString());
-        staff.setMobileNumber(phoneTxt.getText().toString());
+        staff.setEmail(agentEmailEditTxt.getText().toString());
+        staff.setMobileNumber(agentNumberEditTxt.getText().toString());
         staff.setTypeCode(EnumCode.StaffTypeCode.DSPTCHR.toString());
         staff.setLangId(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
     }
@@ -148,25 +138,17 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
                                 true).build());
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (staff.getStaffId() != null) {
-            ((HomeActivity) getActivity()).getSupportActionBar().setTitle("update agent");
-        } else {
 
-            ((HomeActivity) getActivity()).getSupportActionBar().setTitle("add agent");
-        }
-    }
 
     private void updateData() {
         if (staff != null) {
 
-            idTxt.setText(staff.getStaffId());
-            firstNameTxt.setText(staff.getFirstName());
-            lastNameTxt.setText(staff.getFamilyName());
-            emailTxt.setText(staff.getEmail());
-            phoneTxt.setText(staff.getMobileNumber());
+            agentIdEditTxt.setText(staff.getStaffId());
+            agentIdEditTxt.setEnabled(false);
+            agentFirstNameEditTxt.setText(staff.getFirstName());
+            agentLastNameEditTxt.setText(staff.getFamilyName());
+            agentEmailEditTxt.setText(staff.getEmail());
+            agentNumberEditTxt.setText(staff.getMobileNumber());
             if (staff.getGender() == EnumCode.Gender.F.toString())
                 genderRadioGroup.check(R.id.femaleRadioButton);
             else if (staff.getGender().equals(EnumCode.Gender.M.toString()))
@@ -189,16 +171,20 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
                 }
 
             }
+            ((HomeActivity) getActivity()).getSupportActionBar().setTitle("update agent");
 
         } else {
 
             staff = new Staff();
             isStaffHasData = false;
-            firstNameTxt.setText("");
-            lastNameTxt.setText("");
-            emailTxt.setText("");
+            agentFirstNameEditTxt.setText("");
+            agentIdEditTxt.setEnabled(true);
+            agentLastNameEditTxt.setText("");
+            agentEmailEditTxt.setText("");
             addBtn.setHint(getResources().getString(R.string.add_txt));
             addProfileImg.setImageResource(R.drawable.man);
+            ((HomeActivity) getActivity()).getSupportActionBar().setTitle("add agent");
+
         }
     }
 
@@ -206,39 +192,137 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
     public void onClick(final View v) {
         switch (v.getId()) {
             case R.id.addOrUpdateBtn:
+                idTxt = agentIdEditTxt.getText().toString();
+                firstNameTxt = agentFirstNameEditTxt.getText().toString();
+                lastNameTxt = agentLastNameEditTxt.getText().toString();
+                emailTxt = agentEmailEditTxt.getText().toString();
+                phoneTxt = agentNumberEditTxt.getText().toString();
+                if(!isDataValid(idTxt,firstNameTxt,lastNameTxt,emailTxt,phoneTxt)) {
                 getDataFromUi();
                 if (!isStaffHasData) {
-                    addOrUpdateViewModel.addNewAgent(staff).observe(getActivity(), new Observer<String>() {
-                        @Override
-                        public void onChanged(String s) {
-                            Log.i("AddOrUpdate", "add agent message" + s);
-                            if (s.contains("success")) {
-                                onAddOrUpdateSuccessfully();
-                                Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
-
-                            } else if (s.contains("Failed")) {
-                                Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
-                            }
-
-
-                        }
-                    });
+                    if (addNewAgentMessage == null)
+                        addNewAgent();
+                    else {
+                        addOrUpdateViewModel.addNewAgent(staff);
+                    }
                 } else {
-                    addOrUpdateViewModel.updateAgent(staff).observe(getActivity(), new Observer<String>() {
-                        @Override
-                        public void onChanged(String s) {
-                            Log.i("AddOrUpdate", "Update agent message" + s);
-                            Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
-                            if (s.contains("success"))
-                                navController = Navigation.findNavController(v);
-                                onAddOrUpdateSuccessfully();
-                        }
-                    });
+                    if (updateAgentMessage == null)
+                        updateAgent();
+                    else
+                        addOrUpdateViewModel.updateAgent(staff);
+                    }
                 }
                 break;
             case R.id.cancel_btn:
                 onCancelOrBackButtonPressed();
                 break;
         }
+    }
+
+    private boolean isDataValid(String idTxt, String firstNameTxt, String lastNameTxt, String email, String phone) {
+        if (isIdValid(idTxt) && isFirstNameValid(firstNameTxt) && isLastNameValid(lastNameTxt) && isEmailValid(email) && isPhoneValid(phone))
+            return true;
+        else
+            return false;
+    }
+
+    private boolean isIdValid(String id) {
+        idValidateMessage = addOrUpdateViewModel.validateId(id);
+        if (idValidateMessage.isEmpty())
+            return true;
+        else {
+            agentIdEditTxt.setError(idValidateMessage);
+            requestFocus(agentIdEditTxt);
+
+            return false;
+        }
+
+    }
+
+    private boolean isFirstNameValid(String firstName) {
+        firstNameValidateMessage = addOrUpdateViewModel.validateFirstName(firstName);
+        if (firstNameValidateMessage.isEmpty())
+
+            return true;
+        else {
+            agentFirstNameEditTxt.setError(firstNameValidateMessage);
+            requestFocus(agentFirstNameEditTxt);
+
+            return false;
+        }
+
+    }
+
+    private boolean isLastNameValid(String lastName) {
+        lastNameValidateMessage = addOrUpdateViewModel.validateFamilyName(lastName);
+        if (lastNameValidateMessage.isEmpty())
+            return true;
+        else {
+            agentLastNameEditTxt.setError(lastNameValidateMessage);
+            requestFocus(agentLastNameEditTxt);
+            return false;
+        }
+
+    }
+
+    private boolean isEmailValid(String email) {
+        emailValidateMessage = addOrUpdateViewModel.validateEmail(email);
+        if (emailValidateMessage.isEmpty())
+            return true;
+        else {
+            agentEmailEditTxt.setError(emailValidateMessage);
+            requestFocus(agentEmailEditTxt);
+            return false;
+        }
+    }
+
+    private boolean isPhoneValid(String phone) {
+        phoneValidateMessage = addOrUpdateViewModel.validatePhoneNumber(phone);
+        if (phoneValidateMessage.isEmpty())
+            return true;
+        else {
+            agentNumberEditTxt.setError(phoneValidateMessage);
+            requestFocus(agentNumberEditTxt);
+            return false;
+        }
+    }
+
+    public void requestFocus(View view) {
+        if (view.requestFocus()) {
+            getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        }
+    }
+
+    private void addNewAgent() {
+
+        addOrUpdateViewModel.addNewAgent(staff).observe(getActivity(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                addNewAgentMessage = s;
+                Log.i("AddOrUpdate", "add agent message" + addNewAgentMessage);
+                if (addNewAgentMessage.contains("success")) {
+                    onAddOrUpdateSuccessfully();
+                    Toast.makeText(getContext(), addNewAgentMessage, Toast.LENGTH_SHORT).show();
+
+                } else if (addNewAgentMessage.contains("Failed")) {
+                    Toast.makeText(getActivity(), addNewAgentMessage, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+    }
+
+    private void updateAgent() {
+        addOrUpdateViewModel.updateAgent(staff).observe(getActivity(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                updateAgentMessage = s;
+                Log.i("AddOrUpdate", "Update agent message" + s);
+                Toast.makeText(getContext(), updateAgentMessage, Toast.LENGTH_SHORT).show();
+                if (updateAgentMessage.contains("success")) {
+                    onAddOrUpdateSuccessfully();
+                }
+            }
+        });
     }
 }

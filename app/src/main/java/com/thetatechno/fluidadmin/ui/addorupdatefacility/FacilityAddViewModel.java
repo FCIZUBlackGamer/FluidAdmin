@@ -6,6 +6,7 @@ import android.widget.LinearLayout;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.listeners.OnDataChangedCallBackListener;
 import com.thetatechno.fluidadmin.model.Device;
 import com.thetatechno.fluidadmin.model.DeviceListData;
@@ -17,6 +18,7 @@ import com.thetatechno.fluidadmin.utils.App;
 import com.thetatechno.fluidadmin.utils.Constants;
 import com.thetatechno.fluidadmin.utils.EnumCode;
 import com.thetatechno.fluidadmin.utils.PreferenceController;
+import com.thetatechno.fluidadmin.utils.Validation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +33,7 @@ public class FacilityAddViewModel extends ViewModel {
     private String message = "";
     List<Device> deviceList = new ArrayList<>();
     List<Facility> facilities = new ArrayList<>();
+    private String  typeMessage , idValidateMessage, descriptionMessage;
 
     public MutableLiveData<String> addNewFacility(Facility facility, String deviceDescription, String waitingAreaDescription) {
         if (!getDeviceID(deviceDescription).isEmpty())
@@ -62,7 +65,6 @@ public class FacilityAddViewModel extends ViewModel {
             @Override
             public void onResponse(String b) {
                 if (Integer.parseInt(b) > 0) {
-
                     message = "updated facility successfully";
                 } else if (b.equals(Constants.ADD_DELETE_OR_UPDATE_FAIL_STATE)) {
                     message = "Failed to update facility.";
@@ -152,4 +154,51 @@ public class FacilityAddViewModel extends ViewModel {
 
     }
 
+    public String validateFacilityType(String facilityType) {
+        if (isValidFacilityType(facilityType)) {
+            typeMessage = "";
+        } else {
+            typeMessage = App.getContext().getResources().getString(R.string.choose_facility_type_error);
+        }
+        return typeMessage;
+    }
+
+    private boolean isValidFacilityType(String speciality) {
+        if (Validation.isValidForWord(speciality))
+            return true;
+        else
+            return false;
+    }
+
+    public String validateId(String id) {
+        if (isValidForID(id)) {
+            idValidateMessage = "";
+
+        } else {
+            idValidateMessage = App.getContext().getResources().getString(R.string.id_error_message);
+        }
+        return idValidateMessage;
+    }
+    public String validateDescription(String description) {
+        if (isValidForDescription(description)) {
+            descriptionMessage = "";
+
+        } else {
+            descriptionMessage = App.getContext().getResources().getString(R.string.description_error_message);
+        }
+        return descriptionMessage;
+    }
+    private boolean isValidForID(String id) {
+        if (!Validation.isValidForId(id))
+            return false;
+        else
+            return true;
+
+    }
+    private boolean isValidForDescription(String description){
+        if(!Validation.isValidForWord(description))
+            return false;
+        else
+            return true;
+    }
 }

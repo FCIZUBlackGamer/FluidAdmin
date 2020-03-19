@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,7 +25,7 @@ public class FacilitiesListDialog extends Dialog {
 
     List<Facility> appointmentList;
     Context context;
-    Button linkBtn, cancelBtn;
+    TextView linkBtn, cancelBtn;
     String staffId ;
     SearchView searchForSpecificFacilityView;
     OnConfirmLinkToFacilityListener onConfirmLinkToFacilityListener;

@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -246,7 +247,7 @@ public class AgentListAdapter extends RecyclerView.Adapter<AgentListAdapter.Agen
         TextView agentTextViewOptions, fullNameTxt, agentEmailTxt, agentPhoneTxt;
         TextView idTxt;
         ViewPager2 pager;
-        Button previousBtn, nextBtn;
+        ImageButton previousBtn, nextBtn;
 
         public AgentListViewHolder(@NonNull View itemView) {
             super(itemView);

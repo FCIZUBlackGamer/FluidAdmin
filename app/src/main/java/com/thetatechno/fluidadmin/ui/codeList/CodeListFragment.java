@@ -76,7 +76,8 @@ public class CodeListFragment extends Fragment {
         codeListViewModel = ViewModelProviders.of(this).get(CodeListViewModel.class);
         codeSwipeRefreshLayout = view.findViewById(R.id.codeSwipeLayout);
         codeListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-       EspressoTestingIdlingResource.increment();
+//       EspressoTestingIdlingResource.increment();
+        codeSwipeRefreshLayout.setRefreshing(true);
         codeListViewModel.getDataForCode(EnumCode.Code.STFFGRP.toString(), PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase()).observe(this, new Observer<CodeList>() {
             @Override
             public void onChanged(CodeList codeListData) {
@@ -85,9 +86,9 @@ public class CodeListFragment extends Fragment {
                     if (codeListData.getCodeList() != null) {
                         EspressoTestingIdlingResource.increment();
                         codeList = codeListData.getCodeList();
+
                         codeListAdapter = new CodeListAdapter(navController, getContext(), codeList, getActivity().getSupportFragmentManager());
                         codeListRecyclerView.setAdapter(codeListAdapter);
-                        codeSwipeRefreshLayout.setRefreshing(false);
                         EspressoTestingIdlingResource.decrement();
                     } else {
                         Log.e(TAG, "codeList Is Null");
@@ -95,7 +96,8 @@ public class CodeListFragment extends Fragment {
                 } else {
                     Log.e(TAG, "no data returns");
                 }
-                EspressoTestingIdlingResource.decrement();
+                codeSwipeRefreshLayout.setRefreshing(false);
+//                EspressoTestingIdlingResource.decrement();
             }
         });
 

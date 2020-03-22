@@ -27,6 +27,8 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.model.Staff;
 import com.thetatechno.fluidadmin.ui.EspressoTestingIdlingResource;
@@ -47,23 +49,25 @@ import static com.thetatechno.fluidadmin.utils.Constants.ARG_STAFF;
  */
 public class AddOrUpdateProviderFragment extends Fragment {
     private static String TAG = "AddStaff";
-    EditText idEdtTxt;
-    EditText providerfirstNameEditTxt;
-    EditText providerLastNameEditTxt;
-    EditText providerEmailEditTxt;
-    EditText providerMobileEditTxt;
-    RadioGroup genderRadioGroup;
-    Button addBtn;
-    Button cancelBtn;
-    AddOrUpdateProviderViewModel addOrUpdateViewModel;
-    boolean isStaffHasData;
-    Staff staff;
-    Spinner specialitySpinner;
-    NavController navController;
-    String idTxt, firstNameTxt, lastNameTxt, specialityTxt;
-    String idValidateMessage, firstNameValidateMessage, lastNameValidateMessage, specialityValidateMessage, emailValidateMessage, phoneValidateMessage;
-    ArrayList<String> specialitiesList;
-    ImageView addProfileImage;
+    private TextInputEditText idEdtTxt;
+    private   TextInputEditText providerfirstNameEditTxt;
+    private   EditText providerLastNameEditTxt;
+    private   EditText providerEmailEditTxt;
+    private  EditText providerMobileEditTxt;
+    private TextInputLayout providerIdTxtInputLayout,providerLastNameTxtInputLayout,
+            providerFirstNameTextInputLayout,providerEmailTextInputLayout, providerMobileInputLayout;
+    private   RadioGroup genderRadioGroup;
+    private Button addBtn;
+    private  Button cancelBtn;
+    private  AddOrUpdateProviderViewModel addOrUpdateViewModel;
+    private  boolean isStaffHasData;
+    private  Staff staff;
+    private  Spinner specialitySpinner;
+    private  NavController navController;
+    private  String idTxt, firstNameTxt, lastNameTxt, specialityTxt;
+    private  String idValidateMessage, firstNameValidateMessage, lastNameValidateMessage, specialityValidateMessage, emailValidateMessage, phoneValidateMessage;
+    private ArrayList<String> specialitiesList;
+    private ImageView addProfileImage;
 
     public AddOrUpdateProviderFragment() {
         // Required empty public constructor
@@ -120,20 +124,10 @@ public class AddOrUpdateProviderFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        idEdtTxt = view.findViewById(R.id.providerIdEdtTxt);
-        providerfirstNameEditTxt = view.findViewById(R.id.providerFirstNameEdtTxt);
-        providerLastNameEditTxt = view.findViewById(R.id.providerLastNameEdtTxt);
-        providerEmailEditTxt = view.findViewById(R.id.providerEmailEditTxt);
-        providerMobileEditTxt = view.findViewById(R.id.providerMobileEdtTxt);
-        genderRadioGroup = view.findViewById(R.id.providerGenderRadioGroup);
-        addBtn = view.findViewById(R.id.addOrUpdateProviderBtn);
-        cancelBtn = view.findViewById(R.id.cancelAddOrUpdateProviderBtn);
-        addProfileImage = view.findViewById(R.id.addProfileImg);
-        specialitySpinner = view.findViewById(R.id.specialitySpinner);
+        initiateViews(view);
         addOrUpdateViewModel = ViewModelProviders.of(this).get(AddOrUpdateProviderViewModel.class);
         getSpecialitiesList();
         updateData();
-
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -193,6 +187,25 @@ public class AddOrUpdateProviderFragment extends Fragment {
 
     }
 
+    private void initiateViews(View view) {
+        idEdtTxt = view.findViewById(R.id.providerIdEdtTxt);
+        providerIdTxtInputLayout = view.findViewById(R.id.providerIdTxtInputLayout);
+        providerfirstNameEditTxt = view.findViewById(R.id.providerFirstNameEdtTxt);
+        providerFirstNameTextInputLayout = view.findViewById(R.id.providerFirstNameTxtInputLayout);
+        providerLastNameTxtInputLayout = view.findViewById(R.id.agentFamilyNameInputLayout);
+        providerLastNameEditTxt = view.findViewById(R.id.providerLastNameEdtTxt);
+        providerEmailEditTxt = view.findViewById(R.id.providerEmailEditTxt);
+        providerEmailTextInputLayout = view.findViewById(R.id.providerEmailTxtInputLayout);
+        providerMobileEditTxt = view.findViewById(R.id.providerMobileEdtTxt);
+        providerMobileInputLayout = view.findViewById(R.id.providerMobileTxtInputLayout);
+        genderRadioGroup = view.findViewById(R.id.providerGenderRadioGroup);
+        addBtn = view.findViewById(R.id.addOrUpdateProviderBtn);
+        cancelBtn = view.findViewById(R.id.cancelAddOrUpdateProviderBtn);
+        addProfileImage = view.findViewById(R.id.addProfileImg);
+        specialitySpinner = view.findViewById(R.id.specialitySpinner);
+
+    }
+
     private boolean isDataValid(String idTxt, String firstNameTxt, String lastNameTxt, String specialityTxt, String email, String phone) {
         if (isIdValid(idTxt) && isFirstNameValid(firstNameTxt) && isLastNameValid(lastNameTxt) && isSpecialitySelected(specialityTxt) && isEmailValid(email) && isPhoneValid(phone))
             return true;
@@ -205,9 +218,7 @@ public class AddOrUpdateProviderFragment extends Fragment {
         if (idValidateMessage.isEmpty())
             return true;
         else {
-            idEdtTxt.setError(idValidateMessage);
-            requestFocus(idEdtTxt);
-
+            providerIdTxtInputLayout.setError(idValidateMessage);
             return false;
         }
 
@@ -219,9 +230,7 @@ public class AddOrUpdateProviderFragment extends Fragment {
 
             return true;
         else {
-            providerfirstNameEditTxt.setError(firstNameValidateMessage);
-            requestFocus(providerfirstNameEditTxt);
-
+            providerFirstNameTextInputLayout.setError(firstNameValidateMessage);
             return false;
         }
 
@@ -232,8 +241,7 @@ public class AddOrUpdateProviderFragment extends Fragment {
         if (lastNameValidateMessage.isEmpty())
             return true;
         else {
-            providerLastNameEditTxt.setError(lastNameValidateMessage);
-            requestFocus(providerLastNameEditTxt);
+            providerLastNameTxtInputLayout.setError(lastNameValidateMessage);
             return false;
         }
 
@@ -244,8 +252,7 @@ public class AddOrUpdateProviderFragment extends Fragment {
         if (emailValidateMessage.isEmpty())
             return true;
         else {
-            providerEmailEditTxt.setError(emailValidateMessage);
-            requestFocus(providerEmailEditTxt);
+            providerEmailTextInputLayout.setError(emailValidateMessage);
             return false;
         }
     }
@@ -255,8 +262,8 @@ public class AddOrUpdateProviderFragment extends Fragment {
         if (phoneValidateMessage.isEmpty())
             return true;
         else {
-            providerMobileEditTxt.setError(phoneValidateMessage);
-            requestFocus(providerMobileEditTxt);
+            providerMobileInputLayout.setError(phoneValidateMessage);
+
             return false;
         }
     }

@@ -1,6 +1,5 @@
 package com.thetatechno.fluidadmin.activities;
 
-import android.util.Log;
 import android.view.Gravity;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -78,8 +77,8 @@ public class FacilityTest {
     public void testAddNewFacility() {
        openDrawerGoToFacilityListListAndGetNumberCount();
         onView(withId(R.id.addNewFacilityFab)).perform(click());
-        onView(withId(R.id.facility_id_et)).perform(typeText("RM899"), closeSoftKeyboard());
-        onView(withId(R.id.desc_et)).perform(typeText("Room 899"), closeSoftKeyboard());
+        onView(withId(R.id.facilityIdEdtTxt)).perform(typeText("RM899"), closeSoftKeyboard());
+        onView(withId(R.id.facilityDesriptionEdtTxt)).perform(typeText("Room 899"), closeSoftKeyboard());
         onView(withId(R.id.clinicTyperadioButton)).perform(click());
         onView(withId(R.id.addOrUpdateFacilityBtn)).perform(click());
         onView(ViewMatchers.withId(R.id.facilityListClinicRecyclerView)).check(new RecyclerViewItemCountAssertion(greaterThan(countBefore)));
@@ -105,7 +104,7 @@ public class FacilityTest {
         onView(withId(R.id.facilityListClinicRecyclerView)).perform(
                 RecyclerViewActions.actionOnItemAtPosition(2, MyViewAction.clickChildViewWithId(R.id.facilityTextViewOptions)));
         onView(anyOf(withText(R.string.update_txt), withId(R.id.editFacility))).perform(click());
-        onView(withId(R.id.desc_et)).perform(clearText(),typeText("Room 11"), closeSoftKeyboard());
+        onView(withId(R.id.facilityDesriptionEdtTxt)).perform(clearText(),typeText("Room 11"), closeSoftKeyboard());
         onView(withId(R.id.clinicTyperadioButton)).perform(click());
         onView(withId(R.id.waitingAreaSpinner)).perform(click());
         onData(anything()).atPosition(1).perform(click());

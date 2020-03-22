@@ -55,6 +55,8 @@ public class CodeAddFragment extends DialogFragment {
     List<Code> codeList;
     AlertDialog.Builder builder;
     AlertDialog dialog;
+    String codeAddMessage;
+    String codeUpdateMessage;
     private String idValidateMessage, descriptionValidateMessage;
     Context context;
 
@@ -142,20 +144,13 @@ public class CodeAddFragment extends DialogFragment {
                     getDataFromUi();
                     if (isDataValid()) {
                         fillCodeObjectWithUiData();
-                        codeViewModel.addNewCode(code).observe(getActivity(), new Observer<String>() {
-                            @Override
-                            public void onChanged(String s) {
-                                EspressoTestingIdlingResource.increment();
-                                Log.i("CodeFragment", "addNewCode message " + s);
-                                Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
-                                if (s.contains("success")) {
-                                    EspressoTestingIdlingResource.increment();
-                                    onButtonPressed();
-                                    EspressoTestingIdlingResource.decrement();
-                                }
-                                EspressoTestingIdlingResource.decrement();
-                            }
-                        });
+                        if(codeAddMessage ==null) {
+                            addCode();
+                        }
+                        else
+                        {
+                            codeViewModel.addNewCode(code);
+                        }
                     }
                     EspressoTestingIdlingResource.decrement();
                 }
@@ -165,27 +160,15 @@ public class CodeAddFragment extends DialogFragment {
         }
         else if (button.getText().toString().equals(getResources().getString(R.string.update_txt))){
             EspressoTestingIdlingResource.increment();
-
             getDataFromUi();
             if (isDataValid()) {
                 fillCodeObjectWithUiData();
-                codeViewModel.updateCode(code).observe(getActivity(), new Observer<String>() {
-                    @Override
-                    public void onChanged(String s) {
-                        EspressoTestingIdlingResource.increment();
-                        if (s != null)
-                            Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
-                        Log.i("CodeFragment", "updateCode message " + s);
-                        if (s.contains("successfully")) {
-                            EspressoTestingIdlingResource.increment();
-                            onButtonPressed();
-                            EspressoTestingIdlingResource.decrement();
-                        }
-                        EspressoTestingIdlingResource.decrement();
+                if(codeUpdateMessage == null){
+                    updateCode();
+                }
+                else
+                    codeViewModel.updateCode(code);
 
-
-                    }
-                });
             }
             EspressoTestingIdlingResource.decrement();
 
@@ -193,6 +176,26 @@ public class CodeAddFragment extends DialogFragment {
 
     }
 
+    private void addCode() {
+        codeViewModel.addNewCode(code).observe(getActivity(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                EspressoTestingIdlingResource.increment();
+                codeAddMessage = s;
+                Log.i("CodeFragment", "addNewCode message " + s);
+                Toast.makeText(context, codeAddMessage, Toast.LENGTH_SHORT).show();
+                if (codeAddMessage.contains("success")) {
+                    EspressoTestingIdlingResource.increment();
+                    onButtonPressed();
+                    EspressoTestingIdlingResource.decrement();
+                }
+                EspressoTestingIdlingResource.decrement();
+            }
+        });
+    }
+private void updateCode(){
+
+}
     private void getDataFromUi() {
         idTxt = codeIdEditTxt.getText().toString();
         descriptionTxt = codeDescriptionEditTxt.getText().toString();

@@ -64,11 +64,11 @@ public class FacilityListFragment extends Fragment {
         facilitySwipeLayout = view.findViewById(R.id.facilitySwipeLayout);
         facilityListClinicRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         facilityListViewModel = ViewModelProviders.of(this).get(FacilityListViewModel.class);
-        EspressoTestingIdlingResource.increment();
+//        EspressoTestingIdlingResource.increment();
         facilityListViewModel.getAllFacilities("").observe(this, new Observer<Facilities>() {
             @Override
             public void onChanged(Facilities facilities) {
-                EspressoTestingIdlingResource.decrement();
+//                EspressoTestingIdlingResource.decrement();
                 EspressoTestingIdlingResource.increment();
                 if (facilities != null) {
                     if (facilities.getFacilities() != null) {

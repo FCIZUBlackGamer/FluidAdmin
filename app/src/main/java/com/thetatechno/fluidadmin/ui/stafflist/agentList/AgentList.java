@@ -75,7 +75,7 @@ public class AgentList extends Fragment {
         agentSwipeLayout = view.findViewById(R.id.agentSwipeLayout);
         agentListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         if (agentList == null) {
-            EspressoTestingIdlingResource.increment();
+//            EspressoTestingIdlingResource.increment();
             staffListViewModel.getStaffData(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase(), EnumCode.StaffTypeCode.DSPTCHR.toString()).observe(this, new Observer<StaffData>() {
                 @Override
                 public void onChanged(StaffData staffData) {
@@ -93,7 +93,7 @@ public class AgentList extends Fragment {
                         Log.e(TAG, "no data returns");
                     }
 
-                    EspressoTestingIdlingResource.decrement();
+//                    EspressoTestingIdlingResource.decrement();
                 }
             });
         } else {

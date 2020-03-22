@@ -104,7 +104,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/mobile_num_txt" />
 
-        <Button
+        <ImageButton
             android:id="@+id/previous_btn"
             android:layout_width="30dp"
             android:layout_height="30dp"
@@ -114,7 +114,7 @@
             app:layout_constraintStart_toStartOf="@id/photo_viewpager"
             app:layout_constraintTop_toTopOf="@id/photo_viewpager" />
 
-        <Button
+        <ImageButton
             android:id="@+id/next_btn"
             android:layout_width="30dp"
             android:layout_height="30dp"

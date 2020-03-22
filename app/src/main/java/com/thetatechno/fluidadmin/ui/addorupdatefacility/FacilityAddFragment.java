@@ -8,10 +8,8 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -22,6 +20,8 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.model.Facility;
 import com.thetatechno.fluidadmin.ui.EspressoTestingIdlingResource;
@@ -37,7 +37,8 @@ import static com.thetatechno.fluidadmin.utils.Constants.ARG_FACILITY;
 
 public class FacilityAddFragment extends Fragment {
     private Facility facility;
-    private EditText facilityIdEditTxt, facilityDescriptionEditTxt;
+    private TextInputEditText facilityIdEditTxt, facilityDescriptionEditTxt;
+    private TextInputLayout facilityIdEditTxtInputLayout , facilityDescriptionEditTxtInputLayout;
     private Button cancelBtn, addOrUpdateBtn;
     private boolean isDataFound;
     private FacilityAddViewModel facilityAddViewModel;
@@ -160,8 +161,10 @@ public class FacilityAddFragment extends Fragment {
 
     private void initViews(View view) {
 
-        facilityIdEditTxt = view.findViewById(R.id.facility_id_et);
-        facilityDescriptionEditTxt = view.findViewById(R.id.desc_et);
+        facilityIdEditTxt = view.findViewById(R.id.facilityIdEdtTxt);
+        facilityDescriptionEditTxt = view.findViewById(R.id.facilityDesriptionEdtTxt);
+        facilityIdEditTxtInputLayout = view.findViewById(R.id.facilityIdTxtInputLayout);
+        facilityDescriptionEditTxtInputLayout = view.findViewById(R.id.facility_description_txt_input_layout);
         facilityTypeRadioGroup = view.findViewById(R.id.typeRadioGroup);
         waitingAreaSpinner = view.findViewById(R.id.waitingAreaSpinner);
         deviceIdSpinner = view.findViewById(R.id.deviceIdSpinner);
@@ -169,6 +172,7 @@ public class FacilityAddFragment extends Fragment {
         addOrUpdateBtn = view.findViewById(R.id.addOrUpdateFacilityBtn);
         deviceArrowDownImg = view.findViewById(R.id.device_arrow_down_img);
         waitingAreaArrowDownImg = view.findViewById(R.id.waiting_area_arrow_down_img);
+
     }
 
     private void getWaitingAreaDescriptionList() {
@@ -325,7 +329,7 @@ public class FacilityAddFragment extends Fragment {
         if (idValidateMessage.isEmpty())
             return true;
         else {
-            facilityIdEditTxt.setError(idValidateMessage);
+            facilityIdEditTxtInputLayout.setError(idValidateMessage);
             requestFocus(facilityIdEditTxt);
             return false;
         }
@@ -338,7 +342,7 @@ public class FacilityAddFragment extends Fragment {
 
             return true;
         else {
-            facilityDescriptionEditTxt.setError(descriptionValidateMessage);
+            facilityDescriptionEditTxtInputLayout.setError(descriptionValidateMessage);
             requestFocus(facilityDescriptionEditTxt);
             return false;
         }

@@ -15,147 +15,174 @@
             android:layout_width="90dp"
             android:layout_height="90dp"
             android:layout_marginTop="36dp"
+            android:contentDescription="@string/Agents"
             android:src="@drawable/ic_person_add_black_24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.467"
-            android:contentDescription="@string/Agents"
 
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
-            android:id="@+id/agentIdEdtTxt"
+        <com.google.android.material.textfield.TextInputLayout
+
+            android:id="@+id/agentIdTxtInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="9"
-            android:hint="@string/id_txt"
-            android:inputType="text"
+            android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.502"
+
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/staffId" />
+            app:layout_constraintTop_toBottomOf="@+id/addProfileImg">
 
-        <TextView
-            android:id="@+id/staffId"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/agentIdEdtTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="12"
+                android:hint="@string/id_txt"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <!--        <TextView-->
+        <!--            android:id="@+id/staffId"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:autoSizeTextType="uniform"-->
+        <!--            android:drawableEnd="@drawable/ic_ambulance"-->
+        <!--            android:drawablePadding="5dp"-->
+        <!--            android:text="@string/id_txt"-->
+        <!--            android:textColor="@color/colorPrimary"-->
+        <!--            android:textStyle="bold"-->
+        <!--            app:layout_constraintStart_toStartOf="@+id/agentIdTxtInputLayout"-->
+        <!--            app:layout_constraintTop_toBottomOf="@+id/addProfileImg" />-->
+
+        <!--        <TextView-->
+        <!--            android:id="@+id/first_name_txt"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginTop="16dp"-->
+        <!--            android:autoSizeTextType="uniform"-->
+        <!--            android:drawableEnd="@drawable/ic_ambulance"-->
+        <!--            android:drawablePadding="5dp"-->
+        <!--            android:text="@string/first_name"-->
+        <!--            android:textColor="@color/colorPrimary"-->
+        <!--            app:layout_constraintStart_toStartOf="@+id/staffId"-->
+        <!--            app:layout_constraintTop_toBottomOf="@id/agentIdTxtInputLayout" />-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/agentFirstNameInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:autoSizeTextType="uniform"
-            android:drawableEnd="@drawable/ic_ambulance"
-            android:drawablePadding="5dp"
-            android:text="@string/id_txt"
-            android:textColor="@color/colorPrimary"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@+id/agentIdEdtTxt"
-            app:layout_constraintTop_toBottomOf="@+id/addProfileImg" />
+            android:layout_marginTop="4dp"
+            app:layout_constraintStart_toStartOf="@+id/agentIdTxtInputLayout"
+            app:layout_constraintTop_toBottomOf="@+id/agentIdTxtInputLayout">
 
-        <TextView
-            android:id="@+id/first_name_txt"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/agentFirstNameEdtTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="12"
+                android:hint="@string/first_name"
+                android:inputType="textPersonName" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+<!--        <TextView-->
+<!--            android:id="@+id/family_name_txt"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="16dp"-->
+<!--            android:autoSizeTextType="uniform"-->
+<!--            android:drawableEnd="@drawable/ic_ambulance"-->
+<!--            android:drawablePadding="5dp"-->
+<!--            android:text="@string/family_name_txt"-->
+<!--            android:textColor="@color/colorPrimary"-->
+<!--            app:layout_constraintStart_toStartOf="@id/first_name_txt"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/agentFirstNameEdtTxt" />-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/agentFamilyNameInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:autoSizeTextType="uniform"
-            android:drawableEnd="@drawable/ic_ambulance"
-            android:drawablePadding="5dp"
-            android:text="@string/first_name"
-            android:textColor="@color/colorPrimary"
-            app:layout_constraintStart_toStartOf="@+id/staffId"
-            app:layout_constraintTop_toBottomOf="@id/agentIdEdtTxt" />
-
-        <EditText
-            android:id="@+id/agentFirstNameEdtTxt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="9"
-            android:hint="@string/first_name"
-            android:inputType="textPersonName"
-            android:paddingStart="5dp"
-            android:paddingEnd="5dp"
-
-            app:layout_constraintEnd_toEndOf="@+id/agentIdEdtTxt"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="@+id/agentIdEdtTxt"
-            app:layout_constraintTop_toBottomOf="@+id/first_name_txt" />
-
-
-        <TextView
-            android:id="@+id/family_name_txt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:autoSizeTextType="uniform"
-            android:drawableEnd="@drawable/ic_ambulance"
-            android:drawablePadding="5dp"
-            android:text="@string/family_name_txt"
-            android:textColor="@color/colorPrimary"
-            app:layout_constraintStart_toStartOf="@id/first_name_txt"
-            app:layout_constraintTop_toBottomOf="@id/agentFirstNameEdtTxt" />
-
-        <EditText
-            android:id="@+id/agentFamilyNameEdtTxt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="9"
+            android:layout_marginTop="4dp"
             android:hint="@string/family_name_txt"
-            android:inputType="textPersonName"
-            android:paddingStart="5dp"
-            android:paddingEnd="5dp"
-            app:layout_constraintEnd_toEndOf="@id/agentFirstNameEdtTxt"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@id/agentFirstNameEdtTxt"
-            app:layout_constraintTop_toBottomOf="@+id/family_name_txt" />
+            app:layout_constraintStart_toStartOf="@id/agentFirstNameInputLayout"
+            app:layout_constraintTop_toBottomOf="@+id/agentFirstNameInputLayout">
 
-        <TextView
-            android:id="@+id/email_txt"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/agentFamilyNameEdtTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="12"
+                android:inputType="textPersonName"
+
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+<!--        <TextView-->
+<!--            android:id="@+id/email_txt"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="16dp"-->
+<!--            android:autoSizeTextType="uniform"-->
+<!--            android:drawableStart="@drawable/ic_email_black_24dp"-->
+<!--            android:drawablePadding="8dp"-->
+<!--            android:text="@string/email_txt"-->
+<!--            android:textColor="@color/colorPrimary"-->
+<!--            app:layout_constraintStart_toStartOf="@+id/agentFamilyNameEdtTxt"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/agentFamilyNameEdtTxt" />-->
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/agentEmailInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:autoSizeTextType="uniform"
-            android:drawableStart="@drawable/ic_email_black_24dp"
-            android:drawablePadding="8dp"
-            android:text="@string/email_txt"
-            android:textColor="@color/colorPrimary"
-            app:layout_constraintStart_toStartOf="@+id/agentFamilyNameEdtTxt"
-            app:layout_constraintTop_toBottomOf="@+id/agentFamilyNameEdtTxt" />
-
-        <EditText
-            android:id="@+id/agentEmailEditTxt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="9"
-            android:hint="@string/email_prompt"
-            android:inputType="textEmailAddress"
-            app:layout_constraintEnd_toEndOf="@id/agentFamilyNameEdtTxt"
+            android:layout_marginTop="4dp"
+            app:layout_constraintEnd_toEndOf="@id/agentFamilyNameInputLayout"
             app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="@id/agentFamilyNameEdtTxt"
-            app:layout_constraintTop_toBottomOf="@+id/email_txt" />
+            app:layout_constraintStart_toStartOf="@id/agentFamilyNameInputLayout"
+            app:layout_constraintTop_toBottomOf="@+id/agentFamilyNameInputLayout">
 
-        <TextView
-            android:id="@+id/mobile_num_txt"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/agentEmailEditTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="12"
+                android:hint="@string/email_prompt"
+                android:inputType="textEmailAddress" />
+        </com.google.android.material.textfield.TextInputLayout>
+<!--        <TextView-->
+<!--            android:id="@+id/mobile_num_txt"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="16dp"-->
+<!--            android:autoSizeTextType="uniform"-->
+<!--            android:drawableStart="@drawable/ic_phone"-->
+<!--            android:drawablePadding="8dp"-->
+<!--            android:text="@string/mobile_number_txt"-->
+<!--            android:textColor="@color/colorPrimary"-->
+<!--            app:layout_constraintEnd_toEndOf="@+id/email_txt"-->
+<!--            app:layout_constraintHorizontal_bias="0.0"-->
+<!--            app:layout_constraintStart_toStartOf="@+id/email_txt"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/agentEmailEditTxt" />-->
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/agentMobileInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:autoSizeTextType="uniform"
-            android:drawableStart="@drawable/ic_phone"
-            android:drawablePadding="8dp"
-            android:text="@string/mobile_number_txt"
-            android:textColor="@color/colorPrimary"
-            app:layout_constraintEnd_toEndOf="@+id/email_txt"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/email_txt"
-            app:layout_constraintTop_toBottomOf="@+id/agentEmailEditTxt" />
-
-        <EditText
-            android:id="@+id/agentMobileEdtTxt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="9"
+            android:layout_marginTop="4dp"
             android:hint="@string/number_prompt"
-            android:inputType="phone"
-            app:layout_constraintEnd_toEndOf="@id/agentEmailEditTxt"
+            app:layout_constraintEnd_toEndOf="@id/agentEmailInputLayout"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/agentEmailEditTxt"
-            app:layout_constraintTop_toBottomOf="@+id/mobile_num_txt" />
+            app:layout_constraintStart_toStartOf="@id/agentEmailInputLayout"
+            app:layout_constraintTop_toBottomOf="@id/agentEmailInputLayout">
 
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/agentMobileEdtTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="12"
+                android:inputType="phone" />
+        </com.google.android.material.textfield.TextInputLayout>
         <TextView
             android:id="@+id/gender_txt"
             android:layout_width="wrap_content"
@@ -164,8 +191,8 @@
             android:autoSizeTextType="uniform"
             android:text="@string/gender_txt"
             android:textColor="@color/colorPrimary"
-            app:layout_constraintStart_toStartOf="@+id/mobile_num_txt"
-            app:layout_constraintTop_toBottomOf="@+id/agentMobileEdtTxt" />
+            app:layout_constraintStart_toStartOf="@+id/agentMobileInputLayout"
+            app:layout_constraintTop_toBottomOf="@+id/agentMobileInputLayout" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -179,22 +206,20 @@
 
             <Button
                 android:id="@+id/cancel_btn"
+                style="@style/CancelButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:background="@color/colorAccent"
                 android:hint="@string/cancel_btn_txt"
                 android:paddingStart="32dp"
                 android:paddingEnd="32dp"
-                android:textColorHint="@color/colorWhite"
-            />
+                android:textColorHint="@color/colorWhite" />
 
             <Button
                 android:id="@+id/addOrUpdateAgentBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:background="@color/colorPrimary"
                 android:hint="@string/add_txt"
                 android:paddingStart="40dp"
                 android:paddingEnd="40dp"
@@ -205,11 +230,11 @@
             android:id="@+id/agentGenderRadioGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
+            android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="@+id/gender_txt"
-            app:layout_constraintEnd_toEndOf="@+id/agentMobileEdtTxt"
+            app:layout_constraintEnd_toEndOf="@+id/agentMobileInputLayout"
             app:layout_constraintStart_toEndOf="@+id/gender_txt"
             app:layout_constraintTop_toTopOf="@+id/gender_txt">
 

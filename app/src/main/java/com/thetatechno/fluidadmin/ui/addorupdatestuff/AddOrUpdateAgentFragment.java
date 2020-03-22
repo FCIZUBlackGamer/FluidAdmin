@@ -24,6 +24,8 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.model.Staff;
 import com.thetatechno.fluidadmin.ui.EspressoTestingIdlingResource;
@@ -39,11 +41,12 @@ import static com.thetatechno.fluidadmin.utils.Constants.ARG_STAFF;
 
 
 public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickListener {
-    EditText agentIdEditTxt;
-    EditText agentFirstNameEditTxt;
-    EditText agentLastNameEditTxt;
-    EditText agentEmailEditTxt;
-    EditText agentNumberEditTxt;
+    TextInputEditText agentIdEditTxt;
+    TextInputEditText agentFirstNameEditTxt;
+    TextInputEditText agentLastNameEditTxt;
+    TextInputEditText agentEmailEditTxt;
+    TextInputEditText agentNumberEditTxt;
+    TextInputLayout agentIdInputLayout, agentFirstNameInputLayout, agentFamilyNameInputLayout, agentEmailInputLayout, agentNumberInputLayout;
     RadioGroup genderRadioGroup;
     Button addBtn;
     Button cancelBtn;
@@ -110,6 +113,11 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
         agentLastNameEditTxt = view.findViewById(R.id.agentFamilyNameEdtTxt);
         agentEmailEditTxt = view.findViewById(R.id.agentEmailEditTxt);
         agentNumberEditTxt = view.findViewById(R.id.agentMobileEdtTxt);
+        agentIdInputLayout = view.findViewById(R.id.agentIdTxtInputLayout);
+        agentFirstNameInputLayout = view.findViewById(R.id.agentFirstNameInputLayout);
+        agentFamilyNameInputLayout = view.findViewById(R.id.agentFamilyNameInputLayout);
+        agentEmailInputLayout = view.findViewById(R.id.agentEmailInputLayout);
+        agentNumberInputLayout = view.findViewById(R.id.agentMobileInputLayout);
         genderRadioGroup = view.findViewById(R.id.agentGenderRadioGroup);
         addBtn = view.findViewById(R.id.addOrUpdateAgentBtn);
         cancelBtn = view.findViewById(R.id.cancel_btn);
@@ -146,7 +154,6 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
 
     private void updateData() {
         if (staff != null) {
-
             agentIdEditTxt.setText(staff.getStaffId());
             agentIdEditTxt.setEnabled(false);
             agentFirstNameEditTxt.setText(staff.getFirstName());
@@ -238,9 +245,7 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
         if (idValidateMessage.isEmpty())
             return true;
         else {
-            agentIdEditTxt.setError(idValidateMessage);
-            requestFocus(agentIdEditTxt);
-
+            agentIdInputLayout.setError(idValidateMessage);
             return false;
         }
 
@@ -252,9 +257,7 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
 
             return true;
         else {
-            agentFirstNameEditTxt.setError(firstNameValidateMessage);
-            requestFocus(agentFirstNameEditTxt);
-
+            agentFirstNameInputLayout.setError(firstNameValidateMessage);
             return false;
         }
 
@@ -265,8 +268,7 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
         if (lastNameValidateMessage.isEmpty())
             return true;
         else {
-            agentLastNameEditTxt.setError(lastNameValidateMessage);
-            requestFocus(agentLastNameEditTxt);
+            agentFamilyNameInputLayout.setError(lastNameValidateMessage);
             return false;
         }
 
@@ -277,8 +279,7 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
         if (emailValidateMessage.isEmpty())
             return true;
         else {
-            agentEmailEditTxt.setError(emailValidateMessage);
-            requestFocus(agentEmailEditTxt);
+            agentEmailInputLayout.setError(emailValidateMessage);
             return false;
         }
     }
@@ -288,15 +289,9 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
         if (phoneValidateMessage.isEmpty())
             return true;
         else {
-            agentNumberEditTxt.setError(phoneValidateMessage);
-            requestFocus(agentNumberEditTxt);
-            return false;
-        }
-    }
+            agentNumberInputLayout.setError(phoneValidateMessage);
 
-    public void requestFocus(View view) {
-        if (view.requestFocus()) {
-            getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+            return false;
         }
     }
 

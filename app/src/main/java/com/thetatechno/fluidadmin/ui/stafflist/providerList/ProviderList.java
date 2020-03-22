@@ -65,8 +65,7 @@ public class ProviderList extends Fragment {
         addNewProviderFab = view.findViewById(R.id.addProviderFab);
         providerListViewModel = ViewModelProviders.of(this).get(StaffListViewModel.class);
         providerListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        EspressoTestingIdlingResource.increment();
-
+//        EspressoTestingIdlingResource.increment();
         providerListViewModel.getStaffData(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase(), EnumCode.StaffTypeCode.PRVDR.toString()).observe(this, new Observer<StaffData>() {
             @Override
             public void onChanged(StaffData staffData) {
@@ -85,9 +84,10 @@ public class ProviderList extends Fragment {
                 }else{
                     Log.e(TAG, "no data returns");
                 }
-                EspressoTestingIdlingResource.decrement();
             }
         });
+        //                EspressoTestingIdlingResource.decrement();
+
         providerSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

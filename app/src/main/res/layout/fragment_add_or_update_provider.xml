@@ -21,134 +21,107 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
-            android:id="@+id/providerIdEdtTxt"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/providerIdTxtInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="10"
             android:hint="@string/id_txt"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/staffId" />
+            app:layout_constraintTop_toBottomOf="@+id/addProfileImg">
 
-        <TextView
-            android:id="@+id/staffId"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/providerIdEdtTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="12" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/providerFirstNameTxtInputLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:autoSizeTextType="uniform"
-            android:drawableEnd="@drawable/ic_ambulance"
-            android:drawablePadding="5dp"
-            android:text="@string/id_txt"
-            android:textColor="@color/colorPrimary"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@+id/providerIdEdtTxt"
-            app:layout_constraintTop_toBottomOf="@+id/addProfileImg" />
-
-        <TextView
-            android:id="@+id/first_name_txt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:autoSizeTextType="uniform"
-            android:drawableEnd="@drawable/ic_ambulance"
-            android:drawablePadding="5dp"
-            android:text="@string/first_name"
-            android:textColor="@color/colorPrimary"
-            app:layout_constraintStart_toStartOf="@+id/staffId"
-            app:layout_constraintTop_toBottomOf="@+id/providerIdEdtTxt" />
-
-        <EditText
-            android:id="@+id/providerFirstNameEdtTxt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="10"
             android:hint="@string/first_name"
-            android:inputType="textPersonName"
-            android:paddingStart="5dp"
-            app:layout_constraintEnd_toEndOf="@+id/providerIdEdtTxt"
+            android:layout_marginTop="4dp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:layout_constraintEnd_toEndOf="@id/providerIdTxtInputLayout"
             app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="@+id/providerIdEdtTxt"
-            app:layout_constraintTop_toBottomOf="@+id/first_name_txt" />
+            app:layout_constraintStart_toStartOf="@+id/providerIdTxtInputLayout"
+            app:layout_constraintTop_toBottomOf="@+id/providerIdTxtInputLayout">
 
-        <TextView
-            android:id="@+id/family_name_txt"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/providerFirstNameEdtTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="12"
+                android:inputType="textPersonName"
+          />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/providerFamilyNameTxtInputLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:autoSizeTextType="uniform"
-            android:drawableEnd="@drawable/ic_ambulance"
-            android:drawablePadding="5dp"
-            android:text="@string/family_name_txt"
-            android:textColor="@color/colorPrimary"
-            app:layout_constraintStart_toStartOf="@+id/first_name_txt"
-            app:layout_constraintTop_toBottomOf="@+id/providerFirstNameEdtTxt" />
-
-
-        <EditText
+            android:hint="@string/family_name_txt"
+            android:layout_marginTop="4dp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:layout_constraintEnd_toEndOf="@+id/providerFirstNameTxtInputLayout"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/providerFirstNameTxtInputLayout"
+            app:layout_constraintTop_toBottomOf="@+id/providerFirstNameTxtInputLayout">
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/providerLastNameEdtTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/family_name_txt"
+            android:ems="12"
             android:inputType="textPersonName"
-            android:paddingStart="5dp"
-            app:layout_constraintEnd_toEndOf="@+id/providerFirstNameEdtTxt"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="@+id/providerFirstNameEdtTxt"
-            app:layout_constraintTop_toBottomOf="@+id/family_name_txt" />
-
-        <TextView
-            android:id="@+id/email_txt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:autoSizeTextType="uniform"
-            android:drawableStart="@drawable/ic_email_black_24dp"
-            android:drawablePadding="8dp"
-            android:text="@string/email_txt"
-            android:textColor="@color/colorPrimary"
-            app:layout_constraintStart_toStartOf="@+id/family_name_txt"
-            app:layout_constraintTop_toBottomOf="@+id/providerLastNameEdtTxt" />
-
-        <EditText
+            />
+        </com.google.android.material.textfield.TextInputLayout>
+<com.google.android.material.textfield.TextInputLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_constraintEnd_toEndOf="@id/providerFamilyNameTxtInputLayout"
+    app:layout_constraintHorizontal_bias="1.0"
+    android:layout_marginTop="4dp"
+    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+    app:layout_constraintStart_toStartOf="@id/providerFamilyNameTxtInputLayout"
+    app:layout_constraintTop_toBottomOf="@id/providerFamilyNameTxtInputLayout"
+    android:id="@+id/providerEmailTxtInputLayout"
+    >
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/providerEmailEditTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="10"
+            android:ems="12"
             android:hint="@string/email_prompt"
             android:inputType="textEmailAddress"
-            app:layout_constraintEnd_toEndOf="@+id/providerLastNameEdtTxt"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="@+id/providerLastNameEdtTxt"
-            app:layout_constraintTop_toBottomOf="@+id/email_txt" />
+ />
+</com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
-            android:id="@+id/mobile_num_txt"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:autoSizeTextType="uniform"
-            android:drawableStart="@drawable/ic_phone"
-            android:drawablePadding="8dp"
-            android:text="@string/mobile_number_txt"
-            android:textColor="@color/colorPrimary"
-            app:layout_constraintEnd_toEndOf="@+id/email_txt"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/email_txt"
-            app:layout_constraintTop_toBottomOf="@+id/providerEmailEditTxt" />
+            app:layout_constraintHorizontal_bias="1.0"
+            android:layout_marginTop="4dp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:layout_constraintEnd_toEndOf="@id/providerEmailTxtInputLayout"
+            app:layout_constraintStart_toStartOf="@id/providerEmailTxtInputLayout"
+            app:layout_constraintTop_toBottomOf="@id/providerEmailTxtInputLayout"
+            android:id="@+id/providerMobileTxtInputLayout"
+            >
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/providerMobileEdtTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="10"
+            android:ems="12"
             android:hint="@string/number_prompt"
             android:inputType="phone"
-            app:layout_constraintEnd_toEndOf="@id/providerEmailEditTxt"
-            app:layout_constraintStart_toStartOf="@id/providerEmailEditTxt"
-            app:layout_constraintTop_toBottomOf="@id/mobile_num_txt" />
-
+ />
+        </com.google.android.material.textfield.TextInputLayout>
         <TextView
             android:id="@+id/gender_txt"
             android:layout_width="wrap_content"
@@ -157,7 +130,7 @@
             android:autoSizeTextType="uniform"
             android:text="@string/gender_txt"
             android:textColor="@color/colorPrimary"
-            app:layout_constraintStart_toStartOf="@+id/mobile_num_txt"
+            app:layout_constraintStart_toStartOf="@+id/providerMobileTxtInputLayout"
             app:layout_constraintTop_toBottomOf="@+id/layoutSpinner" />
 
 
@@ -175,10 +148,10 @@
 
             <Button
                 android:id="@+id/cancelAddOrUpdateProviderBtn"
+                style="@style/CancelButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:background="@color/colorAccent"
                 android:hint="@string/cancel_btn_txt"
                 android:paddingStart="32dp"
                 android:paddingEnd="32dp"
@@ -189,7 +162,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:background="@color/colorPrimary"
                 android:hint="@string/add_txt"
                 android:paddingStart="40dp"
                 android:paddingEnd="40dp"
@@ -203,11 +175,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
-             android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="@+id/gender_txt"
-            app:layout_constraintEnd_toEndOf="@id/providerMobileEdtTxt"
-            app:layout_constraintStart_toEndOf="@+id/gender_txt"
-            app:layout_constraintTop_toTopOf="@+id/gender_txt">
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="@id/gender_txt"
+            app:layout_constraintEnd_toEndOf="@id/providerMobileTxtInputLayout"
+            app:layout_constraintStart_toEndOf="@id/gender_txt"
+            app:layout_constraintTop_toTopOf="@id/gender_txt">
 
             <RadioButton
                 android:id="@+id/femaleRadioButton"
@@ -234,16 +206,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/speciality_txt"
-            android:drawablePadding="5dp"
             android:drawableEnd="@drawable/ic_ambulance"
+            android:drawablePadding="5dp"
+            android:text="@string/speciality_txt"
             android:textColor="@color/colorPrimary"
-            app:layout_constraintStart_toStartOf="@+id/staffId"
-            app:layout_constraintTop_toBottomOf="@id/providerMobileEdtTxt" />
+            app:layout_constraintStart_toStartOf="@+id/providerMobileTxtInputLayout"
+            app:layout_constraintTop_toBottomOf="@id/providerMobileTxtInputLayout" />
 
         <RelativeLayout
             android:id="@+id/layoutSpinner"
-            android:layout_width="200dp"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_between_txt_and_edt"
             android:background="@drawable/spinner_background"

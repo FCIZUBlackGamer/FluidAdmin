@@ -17,6 +17,7 @@ import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.listeners.OnConfirmLinkToFacilityListener;
 import com.thetatechno.fluidadmin.model.Facility;
 import com.thetatechno.fluidadmin.model.FacilityCodes;
+import com.thetatechno.fluidadmin.ui.EspressoTestingIdlingResource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,12 +47,13 @@ public class FacilitiesListDialog extends Dialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.link_to_facilities_dialog);
-
+         EspressoTestingIdlingResource.increment();
         appointmentListRecyclerView = findViewById(R.id.facilityListView);
         alertDialogAdapter = new FacilityListDialogAdapter(context, appointmentList);
         searchForSpecificFacilityView = findViewById(R.id.searchForSpecificFacility);
         appointmentListRecyclerView.setAdapter(alertDialogAdapter);
         appointmentListRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+        EspressoTestingIdlingResource.decrement();
         linkBtn = findViewById(R.id.link_btn);
         cancelBtn = findViewById(R.id.cancel_btn);
         linkBtn.setOnClickListener(new View.OnClickListener() {
@@ -79,13 +81,18 @@ public class FacilitiesListDialog extends Dialog {
         searchForSpecificFacilityView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                EspressoTestingIdlingResource.increment();
                 alertDialogAdapter.getFilter().filter(query);
+                EspressoTestingIdlingResource.decrement();
+
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                EspressoTestingIdlingResource.increment();
                 alertDialogAdapter.getFilter().filter(newText);
+                EspressoTestingIdlingResource.decrement();
 
                 return false;
             }

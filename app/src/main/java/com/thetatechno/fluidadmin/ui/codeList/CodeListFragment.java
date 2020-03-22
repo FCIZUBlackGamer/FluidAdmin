@@ -21,13 +21,14 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.model.Code;
 import com.thetatechno.fluidadmin.model.CodeList;
+import com.thetatechno.fluidadmin.ui.EspressoTestingIdlingResource;
 import com.thetatechno.fluidadmin.utils.App;
 import com.thetatechno.fluidadmin.utils.EnumCode;
 import com.thetatechno.fluidadmin.utils.PreferenceController;
 
 import java.util.List;
 
-public class CodeListFragment extends Fragment{
+public class CodeListFragment extends Fragment {
     NavController navController;
     List<Code> codeList;
     final String TAG = CodeListFragment.class.getSimpleName();
@@ -71,47 +72,53 @@ public class CodeListFragment extends Fragment{
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
         codeListRecyclerView = view.findViewById(R.id.codeListView);
-        addNewCodeFab = view.findViewById(R.id.fab);
+        addNewCodeFab = view.findViewById(R.id.addNewCodeFab);
         codeListViewModel = ViewModelProviders.of(this).get(CodeListViewModel.class);
         codeSwipeRefreshLayout = view.findViewById(R.id.codeSwipeLayout);
         codeListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-            codeListViewModel.getDataForCode(EnumCode.Code.STFFGRP.toString(), PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase()).observe(this, new Observer<CodeList>() {
-                @Override
-                public void onChanged(CodeList codeListData) {
-                    if (codeListData != null) {
-                        if (codeListData.getCodeList() != null) {
-                            codeList = codeListData.getCodeList();
-                            codeListAdapter = new CodeListAdapter(navController, getContext(), codeList, getActivity().getSupportFragmentManager());
-                            codeListRecyclerView.setAdapter(codeListAdapter);
-                            codeSwipeRefreshLayout.setRefreshing(false);
-                        } else {
-                            Log.e(TAG, "codeList Is Null");
-                        }
-                    } else {
-                        Log.e(TAG, "no data returns");
-                    }
-                }
-            });
-       codeSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-           @Override
-           public void onRefresh() {
-               codeSwipeRefreshLayout.setRefreshing(true);
-               codeListViewModel.getDataForCode(EnumCode.Code.STFFGRP.toString(), PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
+       EspressoTestingIdlingResource.increment();
+        codeListViewModel.getDataForCode(EnumCode.Code.STFFGRP.toString(), PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase()).observe(this, new Observer<CodeList>() {
+            @Override
+            public void onChanged(CodeList codeListData) {
 
-           }
-       });
+                if (codeListData != null) {
+                    if (codeListData.getCodeList() != null) {
+                        EspressoTestingIdlingResource.increment();
+                        codeList = codeListData.getCodeList();
+                        codeListAdapter = new CodeListAdapter(navController, getContext(), codeList, getActivity().getSupportFragmentManager());
+                        codeListRecyclerView.setAdapter(codeListAdapter);
+                        codeSwipeRefreshLayout.setRefreshing(false);
+                        EspressoTestingIdlingResource.decrement();
+                    } else {
+                        Log.e(TAG, "codeList Is Null");
+                    }
+                } else {
+                    Log.e(TAG, "no data returns");
+                }
+                EspressoTestingIdlingResource.decrement();
+            }
+        });
+
+        codeSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                codeSwipeRefreshLayout.setRefreshing(true);
+                codeListViewModel.getDataForCode(EnumCode.Code.STFFGRP.toString(), PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
+
+            }
+        });
         addNewCodeFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-               navController.navigate(R.id.action_codeListFragment_to_codeAddFragment);
+                navController.navigate(R.id.action_codeListFragment_to_codeAddFragment);
+
 
 
             }
         });
 
     }
-
 
 
 }

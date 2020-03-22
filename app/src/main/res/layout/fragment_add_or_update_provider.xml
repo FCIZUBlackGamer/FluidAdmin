@@ -15,14 +15,14 @@
             android:id="@+id/addProfileImg"
             android:layout_width="90dp"
             android:layout_height="90dp"
-            android:layout_marginTop="64dp"
+            android:layout_marginTop="32dp"
             android:src="@drawable/ic_girl"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/idEdtTxt"
+            android:id="@+id/providerIdEdtTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -35,14 +35,14 @@
             android:id="@+id/staffId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="56dp"
+            android:layout_marginTop="16dp"
             android:autoSizeTextType="uniform"
             android:drawableEnd="@drawable/ic_ambulance"
             android:drawablePadding="5dp"
             android:text="@string/id_txt"
             android:textColor="@color/colorPrimary"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@+id/idEdtTxt"
+            app:layout_constraintStart_toStartOf="@+id/providerIdEdtTxt"
             app:layout_constraintTop_toBottomOf="@+id/addProfileImg" />
 
         <TextView
@@ -56,19 +56,19 @@
             android:text="@string/first_name"
             android:textColor="@color/colorPrimary"
             app:layout_constraintStart_toStartOf="@+id/staffId"
-            app:layout_constraintTop_toBottomOf="@+id/idEdtTxt" />
+            app:layout_constraintTop_toBottomOf="@+id/providerIdEdtTxt" />
 
         <EditText
-            android:id="@+id/first_name_edt_txt"
+            android:id="@+id/providerFirstNameEdtTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/first_name"
             android:inputType="textPersonName"
             android:paddingStart="5dp"
-            app:layout_constraintEnd_toEndOf="@+id/idEdtTxt"
+            app:layout_constraintEnd_toEndOf="@+id/providerIdEdtTxt"
             app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="@+id/idEdtTxt"
+            app:layout_constraintStart_toStartOf="@+id/providerIdEdtTxt"
             app:layout_constraintTop_toBottomOf="@+id/first_name_txt" />
 
         <TextView
@@ -82,20 +82,20 @@
             android:text="@string/family_name_txt"
             android:textColor="@color/colorPrimary"
             app:layout_constraintStart_toStartOf="@+id/first_name_txt"
-            app:layout_constraintTop_toBottomOf="@+id/first_name_edt_txt" />
+            app:layout_constraintTop_toBottomOf="@+id/providerFirstNameEdtTxt" />
 
 
         <EditText
-            android:id="@+id/family_name_edt_txt"
+            android:id="@+id/providerLastNameEdtTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/family_name_txt"
             android:inputType="textPersonName"
             android:paddingStart="5dp"
-            app:layout_constraintEnd_toEndOf="@+id/first_name_edt_txt"
+            app:layout_constraintEnd_toEndOf="@+id/providerFirstNameEdtTxt"
             app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="@+id/first_name_edt_txt"
+            app:layout_constraintStart_toStartOf="@+id/providerFirstNameEdtTxt"
             app:layout_constraintTop_toBottomOf="@+id/family_name_txt" />
 
         <TextView
@@ -109,18 +109,18 @@
             android:text="@string/email_txt"
             android:textColor="@color/colorPrimary"
             app:layout_constraintStart_toStartOf="@+id/family_name_txt"
-            app:layout_constraintTop_toBottomOf="@+id/family_name_edt_txt" />
+            app:layout_constraintTop_toBottomOf="@+id/providerLastNameEdtTxt" />
 
         <EditText
-            android:id="@+id/emailEditTxt"
+            android:id="@+id/providerEmailEditTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/email_prompt"
             android:inputType="textEmailAddress"
-            app:layout_constraintEnd_toEndOf="@+id/family_name_edt_txt"
+            app:layout_constraintEnd_toEndOf="@+id/providerLastNameEdtTxt"
             app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="@+id/family_name_edt_txt"
+            app:layout_constraintStart_toStartOf="@+id/providerLastNameEdtTxt"
             app:layout_constraintTop_toBottomOf="@+id/email_txt" />
 
         <TextView
@@ -136,17 +136,17 @@
             app:layout_constraintEnd_toEndOf="@+id/email_txt"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/email_txt"
-            app:layout_constraintTop_toBottomOf="@+id/emailEditTxt" />
+            app:layout_constraintTop_toBottomOf="@+id/providerEmailEditTxt" />
 
         <EditText
-            android:id="@+id/mobile_num_Edt_txt"
+            android:id="@+id/providerMobileEdtTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/number_prompt"
             android:inputType="phone"
-            app:layout_constraintEnd_toEndOf="@+id/emailEditTxt"
-            app:layout_constraintStart_toStartOf="@+id/emailEditTxt"
+            app:layout_constraintEnd_toEndOf="@id/providerEmailEditTxt"
+            app:layout_constraintStart_toStartOf="@id/providerEmailEditTxt"
             app:layout_constraintTop_toBottomOf="@id/mobile_num_txt" />
 
         <TextView
@@ -170,11 +170,11 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/genderRadioGroup"
+            app:layout_constraintTop_toBottomOf="@id/providerGenderRadioGroup"
             app:layout_constraintVertical_bias="0.501">
 
             <Button
-                android:id="@+id/cancel_btn"
+                android:id="@+id/cancelAddOrUpdateProviderBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
@@ -185,7 +185,7 @@
                 android:textColorHint="@color/colorWhite" />
 
             <Button
-                android:id="@+id/addOrUpdateBtn"
+                android:id="@+id/addOrUpdateProviderBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -198,14 +198,14 @@
 
 
         <RadioGroup
-            android:id="@+id/genderRadioGroup"
+            android:id="@+id/providerGenderRadioGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
              android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="@+id/gender_txt"
-            app:layout_constraintEnd_toEndOf="@id/mobile_num_Edt_txt"
+            app:layout_constraintEnd_toEndOf="@id/providerMobileEdtTxt"
             app:layout_constraintStart_toEndOf="@+id/gender_txt"
             app:layout_constraintTop_toTopOf="@+id/gender_txt">
 
@@ -239,7 +239,7 @@
             android:drawableEnd="@drawable/ic_ambulance"
             android:textColor="@color/colorPrimary"
             app:layout_constraintStart_toStartOf="@+id/staffId"
-            app:layout_constraintTop_toBottomOf="@+id/mobile_num_Edt_txt" />
+            app:layout_constraintTop_toBottomOf="@id/providerMobileEdtTxt" />
 
         <RelativeLayout
             android:id="@+id/layoutSpinner"

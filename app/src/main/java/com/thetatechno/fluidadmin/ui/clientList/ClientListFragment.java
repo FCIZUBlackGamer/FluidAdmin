@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.model.CustomerList;
 import com.thetatechno.fluidadmin.model.Person;
+import com.thetatechno.fluidadmin.ui.EspressoTestingIdlingResource;
 
 import java.util.List;
 
@@ -59,21 +60,27 @@ static final String TAG = ClientListFragment.class.getSimpleName();
         clientListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         clientSwipeLayout = view.findViewById(R.id.clientSwipeLayout);
         setHasOptionsMenu(true);
+        EspressoTestingIdlingResource.increment();
         clientListViewModel.getAllClients("").observe(this, new Observer<CustomerList>() {
             @Override
             public void onChanged(CustomerList customerList) {
                 if (customerList != null) {
+
                     if (customerList.getPersonList() != null) {
+                        EspressoTestingIdlingResource.increment();
                         clientList = customerList.getPersonList();
                         clientListViewAdapter = new ClientListViewAdapter(getContext(),clientList,getActivity().getSupportFragmentManager());
                         clientListRecyclerView.setAdapter(clientListViewAdapter);
                         clientSwipeLayout.setRefreshing(false);
+                        EspressoTestingIdlingResource.decrement();
                     } else {
                         Log.e(TAG, "clientList Is Null");
                     }
                 } else {
                     Log.e(TAG, "no data returns");
                 }
+                EspressoTestingIdlingResource.decrement();
+
             }
         });
         clientSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

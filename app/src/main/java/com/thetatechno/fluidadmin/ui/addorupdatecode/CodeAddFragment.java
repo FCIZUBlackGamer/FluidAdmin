@@ -33,6 +33,7 @@ import androidx.navigation.Navigation;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.listeners.OnFragmentInteractionListener;
 import com.thetatechno.fluidadmin.model.Code;
+import com.thetatechno.fluidadmin.ui.EspressoTestingIdlingResource;
 import com.thetatechno.fluidadmin.ui.HomeActivity;
 import com.thetatechno.fluidadmin.utils.App;
 import com.thetatechno.fluidadmin.utils.EnumCode;
@@ -121,8 +122,8 @@ public class CodeAddFragment extends DialogFragment {
                 onBackOrCancelBtnPressed();
             }
         });
-        codeIdEditTxt = view.findViewById(R.id.code_id_et);
-        codeDescriptionEditTxt = view.findViewById(R.id.desc_et);
+        codeIdEditTxt = view.findViewById(R.id.code_id_edt_txt);
+        codeDescriptionEditTxt = view.findViewById(R.id.code_description_edt_txt);
         updateViewWithData();
         dialog = builder.create();
         return dialog;
@@ -136,6 +137,7 @@ public class CodeAddFragment extends DialogFragment {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    EspressoTestingIdlingResource.increment();
                     code = new Code();
                     getDataFromUi();
                     if (isDataValid()) {
@@ -143,33 +145,52 @@ public class CodeAddFragment extends DialogFragment {
                         codeViewModel.addNewCode(code).observe(getActivity(), new Observer<String>() {
                             @Override
                             public void onChanged(String s) {
+                                EspressoTestingIdlingResource.increment();
                                 Log.i("CodeFragment", "addNewCode message " + s);
                                 Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
-                                if (s.contains("success"))
+                                if (s.contains("success")) {
+                                    EspressoTestingIdlingResource.increment();
                                     onButtonPressed();
+                                    EspressoTestingIdlingResource.decrement();
+                                }
+                                EspressoTestingIdlingResource.decrement();
                             }
                         });
                     }
+                    EspressoTestingIdlingResource.decrement();
                 }
             });
+
+
         }
         else if (button.getText().toString().equals(getResources().getString(R.string.update_txt))){
+            EspressoTestingIdlingResource.increment();
+
             getDataFromUi();
             if (isDataValid()) {
                 fillCodeObjectWithUiData();
                 codeViewModel.updateCode(code).observe(getActivity(), new Observer<String>() {
                     @Override
                     public void onChanged(String s) {
+                        EspressoTestingIdlingResource.increment();
                         if (s != null)
                             Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
                         Log.i("CodeFragment", "updateCode message " + s);
-                        if (s.contains("successfully"))
+                        if (s.contains("successfully")) {
+                            EspressoTestingIdlingResource.increment();
                             onButtonPressed();
+                            EspressoTestingIdlingResource.decrement();
+                        }
+                        EspressoTestingIdlingResource.decrement();
+
 
                     }
                 });
             }
+            EspressoTestingIdlingResource.decrement();
+
         }
+
     }
 
     private void getDataFromUi() {
@@ -203,10 +224,12 @@ public class CodeAddFragment extends DialogFragment {
     }
 
     public void onButtonPressed() {
+        EspressoTestingIdlingResource.increment();
         navController.navigate(R.id.codeList, null,
                 new NavOptions.Builder()
                         .setPopUpTo(R.id.codeList,
                                 true).build());
+        EspressoTestingIdlingResource.decrement();
 
     }
 

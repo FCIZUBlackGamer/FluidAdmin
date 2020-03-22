@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/colorWhite"
     android:layout_width="match_parent"
-android:padding="16dp"
+    android:padding="16dp"
     android:layout_height="wrap_content">
 
 <!--    <TextView-->
@@ -26,16 +25,15 @@ android:padding="16dp"
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/code_txt"
-        android:drawablePadding="5dp"
         android:drawableEnd="@drawable/ic_ambulance"
+        android:drawablePadding="5dp"
+        android:text="@string/code_txt"
         android:textColor="@color/colorPrimary"
-        app:layout_constraintStart_toStartOf="@+id/code_id_et"
-        app:layout_constraintTop_toBottomOf="@+id/titleTxt" />
+        app:layout_constraintStart_toStartOf="@id/code_id_edt_txt"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/code_id_et"
+        android:id="@+id/code_id_edt_txt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -54,18 +52,18 @@ android:padding="16dp"
         android:drawableEnd="@drawable/ic_ambulance"
         android:textColor="@color/colorPrimary"
         app:layout_constraintStart_toStartOf="@+id/textView2"
-        app:layout_constraintTop_toBottomOf="@+id/code_id_et" />
+        app:layout_constraintTop_toBottomOf="@id/code_id_edt_txt" />
 
     <EditText
-        android:id="@+id/desc_et"
+        android:id="@+id/code_description_edt_txt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPersonName"
         android:maxLines="3"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/code_id_et"
-        app:layout_constraintStart_toStartOf="@+id/code_id_et"
+        app:layout_constraintEnd_toEndOf="@id/code_id_edt_txt"
+        app:layout_constraintStart_toStartOf="@id/code_id_edt_txt"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
 <!--    <LinearLayout-->

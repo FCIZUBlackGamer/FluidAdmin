@@ -18,6 +18,7 @@
             android:src="@drawable/ic_person_add_black_24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.467"
+            android:contentDescription="@string/Agents"
 
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -28,6 +29,7 @@
             android:layout_height="wrap_content"
             android:ems="9"
             android:hint="@string/id_txt"
+            android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.502"
             app:layout_constraintStart_toStartOf="parent"
@@ -60,7 +62,7 @@
             app:layout_constraintTop_toBottomOf="@id/agentIdEdtTxt" />
 
         <EditText
-            android:id="@+id/first_name_edt_txt"
+            android:id="@+id/agentFirstNameEdtTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="9"
@@ -85,11 +87,11 @@
             android:drawablePadding="5dp"
             android:text="@string/family_name_txt"
             android:textColor="@color/colorPrimary"
-            app:layout_constraintStart_toStartOf="@+id/first_name_txt"
-            app:layout_constraintTop_toBottomOf="@+id/first_name_edt_txt" />
+            app:layout_constraintStart_toStartOf="@id/first_name_txt"
+            app:layout_constraintTop_toBottomOf="@id/agentFirstNameEdtTxt" />
 
         <EditText
-            android:id="@+id/family_name_edt_txt"
+            android:id="@+id/agentFamilyNameEdtTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="9"
@@ -97,9 +99,9 @@
             android:inputType="textPersonName"
             android:paddingStart="5dp"
             android:paddingEnd="5dp"
-            app:layout_constraintEnd_toEndOf="@+id/first_name_edt_txt"
+            app:layout_constraintEnd_toEndOf="@id/agentFirstNameEdtTxt"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/first_name_edt_txt"
+            app:layout_constraintStart_toStartOf="@id/agentFirstNameEdtTxt"
             app:layout_constraintTop_toBottomOf="@+id/family_name_txt" />
 
         <TextView
@@ -112,19 +114,19 @@
             android:drawablePadding="8dp"
             android:text="@string/email_txt"
             android:textColor="@color/colorPrimary"
-            app:layout_constraintStart_toStartOf="@+id/family_name_edt_txt"
-            app:layout_constraintTop_toBottomOf="@+id/family_name_edt_txt" />
+            app:layout_constraintStart_toStartOf="@+id/agentFamilyNameEdtTxt"
+            app:layout_constraintTop_toBottomOf="@+id/agentFamilyNameEdtTxt" />
 
         <EditText
-            android:id="@+id/emailEditTxt"
+            android:id="@+id/agentEmailEditTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="9"
             android:hint="@string/email_prompt"
             android:inputType="textEmailAddress"
-            app:layout_constraintEnd_toEndOf="@+id/family_name_edt_txt"
+            app:layout_constraintEnd_toEndOf="@id/agentFamilyNameEdtTxt"
             app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="@+id/family_name_edt_txt"
+            app:layout_constraintStart_toStartOf="@id/agentFamilyNameEdtTxt"
             app:layout_constraintTop_toBottomOf="@+id/email_txt" />
 
         <TextView
@@ -140,18 +142,18 @@
             app:layout_constraintEnd_toEndOf="@+id/email_txt"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/email_txt"
-            app:layout_constraintTop_toBottomOf="@+id/emailEditTxt" />
+            app:layout_constraintTop_toBottomOf="@+id/agentEmailEditTxt" />
 
         <EditText
-            android:id="@+id/mobile_num_Edt_txt"
+            android:id="@+id/agentMobileEdtTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="9"
             android:hint="@string/number_prompt"
             android:inputType="phone"
-            app:layout_constraintEnd_toEndOf="@+id/emailEditTxt"
+            app:layout_constraintEnd_toEndOf="@id/agentEmailEditTxt"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/emailEditTxt"
+            app:layout_constraintStart_toStartOf="@+id/agentEmailEditTxt"
             app:layout_constraintTop_toBottomOf="@+id/mobile_num_txt" />
 
         <TextView
@@ -163,7 +165,7 @@
             android:text="@string/gender_txt"
             android:textColor="@color/colorPrimary"
             app:layout_constraintStart_toStartOf="@+id/mobile_num_txt"
-            app:layout_constraintTop_toBottomOf="@+id/mobile_num_Edt_txt" />
+            app:layout_constraintTop_toBottomOf="@+id/agentMobileEdtTxt" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -173,7 +175,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/genderRadioGroup">
+            app:layout_constraintTop_toBottomOf="@+id/agentGenderRadioGroup">
 
             <Button
                 android:id="@+id/cancel_btn"
@@ -185,13 +187,10 @@
                 android:paddingStart="32dp"
                 android:paddingEnd="32dp"
                 android:textColorHint="@color/colorWhite"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/gender_txt"
-                app:layout_constraintTop_toBottomOf="@+id/genderRadioGroup"
-                app:layout_constraintVertical_bias="0.501" />
+            />
 
             <Button
-                android:id="@+id/addOrUpdateBtn"
+                android:id="@+id/addOrUpdateAgentBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -203,19 +202,19 @@
         </LinearLayout>
 
         <RadioGroup
-            android:id="@+id/genderRadioGroup"
+            android:id="@+id/agentGenderRadioGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
             app:layout_constraintBottom_toBottomOf="@+id/gender_txt"
-            app:layout_constraintEnd_toEndOf="@+id/mobile_num_Edt_txt"
+            app:layout_constraintEnd_toEndOf="@+id/agentMobileEdtTxt"
             app:layout_constraintStart_toEndOf="@+id/gender_txt"
             app:layout_constraintTop_toTopOf="@+id/gender_txt">
 
             <RadioButton
-                android:id="@+id/femaleRadioButton"
+                android:id="@+id/agentFemaleRadioButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
@@ -225,7 +224,7 @@
                 tools:layout_editor_absoluteY="154dp" />
 
             <RadioButton
-                android:id="@+id/maleRadioButton"
+                android:id="@+id/agentMaleRadioButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/male_txt"

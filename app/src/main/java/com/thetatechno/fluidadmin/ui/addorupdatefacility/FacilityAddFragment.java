@@ -24,6 +24,7 @@ import androidx.navigation.Navigation;
 
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.model.Facility;
+import com.thetatechno.fluidadmin.ui.EspressoTestingIdlingResource;
 import com.thetatechno.fluidadmin.ui.HomeActivity;
 import com.thetatechno.fluidadmin.utils.App;
 import com.thetatechno.fluidadmin.utils.EnumCode;
@@ -98,6 +99,7 @@ public class FacilityAddFragment extends Fragment {
         addOrUpdateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                EspressoTestingIdlingResource.increment();
                 idTxt = facilityIdEditTxt.getText().toString();
                 descriptionTxt = facilityDescriptionEditTxt.getText().toString();
                 int id = facilityTypeRadioGroup.getCheckedRadioButtonId();
@@ -123,6 +125,7 @@ public class FacilityAddFragment extends Fragment {
 
                     }
                 }
+                EspressoTestingIdlingResource.decrement();
 
             }
 
@@ -140,6 +143,7 @@ public class FacilityAddFragment extends Fragment {
         facilityAddViewModel.addNewFacility(facility, deviceIdSpinner.getSelectedItem().toString(), waitingAreaSpinner.getSelectedItem().toString()).observe(getActivity(), new Observer<String>() {
             @Override
             public void onChanged(String s) {
+              EspressoTestingIdlingResource.increment();
                 addNewFacilityMessage = s;
                 Log.i(TAG, "add response message " + addNewFacilityMessage);
                 if (!addNewFacilityMessage.isEmpty())
@@ -147,6 +151,8 @@ public class FacilityAddFragment extends Fragment {
                 if (addNewFacilityMessage.contains("successfully")) {
                     onAddOrUpdateClicked();
                 }
+                EspressoTestingIdlingResource.decrement();
+
 
             }
         });
@@ -160,7 +166,7 @@ public class FacilityAddFragment extends Fragment {
         waitingAreaSpinner = view.findViewById(R.id.waitingAreaSpinner);
         deviceIdSpinner = view.findViewById(R.id.deviceIdSpinner);
         cancelBtn = view.findViewById(R.id.cancel_btn);
-        addOrUpdateBtn = view.findViewById(R.id.addOrUpdateBtn);
+        addOrUpdateBtn = view.findViewById(R.id.addOrUpdateFacilityBtn);
         deviceArrowDownImg = view.findViewById(R.id.device_arrow_down_img);
         waitingAreaArrowDownImg = view.findViewById(R.id.waiting_area_arrow_down_img);
     }
@@ -216,7 +222,9 @@ public class FacilityAddFragment extends Fragment {
     }
 
     void onAddOrUpdateClicked() {
+        EspressoTestingIdlingResource.increment();
         navController.navigate(R.id.action_facilityAddFragment_to_clinicList);
+        EspressoTestingIdlingResource.decrement();
 
     }
 
@@ -285,15 +293,19 @@ public class FacilityAddFragment extends Fragment {
     }
 
     private void updateFacility() {
+        EspressoTestingIdlingResource.increment();
         facilityAddViewModel.updateFacility(facility, deviceIdSpinner.getSelectedItem().toString(), waitingAreaSpinner.getSelectedItem().toString()).observe(getActivity(), new Observer<String>() {
             @Override
             public void onChanged(String s) {
                 addOrUpdateMessage = s;
+                EspressoTestingIdlingResource.decrement();
                 Log.i(TAG, "update response message " + addOrUpdateMessage);
                 if (!addOrUpdateMessage.isEmpty())
                     Toast.makeText(getActivity(), addOrUpdateMessage, Toast.LENGTH_SHORT);
                 if (addOrUpdateMessage.contains("success")) {
+                    EspressoTestingIdlingResource.increment();
                     onAddOrUpdateClicked();
+                    EspressoTestingIdlingResource.decrement();
                 }
 
             }

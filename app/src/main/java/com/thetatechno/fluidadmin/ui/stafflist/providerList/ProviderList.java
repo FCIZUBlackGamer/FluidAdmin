@@ -23,6 +23,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.model.Staff;
 import com.thetatechno.fluidadmin.model.StaffData;
+import com.thetatechno.fluidadmin.ui.EspressoTestingIdlingResource;
 import com.thetatechno.fluidadmin.ui.stafflist.StaffListViewModel;
 import com.thetatechno.fluidadmin.utils.App;
 import com.thetatechno.fluidadmin.utils.Constants;
@@ -61,23 +62,30 @@ public class ProviderList extends Fragment {
         providerListRecyclerView = view.findViewById(R.id.providerRecyclerView);
         navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
         providerSwipeLayout = view.findViewById(R.id.providerSwipeLayout);
-        addNewProviderFab = view.findViewById(R.id.fab);
+        addNewProviderFab = view.findViewById(R.id.addProviderFab);
         providerListViewModel = ViewModelProviders.of(this).get(StaffListViewModel.class);
         providerListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        EspressoTestingIdlingResource.increment();
+
         providerListViewModel.getStaffData(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase(), EnumCode.StaffTypeCode.PRVDR.toString()).observe(this, new Observer<StaffData>() {
             @Override
             public void onChanged(StaffData staffData) {
+
                 if (staffData != null) {
                     if (staffData.getStaffList() != null) {
+                        EspressoTestingIdlingResource.increment();
                         providerList = staffData.getStaffList();
                         providerListAdapter = new ProviderListAdapter(navController, getContext(), providerList, getActivity().getSupportFragmentManager());
                         providerListRecyclerView.setAdapter(providerListAdapter);
+                        EspressoTestingIdlingResource.decrement();
+
                     } else {
                         Log.e(TAG, "provider List Is Null");
                     }
                 }else{
                     Log.e(TAG, "no data returns");
                 }
+                EspressoTestingIdlingResource.decrement();
             }
         });
         providerSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

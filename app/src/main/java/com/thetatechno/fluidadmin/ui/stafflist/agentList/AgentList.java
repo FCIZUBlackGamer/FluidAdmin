@@ -23,6 +23,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.model.Staff;
 import com.thetatechno.fluidadmin.model.StaffData;
+import com.thetatechno.fluidadmin.ui.EspressoTestingIdlingResource;
 import com.thetatechno.fluidadmin.ui.stafflist.StaffListViewModel;
 import com.thetatechno.fluidadmin.utils.App;
 import com.thetatechno.fluidadmin.utils.EnumCode;
@@ -69,25 +70,30 @@ public class AgentList extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
         agentListRecyclerView = view.findViewById(R.id.agentsListRecyclerView);
-        addNewAgentFab = view.findViewById(R.id.fab);
+        addNewAgentFab = view.findViewById(R.id.addAgentFab);
         staffListViewModel = ViewModelProviders.of(this).get(StaffListViewModel.class);
         agentSwipeLayout = view.findViewById(R.id.agentSwipeLayout);
         agentListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         if (agentList == null) {
+            EspressoTestingIdlingResource.increment();
             staffListViewModel.getStaffData(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase(), EnumCode.StaffTypeCode.DSPTCHR.toString()).observe(this, new Observer<StaffData>() {
                 @Override
                 public void onChanged(StaffData staffData) {
                     if (staffData != null) {
                         if (staffData.getStaffList() != null) {
+                            EspressoTestingIdlingResource.increment();
                             agentList = staffData.getStaffList();
                             agentListAdapter = new AgentListAdapter(navController, getContext(), agentList, getActivity().getSupportFragmentManager());
                             agentListRecyclerView.setAdapter(agentListAdapter);
+                            EspressoTestingIdlingResource.decrement();
                         } else {
                             Log.e(TAG, "agentList Is Null");
                         }
                     }else{
                         Log.e(TAG, "no data returns");
                     }
+
+                    EspressoTestingIdlingResource.decrement();
                 }
             });
         } else {

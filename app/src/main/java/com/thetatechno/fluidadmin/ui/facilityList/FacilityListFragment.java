@@ -23,6 +23,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.model.Facilities;
 import com.thetatechno.fluidadmin.model.Facility;
+import com.thetatechno.fluidadmin.ui.EspressoTestingIdlingResource;
 import com.thetatechno.fluidadmin.utils.EnumCode;
 
 import java.io.Serializable;
@@ -59,18 +60,23 @@ public class FacilityListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         facilityListClinicRecyclerView = view.findViewById(R.id.facilityListClinicRecyclerView);
         navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
-        addNewFacilityFab = view.findViewById(R.id.fab);
+        addNewFacilityFab = view.findViewById(R.id.addNewFacilityFab);
         facilitySwipeLayout = view.findViewById(R.id.facilitySwipeLayout);
         facilityListClinicRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         facilityListViewModel = ViewModelProviders.of(this).get(FacilityListViewModel.class);
+        EspressoTestingIdlingResource.increment();
         facilityListViewModel.getAllFacilities("").observe(this, new Observer<Facilities>() {
             @Override
             public void onChanged(Facilities facilities) {
+                EspressoTestingIdlingResource.decrement();
+                EspressoTestingIdlingResource.increment();
                 if (facilities != null) {
                     if (facilities.getFacilities() != null) {
+
                         facilityList = facilities.getFacilities();
                         facilityListAdapter = new FacilityListAdapter(navController, getContext(), facilityList, getActivity().getSupportFragmentManager());
                         facilityListClinicRecyclerView.setAdapter(facilityListAdapter);
+
 
                     } else {
                         Log.e(TAG, "facilityList Is Null");
@@ -78,13 +84,16 @@ public class FacilityListFragment extends Fragment {
                 }else{
                         Log.e(TAG, "no data returns");
                     }
+                EspressoTestingIdlingResource.decrement();
                 }
 
         });
         addNewFacilityFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                EspressoTestingIdlingResource.increment();
                             navController.navigate(R.id.action_facilityListFragment_to_facilityAddFragment);
+                            EspressoTestingIdlingResource.decrement();
             }
         });
         facilitySwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

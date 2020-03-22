@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.model.Facility;
+import com.thetatechno.fluidadmin.ui.EspressoTestingIdlingResource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +70,7 @@ public class FacilityListDialogAdapter extends RecyclerView.Adapter<FacilityList
         return new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
+                EspressoTestingIdlingResource.increment();
                 String charSequenceString = constraint.toString();
                 if (charSequenceString.isEmpty()) {
                     filteredFacilityList= facilityList;
@@ -84,6 +86,7 @@ public class FacilityListDialogAdapter extends RecyclerView.Adapter<FacilityList
                 }
                 FilterResults results = new FilterResults();
                 results.values = filteredFacilityList;
+                EspressoTestingIdlingResource.decrement();
                 return results;
             }
 

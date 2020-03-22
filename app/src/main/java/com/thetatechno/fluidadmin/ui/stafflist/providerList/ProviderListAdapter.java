@@ -133,14 +133,13 @@ if(position <providerList.size()) {
                 public boolean onMenuItemClick(MenuItem item) {
                     switch (item.getItemId()) {
 
-                        case R.id.edit:
+                        case R.id.editProvider:
                             //handle edit click
                             bundle.putSerializable(ARG_STAFF, (Serializable) providerList.get(position));
                             bundle.putSerializable("providerList", (Serializable) providerList);
                             navController.navigate(R.id.addOrUpdateProviderFragment, bundle);
-
                             break;
-                        case R.id.delete:
+                        case R.id.deleteProvider:
                             //handle delete click
                             if (listener != null)
                                 listener.onDeleteButtonClicked(providerList.get(position));

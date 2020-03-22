@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.model.Staff;
+import com.thetatechno.fluidadmin.ui.EspressoTestingIdlingResource;
 import com.thetatechno.fluidadmin.ui.HomeActivity;
 import com.thetatechno.fluidadmin.utils.App;
 import com.thetatechno.fluidadmin.utils.Constants;
@@ -105,12 +106,12 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
 
     private void initiateView(View view) {
         agentIdEditTxt = view.findViewById(R.id.agentIdEdtTxt);
-        agentFirstNameEditTxt = view.findViewById(R.id.first_name_edt_txt);
-        agentLastNameEditTxt = view.findViewById(R.id.family_name_edt_txt);
-        agentEmailEditTxt = view.findViewById(R.id.emailEditTxt);
-        agentNumberEditTxt = view.findViewById(R.id.mobile_num_Edt_txt);
-        genderRadioGroup = view.findViewById(R.id.genderRadioGroup);
-        addBtn = view.findViewById(R.id.addOrUpdateBtn);
+        agentFirstNameEditTxt = view.findViewById(R.id.agentFirstNameEdtTxt);
+        agentLastNameEditTxt = view.findViewById(R.id.agentFamilyNameEdtTxt);
+        agentEmailEditTxt = view.findViewById(R.id.agentEmailEditTxt);
+        agentNumberEditTxt = view.findViewById(R.id.agentMobileEdtTxt);
+        genderRadioGroup = view.findViewById(R.id.agentGenderRadioGroup);
+        addBtn = view.findViewById(R.id.addOrUpdateAgentBtn);
         cancelBtn = view.findViewById(R.id.cancel_btn);
         addProfileImg = view.findViewById(R.id.addProfileImg);
     }
@@ -121,9 +122,9 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
         staff.setFamilyName(agentLastNameEditTxt.getText().toString());
         staff.setStaffId(agentIdEditTxt.getText().toString());
         int id = genderRadioGroup.getCheckedRadioButtonId();
-        if (id == R.id.maleRadioButton)
+        if (id == R.id.agentMaleRadioButton)
             staff.setGender(EnumCode.Gender.M.toString());
-        else if (id == R.id.femaleRadioButton)
+        else if (id == R.id.agentFemaleRadioButton)
             staff.setGender(EnumCode.Gender.F.toString());
         staff.setEmail(agentEmailEditTxt.getText().toString());
         staff.setMobileNumber(agentNumberEditTxt.getText().toString());
@@ -132,10 +133,13 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
     }
 
     private void onAddOrUpdateSuccessfully() {
+        EspressoTestingIdlingResource.increment();
+
         navController.navigate(R.id.agentList, null,
                 new NavOptions.Builder()
                         .setPopUpTo(R.id.agentList,
                                 true).build());
+        EspressoTestingIdlingResource.decrement();
     }
 
 
@@ -150,9 +154,9 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
             agentEmailEditTxt.setText(staff.getEmail());
             agentNumberEditTxt.setText(staff.getMobileNumber());
             if (staff.getGender() == EnumCode.Gender.F.toString())
-                genderRadioGroup.check(R.id.femaleRadioButton);
+                genderRadioGroup.check(R.id.agentFemaleRadioButton);
             else if (staff.getGender().equals(EnumCode.Gender.M.toString()))
-                genderRadioGroup.check(R.id.maleRadioButton);
+                genderRadioGroup.check(R.id.agentMaleRadioButton);
             addBtn.setHint(getResources().getString(R.string.update_txt));
             isStaffHasData = true;
             if (!staff.getImageLink().isEmpty()) {
@@ -191,13 +195,14 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
     @Override
     public void onClick(final View v) {
         switch (v.getId()) {
-            case R.id.addOrUpdateBtn:
+            case R.id.addOrUpdateAgentBtn:
+                EspressoTestingIdlingResource.increment();
                 idTxt = agentIdEditTxt.getText().toString();
                 firstNameTxt = agentFirstNameEditTxt.getText().toString();
                 lastNameTxt = agentLastNameEditTxt.getText().toString();
                 emailTxt = agentEmailEditTxt.getText().toString();
                 phoneTxt = agentNumberEditTxt.getText().toString();
-                if(!isDataValid(idTxt,firstNameTxt,lastNameTxt,emailTxt,phoneTxt)) {
+                if(isDataValid(idTxt,firstNameTxt,lastNameTxt,emailTxt,phoneTxt)) {
                 getDataFromUi();
                 if (!isStaffHasData) {
                     if (addNewAgentMessage == null)
@@ -211,6 +216,8 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
                     else
                         addOrUpdateViewModel.updateAgent(staff);
                     }
+                    EspressoTestingIdlingResource.decrement();
+
                 }
                 break;
             case R.id.cancel_btn:
@@ -299,14 +306,19 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
             @Override
             public void onChanged(String s) {
                 addNewAgentMessage = s;
+                EspressoTestingIdlingResource.increment();
                 Log.i("AddOrUpdate", "add agent message" + addNewAgentMessage);
                 if (addNewAgentMessage.contains("success")) {
+
                     onAddOrUpdateSuccessfully();
                     Toast.makeText(getContext(), addNewAgentMessage, Toast.LENGTH_SHORT).show();
 
+
                 } else if (addNewAgentMessage.contains("Failed")) {
+
                     Toast.makeText(getActivity(), addNewAgentMessage, Toast.LENGTH_SHORT).show();
                 }
+                EspressoTestingIdlingResource.decrement();
             }
         });
 

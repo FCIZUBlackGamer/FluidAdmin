@@ -2,7 +2,6 @@ package com.thetatechno.fluidadmin.ui.codeList;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -83,20 +82,20 @@ public class CodeListAdapter extends RecyclerView.Adapter<CodeListAdapter.CodeVi
 
 
                         PopupMenu popup = new PopupMenu(context, holder.codeTextViewOptions);
-                        popup.inflate(R.menu.default_menu);
+                        popup.inflate(R.menu.code_menu);
                         //adding click listener
                         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                             @Override
                             public boolean onMenuItemClick(MenuItem item) {
                                 switch (item.getItemId()) {
-                                    case R.id.edit:
+                                    case R.id.editCode:
                                         bundle.putSerializable(ARG_CODE, (Serializable) codeList.get(position));
                                         bundle.putSerializable("type", (Serializable) EnumCode.UsageType.Code);
                                         bundle.putSerializable("codeList", (Serializable) codeList);
                                         navController.navigate(R.id.codeAddFragment, bundle);
 
                                         break;
-                                    case R.id.delete:
+                                    case R.id.deleteCode:
                                         //handle delete click
                                         if (listener != null)
                                             listener.onDeleteButtonClicked(codeList.get(position));

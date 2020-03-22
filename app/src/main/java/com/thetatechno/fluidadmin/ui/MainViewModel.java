@@ -35,7 +35,7 @@ public class MainViewModel extends ViewModel {
                 if (b.equals(Constants.DELETE_SUCCESS_STATE)) {
                     messageForStaff = "Delete " + staff.getFirstName() + " successfully";
                 }
-                else if (b.equals(Constants.ADD_DELETE_OR_UPDATE_FAIL_STATE)){
+                else if (b.equals("-2292")){
                     messageForStaff = "Cannot delete, Provider has a schedule.";
 
                 }else if (b.equals(Constants.ADD_DELETE_OR_UPDATE_FAIL_STATE)) {
@@ -65,6 +65,7 @@ public class MainViewModel extends ViewModel {
                     deletedCodeMessageLiveData.setValue(messageForCode);
                 }
 
+
             }
         });
         return deletedCodeMessageLiveData;
@@ -82,6 +83,10 @@ public class MainViewModel extends ViewModel {
 
                 } else if (b.equals(Constants.ADD_DELETE_OR_UPDATE_FAIL_STATE)) {
                     messageForSFacility = "Failed to delete facility " + facility.getId();
+                    deletedFacilityMessageLiveData.setValue(messageForSFacility);
+                }
+                else if(b.equals("-2292")) {
+                    messageForSFacility = "cann't delete facility";
                     deletedFacilityMessageLiveData.setValue(messageForSFacility);
                 }
 

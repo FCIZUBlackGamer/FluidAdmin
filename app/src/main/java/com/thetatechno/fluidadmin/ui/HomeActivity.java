@@ -59,17 +59,18 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     private FacilityListViewModel facilityListViewModel;
     private NavigationView navigationView;
     private ConfirmDeleteDialog confirmDeleteDialog;
-    private  NavController navController;
-    private  Bundle bundle;
+    private NavController navController;
+    private Bundle bundle;
     private AppBarConfiguration mAppBarConfiguration;
     private DrawerLayout drawer;
     private FacilitiesListDialog facilitiesListDialog;
     private AlertDialog alertDialog;
     private static final String TAG = HomeActivity.class.getSimpleName();
-    private  List<Facility> facilityList = new ArrayList<>();
-    private   String deleteStaffMessage = "";
-    private   String deleteCodeMessage = "";
-    private  String deleteFacilityMessage ="";
+    private List<Facility> facilityList = new ArrayList<>();
+    private String deleteStaffMessage = "";
+    private String deleteCodeMessage = "";
+    private String deleteFacilityMessage = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -173,37 +174,39 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     public void onOkButtonClicked(final Object itemDeleted) {
-
+        EspressoTestingIdlingResource.increment();
         if (itemDeleted instanceof Facility) {
             Log.i("Object", "facility type " + ((Facility) itemDeleted).getId());
-            if(deleteFacilityMessage.isEmpty())
-           deleteFacility((Facility)itemDeleted);
+            if (deleteFacilityMessage.isEmpty())
+                deleteFacility((Facility) itemDeleted);
             else
-                mainViewModel.deleteFacility((Facility)itemDeleted);
+                mainViewModel.deleteFacility((Facility) itemDeleted);
 
 
         }
         if (itemDeleted instanceof Staff) {
             Log.i("Object", "staff type " + ((Staff) itemDeleted).getStaffId());
             if (deleteStaffMessage.isEmpty())
-            deleteAgentOrProvider((Staff) itemDeleted);
+                deleteAgentOrProvider((Staff) itemDeleted);
             else
-                mainViewModel.deleteAgentOrProvider((Staff)itemDeleted);
+                mainViewModel.deleteAgentOrProvider((Staff) itemDeleted);
         }
         if (itemDeleted instanceof Code) {
             Log.i("Object", "code type " + ((Code) itemDeleted).getCode());
-            if(deleteCodeMessage.isEmpty())
-           deleteCode((Code)itemDeleted);
+            if (deleteCodeMessage.isEmpty())
+                deleteCode((Code) itemDeleted);
             else
-                mainViewModel.deleteCode((Code)itemDeleted);
+                mainViewModel.deleteCode((Code) itemDeleted);
         }
         if (alertDialog.isShowing()) {
             alertDialog.dismiss();
         }
+        EspressoTestingIdlingResource.decrement();
 
     }
 
-    int id ;
+    int id;
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         item.isChecked();
@@ -242,26 +245,32 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     public void getFacilities() {
+        EspressoTestingIdlingResource.increment();
         facilityListViewModel.getFacilityDataForClinicType("").observe(this, new Observer<Facilities>() {
             @Override
             public void onChanged(Facilities facilities) {
+                EspressoTestingIdlingResource.decrement();
                 if (facilities.getFacilities() != null) {
+                    EspressoTestingIdlingResource.increment();
                     facilityList = facilities.getFacilities();
                     checkAllFacilitiesThatLinkedToStaffAndShowDialog(staff);
+                    EspressoTestingIdlingResource.decrement();
 
 
                 }
             }
         });
     }
-Staff staff;
+
+    Staff staff;
+
     public void buildLinkToFacilityDialog(Staff staff) {
-            this.staff = staff;
+        EspressoTestingIdlingResource.decrement();
+        this.staff = staff;
         if (facilityList.size() == 0) {
             getFacilities();
 
-        }
-        else {
+        } else {
             facilityListViewModel.getFacilityDataForClinicType("");
         }
 
@@ -269,6 +278,7 @@ Staff staff;
     }
 
     private void checkAllFacilitiesThatLinkedToStaffAndShowDialog(@NotNull Staff staff) {
+        EspressoTestingIdlingResource.increment();
         List<Facility> facilityArrayList = facilityList;
         if (staff.getFacilityList() != null)
             for (int i = 0; i < staff.getFacilityList().size(); i++) {
@@ -281,9 +291,11 @@ Staff staff;
         facilitiesListDialog = new FacilitiesListDialog(HomeActivity.this, facilityArrayList, staff.getStaffId());
         facilitiesListDialog.show();
 
+
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-       facilitiesListDialog.getWindow().setLayout(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            facilitiesListDialog.getWindow().setLayout(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         }
+        EspressoTestingIdlingResource.decrement();
 
 
     }
@@ -336,56 +348,65 @@ Staff staff;
 
     @Override
     public void onConfirmLinkToFacility(String staffId, FacilityCodes facilityCodes) {
+        EspressoTestingIdlingResource.increment();
         mainViewModel.linkToFacility(staffId, facilityCodes, new OnDataChangedCallBackListener<String>() {
             @Override
             public void onResponse(String b) {
-                Log.i(TAG,"onConfirmLinkToFacility: status "+  b);
+                EspressoTestingIdlingResource.decrement();
+                Log.i(TAG, "onConfirmLinkToFacility: status " + b);
+                EspressoTestingIdlingResource.increment();
                 if (facilitiesListDialog.isShowing()) {
                     facilitiesListDialog.dismiss();
                     navigateToAgentList();
                 }
+                EspressoTestingIdlingResource.decrement();
 
             }
         });
     }
 
-private void deleteAgentOrProvider( final Staff itemDeleted){
-    mainViewModel.deleteAgentOrProvider( itemDeleted).observe(this, new Observer<String>() {
-        @Override
-        public void onChanged(String s) {
-            deleteStaffMessage = s;
-            if ( itemDeleted.getTypeCode().equals(EnumCode.StaffTypeCode.DSPTCHR.toString())) {
-                navigateToAgentList();
-                Toast.makeText(HomeActivity.this, deleteStaffMessage, Toast.LENGTH_SHORT).show();
-            } else if ( itemDeleted.getTypeCode().equals(EnumCode.StaffTypeCode.PRVDR.toString())) {
-                navigateToProviderList();
-                Toast.makeText(HomeActivity.this, deleteStaffMessage, Toast.LENGTH_SHORT).show();
+    private void deleteAgentOrProvider(final Staff itemDeleted) {
+        mainViewModel.deleteAgentOrProvider(itemDeleted).observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                EspressoTestingIdlingResource.increment();
+                deleteStaffMessage = s;
+                if (itemDeleted.getTypeCode().equals(EnumCode.StaffTypeCode.DSPTCHR.toString())) {
+                    navigateToAgentList();
+                    Toast.makeText(HomeActivity.this, deleteStaffMessage, Toast.LENGTH_SHORT).show();
+                } else if (itemDeleted.getTypeCode().equals(EnumCode.StaffTypeCode.PRVDR.toString())) {
+                    navigateToProviderList();
+                    Toast.makeText(HomeActivity.this, deleteStaffMessage, Toast.LENGTH_SHORT).show();
 
+                }
+                EspressoTestingIdlingResource.decrement();
             }
-        }
-    });
-}
-private void deleteFacility(Facility facility){
-    mainViewModel.deleteFacility(facility).observe(this, new Observer<String>() {
-        @Override
-        public void onChanged(String s) {
-            deleteFacilityMessage = s;
-            Toast.makeText(HomeActivity.this, deleteCodeMessage, Toast.LENGTH_SHORT).show();
-            navigateToClinicTypeList();
-        }
-    });
+        });
+    }
+
+    private void deleteFacility(Facility facility) {
+        mainViewModel.deleteFacility(facility).observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                EspressoTestingIdlingResource.increment();
+                deleteFacilityMessage = s;
+                Toast.makeText(HomeActivity.this, deleteFacilityMessage, Toast.LENGTH_SHORT).show();
+                navigateToClinicTypeList();
+                EspressoTestingIdlingResource.decrement();
+            }
+        });
 
 
-}
-private void deleteCode(Code code){
-    mainViewModel.deleteCode(code).observe(this, new Observer<String>() {
-        @Override
-        public void onChanged(String s) {
-            deleteCodeMessage = s;
-            Toast.makeText(HomeActivity.this, deleteCodeMessage, Toast.LENGTH_SHORT).show();
+    }
 
-            navigateToCodeList();
-        }
-    });
-}
+    private void deleteCode(Code code) {
+        mainViewModel.deleteCode(code).observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                deleteCodeMessage = s;
+                Toast.makeText(HomeActivity.this, deleteCodeMessage, Toast.LENGTH_SHORT).show();
+                navigateToCodeList();
+            }
+        });
+    }
 }

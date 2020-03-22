@@ -27,6 +27,7 @@ import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.listeners.OnDeleteListener;
 import com.thetatechno.fluidadmin.listeners.OnLinkToFacilityClickedListener;
 import com.thetatechno.fluidadmin.model.Staff;
+import com.thetatechno.fluidadmin.ui.EspressoTestingIdlingResource;
 import com.thetatechno.fluidadmin.utils.Constants;
 import com.thetatechno.fluidadmin.utils.EnumCode;
 
@@ -200,18 +201,21 @@ public class AgentListAdapter extends RecyclerView.Adapter<AgentListAdapter.Agen
                             switch (item.getItemId()) {
                                 case R.id.linkToFacility:
                                     //TODO: show dialog with facilities
-                                    if (onLinkToFacilityClickedListener != null)
+                                    if (onLinkToFacilityClickedListener != null) {
+                                        EspressoTestingIdlingResource.increment();
                                         onLinkToFacilityClickedListener.onShowDialogLinkToFacility(agentList.get(position));
 
+                                    }
+
                                     break;
-                                case R.id.edit:
+                                case R.id.editAgent:
                                     //handle edit click
                                     bundle.putSerializable(ARG_STAFF, (Serializable) agentList.get(position));
                                     bundle.putSerializable("agentList", (Serializable) agentList);
                                     navController.navigate(R.id.addOrUpdateAgentFragment, bundle);
 
                                     break;
-                                case R.id.delete:
+                                case R.id.deleteAgent:
                                     //show confirmation dialog to delete item
                                     if (listener != null)
                                         listener.onDeleteButtonClicked(agentList.get(position));

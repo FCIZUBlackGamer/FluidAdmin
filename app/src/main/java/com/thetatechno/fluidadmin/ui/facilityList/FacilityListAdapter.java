@@ -99,13 +99,13 @@ public class FacilityListAdapter extends RecyclerView.Adapter<FacilityListAdapte
                     //creating a popup agents_menu
                     PopupMenu popup = new PopupMenu(context, holder.facilityTextViewOptions);
                     //inflating agents_menu from xml resource
-                    popup.inflate(R.menu.default_menu);
+                    popup.inflate(R.menu.facility_menu);
                     //adding click listener
                     popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {
                             switch (item.getItemId()) {
-                                case R.id.edit:
+                                case R.id.editFacility:
                                     //handle edit click
                                     bundle.putSerializable(ARG_FACILITY, (Serializable) facilityList.get(position));
                                     bundle.putSerializable("type", (Serializable) EnumCode.UsageType.Facility);
@@ -115,7 +115,7 @@ public class FacilityListAdapter extends RecyclerView.Adapter<FacilityListAdapte
 
                                     break;
 
-                                case R.id.delete:
+                                case R.id.deleteFacility:
                                     // show delete dialog
                                     if (listener != null)
                                         listener.onDeleteButtonClicked(facilityList.get(position));

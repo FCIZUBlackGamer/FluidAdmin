@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.model.Staff;
+import com.thetatechno.fluidadmin.ui.EspressoTestingIdlingResource;
 import com.thetatechno.fluidadmin.ui.HomeActivity;
 import com.thetatechno.fluidadmin.utils.App;
 import com.thetatechno.fluidadmin.utils.Constants;
@@ -119,14 +120,14 @@ public class AddOrUpdateProviderFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        idEdtTxt = view.findViewById(R.id.idEdtTxt);
-        providerfirstNameEditTxt = view.findViewById(R.id.first_name_edt_txt);
-        providerLastNameEditTxt = view.findViewById(R.id.family_name_edt_txt);
-        providerEmailEditTxt = view.findViewById(R.id.emailEditTxt);
-        providerMobileEditTxt = view.findViewById(R.id.mobile_num_Edt_txt);
-        genderRadioGroup = view.findViewById(R.id.genderRadioGroup);
-        addBtn = view.findViewById(R.id.addOrUpdateBtn);
-        cancelBtn = view.findViewById(R.id.cancel_btn);
+        idEdtTxt = view.findViewById(R.id.providerIdEdtTxt);
+        providerfirstNameEditTxt = view.findViewById(R.id.providerFirstNameEdtTxt);
+        providerLastNameEditTxt = view.findViewById(R.id.providerLastNameEdtTxt);
+        providerEmailEditTxt = view.findViewById(R.id.providerEmailEditTxt);
+        providerMobileEditTxt = view.findViewById(R.id.providerMobileEdtTxt);
+        genderRadioGroup = view.findViewById(R.id.providerGenderRadioGroup);
+        addBtn = view.findViewById(R.id.addOrUpdateProviderBtn);
+        cancelBtn = view.findViewById(R.id.cancelAddOrUpdateProviderBtn);
         addProfileImage = view.findViewById(R.id.addProfileImg);
         specialitySpinner = view.findViewById(R.id.specialitySpinner);
         addOrUpdateViewModel = ViewModelProviders.of(this).get(AddOrUpdateProviderViewModel.class);
@@ -136,6 +137,7 @@ public class AddOrUpdateProviderFragment extends Fragment {
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                EspressoTestingIdlingResource.increment();
                 idTxt = idEdtTxt.getText().toString();
                 firstNameTxt = providerfirstNameEditTxt.getText().toString();
                 lastNameTxt = providerLastNameEditTxt.getText().toString();
@@ -143,33 +145,42 @@ public class AddOrUpdateProviderFragment extends Fragment {
                 if (isDataValid(idTxt, firstNameTxt, lastNameTxt, specialityTxt, providerEmailEditTxt.getText().toString(), providerMobileEditTxt.getText().toString())) {
                     getDataFromUi();
                     if (!isStaffHasData) {
+                        EspressoTestingIdlingResource.increment();
                         addOrUpdateViewModel.addNewProvider(staff, specialitySpinner.getSelectedItem().toString()).observe(getActivity(), new Observer<String>() {
                             @Override
                             public void onChanged(String s) {
                                 Log.i(TAG, "add staff message" + s);
                                 if (s.contains("success")) {
+                                    EspressoTestingIdlingResource.increment();
                                     Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
                                     onAddOrUpdateData();
+                                    EspressoTestingIdlingResource.decrement();
 
                                 }
 
                             }
                         });
+                        EspressoTestingIdlingResource.decrement();
                     } else {
+                        EspressoTestingIdlingResource.increment();
                         addOrUpdateViewModel.updateProvider(staff, specialitySpinner.getSelectedItem().toString()).observe(getActivity(), new Observer<String>() {
                             @Override
                             public void onChanged(String s) {
                                 Log.i(TAG, "Update staff message" + s);
                                 if (s.contains("success")) {
+                                    EspressoTestingIdlingResource.increment();
                                     onAddOrUpdateData();
                                     Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
+                                    EspressoTestingIdlingResource.decrement();
 
                                 }
 
                             }
                         });
+                        EspressoTestingIdlingResource.decrement();
                     }
                 }
+                EspressoTestingIdlingResource.decrement();
             }
         });
 
@@ -308,10 +319,12 @@ public class AddOrUpdateProviderFragment extends Fragment {
     }
 
     private void onAddOrUpdateData() {
+        EspressoTestingIdlingResource.increment();
         navController.navigate(R.id.providerList, null,
                 new NavOptions.Builder()
                         .setPopUpTo(R.id.providerList,
                                 true).build());
+        EspressoTestingIdlingResource.decrement();
 
     }
 

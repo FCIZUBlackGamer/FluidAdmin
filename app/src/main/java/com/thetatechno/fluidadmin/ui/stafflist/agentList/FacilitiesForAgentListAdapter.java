@@ -48,7 +48,6 @@ public class FacilitiesForAgentListAdapter extends RecyclerView.Adapter<Faciliti
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView myTextView;
 
-
         ViewHolder(View itemView) {
             super(itemView);
             myTextView = itemView.findViewById(R.id.tvTitle);

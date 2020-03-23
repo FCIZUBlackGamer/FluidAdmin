@@ -245,17 +245,16 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     public void getFacilities() {
-        EspressoTestingIdlingResource.increment();
+//        EspressoTestingIdlingResource.increment();
         facilityListViewModel.getFacilityDataForClinicType("").observe(this, new Observer<Facilities>() {
             @Override
             public void onChanged(Facilities facilities) {
-                EspressoTestingIdlingResource.decrement();
+//                EspressoTestingIdlingResource.decrement();
                 if (facilities.getFacilities() != null) {
                     EspressoTestingIdlingResource.increment();
                     facilityList = facilities.getFacilities();
                     checkAllFacilitiesThatLinkedToStaffAndShowDialog(staff);
                     EspressoTestingIdlingResource.decrement();
-
 
                 }
             }

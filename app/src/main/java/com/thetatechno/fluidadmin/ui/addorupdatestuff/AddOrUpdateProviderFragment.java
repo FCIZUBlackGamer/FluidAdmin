@@ -192,7 +192,7 @@ public class AddOrUpdateProviderFragment extends Fragment {
         providerIdTxtInputLayout = view.findViewById(R.id.providerIdTxtInputLayout);
         providerfirstNameEditTxt = view.findViewById(R.id.providerFirstNameEdtTxt);
         providerFirstNameTextInputLayout = view.findViewById(R.id.providerFirstNameTxtInputLayout);
-        providerLastNameTxtInputLayout = view.findViewById(R.id.agentFamilyNameInputLayout);
+        providerLastNameTxtInputLayout = view.findViewById(R.id.providerFamilyNameTxtInputLayout);
         providerLastNameEditTxt = view.findViewById(R.id.providerLastNameEdtTxt);
         providerEmailEditTxt = view.findViewById(R.id.providerEmailEditTxt);
         providerEmailTextInputLayout = view.findViewById(R.id.providerEmailTxtInputLayout);

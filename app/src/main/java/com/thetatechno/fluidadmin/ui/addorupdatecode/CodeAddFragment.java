@@ -5,7 +5,9 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +32,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.listeners.OnFragmentInteractionListener;
 import com.thetatechno.fluidadmin.model.Code;
@@ -59,6 +62,7 @@ public class CodeAddFragment extends DialogFragment {
     String codeUpdateMessage;
     private String idValidateMessage, descriptionValidateMessage;
     Context context;
+    TextInputLayout codeIdInputLayout, codeDescriptionInputLayout;
 
 
     public CodeAddFragment() {
@@ -126,6 +130,9 @@ public class CodeAddFragment extends DialogFragment {
         });
         codeIdEditTxt = view.findViewById(R.id.code_id_edt_txt);
         codeDescriptionEditTxt = view.findViewById(R.id.code_description_edt_txt);
+        codeIdInputLayout = view.findViewById(R.id.code_id_text_input);
+        codeDescriptionInputLayout = view.findViewById(R.id.code_description_text_input_layout);
+
         updateViewWithData();
         dialog = builder.create();
         return dialog;
@@ -134,6 +141,39 @@ public class CodeAddFragment extends DialogFragment {
     @Override
     public void onResume() {
         super.onResume();
+        codeIdEditTxt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                isIdValid(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                isIdValid(s.toString());
+            }
+        });
+        codeDescriptionEditTxt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                isDescriptionValid(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                isDescriptionValid(s.toString());
+            }
+        });
         Button button = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
         if(button.getText().toString().equals(getResources().getString(R.string.add_txt))){
             button.setOnClickListener(new View.OnClickListener() {
@@ -251,11 +291,13 @@ private void updateCode(){
 
     private boolean isIdValid(String id) {
         idValidateMessage = codeViewModel.validateId(id);
-        if (idValidateMessage.isEmpty())
+        if (idValidateMessage.isEmpty()) {
+            codeIdInputLayout.setErrorEnabled(false);
             return true;
+        }
         else {
-            codeIdEditTxt.setError(idValidateMessage);
-            requestFocus(codeIdEditTxt);
+            codeIdInputLayout.setError(idValidateMessage);
+            codeIdInputLayout.setErrorEnabled(true);
             return false;
         }
 
@@ -263,12 +305,14 @@ private void updateCode(){
 
     private boolean isDescriptionValid(String description) {
         descriptionValidateMessage = codeViewModel.validateDescription(description);
-        if (descriptionValidateMessage.isEmpty())
-
+        if (descriptionValidateMessage.isEmpty()) {
+            codeDescriptionInputLayout.setErrorEnabled(false);
             return true;
+        }
         else {
-            codeDescriptionEditTxt.setError(descriptionValidateMessage);
-            requestFocus(codeDescriptionEditTxt);
+            codeDescriptionInputLayout.setError(descriptionValidateMessage);
+            codeDescriptionInputLayout.setErrorEnabled(true);
+
             return false;
         }
 

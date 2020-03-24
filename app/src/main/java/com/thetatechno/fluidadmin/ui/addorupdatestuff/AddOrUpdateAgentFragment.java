@@ -1,5 +1,6 @@
 package com.thetatechno.fluidadmin.ui.addorupdatestuff;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
@@ -12,11 +13,14 @@ import androidx.navigation.NavController;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -102,6 +106,106 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
         initiateView(view);
         addOrUpdateViewModel = ViewModelProviders.of(this).get(AddOrUpdateViewModel.class);
         updateData();
+        if (staff == null || staff.getImageLink().isEmpty()) {
+
+            genderRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(RadioGroup group, int checkedId) {
+                    switch (checkedId) {
+                        case R.id.agentMaleRadioButton:
+                            addProfileImg.setImageResource(R.drawable.man);
+                            break;
+                        case R.id.agentFemaleRadioButton:
+                            addProfileImg.setImageResource(R.drawable.ic_girl);
+
+                    }
+                }
+            });
+        }
+
+        agentIdEditTxt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                isIdValid(s.toString());
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                isIdValid(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                isIdValid(s.toString());
+            }
+        });
+        agentFirstNameEditTxt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                isFirstNameValid(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                isFirstNameValid(s.toString());
+
+            }
+        });
+        agentLastNameEditTxt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                isLastNameValid(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                isLastNameValid(s.toString());
+
+            }
+        });
+        agentEmailEditTxt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                isEmailValid(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                isEmailValid(s.toString());
+            }
+        });
+        agentNumberEditTxt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                isPhoneValid(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                isPhoneValid(s.toString());
+
+            }
+        });
         addBtn.setOnClickListener(this);
         cancelBtn.setOnClickListener(this);
 
@@ -141,6 +245,7 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
     }
 
     private void onAddOrUpdateSuccessfully() {
+
         EspressoTestingIdlingResource.increment();
 
         navController.navigate(R.id.agentList, null,
@@ -148,8 +253,8 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
                         .setPopUpTo(R.id.agentList,
                                 true).build());
         EspressoTestingIdlingResource.decrement();
-    }
 
+    }
 
 
     private void updateData() {
@@ -165,10 +270,12 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
             else if (staff.getGender().equals(EnumCode.Gender.M.toString()))
                 genderRadioGroup.check(R.id.agentMaleRadioButton);
             addBtn.setHint(getResources().getString(R.string.update_txt));
+
             isStaffHasData = true;
             if (!staff.getImageLink().isEmpty()) {
                 Glide.with(this).load(Constants.BASE_URL + Constants.BASE_EXTENSION_FOR_PHOTOS + staff.getImageLink())
                         .circleCrop()
+                        .placeholder(R.drawable.ic_girl)
                         .into(addProfileImg);
             } else {
                 if (!staff.getGender().isEmpty()) {
@@ -178,7 +285,7 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
                         addProfileImg.setImageResource(R.drawable.ic_girl);
                     }
                 } else {
-                    addProfileImg.setImageResource(R.drawable.man);
+                    addProfileImg.setImageResource(R.drawable.ic_girl);
                 }
 
             }
@@ -193,7 +300,7 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
             agentLastNameEditTxt.setText("");
             agentEmailEditTxt.setText("");
             addBtn.setHint(getResources().getString(R.string.add_txt));
-            addProfileImg.setImageResource(R.drawable.man);
+            addProfileImg.setImageResource(R.drawable.ic_girl);
             ((HomeActivity) getActivity()).getSupportActionBar().setTitle("add agent");
 
         }
@@ -209,19 +316,19 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
                 lastNameTxt = agentLastNameEditTxt.getText().toString();
                 emailTxt = agentEmailEditTxt.getText().toString();
                 phoneTxt = agentNumberEditTxt.getText().toString();
-                if(isDataValid(idTxt,firstNameTxt,lastNameTxt,emailTxt,phoneTxt)) {
-                getDataFromUi();
-                if (!isStaffHasData) {
-                    if (addNewAgentMessage == null)
-                        addNewAgent();
-                    else {
-                        addOrUpdateViewModel.addNewAgent(staff);
-                    }
-                } else {
-                    if (updateAgentMessage == null)
-                        updateAgent();
-                    else
-                        addOrUpdateViewModel.updateAgent(staff);
+                if (isDataValid(idTxt, firstNameTxt, lastNameTxt, emailTxt, phoneTxt)) {
+                    getDataFromUi();
+                    if (!isStaffHasData) {
+                        if (addNewAgentMessage == null)
+                            addNewAgent();
+                        else {
+                            addOrUpdateViewModel.addNewAgent(staff);
+                        }
+                    } else {
+                        if (updateAgentMessage == null)
+                            updateAgent();
+                        else
+                            addOrUpdateViewModel.updateAgent(staff);
                     }
                     EspressoTestingIdlingResource.decrement();
 
@@ -242,10 +349,13 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
 
     private boolean isIdValid(String id) {
         idValidateMessage = addOrUpdateViewModel.validateId(id);
-        if (idValidateMessage.isEmpty())
+        if (idValidateMessage.isEmpty()) {
+            agentIdInputLayout.setErrorEnabled(false);
             return true;
-        else {
+        } else {
             agentIdInputLayout.setError(idValidateMessage);
+            agentIdInputLayout.setErrorEnabled(true);
+
             return false;
         }
 
@@ -253,11 +363,12 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
 
     private boolean isFirstNameValid(String firstName) {
         firstNameValidateMessage = addOrUpdateViewModel.validateFirstName(firstName);
-        if (firstNameValidateMessage.isEmpty())
-
+        if (firstNameValidateMessage.isEmpty()) {
+            agentFirstNameInputLayout.setErrorEnabled(false);
             return true;
-        else {
+        } else {
             agentFirstNameInputLayout.setError(firstNameValidateMessage);
+            agentIdInputLayout.setErrorEnabled(true);
             return false;
         }
 
@@ -265,10 +376,12 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
 
     private boolean isLastNameValid(String lastName) {
         lastNameValidateMessage = addOrUpdateViewModel.validateFamilyName(lastName);
-        if (lastNameValidateMessage.isEmpty())
+        if (lastNameValidateMessage.isEmpty()) {
+            agentFamilyNameInputLayout.setErrorEnabled(false);
             return true;
-        else {
+        } else {
             agentFamilyNameInputLayout.setError(lastNameValidateMessage);
+            agentFamilyNameInputLayout.setErrorEnabled(true);
             return false;
         }
 
@@ -276,19 +389,25 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
 
     private boolean isEmailValid(String email) {
         emailValidateMessage = addOrUpdateViewModel.validateEmail(email);
-        if (emailValidateMessage.isEmpty())
+        if (emailValidateMessage.isEmpty()) {
+            agentEmailInputLayout.setErrorEnabled(false);
             return true;
-        else {
+        } else {
             agentEmailInputLayout.setError(emailValidateMessage);
+            agentEmailInputLayout.setErrorEnabled(true);
+
             return false;
         }
     }
 
     private boolean isPhoneValid(String phone) {
         phoneValidateMessage = addOrUpdateViewModel.validatePhoneNumber(phone);
-        if (phoneValidateMessage.isEmpty())
+        if (phoneValidateMessage.isEmpty()) {
+            agentNumberInputLayout.setErrorEnabled(false);
+
             return true;
-        else {
+        } else {
+            agentNumberInputLayout.setErrorEnabled(true);
             agentNumberInputLayout.setError(phoneValidateMessage);
 
             return false;
@@ -331,5 +450,12 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
                 }
             }
         });
+    }
+
+    private void hideKeyboard(Context context, View view) {
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 }

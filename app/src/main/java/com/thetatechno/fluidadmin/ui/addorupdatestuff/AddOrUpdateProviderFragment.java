@@ -13,6 +13,8 @@ import androidx.navigation.NavController;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,7 +69,7 @@ public class AddOrUpdateProviderFragment extends Fragment {
     private  String idTxt, firstNameTxt, lastNameTxt, specialityTxt;
     private  String idValidateMessage, firstNameValidateMessage, lastNameValidateMessage, specialityValidateMessage, emailValidateMessage, phoneValidateMessage;
     private ArrayList<String> specialitiesList;
-    private ImageView addProfileImage;
+    private ImageView providerProfileImage;
 
     public AddOrUpdateProviderFragment() {
         // Required empty public constructor
@@ -128,6 +130,91 @@ public class AddOrUpdateProviderFragment extends Fragment {
         addOrUpdateViewModel = ViewModelProviders.of(this).get(AddOrUpdateProviderViewModel.class);
         getSpecialitiesList();
         updateData();
+        changeImageAvatar();
+
+        idEdtTxt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                isIdValid(s.toString());
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                isIdValid(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                isIdValid(s.toString());
+            }
+        });
+        providerfirstNameEditTxt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                isFirstNameValid(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                isFirstNameValid(s.toString());
+
+            }
+        });
+        providerLastNameEditTxt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                isLastNameValid(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                isLastNameValid(s.toString());
+
+            }
+        });
+        providerEmailEditTxt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                isEmailValid(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                isEmailValid(s.toString());
+            }
+        });
+        providerMobileEditTxt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                isPhoneValid(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                isPhoneValid(s.toString());
+
+            }
+        });
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -187,6 +274,25 @@ public class AddOrUpdateProviderFragment extends Fragment {
 
     }
 
+    private void changeImageAvatar() {
+        if(staff == null || staff.getImageLink().isEmpty()){
+
+            genderRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(RadioGroup group, int checkedId) {
+                    switch (checkedId) {
+                        case R.id.agentMaleRadioButton:
+                            providerProfileImage.setImageResource(R.drawable.man);
+                            break;
+                        case R.id.agentFemaleRadioButton:
+                            providerProfileImage.setImageResource(R.drawable.ic_girl);
+
+                    }
+                }
+            });
+        }
+    }
+
     private void initiateViews(View view) {
         idEdtTxt = view.findViewById(R.id.providerIdEdtTxt);
         providerIdTxtInputLayout = view.findViewById(R.id.providerIdTxtInputLayout);
@@ -201,7 +307,7 @@ public class AddOrUpdateProviderFragment extends Fragment {
         genderRadioGroup = view.findViewById(R.id.providerGenderRadioGroup);
         addBtn = view.findViewById(R.id.addOrUpdateProviderBtn);
         cancelBtn = view.findViewById(R.id.cancelAddOrUpdateProviderBtn);
-        addProfileImage = view.findViewById(R.id.addProfileImg);
+        providerProfileImage = view.findViewById(R.id.addProfileImg);
         specialitySpinner = view.findViewById(R.id.specialitySpinner);
 
     }
@@ -215,10 +321,14 @@ public class AddOrUpdateProviderFragment extends Fragment {
 
     private boolean isIdValid(String id) {
         idValidateMessage = addOrUpdateViewModel.validateId(id);
-        if (idValidateMessage.isEmpty())
+        if (idValidateMessage.isEmpty()) {
+            providerIdTxtInputLayout.setErrorEnabled(false);
             return true;
+        }
         else {
             providerIdTxtInputLayout.setError(idValidateMessage);
+            providerIdTxtInputLayout.setErrorEnabled(true);
+
             return false;
         }
 
@@ -226,11 +336,13 @@ public class AddOrUpdateProviderFragment extends Fragment {
 
     private boolean isFirstNameValid(String firstName) {
         firstNameValidateMessage = addOrUpdateViewModel.validateFirstName(firstName);
-        if (firstNameValidateMessage.isEmpty())
-
+        if (firstNameValidateMessage.isEmpty()) {
+            providerFirstNameTextInputLayout.setErrorEnabled(false);
             return true;
+        }
         else {
             providerFirstNameTextInputLayout.setError(firstNameValidateMessage);
+            providerFirstNameTextInputLayout.setErrorEnabled(true);
             return false;
         }
 
@@ -238,10 +350,14 @@ public class AddOrUpdateProviderFragment extends Fragment {
 
     private boolean isLastNameValid(String lastName) {
         lastNameValidateMessage = addOrUpdateViewModel.validateFamilyName(lastName);
-        if (lastNameValidateMessage.isEmpty())
+        if (lastNameValidateMessage.isEmpty()) {
+            providerLastNameTxtInputLayout.setErrorEnabled(false);
             return true;
+        }
         else {
             providerLastNameTxtInputLayout.setError(lastNameValidateMessage);
+            providerLastNameTxtInputLayout.setErrorEnabled(false);
+
             return false;
         }
 
@@ -249,21 +365,27 @@ public class AddOrUpdateProviderFragment extends Fragment {
 
     private boolean isEmailValid(String email) {
         emailValidateMessage = addOrUpdateViewModel.validateEmail(email);
-        if (emailValidateMessage.isEmpty())
+        if (emailValidateMessage.isEmpty()) {
+            providerLastNameTxtInputLayout.setErrorEnabled(false);
             return true;
+        }
         else {
             providerEmailTextInputLayout.setError(emailValidateMessage);
+            providerLastNameTxtInputLayout.setErrorEnabled(true);
+
             return false;
         }
     }
 
     private boolean isPhoneValid(String phone) {
         phoneValidateMessage = addOrUpdateViewModel.validatePhoneNumber(phone);
-        if (phoneValidateMessage.isEmpty())
+        if (phoneValidateMessage.isEmpty()) {
+            providerMobileInputLayout.setErrorEnabled(false);
             return true;
+        }
         else {
             providerMobileInputLayout.setError(phoneValidateMessage);
-
+            providerMobileInputLayout.setErrorEnabled(true);
             return false;
         }
     }
@@ -277,12 +399,6 @@ public class AddOrUpdateProviderFragment extends Fragment {
             return false;
         }
 
-    }
-
-    public void requestFocus(View view) {
-        if (view.requestFocus()) {
-            getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-        }
     }
 
     private void getDataFromUi() {
@@ -355,16 +471,17 @@ public class AddOrUpdateProviderFragment extends Fragment {
             if (!staff.getImageLink().isEmpty()) {
                 Glide.with(this).load(Constants.BASE_URL + Constants.BASE_EXTENSION_FOR_PHOTOS + staff.getImageLink())
                         .circleCrop()
-                        .into(addProfileImage);
+                        .placeholder(R.drawable.ic_girl)
+                        .into(providerProfileImage);
             } else {
                 if (!staff.getGender().isEmpty()) {
                     if (staff.getGender().equals(EnumCode.Gender.M.toString())) {
-                        addProfileImage.setImageResource(R.drawable.man);
+                        providerProfileImage.setImageResource(R.drawable.man);
                     } else if (staff.getGender().equals(EnumCode.Gender.F.toString())) {
-                        addProfileImage.setImageResource(R.drawable.ic_girl);
+                        providerProfileImage.setImageResource(R.drawable.ic_girl);
                     }
                 } else {
-                    addProfileImage.setImageResource(R.drawable.man);
+                    providerProfileImage.setImageResource(R.drawable.man);
                 }
             }
 
@@ -376,7 +493,8 @@ public class AddOrUpdateProviderFragment extends Fragment {
             providerLastNameEditTxt.setText("");
             providerEmailEditTxt.setText("");
             addBtn.setHint(getResources().getString(R.string.add_txt));
-            addProfileImage.setImageResource(R.drawable.man);
+            providerProfileImage.setImageResource(R.drawable.man);
+            genderRadioGroup.check(R.id.maleRadioButton);
 
         }
     }

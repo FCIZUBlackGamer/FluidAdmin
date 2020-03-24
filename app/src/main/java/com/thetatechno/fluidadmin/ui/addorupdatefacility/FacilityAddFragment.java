@@ -1,11 +1,17 @@
 package com.thetatechno.fluidadmin.ui.addorupdatefacility;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -14,6 +20,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -38,7 +45,7 @@ import static com.thetatechno.fluidadmin.utils.Constants.ARG_FACILITY;
 public class FacilityAddFragment extends Fragment {
     private Facility facility;
     private TextInputEditText facilityIdEditTxt, facilityDescriptionEditTxt;
-    private TextInputLayout facilityIdEditTxtInputLayout , facilityDescriptionEditTxtInputLayout;
+    private TextInputLayout facilityIdEditTxtInputLayout, facilityDescriptionEditTxtInputLayout;
     private Button cancelBtn, addOrUpdateBtn;
     private boolean isDataFound;
     private FacilityAddViewModel facilityAddViewModel;
@@ -95,6 +102,42 @@ public class FacilityAddFragment extends Fragment {
                     updateSpinnersInUiWhenWaitingAreaTypeSelected();
 
                 }
+
+            }
+        });
+        facilityIdEditTxt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                facilityIdEditTxtInputLayout.setHelperText("Id is mandatory");
+                facilityIdEditTxtInputLayout.setHelperTextEnabled(true);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                isIdValid(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                isIdValid(s.toString());
+            }
+        });
+        facilityDescriptionEditTxt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                facilityDescriptionEditTxtInputLayout.setHelperText("Description is mandatory");
+                facilityDescriptionEditTxtInputLayout.setHelperTextEnabled(true);
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                isDescriptionValid(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                isDescriptionValid(s.toString());
             }
         });
         addOrUpdateBtn.setOnClickListener(new View.OnClickListener() {
@@ -112,7 +155,10 @@ public class FacilityAddFragment extends Fragment {
                     facilityTypeTxt = "";
 
                 if (isDataValid()) {
+                    hideKeyboard(getContext(),facilityIdEditTxt);
+                    hideKeyboard(getContext(),facilityDescriptionEditTxt);
                     addDataToFacilityObject();
+
                     if (isDataFound) {
                         if (addOrUpdateMessage == null)
                             updateFacility();
@@ -134,6 +180,7 @@ public class FacilityAddFragment extends Fragment {
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 onCancelOrBackButtonClicked();
             }
         });
@@ -141,10 +188,11 @@ public class FacilityAddFragment extends Fragment {
     }
 
     private void addNewFacility() {
+
         facilityAddViewModel.addNewFacility(facility, deviceIdSpinner.getSelectedItem().toString(), waitingAreaSpinner.getSelectedItem().toString()).observe(getActivity(), new Observer<String>() {
             @Override
             public void onChanged(String s) {
-              EspressoTestingIdlingResource.increment();
+                EspressoTestingIdlingResource.increment();
                 addNewFacilityMessage = s;
                 Log.i(TAG, "add response message " + addNewFacilityMessage);
                 if (!addNewFacilityMessage.isEmpty())
@@ -316,9 +364,8 @@ public class FacilityAddFragment extends Fragment {
         });
     }
 
-
     private boolean isDataValid() {
-        if (isIdValid(idTxt) && isDescriptionValid(descriptionTxt) && isFacilityTypeSelected(facilityTypeTxt) )
+        if (isIdValid(idTxt) && isDescriptionValid(descriptionTxt) && isFacilityTypeSelected(facilityTypeTxt))
             return true;
         else
             return false;
@@ -326,11 +373,13 @@ public class FacilityAddFragment extends Fragment {
 
     private boolean isIdValid(String id) {
         idValidateMessage = facilityAddViewModel.validateId(id);
-        if (idValidateMessage.isEmpty())
+        if (idValidateMessage.isEmpty()) {
+            facilityIdEditTxtInputLayout.setErrorEnabled(false);
+
             return true;
-        else {
+        } else {
             facilityIdEditTxtInputLayout.setError(idValidateMessage);
-            requestFocus(facilityIdEditTxt);
+            facilityIdEditTxtInputLayout.setErrorEnabled(true);
             return false;
         }
 
@@ -338,12 +387,13 @@ public class FacilityAddFragment extends Fragment {
 
     private boolean isDescriptionValid(String description) {
         descriptionValidateMessage = facilityAddViewModel.validateDescription(description);
-        if (descriptionValidateMessage.isEmpty())
-
+        if (descriptionValidateMessage.isEmpty()) {
+            facilityDescriptionEditTxtInputLayout.setErrorEnabled(false);
             return true;
+        }
         else {
             facilityDescriptionEditTxtInputLayout.setError(descriptionValidateMessage);
-            requestFocus(facilityDescriptionEditTxt);
+            facilityDescriptionEditTxtInputLayout.setErrorEnabled(true);
             return false;
         }
 
@@ -354,17 +404,16 @@ public class FacilityAddFragment extends Fragment {
         if (facilityTypeValidateMessage.isEmpty())
             return true;
         else {
-            Toast.makeText(getContext(),facilityTypeValidateMessage,Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), facilityTypeValidateMessage, Toast.LENGTH_SHORT).show();
             return false;
         }
 
     }
 
-
-
-    public void requestFocus(View view) {
-        if (view.requestFocus()) {
-            getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+    private void hideKeyboard(Context context, View view) {
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
 

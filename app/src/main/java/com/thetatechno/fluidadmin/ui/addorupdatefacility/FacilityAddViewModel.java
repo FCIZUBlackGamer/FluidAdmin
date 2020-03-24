@@ -91,8 +91,8 @@ public class FacilityAddViewModel extends ViewModel {
         if (!waitingAreaDescription.isEmpty()) {
 
             for (Facility facility : facilities) {
-                if (facility.getWaitingAreaDescription() != null && facility.getWaitingAreaDescription().equals(waitingAreaDescription))
-                    return facility.getWaitingAreaId();
+                if ( facility.getDescription().equals(waitingAreaDescription))
+                    return facility.getId();
             }
         }
         return "";

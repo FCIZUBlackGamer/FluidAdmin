@@ -1,5 +1,6 @@
 package com.thetatechno.fluidadmin.ui.addorupdatestuff;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -17,6 +18,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -100,6 +102,7 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
         return inflater.inflate(R.layout.fragment_add_or_update_agent, container, false);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -126,17 +129,17 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
         agentIdEditTxt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                isIdValid(s.toString());
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                isIdValid(s.toString());
+                agentIdInputLayout.setErrorEnabled(false);
+                agentIdInputLayout.setHelperTextEnabled(false);
+
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                isIdValid(s.toString());
             }
         });
         agentFirstNameEditTxt.addTextChangedListener(new TextWatcher() {
@@ -147,12 +150,13 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                isFirstNameValid(s.toString());
+                agentFirstNameInputLayout.setErrorEnabled(false);
+                agentFirstNameInputLayout.setHelperTextEnabled(false);
+
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                isFirstNameValid(s.toString());
 
             }
         });
@@ -164,12 +168,14 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                isLastNameValid(s.toString());
+                agentFamilyNameInputLayout.setErrorEnabled(false);
+                agentFamilyNameInputLayout.setHelperTextEnabled(false);
+
+
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                isLastNameValid(s.toString());
 
             }
         });
@@ -181,12 +187,13 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                isEmailValid(s.toString());
+                agentEmailInputLayout.setErrorEnabled(false);
+
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                isEmailValid(s.toString());
+
             }
         });
         agentNumberEditTxt.addTextChangedListener(new TextWatcher() {
@@ -197,12 +204,11 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                isPhoneValid(s.toString());
+                agentNumberInputLayout.setErrorEnabled(false);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                isPhoneValid(s.toString());
 
             }
         });
@@ -226,6 +232,11 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
         addBtn = view.findViewById(R.id.addOrUpdateAgentBtn);
         cancelBtn = view.findViewById(R.id.cancel_btn);
         addProfileImg = view.findViewById(R.id.addProfileImg);
+        agentIdInputLayout.setHelperText("Id is mandatory");
+        agentFamilyNameInputLayout.setHelperText("Family Name is mandatory");
+        agentFirstNameInputLayout.setHelperText("First Name is mandatory");
+
+
     }
 
     private void getDataFromUi() {
@@ -337,6 +348,9 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
             case R.id.cancel_btn:
                 onCancelOrBackButtonPressed();
                 break;
+            case R.id.agentIdEdtTxt:
+                agentIdInputLayout.setErrorEnabled(false);
+                agentIdInputLayout.setHelperText("Id is required field");
         }
     }
 
@@ -442,15 +456,19 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
         addOrUpdateViewModel.updateAgent(staff).observe(getActivity(), new Observer<String>() {
             @Override
             public void onChanged(String s) {
+                EspressoTestingIdlingResource.increment();
                 updateAgentMessage = s;
                 Log.i("AddOrUpdate", "Update agent message" + s);
                 Toast.makeText(getContext(), updateAgentMessage, Toast.LENGTH_SHORT).show();
                 if (updateAgentMessage.contains("success")) {
                     onAddOrUpdateSuccessfully();
                 }
+                EspressoTestingIdlingResource.decrement();
+
             }
         });
     }
+
 
     private void hideKeyboard(Context context, View view) {
         if (view != null) {
@@ -458,4 +476,5 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
+
 }

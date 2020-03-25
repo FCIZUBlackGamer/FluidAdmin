@@ -182,7 +182,7 @@ public class AddOrUpdateProviderViewModel extends ViewModel {
             firstNameValidateMessage = "";
 
         } else {
-            firstNameValidateMessage = App.getContext().getResources().getString(R.string.first_name_error_message);
+            firstNameValidateMessage = App.getContext().getResources().getString(R.string.aphabets_error_message);
         }
         return firstNameValidateMessage;
     }
@@ -191,7 +191,7 @@ public class AddOrUpdateProviderViewModel extends ViewModel {
         if (isValidFamilyName(familyName)) {
             familyNameValidateMessage = "";
         } else {
-            familyNameValidateMessage = App.getContext().getResources().getString(R.string.family_name_error_message);
+            familyNameValidateMessage = App.getContext().getResources().getString(R.string.aphabets_error_message);
         }
         return familyNameValidateMessage;
     }

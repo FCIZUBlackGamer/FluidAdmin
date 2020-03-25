@@ -33,14 +33,20 @@ public class FacilityAddViewModel extends ViewModel {
     private String message = "";
     List<Device> deviceList = new ArrayList<>();
     List<Facility> facilities = new ArrayList<>();
-    private String  typeMessage , idValidateMessage, descriptionMessage;
+    private String typeMessage, idValidateMessage, descriptionMessage;
 
     public MutableLiveData<String> addNewFacility(Facility facility, String deviceDescription, String waitingAreaDescription) {
-        if (!getDeviceID(deviceDescription).isEmpty())
-            facility.setDeviceId(getDeviceID(deviceDescription));
-        if (!getWaitingAreaCode(waitingAreaDescription).isEmpty())
-            facility.setWaitingAreaId(getWaitingAreaCode(waitingAreaDescription));
-
+        if (facility.getType().equals(EnumCode.ClinicTypeCode.CLINIC.toString())) {
+            if (!getWaitingAreaCode(waitingAreaDescription).isEmpty())
+                facility.setWaitingAreaId(getWaitingAreaCode(waitingAreaDescription));
+            facility.setDeviceId("");
+            facility.setDescription("");
+        } else if (facility.getType().equals(EnumCode.ClinicTypeCode.WAITAREA.toString())) {
+            if (!getDeviceID(deviceDescription).isEmpty())
+                facility.setDeviceId(getDeviceID(deviceDescription));
+            facility.setWaitingAreaId("");
+            facility.setWaitingAreaDescription("");
+        }
         facilityRepository.insertFacility(facility, new OnDataChangedCallBackListener<String>() {
             @Override
             public void onResponse(String b) {
@@ -57,10 +63,18 @@ public class FacilityAddViewModel extends ViewModel {
     }
 
     public MutableLiveData<String> updateFacility(Facility facility, String deviceDescription, String waitingAreaDescription) {
-        if (!getDeviceID(deviceDescription).isEmpty())
-            facility.setDeviceId(getDeviceID(deviceDescription));
-        if (!getWaitingAreaCode(waitingAreaDescription).isEmpty())
-            facility.setWaitingAreaId(getWaitingAreaCode(waitingAreaDescription));
+        if (facility.getType().equals(EnumCode.ClinicTypeCode.CLINIC.toString())) {
+            if (!getWaitingAreaCode(waitingAreaDescription).isEmpty())
+                facility.setWaitingAreaId(getWaitingAreaCode(waitingAreaDescription));
+            facility.setDeviceId("");
+            facility.setDescription("");
+        } else if (facility.getType().equals(EnumCode.ClinicTypeCode.WAITAREA.toString())) {
+            if (!getDeviceID(deviceDescription).isEmpty())
+                facility.setDeviceId(getDeviceID(deviceDescription));
+            facility.setWaitingAreaId("");
+            facility.setWaitingAreaDescription("");
+        }
+
         facilityRepository.updateFacility(facility, new OnDataChangedCallBackListener<String>() {
             @Override
             public void onResponse(String b) {
@@ -91,7 +105,7 @@ public class FacilityAddViewModel extends ViewModel {
         if (!waitingAreaDescription.isEmpty()) {
 
             for (Facility facility : facilities) {
-                if ( facility.getDescription().equals(waitingAreaDescription))
+                if (facility.getDescription().equals(waitingAreaDescription))
                     return facility.getId();
             }
         }
@@ -109,7 +123,7 @@ public class FacilityAddViewModel extends ViewModel {
                         List<Facility> waitListIds = new ArrayList<>();
                         waitListIds.add(new Facility());
                         for (Facility facility : facilitiesListResponse.getFacilities()) {
-                                waitListIds.add(facility);
+                            waitListIds.add(facility);
                         }
                         facilitiesWaitListStringMutableLiveData.setValue(waitListIds);
                     } else {
@@ -179,6 +193,7 @@ public class FacilityAddViewModel extends ViewModel {
         }
         return idValidateMessage;
     }
+
     public String validateDescription(String description) {
         if (isValidForDescription(description)) {
             descriptionMessage = "";
@@ -188,6 +203,7 @@ public class FacilityAddViewModel extends ViewModel {
         }
         return descriptionMessage;
     }
+
     private boolean isValidForID(String id) {
         if (!Validation.isValidForId(id))
             return false;
@@ -195,8 +211,9 @@ public class FacilityAddViewModel extends ViewModel {
             return true;
 
     }
-    private boolean isValidForDescription(String description){
-        if(!Validation.isValidForWord(description))
+
+    private boolean isValidForDescription(String description) {
+        if (!Validation.isValidForWord(description))
             return false;
         else
             return true;

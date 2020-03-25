@@ -20,11 +20,11 @@ public class Validation {
     }
     public static boolean isValidPhoneNumber(String phone){
         Log.i(TAG,Patterns.PHONE.pattern());
-        return (TextUtils.isEmpty(phone.trim()) || Patterns.PHONE.matcher(phone).matches());
+        return (TextUtils.isEmpty(phone.trim()) || phone.matches("^[+]?[0-9]{10,15}$"));
     }
     public static boolean isValidForName(String word){
 
-        return (!TextUtils.isEmpty(word.trim()));
+        return (!TextUtils.isEmpty(word.trim())&& word.matches("[a-zA-Z]+"));
     }
     public static boolean isValidForId(String id){
 

@@ -108,36 +108,34 @@ public class FacilityAddFragment extends Fragment {
         facilityIdEditTxt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                facilityIdEditTxtInputLayout.setHelperText("Id is mandatory");
-                facilityIdEditTxtInputLayout.setHelperTextEnabled(true);
+
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                isIdValid(s.toString());
+                facilityIdEditTxtInputLayout.setErrorEnabled(false);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                isIdValid(s.toString());
+
             }
         });
         facilityDescriptionEditTxt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                facilityDescriptionEditTxtInputLayout.setHelperText("Description is mandatory");
-                facilityDescriptionEditTxtInputLayout.setHelperTextEnabled(true);
 
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                isDescriptionValid(s.toString());
+                facilityDescriptionEditTxtInputLayout.setErrorEnabled(false);
+
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                isDescriptionValid(s.toString());
+
             }
         });
         addOrUpdateBtn.setOnClickListener(new View.OnClickListener() {
@@ -155,10 +153,7 @@ public class FacilityAddFragment extends Fragment {
                     facilityTypeTxt = "";
 
                 if (isDataValid()) {
-                    hideKeyboard(getContext(),facilityIdEditTxt);
-                    hideKeyboard(getContext(),facilityDescriptionEditTxt);
                     addDataToFacilityObject();
-
                     if (isDataFound) {
                         if (addOrUpdateMessage == null)
                             updateFacility();
@@ -208,7 +203,6 @@ public class FacilityAddFragment extends Fragment {
     }
 
     private void initViews(View view) {
-
         facilityIdEditTxt = view.findViewById(R.id.facilityIdEdtTxt);
         facilityDescriptionEditTxt = view.findViewById(R.id.facilityDesriptionEdtTxt);
         facilityIdEditTxtInputLayout = view.findViewById(R.id.facilityIdTxtInputLayout);
@@ -350,7 +344,6 @@ public class FacilityAddFragment extends Fragment {
             @Override
             public void onChanged(String s) {
                 addOrUpdateMessage = s;
-                EspressoTestingIdlingResource.decrement();
                 Log.i(TAG, "update response message " + addOrUpdateMessage);
                 if (!addOrUpdateMessage.isEmpty())
                     Toast.makeText(getActivity(), addOrUpdateMessage, Toast.LENGTH_SHORT);
@@ -362,6 +355,7 @@ public class FacilityAddFragment extends Fragment {
 
             }
         });
+        EspressoTestingIdlingResource.decrement();
     }
 
     private boolean isDataValid() {

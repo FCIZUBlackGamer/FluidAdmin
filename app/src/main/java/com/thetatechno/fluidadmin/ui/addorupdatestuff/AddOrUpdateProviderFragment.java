@@ -49,7 +49,7 @@ import static com.thetatechno.fluidadmin.utils.Constants.ARG_STAFF;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AddOrUpdateProviderFragment extends Fragment {
+public class AddOrUpdateProviderFragment extends Fragment  {
     private static String TAG = "AddStaff";
     private TextInputEditText idEdtTxt;
     private   TextInputEditText providerfirstNameEditTxt;
@@ -140,7 +140,8 @@ public class AddOrUpdateProviderFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                isIdValid(s.toString());
+                providerIdTxtInputLayout.setErrorEnabled(false);
+
             }
 
             @Override
@@ -156,12 +157,11 @@ public class AddOrUpdateProviderFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                isFirstNameValid(s.toString());
+                providerFirstNameTextInputLayout.setErrorEnabled(false);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                isFirstNameValid(s.toString());
 
             }
         });
@@ -173,12 +173,11 @@ public class AddOrUpdateProviderFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                isLastNameValid(s.toString());
+                providerLastNameTxtInputLayout.setErrorEnabled(false);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                isLastNameValid(s.toString());
 
             }
         });
@@ -190,12 +189,11 @@ public class AddOrUpdateProviderFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                isEmailValid(s.toString());
+                providerEmailTextInputLayout.setErrorEnabled(false);
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-                isEmailValid(s.toString());
+            public void afterTextChanged(Editable s){
             }
         });
         providerMobileEditTxt.addTextChangedListener(new TextWatcher() {
@@ -206,12 +204,13 @@ public class AddOrUpdateProviderFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                isPhoneValid(s.toString());
+                providerMobileInputLayout.setErrorEnabled(false);
+
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                isPhoneValid(s.toString());
+
 
             }
         });
@@ -243,10 +242,11 @@ public class AddOrUpdateProviderFragment extends Fragment {
                         });
                         EspressoTestingIdlingResource.decrement();
                     } else {
-                        EspressoTestingIdlingResource.increment();
+
                         addOrUpdateViewModel.updateProvider(staff, specialitySpinner.getSelectedItem().toString()).observe(getActivity(), new Observer<String>() {
                             @Override
                             public void onChanged(String s) {
+                                EspressoTestingIdlingResource.increment();
                                 Log.i(TAG, "Update staff message" + s);
                                 if (s.contains("success")) {
                                     EspressoTestingIdlingResource.increment();
@@ -255,10 +255,11 @@ public class AddOrUpdateProviderFragment extends Fragment {
                                     EspressoTestingIdlingResource.decrement();
 
                                 }
+                                EspressoTestingIdlingResource.decrement();
+
 
                             }
                         });
-                        EspressoTestingIdlingResource.decrement();
                     }
                 }
                 EspressoTestingIdlingResource.decrement();
@@ -276,15 +277,14 @@ public class AddOrUpdateProviderFragment extends Fragment {
 
     private void changeImageAvatar() {
         if(staff == null || staff.getImageLink().isEmpty()){
-
             genderRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(RadioGroup group, int checkedId) {
                     switch (checkedId) {
-                        case R.id.agentMaleRadioButton:
+                        case R.id.maleRadioButton:
                             providerProfileImage.setImageResource(R.drawable.man);
                             break;
-                        case R.id.agentFemaleRadioButton:
+                        case R.id.femaleRadioButton:
                             providerProfileImage.setImageResource(R.drawable.ic_girl);
 
                     }
@@ -356,7 +356,7 @@ public class AddOrUpdateProviderFragment extends Fragment {
         }
         else {
             providerLastNameTxtInputLayout.setError(lastNameValidateMessage);
-            providerLastNameTxtInputLayout.setErrorEnabled(false);
+            providerLastNameTxtInputLayout.setErrorEnabled(true);
 
             return false;
         }

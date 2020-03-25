@@ -149,7 +149,7 @@ public class CodeAddFragment extends DialogFragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                isIdValid(s.toString());
+                codeIdInputLayout.setErrorEnabled(false);
             }
 
             @Override
@@ -166,7 +166,7 @@ public class CodeAddFragment extends DialogFragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                isDescriptionValid(s.toString());
+                codeDescriptionInputLayout.setErrorEnabled(false);
             }
 
             @Override
@@ -199,18 +199,24 @@ public class CodeAddFragment extends DialogFragment {
 
         }
         else if (button.getText().toString().equals(getResources().getString(R.string.update_txt))){
-            EspressoTestingIdlingResource.increment();
-            getDataFromUi();
-            if (isDataValid()) {
-                fillCodeObjectWithUiData();
-                if(codeUpdateMessage == null){
-                    updateCode();
-                }
-                else
-                    codeViewModel.updateCode(code);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    EspressoTestingIdlingResource.increment();
+                    getDataFromUi();
+                    if (isDataValid()) {
+                        fillCodeObjectWithUiData();
+                        if(codeUpdateMessage == null){
+                            updateCode();
+                        }
+                        else
+                            codeViewModel.updateCode(code);
 
-            }
-            EspressoTestingIdlingResource.decrement();
+                    }
+                    EspressoTestingIdlingResource.decrement();
+                }
+            });
+
 
         }
 
@@ -220,6 +226,7 @@ public class CodeAddFragment extends DialogFragment {
         codeViewModel.addNewCode(code).observe(getActivity(), new Observer<String>() {
             @Override
             public void onChanged(String s) {
+
                 EspressoTestingIdlingResource.increment();
                 codeAddMessage = s;
                 Log.i("CodeFragment", "addNewCode message " + s);
@@ -234,7 +241,22 @@ public class CodeAddFragment extends DialogFragment {
         });
     }
 private void updateCode(){
+    codeViewModel.updateCode(code).observe(getActivity(), new Observer<String>() {
+        @Override
+        public void onChanged(String s) {
 
+            EspressoTestingIdlingResource.increment();
+            codeUpdateMessage = s;
+            Log.i("CodeFragment", "addNewCode message " + s);
+            Toast.makeText(context, codeUpdateMessage, Toast.LENGTH_SHORT).show();
+            if (codeUpdateMessage.contains("success")) {
+                EspressoTestingIdlingResource.increment();
+                onButtonPressed();
+                EspressoTestingIdlingResource.decrement();
+            }
+            EspressoTestingIdlingResource.decrement();
+        }
+    });
 }
     private void getDataFromUi() {
         idTxt = codeIdEditTxt.getText().toString();

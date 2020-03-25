@@ -72,9 +72,10 @@
     <string name="update_facility">Update Facility</string>
     <string name="agent_id">id</string>
 
-    <string name="error_message_for_number">Enter a valid number</string>
+    <string name="error_message_for_number">Enter at least 10 numbers</string>
     <string name="error_message_for_email">Enter a Valid Email</string>
     <string name="first_name_error_message">First Name is required Field</string>
+    <string name="aphabets_error_message">Enter only alphabets</string>
     <string name="family_name_error_message">Family Name is required Field</string>
     <string name="choose_speciality_error_message">Please choose speciality</string>
     <string name="id_error_message">Id is required Field</string>

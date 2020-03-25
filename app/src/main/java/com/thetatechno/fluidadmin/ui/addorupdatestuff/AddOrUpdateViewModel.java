@@ -64,8 +64,9 @@ public class AddOrUpdateViewModel extends ViewModel {
             return true;
     }
     private boolean isValidFirstName(String firstName){
-        if (!Validation.isValidForName(firstName))
+        if (!Validation.isValidForName(firstName)) {
             return false;
+        }
         else
             return true;
 
@@ -118,7 +119,12 @@ public class AddOrUpdateViewModel extends ViewModel {
 
         }
         else{
-            firstNameValidateMessage = App.getContext().getResources().getString(R.string.first_name_error_message);
+            if(!firstName.matches("[a-zA-Z]]"))
+            firstNameValidateMessage = App.getContext().getResources().getString(R.string.aphabets_error_message);
+            else if(firstName.trim().isEmpty()) {
+                firstNameValidateMessage = App.getContext().getResources().getString(R.string.first_name_error_message);
+
+            }
         }
         return firstNameValidateMessage;
     }
@@ -127,7 +133,7 @@ public class AddOrUpdateViewModel extends ViewModel {
             familyNameValidateMessage ="";
         }
         else{
-            familyNameValidateMessage  = App.getContext().getResources().getString(R.string.family_name_error_message);
+            familyNameValidateMessage  = App.getContext().getResources().getString(R.string.aphabets_error_message);
         }
         return familyNameValidateMessage;
     }

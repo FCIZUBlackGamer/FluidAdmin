@@ -93,95 +93,131 @@
 
     </RadioGroup>
 
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/waitingAreaID"
-        android:textColor="@color/colorPrimary"
-        app:layout_constraintStart_toStartOf="@+id/textView4"
-        app:layout_constraintTop_toBottomOf="@+id/typeRadioGroup" />
+<!--    <TextView-->
+<!--        android:id="@+id/textView5"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="@string/waitingAreaID"-->
+<!--        android:textColor="@color/colorPrimary"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/textView4"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/typeRadioGroup" />-->
 
-
-    <RelativeLayout
-        android:id="@+id/waitingAreaLayoutSpinner"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/spinner_background"
-        android:orientation="horizontal"
-        android:weightSum="3"
-        app:layout_constraintStart_toStartOf="@+id/textView5"
-        app:layout_constraintTop_toBottomOf="@+id/textView5">
-
-        <Spinner
-
-            android:id="@+id/waitingAreaSpinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center"
-            android:layout_marginStart="5dp"
-            android:background="@android:color/transparent"
-            android:gravity="center"
-            android:spinnerMode="dropdown" />
-
-        <ImageView
-            android:id="@+id/waiting_area_arrow_down_img"
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_arrow_drop_down_black_24dp" />
+            android:hint="@string/waiting_area"
+            android:id="@+id/waitingAreaLayout"
+            app:layout_constraintStart_toStartOf="@id/typeRadioGroup"
+            app:layout_constraintTop_toBottomOf="@id/typeRadioGroup"
+            >
 
-    </RelativeLayout>
+            <AutoCompleteTextView
+                android:id="@+id/waitingAreaAutoCompleteTextView"
+                android:layout_width="match_parent"
+                android:ems="12"
+                android:layout_height="wrap_content"
+                android:inputType="none" />
 
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/deviceId"
-        android:textColor="@color/colorPrimary"
-        app:layout_constraintStart_toStartOf="@+id/textView5"
-        app:layout_constraintTop_toBottomOf="@+id/waitingAreaLayoutSpinner" />
+        </com.google.android.material.textfield.TextInputLayout>
+<!--    <RelativeLayout-->
+<!--        android:id="@+id/waitingAreaLayoutSpinner"-->
+<!--        android:layout_width="250dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:background="@drawable/spinner_background"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:weightSum="3"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/textView5"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/textView5">-->
+
+<!--        <Spinner-->
+
+<!--            android:id="@+id/waitingAreaSpinner"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_centerVertical="true"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:layout_marginStart="5dp"-->
+<!--            android:background="@android:color/transparent"-->
+<!--            android:gravity="center"-->
+<!--            android:spinnerMode="dropdown" />-->
+
+<!--        <ImageView-->
+<!--            android:id="@+id/waiting_area_arrow_down_img"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignParentEnd="true"-->
+<!--            android:layout_centerVertical="true"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:src="@drawable/ic_arrow_drop_down_black_24dp" />-->
+
+<!--    </RelativeLayout>-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/textView6"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:text="@string/deviceId"-->
+<!--        android:textColor="@color/colorPrimary"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/textView5"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/waitingAreaLayout" />-->
 
 
-    <RelativeLayout
-        android:id="@+id/deviceIdRelativeLayout"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/spinner_background"
-        android:orientation="horizontal"
-        android:weightSum="3"
-        app:layout_constraintEnd_toEndOf="@+id/waitingAreaLayoutSpinner"
-        app:layout_constraintStart_toStartOf="@+id/waitingAreaLayoutSpinner"
-        app:layout_constraintTop_toBottomOf="@+id/textView6">
+<!--    <RelativeLayout-->
+<!--        android:id="@+id/deviceIdRelativeLayout"-->
+<!--        android:layout_width="250dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:background="@drawable/spinner_background"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:weightSum="3"-->
+<!--        app:layout_constraintEnd_toEndOf="@+id/waitingAreaLayout"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/waitingAreaLayout"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/waitingAreaLayout">-->
 
-        <Spinner
-            android:id="@+id/deviceIdSpinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center"
-            android:layout_marginStart="5dp"
-            android:background="@android:color/transparent"
-            android:gravity="center"
-            android:spinnerMode="dropdown" />
+<!--        <Spinner-->
+<!--            android:id="@+id/deviceIdSpinner"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_centerVertical="true"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:layout_marginStart="5dp"-->
+<!--            android:background="@android:color/transparent"-->
+<!--            android:gravity="center"-->
+<!--            android:spinnerMode="dropdown" />-->
 
-        <ImageView
+<!--        <ImageView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignParentEnd="true"-->
+<!--            android:layout_centerVertical="true"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:id="@+id/device_arrow_down_img"-->
+<!--            android:src="@drawable/ic_arrow_drop_down_black_24dp" />-->
+
+<!--    </RelativeLayout>-->
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center"
-            android:id="@+id/device_arrow_down_img"
-            android:src="@drawable/ic_arrow_drop_down_black_24dp" />
+            android:hint="@string/device_txt"
+            android:id="@+id/deviceLayout"
+            app:layout_constraintEnd_toEndOf="@+id/waitingAreaLayout"
+            app:layout_constraintStart_toStartOf="@+id/waitingAreaLayout"
+            app:layout_constraintTop_toBottomOf="@+id/waitingAreaLayout"
+            >
 
-    </RelativeLayout>
+            <AutoCompleteTextView
+                android:id="@+id/deviceAutoCompleteTextView"
+                android:layout_width="match_parent"
+                android:ems="12"
+                android:layout_height="wrap_content"
+                android:inputType="none" />
 
+        </com.google.android.material.textfield.TextInputLayout>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -191,7 +227,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="64dp"
         android:layout_marginBottom="64dp"
-        app:layout_constraintTop_toBottomOf="@+id/deviceIdRelativeLayout">
+        app:layout_constraintTop_toBottomOf="@+id/deviceLayout">
 
         <Button
             android:id="@+id/cancel_btn"

@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
@@ -46,19 +47,19 @@ public class FacilityAddFragment extends Fragment {
     private Facility facility;
     private TextInputEditText facilityIdEditTxt, facilityDescriptionEditTxt;
     private TextInputLayout facilityIdEditTxtInputLayout, facilityDescriptionEditTxtInputLayout;
+    private TextInputLayout facilityWaitingAreaLayout, facilityDeviceLayout;
+    private AutoCompleteTextView facilityWaitingAreaTextView,facilityDeviceTextView;
     private Button cancelBtn, addOrUpdateBtn;
     private boolean isDataFound;
     private FacilityAddViewModel facilityAddViewModel;
     private NavController navController;
-    private Spinner deviceIdSpinner, waitingAreaSpinner;
     private RadioGroup facilityTypeRadioGroup;
     private final static String TAG = "FacilityAddFragment";
     private ArrayAdapter<Facility> waitingAreaListAdapter;
     private List<Facility> waitAreaDescriptionList;
     private List<String> devicesDescriptionList;
     private String addOrUpdateMessage, addNewFacilityMessage;
-    private ImageView deviceArrowDownImg;
-    private ImageView waitingAreaArrowDownImg;
+
     private String idTxt, descriptionTxt, facilityTypeTxt;
     private String idValidateMessage, descriptionValidateMessage, facilityTypeValidateMessage;
 
@@ -96,10 +97,10 @@ public class FacilityAddFragment extends Fragment {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (checkedId == R.id.clinicTyperadioButton) {
-                    updateSpinnersInUiWhenRoomTypeSelected();
+                    updateDropdownListInUiWhenRoomTypeSelected();
 
                 } else if (checkedId == R.id.waitingAreaTypeRadioButton) {
-                    updateSpinnersInUiWhenWaitingAreaTypeSelected();
+                    updateDropdownListInUiWhenWaitingAreaTypeSelected();
 
                 }
 
@@ -158,12 +159,12 @@ public class FacilityAddFragment extends Fragment {
                         if (addOrUpdateMessage == null)
                             updateFacility();
                         else
-                            facilityAddViewModel.updateFacility(facility, deviceIdSpinner.getSelectedItem().toString(), waitingAreaSpinner.getSelectedItem().toString());
+                            facilityAddViewModel.updateFacility(facility, facilityDeviceTextView.getText().toString(), facilityWaitingAreaTextView.getText().toString());
                     } else {
                         if (addNewFacilityMessage == null)
                             addNewFacility();
                         else
-                            facilityAddViewModel.addNewFacility(facility, deviceIdSpinner.getSelectedItem().toString(), waitingAreaSpinner.getSelectedItem().toString());
+                            facilityAddViewModel.addNewFacility(facility, facilityDeviceTextView.getText().toString(), facilityWaitingAreaTextView.getText().toString());
 
                     }
                 }
@@ -184,7 +185,7 @@ public class FacilityAddFragment extends Fragment {
 
     private void addNewFacility() {
 
-        facilityAddViewModel.addNewFacility(facility, deviceIdSpinner.getSelectedItem().toString(), waitingAreaSpinner.getSelectedItem().toString()).observe(getActivity(), new Observer<String>() {
+        facilityAddViewModel.addNewFacility(facility, facilityDeviceTextView.getText().toString(), facilityWaitingAreaTextView.getText().toString()).observe(getActivity(), new Observer<String>() {
             @Override
             public void onChanged(String s) {
                 EspressoTestingIdlingResource.increment();
@@ -208,29 +209,30 @@ public class FacilityAddFragment extends Fragment {
         facilityIdEditTxtInputLayout = view.findViewById(R.id.facilityIdTxtInputLayout);
         facilityDescriptionEditTxtInputLayout = view.findViewById(R.id.facility_description_txt_input_layout);
         facilityTypeRadioGroup = view.findViewById(R.id.typeRadioGroup);
-        waitingAreaSpinner = view.findViewById(R.id.waitingAreaSpinner);
-        deviceIdSpinner = view.findViewById(R.id.deviceIdSpinner);
+        facilityWaitingAreaLayout = view.findViewById(R.id.waitingAreaLayout);
+        facilityDeviceLayout = view.findViewById(R.id.deviceLayout);
+        facilityDeviceTextView= view.findViewById(R.id.deviceAutoCompleteTextView);
+        facilityWaitingAreaTextView = view.findViewById(R.id.waitingAreaAutoCompleteTextView);
         cancelBtn = view.findViewById(R.id.cancel_btn);
         addOrUpdateBtn = view.findViewById(R.id.addOrUpdateFacilityBtn);
-        deviceArrowDownImg = view.findViewById(R.id.device_arrow_down_img);
-        waitingAreaArrowDownImg = view.findViewById(R.id.waiting_area_arrow_down_img);
+
 
     }
 
     private void getWaitingAreaDescriptionList() {
-        facilityAddViewModel.getFacilityDataForWaitingAreaList("").observe(this, new Observer<List<Facility>>() {
+        facilityAddViewModel.getFacilityDataForWaitingAreaList("").observe(getActivity(), new Observer<List<Facility>>() {
             @Override
             public void onChanged(List<Facility> waitAreaList) {
                 if (waitAreaList.size() > 0) {
                     waitAreaDescriptionList = waitAreaList;
                     waitingAreaListAdapter =
-                            new ArrayAdapter<>(getContext(), R.layout.simple_spinner_dropdown_item, waitAreaDescriptionList);
-                    waitingAreaListAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
-                    waitingAreaSpinner.setAdapter(waitingAreaListAdapter);
+                            new ArrayAdapter<>(getContext(), R.layout.dropdown_menu_popup_item, waitAreaDescriptionList);
+                    facilityWaitingAreaTextView.setAdapter(waitingAreaListAdapter);
                     if (facility.getWaitingAreaId() != null) {
                         for (int i = 0; i < waitAreaDescriptionList.size(); i++) {
                             if (waitAreaDescriptionList.get(i).getDescription().equals(facility.getWaitingAreaDescription())) {
-                                waitingAreaSpinner.setSelection(i);
+                                facilityWaitingAreaTextView.setText(facility.getWaitingAreaDescription(),false);
+
                             }
                         }
                     }
@@ -240,19 +242,19 @@ public class FacilityAddFragment extends Fragment {
     }
 
     private void getDevicesListDescription() {
-        facilityAddViewModel.getDevicesList().observe(this, new Observer<List<String>>() {
+        facilityAddViewModel.getDevicesList().observe(getActivity(), new Observer<List<String>>() {
             @Override
             public void onChanged(List<String> deviceList) {
                 if (deviceList.size() > 0) {
                     devicesDescriptionList = deviceList;
                     ArrayAdapter<String> adapter =
-                            new ArrayAdapter<>(getContext(), R.layout.simple_spinner_dropdown_item, devicesDescriptionList);
-                    adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
-                    deviceIdSpinner.setAdapter(adapter);
+                            new ArrayAdapter<>(getContext(), R.layout.dropdown_menu_popup_item, devicesDescriptionList);
+
+                    facilityDeviceTextView.setAdapter(adapter);
                     if (facility.getDeviceId() != null) {
                         for (int i = 0; i < devicesDescriptionList.size(); i++) {
                             if (devicesDescriptionList.get(i).equals(facility.getDeviceDescription())) {
-                                deviceIdSpinner.setSelection(i);
+                                facilityDeviceTextView.setText(facility.getDeviceDescription(),false);
                             }
                         }
                     }
@@ -282,12 +284,11 @@ public class FacilityAddFragment extends Fragment {
             facilityDescriptionEditTxt.setText(facility.getDescription());
             if (facility.getType().equals(EnumCode.ClinicTypeCode.CLINIC.toString())) {
                 facilityTypeRadioGroup.check(R.id.clinicTyperadioButton);
-                updateSpinnersInUiWhenRoomTypeSelected();
+                updateDropdownListInUiWhenRoomTypeSelected();
 
             } else if (facility.getType().equals(EnumCode.ClinicTypeCode.WAITAREA.toString())) {
                 facilityTypeRadioGroup.check(R.id.waitingAreaTypeRadioButton);
-                updateSpinnersInUiWhenWaitingAreaTypeSelected();
-
+                updateDropdownListInUiWhenWaitingAreaTypeSelected();
             }
             updateTitle(getResources().getString(R.string.update_facility));
             addOrUpdateBtn.setHint(getResources().getString(R.string.update_txt));
@@ -311,26 +312,24 @@ public class FacilityAddFragment extends Fragment {
         facility.setLangId(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
     }
 
-    private void updateSpinnersInUiWhenRoomTypeSelected() {
-        deviceIdSpinner.setEnabled(false);
-        waitingAreaSpinner.setEnabled(true);
-        waitingAreaArrowDownImg.setImageResource(R.drawable.ic_arrow_drop_down_black_24dp);
-        deviceArrowDownImg.setImageResource(R.drawable.ic_arrow_drop_down_gray);
+    private void updateDropdownListInUiWhenRoomTypeSelected() {
+        facilityDeviceLayout.setEnabled(false);
+        facilityWaitingAreaLayout.setEnabled(true);
+        facilityDeviceTextView.setText("");
 
     }
 
-    private void updateSpinnersInUiWhenWaitingAreaTypeSelected() {
-        waitingAreaSpinner.setEnabled(false);
-        deviceIdSpinner.setEnabled(true);
-        waitingAreaArrowDownImg.setImageResource(R.drawable.ic_arrow_drop_down_gray);
-        deviceArrowDownImg.setImageResource(R.drawable.ic_arrow_drop_down_black_24dp);
+    private void updateDropdownListInUiWhenWaitingAreaTypeSelected() {
+        facilityWaitingAreaLayout.setEnabled(false);
+        facilityDeviceLayout.setEnabled(true);
+        facilityWaitingAreaTextView.setText("");
+
     }
 
     private void updateSpinnersInUiWhenAddingNewFacility() {
-        waitingAreaSpinner.setEnabled(false);
-        deviceIdSpinner.setEnabled(false);
-        deviceArrowDownImg.setImageResource(R.drawable.ic_arrow_drop_down_gray);
-        waitingAreaArrowDownImg.setImageResource(R.drawable.ic_arrow_drop_down_gray);
+        facilityWaitingAreaLayout.setEnabled(false);
+        facilityDeviceLayout.setEnabled(false);
+
     }
 
     private void updateTitle(String message) {
@@ -340,17 +339,21 @@ public class FacilityAddFragment extends Fragment {
 
     private void updateFacility() {
         EspressoTestingIdlingResource.increment();
-        facilityAddViewModel.updateFacility(facility, deviceIdSpinner.getSelectedItem().toString(), waitingAreaSpinner.getSelectedItem().toString()).observe(getActivity(), new Observer<String>() {
+        facilityAddViewModel.updateFacility(facility, facilityDeviceTextView.getText().toString(), facilityWaitingAreaTextView.getText().toString()).observe(getActivity(), new Observer<String>() {
             @Override
             public void onChanged(String s) {
                 addOrUpdateMessage = s;
                 Log.i(TAG, "update response message " + addOrUpdateMessage);
                 if (!addOrUpdateMessage.isEmpty())
-                    Toast.makeText(getActivity(), addOrUpdateMessage, Toast.LENGTH_SHORT);
                 if (addOrUpdateMessage.contains("success")) {
                     EspressoTestingIdlingResource.increment();
+                    Toast.makeText(getActivity(), addOrUpdateMessage, Toast.LENGTH_SHORT);
                     onAddOrUpdateClicked();
                     EspressoTestingIdlingResource.decrement();
+                }
+                else {
+                    Toast.makeText(getActivity(), addOrUpdateMessage, Toast.LENGTH_SHORT);
+
                 }
 
             }

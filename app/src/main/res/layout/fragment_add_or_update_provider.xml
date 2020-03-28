@@ -122,16 +122,17 @@
             android:inputType="phone"
  />
         </com.google.android.material.textfield.TextInputLayout>
+
         <TextView
             android:id="@+id/gender_txt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="39dp"
+            android:layout_height="12dp"
             android:layout_marginTop="16dp"
             android:autoSizeTextType="uniform"
             android:text="@string/gender_txt"
             android:textColor="@color/colorPrimary"
-            app:layout_constraintStart_toStartOf="@+id/providerMobileTxtInputLayout"
-            app:layout_constraintTop_toBottomOf="@+id/layoutSpinner" />
+            app:layout_constraintStart_toStartOf="@id/providerSpecialityLayout"
+            app:layout_constraintTop_toBottomOf="@id/providerSpecialityLayout" />
 
 
         <LinearLayout
@@ -201,50 +202,37 @@
 
         </RadioGroup>
 
-        <TextView
-            android:id="@+id/specialitytxt"
+<!--        <TextView-->
+<!--            android:id="@+id/specialitytxt"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="16dp"-->
+<!--            android:drawableEnd="@drawable/ic_ambulance"-->
+<!--            android:drawablePadding="5dp"-->
+<!--            android:text="@string/speciality_txt"-->
+<!--            android:textColor="@color/colorPrimary"-->
+<!--            app:layout_constraintStart_toStartOf="@+id/providerMobileTxtInputLayout"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/providerMobileTxtInputLayout" />-->
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:drawableEnd="@drawable/ic_ambulance"
-            android:drawablePadding="5dp"
-            android:text="@string/speciality_txt"
-            android:textColor="@color/colorPrimary"
+            android:hint="@string/speciality_txt"
+            android:id="@+id/providerSpecialityLayout"
             app:layout_constraintStart_toStartOf="@+id/providerMobileTxtInputLayout"
-            app:layout_constraintTop_toBottomOf="@id/providerMobileTxtInputLayout" />
+            app:layout_constraintTop_toBottomOf="@+id/providerMobileTxtInputLayout"
+           >
 
-        <RelativeLayout
-            android:id="@+id/layoutSpinner"
-            android:layout_width="230dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_between_txt_and_edt"
-            android:background="@drawable/spinner_background"
-            android:orientation="horizontal"
-            android:weightSum="3"
-            app:layout_constraintStart_toStartOf="@+id/specialitytxt"
-            app:layout_constraintTop_toBottomOf="@+id/specialitytxt">
-
-            <Spinner
-                android:id="@+id/specialitySpinner"
+            <AutoCompleteTextView
+                android:id="@+id/providerSpecialityAutoCompleteTextView"
                 android:layout_width="match_parent"
+                android:ems="12"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_gravity="center"
-                android:layout_marginStart="5dp"
-                android:background="@android:color/transparent"
-                android:gravity="center"
-                android:spinnerMode="dropdown" />
+                android:inputType="none" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_arrow_drop_down_black_24dp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-
-        </RelativeLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

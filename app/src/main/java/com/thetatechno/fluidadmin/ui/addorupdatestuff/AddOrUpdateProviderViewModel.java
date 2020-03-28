@@ -26,11 +26,6 @@ public class AddOrUpdateProviderViewModel extends ViewModel {
     private CodeRepository codeRepository = new CodeRepository();
     private MutableLiveData<String> addedSuccessLiveData = new MutableLiveData<>();
     private MutableLiveData<List<String>> specialtiesMutableLiveData = new MutableLiveData<>();
-    private MutableLiveData<String> emailMessageLiveData = new MutableLiveData<>();
-    private MutableLiveData<String> firstNameValidateMessageLiveData = new MutableLiveData<>();
-    private MutableLiveData<String> lastNameValidateMessageLiveData = new MutableLiveData<>();
-    private MutableLiveData<String> phoneNumberValidateMessageLiveData = new MutableLiveData<>();
-    private MutableLiveData<String> idValidateMessageLiveData = new MutableLiveData<>();
     private String message = "";
     private String firstNameValidateMessage, familyNameValidateMessage, emailValidateMessage, specialityValidateMessage, idValidateMessage, phoneNumberMessage;
     private List<Code> specialityCodeList = new ArrayList<>();
@@ -95,7 +90,6 @@ public class AddOrUpdateProviderViewModel extends ViewModel {
                 if (codeListData.getCodeList() != null) {
                     specialityCodeList = codeListData.getCodeList();
                     List<String> specialities = new ArrayList<>();
-                    specialities.add("");
                     for (Code code : codeListData.getCodeList()) {
                         specialities.add(code.getDescription());
                     }
@@ -207,7 +201,14 @@ public class AddOrUpdateProviderViewModel extends ViewModel {
 
     private boolean isValidSpeciality(String speciality) {
         if (Validation.isValidForSpeciality(speciality))
-            return true;
+        {
+            for (Code code : specialityCodeList) {
+                if (code.getDescription().equals(speciality))
+                    return true;
+            }
+            return false;
+
+        }
         else
             return false;
     }

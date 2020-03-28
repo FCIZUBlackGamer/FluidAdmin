@@ -1,6 +1,7 @@
 package com.thetatechno.fluidadmin.ui.addorupdatestuff;
 
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
@@ -20,7 +21,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -49,25 +53,25 @@ import static com.thetatechno.fluidadmin.utils.Constants.ARG_STAFF;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AddOrUpdateProviderFragment extends Fragment  {
+public class AddOrUpdateProviderFragment extends Fragment {
     private static String TAG = "AddStaff";
     private TextInputEditText idEdtTxt;
-    private   TextInputEditText providerfirstNameEditTxt;
-    private   EditText providerLastNameEditTxt;
-    private   EditText providerEmailEditTxt;
-    private  EditText providerMobileEditTxt;
-    private TextInputLayout providerIdTxtInputLayout,providerLastNameTxtInputLayout,
-            providerFirstNameTextInputLayout,providerEmailTextInputLayout, providerMobileInputLayout;
-    private   RadioGroup genderRadioGroup;
+    private TextInputEditText providerfirstNameEditTxt;
+    private EditText providerLastNameEditTxt;
+    private EditText providerEmailEditTxt;
+    private EditText providerMobileEditTxt;
+    private TextInputLayout providerIdTxtInputLayout, providerLastNameTxtInputLayout,
+            providerFirstNameTextInputLayout, providerEmailTextInputLayout, providerMobileInputLayout, providerSpecialityInputLayout;
+    private RadioGroup genderRadioGroup;
+    private AutoCompleteTextView specialityTxtView;
     private Button addBtn;
-    private  Button cancelBtn;
-    private  AddOrUpdateProviderViewModel addOrUpdateViewModel;
-    private  boolean isStaffHasData;
-    private  Staff staff;
-    private  Spinner specialitySpinner;
-    private  NavController navController;
-    private  String idTxt, firstNameTxt, lastNameTxt, specialityTxt;
-    private  String idValidateMessage, firstNameValidateMessage, lastNameValidateMessage, specialityValidateMessage, emailValidateMessage, phoneValidateMessage;
+    private Button cancelBtn;
+    private AddOrUpdateProviderViewModel addOrUpdateViewModel;
+    private boolean isStaffHasData;
+    private Staff staff;
+    private NavController navController;
+    private String idTxt, firstNameTxt, lastNameTxt, specialityTxt;
+    private String idValidateMessage, firstNameValidateMessage, lastNameValidateMessage, specialityValidateMessage, emailValidateMessage, phoneValidateMessage;
     private ArrayList<String> specialitiesList;
     private ImageView providerProfileImage;
 
@@ -193,7 +197,7 @@ public class AddOrUpdateProviderFragment extends Fragment  {
             }
 
             @Override
-            public void afterTextChanged(Editable s){
+            public void afterTextChanged(Editable s) {
             }
         });
         providerMobileEditTxt.addTextChangedListener(new TextWatcher() {
@@ -214,6 +218,20 @@ public class AddOrUpdateProviderFragment extends Fragment  {
 
             }
         });
+        specialityTxtView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+         hideKeyboard(getContext(),specialityTxtView);
+
+            }
+        });
+        specialityTxtView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                providerSpecialityInputLayout.setErrorEnabled(false);
+            }
+        });
+
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -221,12 +239,12 @@ public class AddOrUpdateProviderFragment extends Fragment  {
                 idTxt = idEdtTxt.getText().toString();
                 firstNameTxt = providerfirstNameEditTxt.getText().toString();
                 lastNameTxt = providerLastNameEditTxt.getText().toString();
-                specialityTxt = specialitySpinner.getSelectedItem().toString();
+                specialityTxt = specialityTxtView.getText().toString();
                 if (isDataValid(idTxt, firstNameTxt, lastNameTxt, specialityTxt, providerEmailEditTxt.getText().toString(), providerMobileEditTxt.getText().toString())) {
                     getDataFromUi();
                     if (!isStaffHasData) {
                         EspressoTestingIdlingResource.increment();
-                        addOrUpdateViewModel.addNewProvider(staff, specialitySpinner.getSelectedItem().toString()).observe(getActivity(), new Observer<String>() {
+                        addOrUpdateViewModel.addNewProvider(staff, specialityTxt).observe(getActivity(), new Observer<String>() {
                             @Override
                             public void onChanged(String s) {
                                 Log.i(TAG, "add staff message" + s);
@@ -243,7 +261,7 @@ public class AddOrUpdateProviderFragment extends Fragment  {
                         EspressoTestingIdlingResource.decrement();
                     } else {
 
-                        addOrUpdateViewModel.updateProvider(staff, specialitySpinner.getSelectedItem().toString()).observe(getActivity(), new Observer<String>() {
+                        addOrUpdateViewModel.updateProvider(staff, specialityTxt).observe(getActivity(), new Observer<String>() {
                             @Override
                             public void onChanged(String s) {
                                 EspressoTestingIdlingResource.increment();
@@ -276,7 +294,7 @@ public class AddOrUpdateProviderFragment extends Fragment  {
     }
 
     private void changeImageAvatar() {
-        if(staff == null || staff.getImageLink().isEmpty()){
+        if (staff == null || staff.getImageLink().isEmpty()) {
             genderRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -308,7 +326,10 @@ public class AddOrUpdateProviderFragment extends Fragment  {
         addBtn = view.findViewById(R.id.addOrUpdateProviderBtn);
         cancelBtn = view.findViewById(R.id.cancelAddOrUpdateProviderBtn);
         providerProfileImage = view.findViewById(R.id.addProfileImg);
-        specialitySpinner = view.findViewById(R.id.specialitySpinner);
+//        specialitySpinner = view.findViewById(R.id.specialitySpinner);
+        providerSpecialityInputLayout = view.findViewById(R.id.providerSpecialityLayout);
+        specialityTxtView = view.findViewById(R.id.providerSpecialityAutoCompleteTextView);
+
 
     }
 
@@ -324,8 +345,7 @@ public class AddOrUpdateProviderFragment extends Fragment  {
         if (idValidateMessage.isEmpty()) {
             providerIdTxtInputLayout.setErrorEnabled(false);
             return true;
-        }
-        else {
+        } else {
             providerIdTxtInputLayout.setError(idValidateMessage);
             providerIdTxtInputLayout.setErrorEnabled(true);
 
@@ -339,8 +359,7 @@ public class AddOrUpdateProviderFragment extends Fragment  {
         if (firstNameValidateMessage.isEmpty()) {
             providerFirstNameTextInputLayout.setErrorEnabled(false);
             return true;
-        }
-        else {
+        } else {
             providerFirstNameTextInputLayout.setError(firstNameValidateMessage);
             providerFirstNameTextInputLayout.setErrorEnabled(true);
             return false;
@@ -353,8 +372,7 @@ public class AddOrUpdateProviderFragment extends Fragment  {
         if (lastNameValidateMessage.isEmpty()) {
             providerLastNameTxtInputLayout.setErrorEnabled(false);
             return true;
-        }
-        else {
+        } else {
             providerLastNameTxtInputLayout.setError(lastNameValidateMessage);
             providerLastNameTxtInputLayout.setErrorEnabled(true);
 
@@ -368,8 +386,7 @@ public class AddOrUpdateProviderFragment extends Fragment  {
         if (emailValidateMessage.isEmpty()) {
             providerLastNameTxtInputLayout.setErrorEnabled(false);
             return true;
-        }
-        else {
+        } else {
             providerEmailTextInputLayout.setError(emailValidateMessage);
             providerLastNameTxtInputLayout.setErrorEnabled(true);
 
@@ -382,8 +399,7 @@ public class AddOrUpdateProviderFragment extends Fragment  {
         if (phoneValidateMessage.isEmpty()) {
             providerMobileInputLayout.setErrorEnabled(false);
             return true;
-        }
-        else {
+        } else {
             providerMobileInputLayout.setError(phoneValidateMessage);
             providerMobileInputLayout.setErrorEnabled(true);
             return false;
@@ -392,10 +408,12 @@ public class AddOrUpdateProviderFragment extends Fragment  {
 
     private boolean isSpecialitySelected(String speciality) {
         specialityValidateMessage = addOrUpdateViewModel.validateSpeciality(speciality);
-        if (specialityValidateMessage.isEmpty())
+        if (specialityValidateMessage.isEmpty()) {
+            providerSpecialityInputLayout.setErrorEnabled(false);
             return true;
-        else {
-            Toast.makeText(getContext(), specialityValidateMessage, Toast.LENGTH_SHORT).show();
+        } else {
+            providerSpecialityInputLayout.setError(specialityValidateMessage);
+            providerSpecialityInputLayout.setErrorEnabled(true);
             return false;
         }
 
@@ -414,24 +432,23 @@ public class AddOrUpdateProviderFragment extends Fragment  {
         staff.setMobileNumber(providerMobileEditTxt.getText().toString());
         staff.setTypeCode(EnumCode.StaffTypeCode.PRVDR.toString());
         staff.setLangId(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
-        staff.setSpecialityCode(specialitySpinner.getSelectedItem().toString());
     }
 
     private void getSpecialitiesList() {
-        addOrUpdateViewModel.getSpecialities().observe(this, new Observer<List<String>>() {
+        addOrUpdateViewModel.getSpecialities().observe((HomeActivity)getContext(), new Observer<List<String>>() {
             @Override
             public void onChanged(List<String> codeList) {
                 if (codeList.size() > 0) {
                     specialitiesList = (ArrayList<String>) codeList;
                     ArrayAdapter<String> adapter =
-                            new ArrayAdapter<String>(getContext(), R.layout.simple_spinner_dropdown_item, specialitiesList);
-                    adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
-                    specialitySpinner.setAdapter(adapter);
+                            new ArrayAdapter<String>(getContext(), R.layout.dropdown_menu_popup_item, specialitiesList);
+                    specialityTxtView.setAdapter(adapter);
                     if (staff != null)
                         if (staff.getSpeciality() != null) {
                             for (int i = 0; i < specialitiesList.size(); i++) {
                                 if (specialitiesList.get(i).equals(staff.getSpecialityCode())) {
-                                    specialitySpinner.setSelection(i);
+//                                    specialitySpinner.setSelection(i);
+                                    specialityTxtView.setText(specialitiesList.get(i), false);
                                 }
                             }
                         }
@@ -496,6 +513,13 @@ public class AddOrUpdateProviderFragment extends Fragment  {
             providerProfileImage.setImageResource(R.drawable.man);
             genderRadioGroup.check(R.id.maleRadioButton);
 
+        }
+    }
+
+    private void hideKeyboard(Context context, View view) {
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
 

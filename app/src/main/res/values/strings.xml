@@ -25,7 +25,7 @@
 
     <string name="facilty_id">ID</string>
     <string name="decsription">Description </string>
-    <string name="deviceId">Device </string>
+    <string name="device_txt">Device </string>
     <string name="type">Type </string>
     <string name="code_type">Code Type</string>
     <string name="waitingAreaID">Waiting Area </string>
@@ -77,7 +77,7 @@
     <string name="first_name_error_message">First Name is required Field</string>
     <string name="aphabets_error_message">Enter only alphabets</string>
     <string name="family_name_error_message">Family Name is required Field</string>
-    <string name="choose_speciality_error_message">Please choose speciality</string>
+    <string name="choose_speciality_error_message">Please choose one of specialities</string>
     <string name="id_error_message">Id is required Field</string>
     <string name="choose_facility_type_error">Select Facility Type</string>
     <string name="description_error_message">Description is required field</string>

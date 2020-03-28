@@ -40,7 +40,7 @@ public class FacilityAddViewModel extends ViewModel {
             if (!getWaitingAreaCode(waitingAreaDescription).isEmpty())
                 facility.setWaitingAreaId(getWaitingAreaCode(waitingAreaDescription));
             facility.setDeviceId("");
-            facility.setDescription("");
+            facility.setDeviceDescription("");
         } else if (facility.getType().equals(EnumCode.ClinicTypeCode.WAITAREA.toString())) {
             if (!getDeviceID(deviceDescription).isEmpty())
                 facility.setDeviceId(getDeviceID(deviceDescription));
@@ -67,12 +67,14 @@ public class FacilityAddViewModel extends ViewModel {
             if (!getWaitingAreaCode(waitingAreaDescription).isEmpty())
                 facility.setWaitingAreaId(getWaitingAreaCode(waitingAreaDescription));
             facility.setDeviceId("");
-            facility.setDescription("");
+            facility.setDeviceDescription("");
+            facility.setWaitingAreaDescription("");
         } else if (facility.getType().equals(EnumCode.ClinicTypeCode.WAITAREA.toString())) {
             if (!getDeviceID(deviceDescription).isEmpty())
                 facility.setDeviceId(getDeviceID(deviceDescription));
             facility.setWaitingAreaId("");
             facility.setWaitingAreaDescription("");
+            facility.setDeviceDescription("");
         }
 
         facilityRepository.updateFacility(facility, new OnDataChangedCallBackListener<String>() {

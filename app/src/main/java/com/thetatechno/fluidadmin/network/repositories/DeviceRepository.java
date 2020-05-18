@@ -1,12 +1,11 @@
-package com.thetatechno.fluidadmin.retrofiteServices.repositories;
+package com.thetatechno.fluidadmin.network.repositories;
 
 import androidx.lifecycle.MutableLiveData;
 
 import com.thetatechno.fluidadmin.listeners.OnDataChangedCallBackListener;
-import com.thetatechno.fluidadmin.model.DeviceListData;
-import com.thetatechno.fluidadmin.model.Facilities;
-import com.thetatechno.fluidadmin.retrofiteServices.interfaces.MyServicesInterface;
-import com.thetatechno.fluidadmin.retrofiteServices.interfaces.RetrofitInstance;
+import com.thetatechno.fluidadmin.model.device_model.DeviceListData;
+import com.thetatechno.fluidadmin.network.interfaces.MyServicesInterface;
+import com.thetatechno.fluidadmin.network.interfaces.RetrofitInstance;
 
 import retrofit2.Call;
 import retrofit2.Callback;

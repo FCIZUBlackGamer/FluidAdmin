@@ -1,23 +1,16 @@
 package com.thetatechno.fluidadmin.ui.addorupdatecode;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
@@ -25,7 +18,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
@@ -34,10 +26,8 @@ import androidx.navigation.Navigation;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.thetatechno.fluidadmin.R;
-import com.thetatechno.fluidadmin.listeners.OnFragmentInteractionListener;
-import com.thetatechno.fluidadmin.model.Code;
+import com.thetatechno.fluidadmin.model.code_model.Code;
 import com.thetatechno.fluidadmin.ui.EspressoTestingIdlingResource;
-import com.thetatechno.fluidadmin.ui.HomeActivity;
 import com.thetatechno.fluidadmin.utils.App;
 import com.thetatechno.fluidadmin.utils.EnumCode;
 import com.thetatechno.fluidadmin.utils.PreferenceController;
@@ -340,10 +330,5 @@ private void updateCode(){
 
     }
 
-    public void requestFocus(View view) {
-        if (view.requestFocus()) {
-            getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-        }
-    }
 
 }

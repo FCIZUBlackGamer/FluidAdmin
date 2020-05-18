@@ -1,4 +1,4 @@
-package com.thetatechno.fluidadmin.model;
+package com.thetatechno.fluidadmin.model.code_model;
 
 import androidx.annotation.NonNull;
 

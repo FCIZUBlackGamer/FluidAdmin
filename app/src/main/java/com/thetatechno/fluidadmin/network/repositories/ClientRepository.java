@@ -1,10 +1,10 @@
-package com.thetatechno.fluidadmin.retrofiteServices.repositories;
+package com.thetatechno.fluidadmin.network.repositories;
 
 import androidx.lifecycle.MutableLiveData;
 
 import com.thetatechno.fluidadmin.model.CustomerList;
-import com.thetatechno.fluidadmin.retrofiteServices.interfaces.MyServicesInterface;
-import com.thetatechno.fluidadmin.retrofiteServices.interfaces.RetrofitInstance;
+import com.thetatechno.fluidadmin.network.interfaces.MyServicesInterface;
+import com.thetatechno.fluidadmin.network.interfaces.RetrofitInstance;
 import com.thetatechno.fluidadmin.utils.Constants;
 
 import retrofit2.Call;

@@ -37,6 +37,7 @@ public class FacilityListDialogAdapter extends RecyclerView.Adapter<FacilityList
         return new myViewHolder(view);
     }
 
+
     @Override
     public void onBindViewHolder(@NonNull final myViewHolder holder, final int position) {
         final Facility facility = filteredFacilityList.get(position);

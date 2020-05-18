@@ -1,4 +1,4 @@
-package com.thetatechno.fluidadmin.model;
+package com.thetatechno.fluidadmin.model.device_model;
 
 import androidx.annotation.NonNull;
 

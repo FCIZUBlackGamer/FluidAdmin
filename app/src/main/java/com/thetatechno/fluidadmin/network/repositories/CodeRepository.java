@@ -1,4 +1,4 @@
-package com.thetatechno.fluidadmin.retrofiteServices.repositories;
+package com.thetatechno.fluidadmin.network.repositories;
 
 import android.util.Log;
 
@@ -7,11 +7,11 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
 import com.thetatechno.fluidadmin.listeners.OnDataChangedCallBackListener;
-import com.thetatechno.fluidadmin.model.Code;
-import com.thetatechno.fluidadmin.model.CodeList;
+import com.thetatechno.fluidadmin.model.code_model.Code;
+import com.thetatechno.fluidadmin.model.code_model.CodeList;
 import com.thetatechno.fluidadmin.model.State;
-import com.thetatechno.fluidadmin.retrofiteServices.interfaces.MyServicesInterface;
-import com.thetatechno.fluidadmin.retrofiteServices.interfaces.RetrofitInstance;
+import com.thetatechno.fluidadmin.network.interfaces.MyServicesInterface;
+import com.thetatechno.fluidadmin.network.interfaces.RetrofitInstance;
 import com.thetatechno.fluidadmin.utils.Constants;
 
 import retrofit2.Call;
@@ -48,6 +48,7 @@ public class CodeRepository {
         });
         return codesMutableLiveData;
     }
+
     public void getAllCodes(final String codeType, final String langId,final OnDataChangedCallBackListener<CodeList> onDataChangedCallBackListener) {
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
         Call<CodeList> call = myServicesInterface.getCodes(codeType, langId);

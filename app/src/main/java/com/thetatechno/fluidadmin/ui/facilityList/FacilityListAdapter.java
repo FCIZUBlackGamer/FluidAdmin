@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,9 +20,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.listeners.OnDeleteListener;
 import com.thetatechno.fluidadmin.model.Facility;
+import com.thetatechno.fluidadmin.model.Staff;
 import com.thetatechno.fluidadmin.utils.EnumCode;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import io.sentry.Sentry;
@@ -29,19 +33,20 @@ import io.sentry.event.UserBuilder;
 
 import static com.thetatechno.fluidadmin.utils.Constants.ARG_FACILITY;
 
-public class FacilityListAdapter extends RecyclerView.Adapter<FacilityListAdapter.vHolder> {
-    Context context;
-    FragmentManager fragmentManager;
-    List<Facility> facilityList;
+public class FacilityListAdapter extends RecyclerView.Adapter<FacilityListAdapter.vHolder> implements Filterable {
+    private Context context;
+    private List<Facility> facilityList;
+    private List<Facility> filteredFacilityList;
+
     OnDeleteListener listener;
     NavController navController;
     Bundle bundle;
-    public FacilityListAdapter(NavController navControlle, Context context, List<Facility> facilityList, FragmentManager fragmentManager) {
+    public FacilityListAdapter(NavController navController, Context context, List<Facility> facilityList, FragmentManager fragmentManager) {
         this.facilityList = facilityList;
+        this.filteredFacilityList = facilityList;
         this.context = context;
-        this.fragmentManager = fragmentManager;
         bundle = new Bundle();
-        navController = navControlle;
+        this.navController = navController;
         if (context instanceof OnDeleteListener)
             listener = (OnDeleteListener) context;
         else
@@ -65,29 +70,29 @@ public class FacilityListAdapter extends RecyclerView.Adapter<FacilityListAdapte
     @Override
     public void onBindViewHolder(@NonNull final vHolder holder, final int position) {
 
-      if(position < facilityList.size())
+      if(position < filteredFacilityList.size())
         try {
             holder.itemView.setVisibility(View.VISIBLE);
-            holder.facilityIdTxt.setText(facilityList.get(position).getId());
-            if(facilityList.get(position).getType().equals(EnumCode.ClinicTypeCode.CLINIC.toString()) && facilityList.get(position).getWaitingAreaId()!=null) {
-                holder.waitingAreaOrDeviceDescriptionTxt.setText(facilityList.get(position).getWaitingAreaDescription());
+            holder.facilityIdTxt.setText(filteredFacilityList.get(position).getId());
+            if(filteredFacilityList.get(position).getType().equals(EnumCode.ClinicTypeCode.CLINIC.toString()) && filteredFacilityList.get(position).getWaitingAreaId()!=null) {
+                holder.waitingAreaOrDeviceDescriptionTxt.setText(filteredFacilityList.get(position).getWaitingAreaDescription());
                 holder.waitingAreaOrDeviceDescriptionTxt.setVisibility(View.VISIBLE);
 
             }
-            else if(facilityList.get(position).getType().equals(EnumCode.ClinicTypeCode.WAITAREA.toString()) && facilityList.get(position).getDeviceId()!=null)
+            else if(filteredFacilityList.get(position).getType().equals(EnumCode.ClinicTypeCode.WAITAREA.toString()) && filteredFacilityList.get(position).getDeviceId()!=null)
             {
-                holder.waitingAreaOrDeviceDescriptionTxt.setText(facilityList.get(position).getDeviceDescription());
+                holder.waitingAreaOrDeviceDescriptionTxt.setText(filteredFacilityList.get(position).getDeviceDescription());
                 holder.waitingAreaOrDeviceDescriptionTxt.setVisibility(View.VISIBLE);
             }
             else {
                 holder.waitingAreaOrDeviceDescriptionTxt.setVisibility(View.GONE);
             }
             holder.facilityTextViewOptions.setText(context.getResources().getString(R.string.options_menu));
-            holder.facilityDescriptionTxt.setText(facilityList.get(position).getDescription());
-            if(facilityList.get(position).getType().equals(EnumCode.ClinicTypeCode.CLINIC.toString())){
+            holder.facilityDescriptionTxt.setText(filteredFacilityList.get(position).getDescription());
+            if(filteredFacilityList.get(position).getType().equals(EnumCode.ClinicTypeCode.CLINIC.toString())){
                 holder.facilityImgView.setImageResource(R.drawable.ic_clinic);
             }
-            else if (facilityList.get(position).getType().equals(EnumCode.ClinicTypeCode.WAITAREA.toString())){
+            else if (filteredFacilityList.get(position).getType().equals(EnumCode.ClinicTypeCode.WAITAREA.toString())){
                 holder.facilityImgView.setImageResource(R.drawable.ic_chair);
 
             }
@@ -107,10 +112,7 @@ public class FacilityListAdapter extends RecyclerView.Adapter<FacilityListAdapte
                             switch (item.getItemId()) {
                                 case R.id.editFacility:
                                     //handle edit click
-                                    bundle.putSerializable(ARG_FACILITY, (Serializable) facilityList.get(position));
-                                    bundle.putSerializable("type", (Serializable) EnumCode.UsageType.Facility);
-                                    bundle.putSerializable("facilityList", (Serializable) facilityList);
-
+                                    bundle.putSerializable(ARG_FACILITY, filteredFacilityList.get(position));
                                     navController.navigate(R.id.facilityAddFragment, bundle);
 
                                     break;
@@ -118,7 +120,7 @@ public class FacilityListAdapter extends RecyclerView.Adapter<FacilityListAdapte
                                 case R.id.deleteFacility:
                                     // show delete dialog
                                     if (listener != null)
-                                        listener.onDeleteButtonClicked(facilityList.get(position));
+                                        listener.onDeleteButtonClicked(filteredFacilityList.get(position));
                                     break;
 
                             }
@@ -134,7 +136,7 @@ public class FacilityListAdapter extends RecyclerView.Adapter<FacilityListAdapte
             Sentry.capture(e);
         }
 
-      else if(position== facilityList.size()) {
+      else if(position== filteredFacilityList.size()) {
 
           holder.itemView.setVisibility(View.INVISIBLE);
 
@@ -144,7 +146,38 @@ public class FacilityListAdapter extends RecyclerView.Adapter<FacilityListAdapte
   
     @Override
     public int getItemCount() {
-        return facilityList.size()+1;
+        return filteredFacilityList.size()+1;
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                String charSequenceString = constraint.toString();
+                if (charSequenceString.isEmpty()) {
+                    filteredFacilityList= facilityList;
+                } else {
+                    List<Facility> filteredList = new ArrayList<>();
+                    for (Facility facility : facilityList) {
+                        if (facility.getDescription().contains(charSequenceString) || facility.getDescription().equalsIgnoreCase(charSequenceString)) {
+                            filteredList.add(facility);
+                        }
+                        filteredFacilityList = filteredList;
+                    }
+
+                }
+                FilterResults results = new FilterResults();
+                results.values = filteredFacilityList;
+                return results;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                filteredFacilityList = (List<Facility>) results.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     public class vHolder extends RecyclerView.ViewHolder {

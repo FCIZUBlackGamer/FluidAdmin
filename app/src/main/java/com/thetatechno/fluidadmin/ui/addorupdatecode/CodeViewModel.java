@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel;
 
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.listeners.OnDataChangedCallBackListener;
-import com.thetatechno.fluidadmin.model.Code;
-import com.thetatechno.fluidadmin.retrofiteServices.repositories.CodeRepository;
+import com.thetatechno.fluidadmin.model.code_model.Code;
+import com.thetatechno.fluidadmin.network.repositories.CodeRepository;
 import com.thetatechno.fluidadmin.utils.App;
 import com.thetatechno.fluidadmin.utils.Constants;
 import com.thetatechno.fluidadmin.utils.Validation;

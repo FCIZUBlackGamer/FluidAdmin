@@ -106,7 +106,7 @@ public class FacilityTest {
         onView(anyOf(withText(R.string.update_txt), withId(R.id.editFacility))).perform(click());
         onView(withId(R.id.facilityDesriptionEdtTxt)).perform(clearText(),typeText("Room 11"), closeSoftKeyboard());
         onView(withId(R.id.clinicTyperadioButton)).perform(click());
-        onView(withId(R.id.waitingAreaSpinner)).perform(click());
+        onView(withId(R.id.waitingAreaAutoCompleteTextView)).perform(click());
         onData(anything()).atPosition(1).perform(click());
         onView(withId(R.id.addOrUpdateFacilityBtn)).perform(click());
         onView(ViewMatchers.withId(R.id.facilityListClinicRecyclerView)).check(matches(isDisplayed()));

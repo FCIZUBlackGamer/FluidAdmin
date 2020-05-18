@@ -1,4 +1,4 @@
-package com.thetatechno.fluidadmin.retrofiteServices.repositories;
+package com.thetatechno.fluidadmin.network.repositories;
 
 import android.util.Log;
 
@@ -10,8 +10,8 @@ import com.thetatechno.fluidadmin.model.Facilities;
 import com.thetatechno.fluidadmin.model.Facility;
 import com.thetatechno.fluidadmin.model.FacilityCodes;
 import com.thetatechno.fluidadmin.model.State;
-import com.thetatechno.fluidadmin.retrofiteServices.interfaces.MyServicesInterface;
-import com.thetatechno.fluidadmin.retrofiteServices.interfaces.RetrofitInstance;
+import com.thetatechno.fluidadmin.network.interfaces.MyServicesInterface;
+import com.thetatechno.fluidadmin.network.interfaces.RetrofitInstance;
 
 import retrofit2.Call;
 import retrofit2.Callback;

@@ -91,4 +91,26 @@
             android:id="@+id/action_codeListFragment_to_codeAddFragment"
             app:destination="@id/codeAddFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/branches"
+        android:name="com.thetatechno.fluidadmin.ui.branches.Branches"
+        android:label="Branches" >
+
+        <action
+            android:id="@+id/action_branches_to_addOrUpdateBranch"
+            app:destination="@id/addOrUpdateBranch" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/appointments"
+        android:name="com.thetatechno.fluidadmin.ui.appointments.Appointments"
+        android:label="Appointments" />
+    <fragment
+        android:id="@+id/addOrUpdateBranch"
+        android:name="com.thetatechno.fluidadmin.ui.addOrUpdateBranch.AddOrUpdateBranch"
+        android:label="AddOrUpdateBranch" >
+        <action
+            android:id="@+id/action_addOrUpdateBranch_to_branches"
+            app:destination="@id/branches" />
+    </fragment>
 </navigation>

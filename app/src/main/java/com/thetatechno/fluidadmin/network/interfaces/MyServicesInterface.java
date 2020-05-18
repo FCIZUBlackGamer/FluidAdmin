@@ -1,9 +1,11 @@
-package com.thetatechno.fluidadmin.retrofiteServices.interfaces;
+package com.thetatechno.fluidadmin.network.interfaces;
 
-import com.thetatechno.fluidadmin.model.Code;
-import com.thetatechno.fluidadmin.model.CodeList;
+import com.thetatechno.fluidadmin.model.branches_model.Branch;
+import com.thetatechno.fluidadmin.model.branches_model.BranchesResponse;
+import com.thetatechno.fluidadmin.model.code_model.Code;
+import com.thetatechno.fluidadmin.model.code_model.CodeList;
 import com.thetatechno.fluidadmin.model.CustomerList;
-import com.thetatechno.fluidadmin.model.DeviceListData;
+import com.thetatechno.fluidadmin.model.device_model.DeviceListData;
 import com.thetatechno.fluidadmin.model.Facilities;
 import com.thetatechno.fluidadmin.model.Facility;
 import com.thetatechno.fluidadmin.model.FacilityCodes;
@@ -73,4 +75,20 @@ public interface MyServicesInterface {
 
     @GET("/ords/fluid/api/device")
     Call<DeviceListData> getSpecificDeviceData(@Query("deviceId") String deviceId);
+
+    /*  branches API  */
+    @GET("/ords/fluid/api/site")
+    Call<BranchesResponse> getBranches(@Query("langId") String language);
+
+    @POST("/ords/fluid/api/site")
+    Call<State> addBranch(@Body Branch newBranch);
+
+    @PUT("/ords/fluid/api/site")
+    Call<State> updateBranch(@Body Branch newBranch);
+
+    @DELETE("/ords/fluid/api/site")
+    Call<State> deleteBranch(@Query("siteId") String siteId);
+
+
+
 }

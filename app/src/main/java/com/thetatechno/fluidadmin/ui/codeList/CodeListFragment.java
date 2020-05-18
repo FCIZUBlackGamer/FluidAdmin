@@ -19,8 +19,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.thetatechno.fluidadmin.R;
-import com.thetatechno.fluidadmin.model.Code;
-import com.thetatechno.fluidadmin.model.CodeList;
+import com.thetatechno.fluidadmin.model.code_model.Code;
+import com.thetatechno.fluidadmin.model.code_model.CodeList;
 import com.thetatechno.fluidadmin.ui.EspressoTestingIdlingResource;
 import com.thetatechno.fluidadmin.utils.App;
 import com.thetatechno.fluidadmin.utils.EnumCode;
@@ -78,7 +78,7 @@ public class CodeListFragment extends Fragment {
         codeListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
 //       EspressoTestingIdlingResource.increment();
         codeSwipeRefreshLayout.setRefreshing(true);
-        codeListViewModel.getDataForCode(EnumCode.Code.STFFGRP.toString(), PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase()).observe(this, new Observer<CodeList>() {
+        codeListViewModel.getDataForCode(EnumCode.Code.STFFGRP.toString(), PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase()).observe(getViewLifecycleOwner(), new Observer<CodeList>() {
             @Override
             public void onChanged(CodeList codeListData) {
 
@@ -86,7 +86,6 @@ public class CodeListFragment extends Fragment {
                     if (codeListData.getCodeList() != null) {
                         EspressoTestingIdlingResource.increment();
                         codeList = codeListData.getCodeList();
-
                         codeListAdapter = new CodeListAdapter(navController, getContext(), codeList, getActivity().getSupportFragmentManager());
                         codeListRecyclerView.setAdapter(codeListAdapter);
                         EspressoTestingIdlingResource.decrement();

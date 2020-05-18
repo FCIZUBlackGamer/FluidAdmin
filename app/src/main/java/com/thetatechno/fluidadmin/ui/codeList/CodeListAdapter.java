@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.listeners.OnDeleteListener;
-import com.thetatechno.fluidadmin.model.Code;
+import com.thetatechno.fluidadmin.model.code_model.Code;
 import com.thetatechno.fluidadmin.utils.EnumCode;
 
 import java.io.Serializable;

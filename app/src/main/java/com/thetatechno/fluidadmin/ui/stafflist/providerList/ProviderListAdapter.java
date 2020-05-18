@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,11 +22,13 @@ import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.listeners.OnDeleteListener;
+import com.thetatechno.fluidadmin.model.Person;
 import com.thetatechno.fluidadmin.model.Staff;
 import com.thetatechno.fluidadmin.utils.Constants;
 import com.thetatechno.fluidadmin.utils.EnumCode;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import io.sentry.Sentry;
@@ -33,21 +37,23 @@ import io.sentry.event.UserBuilder;
 
 import static com.thetatechno.fluidadmin.utils.Constants.ARG_STAFF;
 
-public class ProviderListAdapter extends RecyclerView.Adapter<ProviderListAdapter.ProviderListViewHolder> {
+public class ProviderListAdapter extends RecyclerView.Adapter<ProviderListAdapter.ProviderListViewHolder>  implements Filterable {
 
-    Context context;
-    FragmentManager fragmentManager;
-    OnDeleteListener listener;
-    List<Staff> providerList;
-    NavController navController;
-    Bundle bundle;
+    private Context context;
+    private FragmentManager fragmentManager;
+    private  OnDeleteListener listener;
+    private  List<Staff> providerList;
+    private NavController navController;
+    private  Bundle bundle;
+    private  List<Staff> filteredProviderList;
 
-    public ProviderListAdapter(NavController navControlle, Context context, List<Staff> providerList, FragmentManager fragmentManager) {
+    public ProviderListAdapter(NavController navController, Context context, List<Staff> providerList, FragmentManager fragmentManager) {
         this.context = context;
         this.providerList = providerList;
+        this.filteredProviderList = providerList;
         Gson gson = new Gson();
         Log.e("Images", gson.toJson(providerList));
-        navController = navControlle;
+        this.navController = navController;
         bundle = new Bundle();
         this.fragmentManager = fragmentManager;
         if (context instanceof OnDeleteListener)
@@ -72,43 +78,43 @@ public class ProviderListAdapter extends RecyclerView.Adapter<ProviderListAdapte
 
     @Override
     public void onBindViewHolder(@NonNull final ProviderListViewHolder holder, final int position) {
-if(position <providerList.size()) {
+if(position <filteredProviderList.size()) {
     holder.itemView.setVisibility(View.VISIBLE);
 
-    if (!providerList.get(position).getFirstName().isEmpty() || !providerList.get(position).getFamilyName().isEmpty()) {
-        holder.fullNameTxt.setText(providerList.get(position).getFirstName() + " " + providerList.get(position).getFamilyName());
+    if (!filteredProviderList.get(position).getFirstName().isEmpty() || !filteredProviderList.get(position).getFamilyName().isEmpty()) {
+        holder.fullNameTxt.setText(filteredProviderList.get(position).getFirstName() + " " + filteredProviderList.get(position).getFamilyName());
         holder.fullNameTxt.setVisibility(View.VISIBLE);
     } else {
         holder.fullNameTxt.setVisibility(View.GONE);
 
     }
-    holder.providerIdTxt.setText(providerList.get(position).getStaffId());
-    if (!providerList.get(position).getEmail().isEmpty()) {
-        holder.mailTxt.setText(providerList.get(position).getEmail());
+    holder.providerIdTxt.setText(filteredProviderList.get(position).getStaffId());
+    if (!filteredProviderList.get(position).getEmail().isEmpty()) {
+        holder.mailTxt.setText(filteredProviderList.get(position).getEmail());
         holder.mailTxt.setVisibility(View.VISIBLE);
     } else {
         holder.mailTxt.setVisibility(View.GONE);
 
     }
-    if (!providerList.get(position).getMobileNumber().isEmpty()) {
+    if (!filteredProviderList.get(position).getMobileNumber().isEmpty()) {
 
-        holder.phoneTxt.setText(providerList.get(position).getMobileNumber());
+        holder.phoneTxt.setText(filteredProviderList.get(position).getMobileNumber());
         holder.phoneTxt.setVisibility(View.VISIBLE);
 
     } else {
         holder.phoneTxt.setVisibility(View.GONE);
 
     }
-    if (providerList.get(position).getImageLink() != null && !providerList.get(position).getImageLink().isEmpty()) {
+    if (filteredProviderList.get(position).getImageLink() != null && !filteredProviderList.get(position).getImageLink().isEmpty()) {
 
-        Glide.with(context).load(Constants.BASE_URL + Constants.BASE_EXTENSION_FOR_PHOTOS + providerList.get(position).getImageLink())
+        Glide.with(context).load(Constants.BASE_URL + Constants.BASE_EXTENSION_FOR_PHOTOS + filteredProviderList.get(position).getImageLink())
                 .circleCrop()
                 .into(holder.personImg);
     } else {
-        if (!providerList.get(position).getGender().isEmpty()) {
-            if (providerList.get(position).getGender().equals(EnumCode.Gender.M.toString())) {
+        if (!filteredProviderList.get(position).getGender().isEmpty()) {
+            if (filteredProviderList.get(position).getGender().equals(EnumCode.Gender.M.toString())) {
                 holder.personImg.setImageResource(R.drawable.man);
-            } else if (providerList.get(position).getGender().equals(EnumCode.Gender.F.toString())) {
+            } else if (filteredProviderList.get(position).getGender().equals(EnumCode.Gender.F.toString())) {
                 holder.personImg.setImageResource(R.drawable.ic_girl);
             }
         } else {
@@ -116,7 +122,7 @@ if(position <providerList.size()) {
         }
     }
 
-    holder.specialityTxt.setText(providerList.get(position).getSpeciality());
+    holder.specialityTxt.setText(filteredProviderList.get(position).getSpeciality());
 
     holder.textViewOptions.setOnClickListener(new View.OnClickListener() {
         @Override
@@ -135,14 +141,13 @@ if(position <providerList.size()) {
 
                         case R.id.editProvider:
                             //handle edit click
-                            bundle.putSerializable(ARG_STAFF, (Serializable) providerList.get(position));
-                            bundle.putSerializable("providerList", (Serializable) providerList);
+                            bundle.putSerializable(ARG_STAFF, (Serializable) filteredProviderList.get(position));
                             navController.navigate(R.id.addOrUpdateProviderFragment, bundle);
                             break;
                         case R.id.deleteProvider:
                             //handle delete click
                             if (listener != null)
-                                listener.onDeleteButtonClicked(providerList.get(position));
+                                listener.onDeleteButtonClicked(filteredProviderList.get(position));
                             break;
                     }
                     return false;
@@ -153,14 +158,45 @@ if(position <providerList.size()) {
         }
     });
 }
-else if(position == providerList.size()){
+else if(position == filteredProviderList.size()){
     holder.itemView.setVisibility(View.INVISIBLE);
 }
     }
 
     @Override
     public int getItemCount() {
-        return providerList.size()+1;
+        return filteredProviderList.size()+1;
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                String charSequenceString = constraint.toString();
+                if (charSequenceString.isEmpty()) {
+                    filteredProviderList= providerList;
+                } else {
+                    List<Staff> filteredList = new ArrayList<>();
+                    for (Staff provider : providerList) {
+                        if (provider.getFirstName().contains(charSequenceString) || provider.getFamilyName().contains(charSequenceString) || provider.getFirstName().equalsIgnoreCase(charSequenceString) || provider.getFamilyName().equalsIgnoreCase(charSequenceString)) {
+                            filteredList.add(provider);
+                        }
+                        filteredProviderList = filteredList;
+                    }
+
+                }
+                FilterResults results = new FilterResults();
+                results.values = filteredProviderList;
+                return results;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                filteredProviderList = (List<Staff>) results.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     class ProviderListViewHolder extends RecyclerView.ViewHolder {

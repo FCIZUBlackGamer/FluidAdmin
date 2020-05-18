@@ -31,7 +31,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
-
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/addProfileImg">
 
@@ -43,31 +42,7 @@
                 android:hint="@string/id_txt"
                 android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
-        <!--        <TextView-->
-        <!--            android:id="@+id/staffId"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:autoSizeTextType="uniform"-->
-        <!--            android:drawableEnd="@drawable/ic_ambulance"-->
-        <!--            android:drawablePadding="5dp"-->
-        <!--            android:text="@string/id_txt"-->
-        <!--            android:textColor="@color/colorPrimary"-->
-        <!--            android:textStyle="bold"-->
-        <!--            app:layout_constraintStart_toStartOf="@+id/agentIdTxtInputLayout"-->
-        <!--            app:layout_constraintTop_toBottomOf="@+id/addProfileImg" />-->
 
-        <!--        <TextView-->
-        <!--            android:id="@+id/first_name_txt"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_marginTop="16dp"-->
-        <!--            android:autoSizeTextType="uniform"-->
-        <!--            android:drawableEnd="@drawable/ic_ambulance"-->
-        <!--            android:drawablePadding="5dp"-->
-        <!--            android:text="@string/first_name"-->
-        <!--            android:textColor="@color/colorPrimary"-->
-        <!--            app:layout_constraintStart_toStartOf="@+id/staffId"-->
-        <!--            app:layout_constraintTop_toBottomOf="@id/agentIdTxtInputLayout" />-->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/agentFirstNameInputLayout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -86,18 +61,6 @@
                 android:inputType="textPersonName" />
         </com.google.android.material.textfield.TextInputLayout>
 
-<!--        <TextView-->
-<!--            android:id="@+id/family_name_txt"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="16dp"-->
-<!--            android:autoSizeTextType="uniform"-->
-<!--            android:drawableEnd="@drawable/ic_ambulance"-->
-<!--            android:drawablePadding="5dp"-->
-<!--            android:text="@string/family_name_txt"-->
-<!--            android:textColor="@color/colorPrimary"-->
-<!--            app:layout_constraintStart_toStartOf="@id/first_name_txt"-->
-<!--            app:layout_constraintTop_toBottomOf="@id/agentFirstNameEdtTxt" />-->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/agentFamilyNameInputLayout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -117,18 +80,6 @@
 
                 />
         </com.google.android.material.textfield.TextInputLayout>
-<!--        <TextView-->
-<!--            android:id="@+id/email_txt"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="16dp"-->
-<!--            android:autoSizeTextType="uniform"-->
-<!--            android:drawableStart="@drawable/ic_email_black_24dp"-->
-<!--            android:drawablePadding="8dp"-->
-<!--            android:text="@string/email_txt"-->
-<!--            android:textColor="@color/colorPrimary"-->
-<!--            app:layout_constraintStart_toStartOf="@+id/agentFamilyNameEdtTxt"-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/agentFamilyNameEdtTxt" />-->
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/agentEmailInputLayout"
@@ -149,20 +100,7 @@
                 android:hint="@string/email_prompt"
                 android:inputType="textEmailAddress" />
         </com.google.android.material.textfield.TextInputLayout>
-<!--        <TextView-->
-<!--            android:id="@+id/mobile_num_txt"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="16dp"-->
-<!--            android:autoSizeTextType="uniform"-->
-<!--            android:drawableStart="@drawable/ic_phone"-->
-<!--            android:drawablePadding="8dp"-->
-<!--            android:text="@string/mobile_number_txt"-->
-<!--            android:textColor="@color/colorPrimary"-->
-<!--            app:layout_constraintEnd_toEndOf="@+id/email_txt"-->
-<!--            app:layout_constraintHorizontal_bias="0.0"-->
-<!--            app:layout_constraintStart_toStartOf="@+id/email_txt"-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/agentEmailEditTxt" />-->
+
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/agentMobileInputLayout"

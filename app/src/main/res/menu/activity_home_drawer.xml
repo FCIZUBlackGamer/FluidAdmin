@@ -25,7 +25,17 @@
             android:id="@+id/facility"
             android:checkableBehavior="single"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Facility"/>
+            android:title="@string/facilities_txt"/>
+        <item
+            android:id="@+id/branches"
+            android:checkableBehavior="single"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="@string/branches_txt"/>
+        <item
+            android:id="@+id/appointments"
+            android:checkableBehavior="single"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="@string/appointments_txt"/>
     </group>
 
 

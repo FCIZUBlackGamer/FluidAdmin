@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -16,6 +17,9 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -32,15 +36,15 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FacilityListFragment extends Fragment {
-    RecyclerView facilityListClinicRecyclerView;
-    FacilityListAdapter facilityListAdapter;
-    List<Facility> facilityList;
-    FacilityListViewModel facilityListViewModel;
-    NavController navController;
-    FloatingActionButton addNewFacilityFab;
-    SwipeRefreshLayout facilitySwipeLayout;
-    private  final String ARG_CLINIC_TYPE = "clinic_type";
+public class FacilityListFragment extends Fragment implements SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener  {
+    private RecyclerView facilityListClinicRecyclerView;
+    private FacilityListAdapter facilityListAdapter;
+    private List<Facility> facilityList;
+    private FacilityListViewModel facilityListViewModel;
+    private NavController navController;
+    private FloatingActionButton addNewFacilityFab;
+    private SwipeRefreshLayout facilitySwipeLayout;
+    private final String ARG_CLINIC_TYPE = "clinic_type";
     final String TAG = FacilityListFragment.class.getSimpleName();
 
     public FacilityListFragment() {
@@ -64,11 +68,11 @@ public class FacilityListFragment extends Fragment {
         facilitySwipeLayout = view.findViewById(R.id.facilitySwipeLayout);
         facilityListClinicRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         facilityListViewModel = ViewModelProviders.of(this).get(FacilityListViewModel.class);
-//        EspressoTestingIdlingResource.increment();
-        facilityListViewModel.getAllFacilities("").observe(this, new Observer<Facilities>() {
+        setHasOptionsMenu(true);
+        EspressoTestingIdlingResource.increment();
+        facilityListViewModel.getAllFacilities("").observe(getViewLifecycleOwner(), new Observer<Facilities>() {
             @Override
             public void onChanged(Facilities facilities) {
-//                EspressoTestingIdlingResource.decrement();
                 EspressoTestingIdlingResource.increment();
                 if (facilities != null) {
                     if (facilities.getFacilities() != null) {
@@ -81,19 +85,20 @@ public class FacilityListFragment extends Fragment {
                     } else {
                         Log.e(TAG, "facilityList Is Null");
                     }
-                }else{
-                        Log.e(TAG, "no data returns");
-                    }
-                EspressoTestingIdlingResource.decrement();
+                } else {
+                    Log.e(TAG, "no data returns");
                 }
+                EspressoTestingIdlingResource.decrement();
+            }
 
         });
+        EspressoTestingIdlingResource.decrement();
         addNewFacilityFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 EspressoTestingIdlingResource.increment();
-                            navController.navigate(R.id.action_facilityListFragment_to_facilityAddFragment);
-                            EspressoTestingIdlingResource.decrement();
+                navController.navigate(R.id.action_facilityListFragment_to_facilityAddFragment);
+                EspressoTestingIdlingResource.decrement();
             }
         });
         facilitySwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -104,5 +109,38 @@ public class FacilityListFragment extends Fragment {
                 facilitySwipeLayout.setRefreshing(false);
             }
         });
+    }
+    @Override
+    public boolean onMenuItemActionExpand(MenuItem item) {
+
+        return true;
+    }
+
+    @Override
+    public boolean onMenuItemActionCollapse(MenuItem item) {
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        facilityListAdapter.getFilter().filter(query);
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        facilityListAdapter.getFilter().filter(newText);
+        return false;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+
+        inflater.inflate(R.menu.home, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+      SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setOnQueryTextListener(this);
+        searchView.setQueryHint("Search");
+        super.onCreateOptionsMenu(menu, inflater);
     }
 }

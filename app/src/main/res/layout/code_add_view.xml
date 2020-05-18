@@ -45,45 +45,5 @@
         android:inputType="textPersonName"
  />
 </com.google.android.material.textfield.TextInputLayout>
-<!--    <LinearLayout-->
-<!--        android:id="@+id/linearLayout"-->
-<!--        android:layout_width="349dp"-->
-<!--        android:layout_height="31dp"-->
-<!--        android:layout_marginStart="32dp"-->
-<!--        android:layout_marginTop="16dp"-->
-<!--        android:layout_marginEnd="32dp"-->
-<!--        android:layout_marginBottom="16dp"-->
-<!--        android:orientation="horizontal"-->
-<!--        android:weightSum="2"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/desc_et">-->
 
-<!--        <Button-->
-<!--            android:id="@+id/cancel_btn"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_gravity="center"-->
-<!--            android:layout_marginStart="16dp"-->
-<!--            android:layout_marginEnd="8dp"-->
-<!--            android:layout_weight="1"-->
-<!--            android:background="@color/colorAccent"-->
-<!--            android:hint="@string/cancel_btn_txt"-->
-<!--            android:textAlignment="center"-->
-<!--            android:textAllCaps="true"-->
-<!--            android:textColorHint="@color/colorWhite" />-->
-
-<!--        <Button-->
-<!--            android:id="@+id/addOrUpdateCodeBtn"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_gravity="center"-->
-<!--            android:layout_marginStart="8dp"-->
-<!--            android:layout_marginEnd="16dp"-->
-<!--            android:layout_weight="1"-->
-<!--            android:background="@color/colorPrimary"-->
-<!--            android:hint="@string/add_txt"-->
-<!--            android:textColorHint="@color/colorWhite" />-->
-<!--    </LinearLayout>-->
 </androidx.constraintlayout.widget.ConstraintLayout>

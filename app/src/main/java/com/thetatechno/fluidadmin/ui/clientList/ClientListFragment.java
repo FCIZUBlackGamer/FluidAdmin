@@ -33,13 +33,14 @@ import java.util.List;
  */
 public class ClientListFragment extends Fragment implements SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener {
 
-    List<Person> clientList;
-    RecyclerView clientListRecyclerView;
-    ClientListViewAdapter clientListViewAdapter;
-    ClientListViewModel clientListViewModel;
-SwipeRefreshLayout clientSwipeLayout;
-SearchView searchView;
-static final String TAG = ClientListFragment.class.getSimpleName();
+    private List<Person> clientList;
+    private RecyclerView clientListRecyclerView;
+    private ClientListViewAdapter clientListViewAdapter;
+    private ClientListViewModel clientListViewModel;
+    private SwipeRefreshLayout clientSwipeLayout;
+    private SearchView searchView;
+    private static final String TAG = ClientListFragment.class.getSimpleName();
+
     public ClientListFragment() {
         // Required empty public constructor
     }
@@ -60,17 +61,16 @@ static final String TAG = ClientListFragment.class.getSimpleName();
         clientListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         clientSwipeLayout = view.findViewById(R.id.clientSwipeLayout);
         setHasOptionsMenu(true);
-//        EspressoTestingIdlingResource.increment();
-
-        clientListViewModel.getAllClients("").observe(this, new Observer<CustomerList>() {
+        clientListViewModel.getAllClients("").observe(getViewLifecycleOwner(), new Observer<CustomerList>() {
             @Override
             public void onChanged(CustomerList customerList) {
+                EspressoTestingIdlingResource.increment();
                 clientSwipeLayout.setRefreshing(true);
                 if (customerList != null) {
                     if (customerList.getPersonList() != null) {
                         EspressoTestingIdlingResource.increment();
                         clientList = customerList.getPersonList();
-                        clientListViewAdapter = new ClientListViewAdapter(getContext(),clientList,getActivity().getSupportFragmentManager());
+                        clientListViewAdapter = new ClientListViewAdapter(getContext(), clientList, getActivity().getSupportFragmentManager());
                         clientListRecyclerView.setAdapter(clientListViewAdapter);
 
                         EspressoTestingIdlingResource.decrement();
@@ -82,7 +82,7 @@ static final String TAG = ClientListFragment.class.getSimpleName();
                     Log.e(TAG, "no data returns");
                 }
                 clientSwipeLayout.setRefreshing(false);
-//                EspressoTestingIdlingResource.decrement();
+                EspressoTestingIdlingResource.decrement();
 
             }
         });
@@ -95,7 +95,8 @@ static final String TAG = ClientListFragment.class.getSimpleName();
             }
         });
     }
-    @Override
+
+      @Override
     public boolean onMenuItemActionExpand(MenuItem item) {
 
         return true;
@@ -121,7 +122,7 @@ static final String TAG = ClientListFragment.class.getSimpleName();
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
 
-        inflater.inflate(R.menu.home,menu);
+        inflater.inflate(R.menu.home, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
         searchView = (SearchView) searchItem.getActionView();
         searchView.setOnQueryTextListener(this);

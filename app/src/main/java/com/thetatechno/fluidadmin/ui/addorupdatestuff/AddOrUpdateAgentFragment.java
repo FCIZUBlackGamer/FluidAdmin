@@ -47,25 +47,24 @@ import static com.thetatechno.fluidadmin.utils.Constants.ARG_STAFF;
 
 
 public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickListener {
-    TextInputEditText agentIdEditTxt;
-    TextInputEditText agentFirstNameEditTxt;
-    TextInputEditText agentLastNameEditTxt;
-    TextInputEditText agentEmailEditTxt;
-    TextInputEditText agentNumberEditTxt;
-    TextInputLayout agentIdInputLayout, agentFirstNameInputLayout, agentFamilyNameInputLayout, agentEmailInputLayout, agentNumberInputLayout;
-    RadioGroup genderRadioGroup;
-    Button addBtn;
-    Button cancelBtn;
-    ImageView addProfileImg;
-    AddOrUpdateViewModel addOrUpdateViewModel;
-    boolean isStaffHasData;
-    Staff staff;
-    List<Staff> agentList;
-    NavController navController;
-    String addNewAgentMessage;
-    String updateAgentMessage;
-    String idTxt, firstNameTxt, lastNameTxt, emailTxt, phoneTxt;
-    String idValidateMessage, firstNameValidateMessage, lastNameValidateMessage, emailValidateMessage, phoneValidateMessage;
+    private TextInputEditText agentIdEditTxt;
+    private TextInputEditText agentFirstNameEditTxt;
+    private TextInputEditText agentLastNameEditTxt;
+    private TextInputEditText agentEmailEditTxt;
+    private TextInputEditText agentNumberEditTxt;
+    private TextInputLayout agentIdInputLayout, agentFirstNameInputLayout, agentFamilyNameInputLayout, agentEmailInputLayout, agentNumberInputLayout;
+    private RadioGroup genderRadioGroup;
+    private Button addBtn;
+    private Button cancelBtn;
+    private ImageView addProfileImg;
+    private AddOrUpdateViewModel addOrUpdateViewModel;
+    private boolean isStaffHasData;
+    private Staff staff;
+    private NavController navController;
+    private String addNewAgentMessage;
+    private String updateAgentMessage;
+    private String idTxt, firstNameTxt, lastNameTxt, emailTxt, phoneTxt;
+    private String idValidateMessage, firstNameValidateMessage, lastNameValidateMessage, emailValidateMessage, phoneValidateMessage;
     private static String TAG = "AddStaff";
 
     public AddOrUpdateAgentFragment() {
@@ -77,7 +76,6 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
         super.onCreate(savedInstanceState);
         if (this.getArguments() != null) {
             staff = (Staff) getArguments().getSerializable(ARG_STAFF);
-            agentList = (List<Staff>) getArguments().getSerializable("agentList");
         }
         navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
@@ -90,7 +88,7 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
 
     }
 
-    void onCancelOrBackButtonPressed() {
+    private void onCancelOrBackButtonPressed() {
         navController.popBackStack();
     }
 
@@ -303,7 +301,6 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
             ((HomeActivity) getActivity()).getSupportActionBar().setTitle("update agent");
 
         } else {
-
             staff = new Staff();
             isStaffHasData = false;
             agentFirstNameEditTxt.setText("");

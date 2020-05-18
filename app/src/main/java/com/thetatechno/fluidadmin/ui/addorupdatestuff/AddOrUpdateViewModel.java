@@ -5,19 +5,11 @@ import androidx.lifecycle.ViewModel;
 
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.listeners.OnDataChangedCallBackListener;
-import com.thetatechno.fluidadmin.model.Code;
-import com.thetatechno.fluidadmin.model.CodeList;
 import com.thetatechno.fluidadmin.model.Staff;
-import com.thetatechno.fluidadmin.retrofiteServices.repositories.CodeRepository;
-import com.thetatechno.fluidadmin.retrofiteServices.repositories.StaffRepository;
+import com.thetatechno.fluidadmin.network.repositories.StaffRepository;
 import com.thetatechno.fluidadmin.utils.App;
 import com.thetatechno.fluidadmin.utils.Constants;
-import com.thetatechno.fluidadmin.utils.EnumCode;
-import com.thetatechno.fluidadmin.utils.PreferenceController;
 import com.thetatechno.fluidadmin.utils.Validation;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class AddOrUpdateViewModel extends ViewModel {
     private StaffRepository staffRepository = new StaffRepository();

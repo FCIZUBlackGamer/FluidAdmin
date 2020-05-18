@@ -10,6 +10,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -32,7 +34,9 @@ import com.thetatechno.fluidadmin.ui.EspressoTestingIdlingResource;
 import com.thetatechno.fluidadmin.utils.Constants;
 import com.thetatechno.fluidadmin.utils.EnumCode;
 
+import java.io.FileFilter;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import io.sentry.Sentry;
@@ -41,21 +45,21 @@ import io.sentry.event.UserBuilder;
 
 import static com.thetatechno.fluidadmin.utils.Constants.ARG_STAFF;
 
-public class AgentListAdapter extends RecyclerView.Adapter<AgentListAdapter.AgentListViewHolder> {
-    Context context;
-    FragmentManager fragmentManager;
-    OnDeleteListener listener;
-    OnLinkToFacilityClickedListener onLinkToFacilityClickedListener;
-    List<Staff> agentList;
-    NavController navController;
-    Bundle bundle;
+public class AgentListAdapter extends RecyclerView.Adapter<AgentListAdapter.AgentListViewHolder> implements Filterable {
+    private Context context;
+    private OnDeleteListener listener;
+    private OnLinkToFacilityClickedListener onLinkToFacilityClickedListener;
+    private List<Staff> agentList;
+    private List<Staff> filteredAgentList;
+    private NavController navController;
+    private Bundle bundle;
 
     public AgentListAdapter(NavController navControlle, Context context, @Nullable List<Staff> agentList, FragmentManager fragmentManager) {
         this.agentList = agentList;
+        this.filteredAgentList = agentList;
         this.context = context;
         navController = navControlle;
         bundle = new Bundle();
-        this.fragmentManager = fragmentManager;
         if (context instanceof OnDeleteListener) {
             listener = (OnDeleteListener) context;
             onLinkToFacilityClickedListener = (OnLinkToFacilityClickedListener) context;
@@ -81,45 +85,45 @@ public class AgentListAdapter extends RecyclerView.Adapter<AgentListAdapter.Agen
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onBindViewHolder(@NonNull final AgentListViewHolder holder, final int position) {
-        if(position < agentList.size()) {
+        if(position < filteredAgentList.size()) {
             holder.itemView.setVisibility(View.VISIBLE);
-            holder.idTxt.setText(agentList.get(position).getStaffId());
-            if (!agentList.get(position).getFirstName().isEmpty() || !agentList.get(position).getFamilyName().isEmpty()) {
-                holder.fullNameTxt.setText(agentList.get(position).getFirstName() + " " + agentList.get(position).getFamilyName());
+            holder.idTxt.setText(filteredAgentList.get(position).getStaffId());
+            if (!filteredAgentList.get(position).getFirstName().isEmpty() || !filteredAgentList.get(position).getFamilyName().isEmpty()) {
+                holder.fullNameTxt.setText(filteredAgentList.get(position).getFirstName() + " " + filteredAgentList.get(position).getFamilyName());
                 holder.fullNameTxt.setVisibility(View.VISIBLE);
             } else {
                 holder.fullNameTxt.setVisibility(View.GONE);
             }
-            if (!agentList.get(position).getEmail().isEmpty()) {
+            if (!filteredAgentList.get(position).getEmail().isEmpty()) {
                 holder.agentEmailTxt.setText(agentList.get(position).getEmail().toLowerCase());
                 holder.agentEmailTxt.setVisibility(View.VISIBLE);
 
             } else
                 holder.agentEmailTxt.setVisibility(View.GONE);
 
-            if (!agentList.get(position).getMobileNumber().isEmpty()) {
-                holder.agentPhoneTxt.setText(agentList.get(position).getMobileNumber());
+            if (!filteredAgentList.get(position).getMobileNumber().isEmpty()) {
+                holder.agentPhoneTxt.setText(filteredAgentList.get(position).getMobileNumber());
                 holder.agentPhoneTxt.setVisibility(View.VISIBLE);
             } else {
                 holder.agentPhoneTxt.setVisibility(View.GONE);
             }
-            if (!agentList.get(position).getImageLink().isEmpty()) {
-                Glide.with(context).load(Constants.BASE_URL + Constants.BASE_EXTENSION_FOR_PHOTOS + agentList.get(position).getImageLink())
+            if (!filteredAgentList.get(position).getImageLink().isEmpty()) {
+                Glide.with(context).load(Constants.BASE_URL + Constants.BASE_EXTENSION_FOR_PHOTOS + filteredAgentList.get(position).getImageLink())
                         .circleCrop()
                         .into(holder.personImg);
             } else {
-                if (!agentList.get(position).getGender().isEmpty()) {
-                    if (agentList.get(position).getGender().equals(EnumCode.Gender.M.toString())) {
+                if (!filteredAgentList.get(position).getGender().isEmpty()) {
+                    if (filteredAgentList.get(position).getGender().equals(EnumCode.Gender.M.toString())) {
                         holder.personImg.setImageResource(R.drawable.man);
-                    } else if (agentList.get(position).getGender().equals(EnumCode.Gender.F.toString())) {
+                    } else if (filteredAgentList.get(position).getGender().equals(EnumCode.Gender.F.toString())) {
                         holder.personImg.setImageResource(R.drawable.ic_girl);
                     }
                 } else {
                     holder.personImg.setImageResource(R.drawable.man);
                 }
             }
-            if (agentList.get(position).getFacilityList() != null) {
-                FacilitiesForAgentListAdapter facilitiesForAgentListAdapter = new FacilitiesForAgentListAdapter(context, agentList.get(position).getFacilityList());
+            if (filteredAgentList.get(position).getFacilityList() != null) {
+                FacilitiesForAgentListAdapter facilitiesForAgentListAdapter = new FacilitiesForAgentListAdapter(context, filteredAgentList.get(position).getFacilityList());
                 holder.pager.setAdapter(facilitiesForAgentListAdapter);
                 holder.nextBtn.setVisibility(View.VISIBLE);
                 holder.pager.setVisibility(View.VISIBLE);
@@ -204,22 +208,21 @@ public class AgentListAdapter extends RecyclerView.Adapter<AgentListAdapter.Agen
                                     //TODO: show dialog with facilities
                                     if (onLinkToFacilityClickedListener != null) {
                                         EspressoTestingIdlingResource.increment();
-                                        onLinkToFacilityClickedListener.onShowDialogLinkToFacility(agentList.get(position));
+                                        onLinkToFacilityClickedListener.onShowDialogLinkToFacility(filteredAgentList.get(position));
 
                                     }
 
                                     break;
                                 case R.id.editAgent:
                                     //handle edit click
-                                    bundle.putSerializable(ARG_STAFF, (Serializable) agentList.get(position));
-                                    bundle.putSerializable("agentList", (Serializable) agentList);
+                                    bundle.putSerializable(ARG_STAFF, filteredAgentList.get(position));
                                     navController.navigate(R.id.addOrUpdateAgentFragment, bundle);
 
                                     break;
                                 case R.id.deleteAgent:
                                     //show confirmation dialog to delete item
                                     if (listener != null)
-                                        listener.onDeleteButtonClicked(agentList.get(position));
+                                        listener.onDeleteButtonClicked(filteredAgentList.get(position));
                                     break;
                             }
                             return false;
@@ -231,14 +234,45 @@ public class AgentListAdapter extends RecyclerView.Adapter<AgentListAdapter.Agen
                 }
             });
         }
-        else if(position == agentList.size()){
+        else if(position == filteredAgentList.size()){
             holder.itemView.setVisibility(View.INVISIBLE);
         }
     }
 
     @Override
     public int getItemCount() {
-        return agentList.size()+1;
+        return filteredAgentList.size()+1;
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                String charSequenceString = constraint.toString();
+                if (charSequenceString.isEmpty()) {
+                    filteredAgentList= agentList;
+                } else {
+                    List<Staff> filteredList = new ArrayList<>();
+                    for (Staff agent : agentList) {
+                        if (agent.getFirstName().contains(charSequenceString) || agent.getFamilyName().contains(charSequenceString) || agent.getFirstName().equalsIgnoreCase(charSequenceString) || agent.getFamilyName().equalsIgnoreCase(charSequenceString)) {
+                            filteredList.add(agent);
+                        }
+                        filteredAgentList = filteredList;
+                    }
+
+                }
+                FilterResults results = new FilterResults();
+                results.values = filteredAgentList;
+                return results;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                filteredAgentList = (List<Staff>) results.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     class AgentListViewHolder extends RecyclerView.ViewHolder {

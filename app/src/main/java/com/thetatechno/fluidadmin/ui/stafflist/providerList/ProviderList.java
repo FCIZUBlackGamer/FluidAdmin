@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -16,6 +17,9 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -35,15 +39,17 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ProviderList extends Fragment {
-   private List<Staff> providerList;
+public class ProviderList extends Fragment implements SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener {
+    private List<Staff> providerList;
     private RecyclerView providerListRecyclerView;
     private FloatingActionButton addNewProviderFab;
     private ProviderListAdapter providerListAdapter;
     private StaffListViewModel providerListViewModel;
     private NavController navController;
     private SwipeRefreshLayout providerSwipeLayout;
+    private SearchView searchView;
     static final private String TAG = ProviderList.class.getSimpleName();
+
     public ProviderList() {
         // Required empty public constructor
     }
@@ -59,14 +65,15 @@ public class ProviderList extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        setHasOptionsMenu(true);
         providerListRecyclerView = view.findViewById(R.id.providerRecyclerView);
         navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
         providerSwipeLayout = view.findViewById(R.id.providerSwipeLayout);
         addNewProviderFab = view.findViewById(R.id.addProviderFab);
         providerListViewModel = ViewModelProviders.of(this).get(StaffListViewModel.class);
         providerListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-//        EspressoTestingIdlingResource.increment();
-        providerListViewModel.getStaffData(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase(), EnumCode.StaffTypeCode.PRVDR.toString()).observe(this, new Observer<StaffData>() {
+        EspressoTestingIdlingResource.increment();
+        providerListViewModel.getStaffData(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase(), EnumCode.StaffTypeCode.PRVDR.toString()).observe(getViewLifecycleOwner(), new Observer<StaffData>() {
             @Override
             public void onChanged(StaffData staffData) {
 
@@ -81,12 +88,12 @@ public class ProviderList extends Fragment {
                     } else {
                         Log.e(TAG, "provider List Is Null");
                     }
-                }else{
+                } else {
                     Log.e(TAG, "no data returns");
                 }
             }
         });
-        //                EspressoTestingIdlingResource.decrement();
+        EspressoTestingIdlingResource.decrement();
 
         providerSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -107,5 +114,39 @@ public class ProviderList extends Fragment {
             }
         });
 
+    }
+
+    @Override
+    public boolean onMenuItemActionExpand(MenuItem item) {
+
+        return true;
+    }
+
+    @Override
+    public boolean onMenuItemActionCollapse(MenuItem item) {
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        providerListAdapter.getFilter().filter(query);
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        providerListAdapter.getFilter().filter(newText);
+        return false;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+
+        inflater.inflate(R.menu.home, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        searchView = (SearchView) searchItem.getActionView();
+        searchView.setOnQueryTextListener(this);
+        searchView.setQueryHint("Search");
+        super.onCreateOptionsMenu(menu, inflater);
     }
 }

@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -16,6 +17,9 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -34,24 +38,22 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AgentList extends Fragment {
-    NavController navController;
-    List<Staff> agentList;
-    final String TAG = AgentList.class.getSimpleName();
-    RecyclerView agentListRecyclerView;
-    FloatingActionButton addNewAgentFab;
-    AgentListAdapter agentListAdapter;
-    StaffListViewModel staffListViewModel;
-    SwipeRefreshLayout agentSwipeLayout;
+public class AgentList extends Fragment implements SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener   {
+    private NavController navController;
+    private List<Staff> agentList;
+    private final String TAG = AgentList.class.getSimpleName();
+    private RecyclerView agentListRecyclerView;
+    private FloatingActionButton addNewAgentFab;
+    private AgentListAdapter agentListAdapter;
+    private StaffListViewModel staffListViewModel;
+    private SwipeRefreshLayout agentSwipeLayout;
 
     public AgentList() {
         // Required empty public constructor
     }
 
     public static AgentList newInstance() {
-        Bundle args = new Bundle();
         AgentList fragment = new AgentList();
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -73,10 +75,11 @@ public class AgentList extends Fragment {
         addNewAgentFab = view.findViewById(R.id.addAgentFab);
         staffListViewModel = ViewModelProviders.of(this).get(StaffListViewModel.class);
         agentSwipeLayout = view.findViewById(R.id.agentSwipeLayout);
+        setHasOptionsMenu(true);
         agentListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         if (agentList == null) {
-//            EspressoTestingIdlingResource.increment();
-            staffListViewModel.getStaffData(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase(), EnumCode.StaffTypeCode.DSPTCHR.toString()).observe(this, new Observer<StaffData>() {
+           EspressoTestingIdlingResource.increment();
+            staffListViewModel.getStaffData(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase(), EnumCode.StaffTypeCode.DSPTCHR.toString()).observe(getViewLifecycleOwner(), new Observer<StaffData>() {
                 @Override
                 public void onChanged(StaffData staffData) {
                     if (staffData != null) {
@@ -93,9 +96,10 @@ public class AgentList extends Fragment {
                         Log.e(TAG, "no data returns");
                     }
 
-//                    EspressoTestingIdlingResource.decrement();
                 }
             });
+            EspressoTestingIdlingResource.decrement();
+
         } else {
             agentListAdapter = new AgentListAdapter(navController, getContext(), agentList, getActivity().getSupportFragmentManager());
             agentListRecyclerView.setAdapter(agentListAdapter);
@@ -118,5 +122,38 @@ public class AgentList extends Fragment {
             }
         });
 
+    }
+    @Override
+    public boolean onMenuItemActionExpand(MenuItem item) {
+
+        return true;
+    }
+
+    @Override
+    public boolean onMenuItemActionCollapse(MenuItem item) {
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        agentListAdapter.getFilter().filter(query);
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        agentListAdapter.getFilter().filter(newText);
+        return false;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+
+        inflater.inflate(R.menu.home, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setOnQueryTextListener(this);
+        searchView.setQueryHint("Search");
+        super.onCreateOptionsMenu(menu, inflater);
     }
 }

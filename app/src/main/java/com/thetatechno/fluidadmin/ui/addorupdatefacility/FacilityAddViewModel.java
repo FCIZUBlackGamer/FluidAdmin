@@ -1,19 +1,17 @@
 package com.thetatechno.fluidadmin.ui.addorupdatefacility;
 
 
-import android.widget.LinearLayout;
-
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.listeners.OnDataChangedCallBackListener;
-import com.thetatechno.fluidadmin.model.Device;
-import com.thetatechno.fluidadmin.model.DeviceListData;
+import com.thetatechno.fluidadmin.model.device_model.Device;
+import com.thetatechno.fluidadmin.model.device_model.DeviceListData;
 import com.thetatechno.fluidadmin.model.Facilities;
 import com.thetatechno.fluidadmin.model.Facility;
-import com.thetatechno.fluidadmin.retrofiteServices.repositories.DeviceRepository;
-import com.thetatechno.fluidadmin.retrofiteServices.repositories.FacilityRepository;
+import com.thetatechno.fluidadmin.network.repositories.DeviceRepository;
+import com.thetatechno.fluidadmin.network.repositories.FacilityRepository;
 import com.thetatechno.fluidadmin.utils.App;
 import com.thetatechno.fluidadmin.utils.Constants;
 import com.thetatechno.fluidadmin.utils.EnumCode;

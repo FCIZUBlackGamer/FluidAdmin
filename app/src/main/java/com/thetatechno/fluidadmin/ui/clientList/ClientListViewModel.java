@@ -3,7 +3,7 @@ package com.thetatechno.fluidadmin.ui.clientList;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.thetatechno.fluidadmin.retrofiteServices.repositories.ClientRepository;
+import com.thetatechno.fluidadmin.network.repositories.ClientRepository;
 import com.thetatechno.fluidadmin.utils.App;
 import com.thetatechno.fluidadmin.utils.PreferenceController;
 

@@ -1,4 +1,4 @@
-package com.thetatechno.fluidadmin.retrofiteServices.interfaces;
+package com.thetatechno.fluidadmin.network.interfaces;
 
 import android.util.Log;
 
@@ -22,6 +22,7 @@ public class RetrofitInstance {
             HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
             interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+                    .addInterceptor(interceptor)
                     .connectTimeout(20, TimeUnit.SECONDS)
                     .readTimeout(40, TimeUnit.SECONDS)
                     .writeTimeout(40, TimeUnit.SECONDS)

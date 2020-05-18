@@ -3,8 +3,8 @@ package com.thetatechno.fluidadmin.ui.codeList;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.thetatechno.fluidadmin.model.CodeList;
-import com.thetatechno.fluidadmin.retrofiteServices.repositories.CodeRepository;
+import com.thetatechno.fluidadmin.model.code_model.CodeList;
+import com.thetatechno.fluidadmin.network.repositories.CodeRepository;
 
 public class CodeListViewModel extends ViewModel {
     CodeRepository codeRepository = new CodeRepository();

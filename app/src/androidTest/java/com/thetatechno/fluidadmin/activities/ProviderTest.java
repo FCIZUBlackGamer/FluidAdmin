@@ -93,9 +93,9 @@ public class ProviderTest {
         onView(withId(R.id.providerLastNameEdtTxt)).perform(typeText("tharwat"), closeSoftKeyboard());
         onView(withId(R.id.femaleRadioButton))
                 .perform(click());
-        onView(withId(R.id.specialitySpinner)).perform(click());
+        onView(withId(R.id.providerSpecialityAutoCompleteTextView)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is("ENT"))).perform(click());
-        onView(withId(R.id.specialitySpinner)).check(matches(withSpinnerText(containsString("ENT"))));
+        onView(withId(R.id.providerSpecialityAutoCompleteTextView)).check(matches(withSpinnerText(containsString("ENT"))));
         onView(withId(R.id.addOrUpdateProviderBtn)).perform(click());
         onView(ViewMatchers.withId(R.id.providerRecyclerView)).check(new RecyclerViewItemCountAssertion(greaterThan(countBefore)));
 
@@ -123,9 +123,9 @@ public class ProviderTest {
         onView(withId(R.id.providerEmailEditTxt)).perform(clearText(),typeText("nesmatharwat20@gmail.com"),closeSoftKeyboard());
         onView(withId(R.id.femaleRadioButton))
                 .perform(click());
-        onView(withId(R.id.specialitySpinner)).perform(click());
+        onView(withId(R.id.providerSpecialityAutoCompleteTextView)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is("ENT"))).perform(click());
-        onView(withId(R.id.specialitySpinner)).check(matches(withSpinnerText(containsString("ENT"))));
+        onView(withId(R.id.providerSpecialityAutoCompleteTextView)).check(matches(withSpinnerText(containsString("ENT"))));
         onView(withId(R.id.addOrUpdateProviderBtn)).perform(click());
         onView(ViewMatchers.withId(R.id.providerRecyclerView)).check(new RecyclerViewItemCountAssertion(is(countBefore)));
     }

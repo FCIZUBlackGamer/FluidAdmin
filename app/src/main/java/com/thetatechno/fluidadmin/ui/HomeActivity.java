@@ -23,7 +23,8 @@ import com.thetatechno.fluidadmin.listeners.OnConfirmLinkToFacilityListener;
 import com.thetatechno.fluidadmin.listeners.OnDataChangedCallBackListener;
 import com.thetatechno.fluidadmin.listeners.OnDeleteListener;
 import com.thetatechno.fluidadmin.listeners.OnLinkToFacilityClickedListener;
-import com.thetatechno.fluidadmin.model.Code;
+import com.thetatechno.fluidadmin.model.branches_model.Branch;
+import com.thetatechno.fluidadmin.model.code_model.Code;
 import com.thetatechno.fluidadmin.model.Facilities;
 import com.thetatechno.fluidadmin.model.Facility;
 import com.thetatechno.fluidadmin.model.FacilityCodes;
@@ -60,7 +61,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     private NavigationView navigationView;
     private ConfirmDeleteDialog confirmDeleteDialog;
     private NavController navController;
-    private Bundle bundle;
     private AppBarConfiguration mAppBarConfiguration;
     private DrawerLayout drawer;
     private FacilitiesListDialog facilitiesListDialog;
@@ -70,6 +70,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     private String deleteStaffMessage = "";
     private String deleteCodeMessage = "";
     private String deleteFacilityMessage = "";
+    private String deleteBranchMessage = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +81,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         );
 
         setContentView(R.layout.activity_home);
-        bundle = new Bundle();
         navigationView = findViewById(R.id.nav_view);
         drawer = findViewById(R.id.drawer_layout);
         mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
@@ -92,7 +92,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.agentList, R.id.providerList, R.id.clientList,
-                R.id.codeList, R.id.facility)
+                R.id.codeList, R.id.facility,R.id.branches,R.id.appointments)
                 .setDrawerLayout(drawer)
                 .build();
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -100,7 +100,8 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         NavigationUI.setupWithNavController(navigationView, navController);
         checkOnTheCurrentLanguage();
         navigationView.setNavigationItemSelectedListener(this);
-        navigationView.getMenu().getItem(0).setChecked(false);
+
+//        navigationView.getMenu().getItem(0).setChecked(false);
 
 
     }
@@ -150,9 +151,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     public void onDeleteButtonClicked(final Object itemClicked) {
-//        confirmDeleteDialog = new ConfirmDeleteDialog(this, itemClicked);
-//        confirmDeleteDialog.show();
-
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.delete_title_dialog);
         builder.setPositiveButton(R.string.delete_txt, new DialogInterface.OnClickListener() {
@@ -184,19 +182,26 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
 
         }
-        if (itemDeleted instanceof Staff) {
+        else if (itemDeleted instanceof Staff) {
             Log.i("Object", "staff type " + ((Staff) itemDeleted).getStaffId());
             if (deleteStaffMessage.isEmpty())
                 deleteAgentOrProvider((Staff) itemDeleted);
             else
                 mainViewModel.deleteAgentOrProvider((Staff) itemDeleted);
         }
-        if (itemDeleted instanceof Code) {
+       else if (itemDeleted instanceof Code) {
             Log.i("Object", "code type " + ((Code) itemDeleted).getCode());
             if (deleteCodeMessage.isEmpty())
                 deleteCode((Code) itemDeleted);
             else
                 mainViewModel.deleteCode((Code) itemDeleted);
+        }
+        else if (itemDeleted instanceof Branch) {
+            Log.i("Object", "code type " + ((Branch) itemDeleted).getDescription());
+            if (deleteBranchMessage.isEmpty())
+                deleteBranch((Branch) itemDeleted);
+            else
+                mainViewModel.deleteBranch((Branch) itemDeleted);
         }
         if (alertDialog.isShowing()) {
             alertDialog.dismiss();
@@ -209,7 +214,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        item.isChecked();
         item.setChecked(false);
         drawer.closeDrawers();
         id = item.getItemId();
@@ -236,6 +240,12 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
             case R.id.facility:
                 navigateToClinicTypeList();
+                break;
+            case R.id.appointments:
+                navigateToAppointments();
+                break;
+            case R.id.branches:
+                navigateToBranches();
                 break;
 
         }
@@ -306,6 +316,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     public void navigateToAgentList() {
+
         navController.navigate(R.id.agentList, null,
                 new NavOptions.Builder()
                         .setPopUpTo(R.id.agentList,
@@ -314,35 +325,36 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     public void navigateToProviderList() {
-        navController.navigate(R.id.providerList, null,
-                new NavOptions.Builder()
-                        .setPopUpTo(R.id.providerList,
-                                true).build());
+        navController.popBackStack();
+        navController.navigate(R.id.providerList);
 
     }
 
     public void navigateToClientList() {
-
-        navController.navigate(R.id.clientList, null,
-                new NavOptions.Builder()
-                        .setPopUpTo(R.id.clientList,
-                                true).build());
+        navController.popBackStack();
+        navController.navigate(R.id.clientList);
 
     }
 
     public void navigateToClinicTypeList() {
-        navController.navigate(R.id.facility, null,
-                new NavOptions.Builder()
-                        .setPopUpTo(R.id.facility,
-                                true).build());
+        navController.popBackStack();
+        navController.navigate(R.id.facility);
     }
 
     public void navigateToCodeList() {
-        navController.navigate(R.id.codeList, null,
-                new NavOptions.Builder()
-                        .setPopUpTo(R.id.codeList,
-                                true).build());
+        navController.popBackStack();
+        navController.navigate(R.id.codeList);
 
+    }
+
+    public void navigateToAppointments() {
+        navController.popBackStack();
+        navController.navigate(R.id.appointments);
+    }
+
+    public void navigateToBranches() {
+        navController.popBackStack();
+        navController.navigate(R.id.branches);
     }
 
     @Override
@@ -405,6 +417,16 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 deleteCodeMessage = s;
                 Toast.makeText(HomeActivity.this, deleteCodeMessage, Toast.LENGTH_SHORT).show();
                 navigateToCodeList();
+            }
+        });
+    }
+    private void deleteBranch(Branch branch){
+        mainViewModel.deleteBranch(branch).observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                deleteBranchMessage = s;
+                Toast.makeText(HomeActivity.this, deleteBranchMessage, Toast.LENGTH_SHORT).show();
+                navigateToBranches();
             }
         });
     }

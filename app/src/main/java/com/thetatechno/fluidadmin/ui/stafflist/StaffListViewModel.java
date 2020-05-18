@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.thetatechno.fluidadmin.model.StaffData;
-import com.thetatechno.fluidadmin.retrofiteServices.repositories.StaffRepository;
+import com.thetatechno.fluidadmin.network.repositories.StaffRepository;
 
 public class StaffListViewModel extends ViewModel {
     StaffRepository staffRepository = new StaffRepository();

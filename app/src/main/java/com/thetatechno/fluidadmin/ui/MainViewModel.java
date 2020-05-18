@@ -6,13 +6,15 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.thetatechno.fluidadmin.listeners.OnDataChangedCallBackListener;
-import com.thetatechno.fluidadmin.model.Code;
+import com.thetatechno.fluidadmin.model.branches_model.Branch;
+import com.thetatechno.fluidadmin.model.code_model.Code;
 import com.thetatechno.fluidadmin.model.Facility;
 import com.thetatechno.fluidadmin.model.FacilityCodes;
 import com.thetatechno.fluidadmin.model.Staff;
-import com.thetatechno.fluidadmin.retrofiteServices.repositories.CodeRepository;
-import com.thetatechno.fluidadmin.retrofiteServices.repositories.FacilityRepository;
-import com.thetatechno.fluidadmin.retrofiteServices.repositories.StaffRepository;
+import com.thetatechno.fluidadmin.network.repositories.BranchesRepository;
+import com.thetatechno.fluidadmin.network.repositories.CodeRepository;
+import com.thetatechno.fluidadmin.network.repositories.FacilityRepository;
+import com.thetatechno.fluidadmin.network.repositories.StaffRepository;
 import com.thetatechno.fluidadmin.utils.Constants;
 
 public class MainViewModel extends ViewModel {
@@ -20,6 +22,7 @@ public class MainViewModel extends ViewModel {
     private StaffRepository staffRepository = new StaffRepository();
     private CodeRepository codeRepository = new CodeRepository();
     private FacilityRepository facilityRepository = new FacilityRepository();
+   private BranchesRepository branchesRepository = new BranchesRepository();
     private MutableLiveData<String> deletedStaffMessageLiveData = new MutableLiveData<>();
     private MutableLiveData<String> deletedCodeMessageLiveData = new MutableLiveData<>();
     private  MutableLiveData<String> deletedFacilityMessageLiveData = new MutableLiveData<>();
@@ -87,6 +90,30 @@ public class MainViewModel extends ViewModel {
                 }
                 else if(b.equals("-2292")) {
                     messageForSFacility = "cann't delete facility";
+                    deletedFacilityMessageLiveData.setValue(messageForSFacility);
+                }
+
+            }
+        });
+        return deletedFacilityMessageLiveData;
+    }
+
+    public MutableLiveData<String> deleteBranch(final Branch branch) {
+        branchesRepository.deleteBranch(branch.getSiteId(), new OnDataChangedCallBackListener<String>() {
+            @Override
+            public void onResponse(String b) {
+                Log.i(TAG, "deleteBranch: delete state " + b);
+
+                if (b.equals(Constants.DELETE_SUCCESS_STATE)) {
+                    messageForSFacility = "Delete branch " + branch.getDescription()+ " successfully";
+                    deletedFacilityMessageLiveData.setValue(messageForSFacility);
+
+                } else if (b.equals(Constants.ADD_DELETE_OR_UPDATE_FAIL_STATE)) {
+                    messageForSFacility = "Failed to delete branch " + branch.getDescription();
+                    deletedFacilityMessageLiveData.setValue(messageForSFacility);
+                }
+                else if(b.equals("-2292")) {
+                    messageForSFacility = "cann't delete branch";
                     deletedFacilityMessageLiveData.setValue(messageForSFacility);
                 }
 

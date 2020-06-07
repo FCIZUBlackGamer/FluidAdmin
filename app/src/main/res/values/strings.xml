@@ -117,4 +117,8 @@
     <string name="error_with_status_code_txt">Error with status code</string>
     <string name="invalid_date">Invalid date</string>
     <string name="invalid_mobile_number_txt">Invalid mobile number</string>
+    <string name="dateFrom">From</string>
+    <string name="dateTo">To</string>
+    <string name="summer_schedule">Summer Schedule</string>
+    <string name="day_name">Monday</string>
 </resources>

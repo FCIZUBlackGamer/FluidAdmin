@@ -109,4 +109,20 @@ public class Schedule {
     public void setLangId(String langId) {
         this.langId = langId;
     }
+
+    public String getProviderName() {
+        return providerName;
+    }
+
+    public void setProviderName(String providerName) {
+        this.providerName = providerName;
+    }
+
+    public String getFacilitDescription() {
+        return facilitDescription;
+    }
+
+    public void setFacilitDescription(String facilitDescription) {
+        this.facilitDescription = facilitDescription;
+    }
 }

@@ -22,9 +22,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:baselineAligned="false"
             android:orientation="horizontal"
-            android:weightSum="4"
-            android:baselineAligned="false">
+            android:weightSum="4">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
@@ -35,7 +35,7 @@
                 android:paddingBottom="20dp">
 
                 <TextView
-                    android:id="@+id/day_txt"
+                    android:id="@+id/schedule_name_txt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/day"
@@ -55,9 +55,9 @@
                     android:text="@string/month"
                     android:textColor="@color/colorWhite"
                     android:textSize="18sp"
-                    app:layout_constraintEnd_toEndOf="@+id/day_txt"
-                    app:layout_constraintStart_toStartOf="@+id/day_txt"
-                    app:layout_constraintTop_toBottomOf="@+id/day_txt" />
+                    app:layout_constraintEnd_toEndOf="@+id/schedule_name_txt"
+                    app:layout_constraintStart_toStartOf="@+id/schedule_name_txt"
+                    app:layout_constraintTop_toBottomOf="@+id/schedule_name_txt" />
 
                 <TextView
                     android:id="@+id/year_txt"
@@ -82,17 +82,17 @@
 
                 <ImageView
 
-                    android:layout_marginTop="6dp"
-                    android:layout_marginStart="6dp"
                     android:id="@+id/doctorImg"
                     android:layout_width="75dp"
                     android:layout_height="75dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginTop="6dp"
+                    android:contentDescription="@string/doctor_image"
                     android:src="@drawable/man"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:contentDescription="@string/doctor_image" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/doctor_name_txt"
@@ -128,21 +128,21 @@
                     app:layout_constraintVertical_bias="0.0" />
 
                 <TextView
-                    android:drawableStart="@drawable/ic_time"
                     android:id="@+id/textView6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
+                    android:layout_marginTop="8dp"
+                    android:drawableStart="@drawable/ic_time"
                     android:drawablePadding="3dp"
                     android:text="@string/expected_time_txt"
                     android:textSize="12sp"
-                    android:layout_marginTop="8dp"
                     app:layout_constraintStart_toStartOf="@+id/doctorImg"
                     app:layout_constraintTop_toBottomOf="@+id/doctorImg"
                     app:layout_goneMarginStart="3dp" />
 
                 <TextView
-                    android:id="@+id/expected_time_txt"
+                    android:id="@+id/time_from_txt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
@@ -171,11 +171,11 @@
                     app:layout_constraintVertical_bias="0.0" />
 
                 <TextView
-                    android:id="@+id/scheduled_time_txt"
+                    android:id="@+id/time_to_txt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/expected_time_txt"
+                    app:layout_constraintBottom_toBottomOf="@+id/time_from_txt"
                     app:layout_constraintEnd_toEndOf="@+id/arrivalTextView"
                     app:layout_constraintStart_toStartOf="@+id/arrivalTextView"
                     app:layout_constraintTop_toBottomOf="@+id/arrivalTextView" />

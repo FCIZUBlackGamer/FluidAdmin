@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -25,7 +26,9 @@ import androidx.navigation.Navigation;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.thetatechno.fluidadmin.R;
-import com.thetatechno.fluidadmin.model.Facility;
+import com.thetatechno.fluidadmin.model.facility_model.Facility;
+import com.thetatechno.fluidadmin.model.branches_model.Branch;
+import com.thetatechno.fluidadmin.model.branches_model.BranchesResponse;
 import com.thetatechno.fluidadmin.ui.EspressoTestingIdlingResource;
 import com.thetatechno.fluidadmin.ui.HomeActivity;
 import com.thetatechno.fluidadmin.utils.App;
@@ -40,9 +43,9 @@ import static com.thetatechno.fluidadmin.utils.Constants.ARG_FACILITY;
 public class FacilityAddFragment extends Fragment {
     private Facility facility;
     private TextInputEditText facilityIdEditTxt, facilityDescriptionEditTxt;
-    private TextInputLayout facilityIdEditTxtInputLayout, facilityDescriptionEditTxtInputLayout;
-    private TextInputLayout facilityWaitingAreaLayout, facilityDeviceLayout;
-    private AutoCompleteTextView facilityWaitingAreaTextView,facilityDeviceTextView;
+    private TextInputLayout facilityIdEditTxtInputLayout, facilityDescriptionEditTxtInputLayout,branchEditTExtInputLayout;
+    private TextInputLayout facilityWaitingAreaLayout, facilityDeviceLayout,branches;
+    private AutoCompleteTextView facilityWaitingAreaTextView,facilityDeviceTextView,branchesTextView;
     private Button cancelBtn, addOrUpdateBtn;
     private boolean isDataFound;
     private FacilityAddViewModel facilityAddViewModel;
@@ -52,8 +55,9 @@ public class FacilityAddFragment extends Fragment {
     private ArrayAdapter<Facility> waitingAreaListAdapter;
     private List<Facility> waitAreaDescriptionList;
     private List<String> devicesDescriptionList;
+    private List<Branch> branchesList;
     private String addOrUpdateMessage, addNewFacilityMessage;
-
+private String selectedBranchId;
     private String idTxt, descriptionTxt, facilityTypeTxt;
     private String idValidateMessage, descriptionValidateMessage, facilityTypeValidateMessage;
 
@@ -80,13 +84,13 @@ public class FacilityAddFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.facility_add_view, container, false);
         facilityAddViewModel = ViewModelProviders.of(this).get(FacilityAddViewModel.class);
         initViews(view);
         getWaitingAreaDescriptionList();
         getDevicesListDescription();
         updateUiWithFacilityData();
+        getBranchesList();
         facilityTypeRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -98,6 +102,12 @@ public class FacilityAddFragment extends Fragment {
 
                 }
 
+            }
+        });
+        branchesTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selectedBranchId = branchesList.get(position).getSiteId();
             }
         });
         facilityIdEditTxt.addTextChangedListener(new TextWatcher() {
@@ -177,6 +187,21 @@ public class FacilityAddFragment extends Fragment {
         return view;
     }
 
+    private void getBranchesList() {
+        facilityAddViewModel.getAllBranches().observe(getViewLifecycleOwner(), new Observer<BranchesResponse>() {
+            @Override
+            public void onChanged(BranchesResponse branchesResponse) {
+                if(branchesResponse!=null){
+                    if(branchesResponse.getBranchList()!=null){
+                        branchesList = branchesResponse.getBranchList();
+                        ArrayAdapter<Branch> branchArrayAdapter = new ArrayAdapter<Branch>(getContext(),R.layout.dropdown_menu_popup_item,branchesList);
+                        branchesTextView.setAdapter(branchArrayAdapter);
+                    }
+                }
+            }
+        });
+    }
+
     private void addNewFacility() {
 
         facilityAddViewModel.addNewFacility(facility, facilityDeviceTextView.getText().toString(), facilityWaitingAreaTextView.getText().toString()).observe(getActivity(), new Observer<String>() {
@@ -207,9 +232,10 @@ public class FacilityAddFragment extends Fragment {
         facilityDeviceLayout = view.findViewById(R.id.deviceLayout);
         facilityDeviceTextView= view.findViewById(R.id.deviceAutoCompleteTextView);
         facilityWaitingAreaTextView = view.findViewById(R.id.waitingAreaAutoCompleteTextView);
+        branchEditTExtInputLayout = view.findViewById(R.id.branchLayout);
+        branchesTextView = view.findViewById(R.id.branchAutoCompleteTextView);
         cancelBtn = view.findViewById(R.id.cancel_btn);
         addOrUpdateBtn = view.findViewById(R.id.addOrUpdateFacilityBtn);
-
 
     }
 
@@ -307,6 +333,7 @@ public class FacilityAddFragment extends Fragment {
         facility.setDescription(descriptionTxt);
         facility.setType(facilityTypeTxt);
         facility.setLangId(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
+        facility.setSiteId(selectedBranchId);
     }
 
     private void updateDropdownListInUiWhenRoomTypeSelected() {

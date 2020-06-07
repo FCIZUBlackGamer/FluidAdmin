@@ -3,8 +3,11 @@ package com.thetatechno.fluidadmin.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.thetatechno.fluidadmin.model.facility_model.Facility;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -113,4 +116,9 @@ public  Staff(){
         dest.writeString(langId);
     }
 
+    @NonNull
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }

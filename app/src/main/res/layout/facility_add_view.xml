@@ -11,9 +11,11 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/facilityIdTxtInputLayout"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
         android:hint="@string/facilty_id"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,7 +25,6 @@
             android:id="@+id/facilityIdEdtTxt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="13"
             android:inputType="textPersonName"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -35,19 +36,20 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/facility_description_txt_input_layout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
         android:hint="@string/description_hint"
         app:layout_constraintStart_toStartOf="@+id/facilityIdTxtInputLayout"
         app:layout_constraintTop_toBottomOf="@id/facilityIdTxtInputLayout">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/facilityDesriptionEdtTxt"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:ems="13"
             android:inputType="textPersonName"
             android:maxLines="3"
             android:singleLine="true" />
@@ -58,7 +60,8 @@
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="32dp"
+
         android:drawablePadding="5dp"
         android:text="@string/type"
         android:textColor="@color/colorPrimary"
@@ -66,58 +69,66 @@
         app:layout_constraintTop_toBottomOf="@+id/facility_description_txt_input_layout" />
 
 
-    <RadioGroup
-        android:id="@+id/typeRadioGroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="@+id/facility_description_txt_input_layout"
-        app:layout_constraintTop_toBottomOf="@+id/textView4">
-
-        <RadioButton
-            android:id="@+id/clinicTyperadioButton"
+        <RadioGroup
+            android:id="@+id/typeRadioGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:text="@string/room_txt"
-            tools:layout_editor_absoluteX="136dp"
-            tools:layout_editor_absoluteY="154dp" />
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="@+id/textView4"
+            app:layout_constraintStart_toEndOf="@+id/textView4"
+            app:layout_constraintTop_toTopOf="@+id/textView4">
 
-        <RadioButton
-            android:id="@+id/waitingAreaTypeRadioButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/waiting_area"
-            tools:layout_editor_absoluteX="136dp"
-            tools:layout_editor_absoluteY="154dp" />
+            <RadioButton
+                android:id="@+id/clinicTyperadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:text="@string/room_txt"
+                tools:layout_editor_absoluteX="136dp"
+                tools:layout_editor_absoluteY="154dp" />
 
-    </RadioGroup>
+            <RadioButton
+                android:id="@+id/waitingAreaTypeRadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/waiting_area"
+                tools:layout_editor_absoluteX="136dp"
+                tools:layout_editor_absoluteY="154dp" />
 
+        </RadioGroup>
 
 
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="@string/waiting_area"
             android:id="@+id/waitingAreaLayout"
-            app:layout_constraintStart_toStartOf="@id/typeRadioGroup"
-            app:layout_constraintTop_toBottomOf="@id/typeRadioGroup"
-            >
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:hint="@string/waiting_area"
+            app:layout_constraintEnd_toEndOf="@+id/facility_description_txt_input_layout"
+            app:layout_constraintStart_toStartOf="@+id/textView4"
+            app:layout_constraintTop_toBottomOf="@id/typeRadioGroup">
 
             <AutoCompleteTextView
                 android:id="@+id/waitingAreaAutoCompleteTextView"
                 android:layout_width="match_parent"
-                android:ems="12"
                 android:layout_height="wrap_content"
+                android:ems="12"
                 android:inputType="none" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginTop="8dp"
             android:hint="@string/device_txt"
             android:id="@+id/deviceLayout"
             app:layout_constraintEnd_toEndOf="@+id/waitingAreaLayout"
@@ -127,6 +138,28 @@
 
             <AutoCompleteTextView
                 android:id="@+id/deviceAutoCompleteTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginTop="8dp"
+
+            android:hint="@string/branches_txt"
+            android:id="@+id/branchLayout"
+            app:layout_constraintEnd_toEndOf="@id/deviceLayout"
+            app:layout_constraintStart_toStartOf="@+id/deviceLayout"
+            app:layout_constraintTop_toBottomOf="@+id/deviceLayout"
+            >
+
+            <AutoCompleteTextView
+                android:id="@+id/branchAutoCompleteTextView"
                 android:layout_width="match_parent"
                 android:ems="12"
                 android:layout_height="wrap_content"
@@ -142,7 +175,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="64dp"
         android:layout_marginBottom="64dp"
-        app:layout_constraintTop_toBottomOf="@+id/deviceLayout">
+        app:layout_constraintTop_toBottomOf="@id/branchLayout">
 
         <Button
             android:id="@+id/cancel_btn"

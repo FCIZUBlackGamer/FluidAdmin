@@ -19,11 +19,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.listeners.OnDeleteListener;
-import com.thetatechno.fluidadmin.model.Facility;
-import com.thetatechno.fluidadmin.model.Staff;
+import com.thetatechno.fluidadmin.model.facility_model.Facility;
 import com.thetatechno.fluidadmin.utils.EnumCode;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -96,6 +94,8 @@ public class FacilityListAdapter extends RecyclerView.Adapter<FacilityListAdapte
                 holder.facilityImgView.setImageResource(R.drawable.ic_chair);
 
             }
+
+            holder.branchTxt.setText(filteredFacilityList.get(position).getSiteDescription());
             holder.facilityTextViewOptions.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -181,7 +181,7 @@ public class FacilityListAdapter extends RecyclerView.Adapter<FacilityListAdapte
     }
 
     public class vHolder extends RecyclerView.ViewHolder {
-        TextView facilityTextViewOptions, facilityIdTxt, facilityDescriptionTxt;
+        TextView facilityTextViewOptions, facilityIdTxt, facilityDescriptionTxt,branchTxt;
         TextView waitingAreaOrDeviceDescriptionTxt;
         ImageView facilityImgView;
 
@@ -192,6 +192,7 @@ public class FacilityListAdapter extends RecyclerView.Adapter<FacilityListAdapte
             facilityDescriptionTxt = itemView.findViewById(R.id.facilityDescriptionTxt);
             waitingAreaOrDeviceDescriptionTxt = itemView.findViewById(R.id.waitingAreaOrDeviceDescriptionTxt);
             facilityImgView = itemView.findViewById(R.id.facilityImgView);
+            branchTxt = itemView.findViewById(R.id.branchTxt);
         }
     }
 }

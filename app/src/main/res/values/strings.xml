@@ -9,7 +9,7 @@
     <string name="email_txt">Email</string>
     <string name="mobile_number_txt">Phone</string>
     <string name="number_prompt">number</string>
-    <string name="email_prompt">email</string>
+    <string name="email_prompt">Email</string>
     <string name="gender_txt">Gender</string>
     <string name="cancel_btn_txt">Cancel</string>
     <string name="update_txt">Update</string>
@@ -94,4 +94,27 @@
     <string name="expected_time_txt">Expected</string>
     <string name="scheduled_time_txt">Scheduled</string>
     <string name="address_error_message">Invalid address</string>
+    <string name="date_txt">Date</string>
+    <string name="confirm_txt_btn">Confirm</string>
+    <string name="appointment_booked_title">Appointment Booked</string>
+    <string name="doctor_name_txt">Doctor Name</string>
+    <string name="time_txt">Time</string>
+    <string name="date_text">Date</string>
+    <string name="take_screenshot_txt">Take screenshot</string>
+    <string name="client_txt">Client</string>
+    <string name="book_appointment_txt">Book appointment</string>
+    <string name="cancel_appointment_txt">Do you want to cancel this appointment?</string>
+    <string name="middle_name_prompet">Middle Name</string>
+    <string name="family_name_prompt">Family Name</string>
+    <string name="nationality_txt">Nationality</string>
+    <string name="identity_type_txt">Identity Type</string>
+    <string name="identity_number_txt">Identity Number</string>
+    <string name="register_txt">Register</string>
+    <string name="date_of_birth_txt">Date of birth</string>
+    <string name="user_created_sueccfully">Client created successfully</string>
+    <string name="null_parameter_txt">there is a null parameter</string>
+    <string name="user_not_exist">Client doens\'t exist</string>
+    <string name="error_with_status_code_txt">Error with status code</string>
+    <string name="invalid_date">Invalid date</string>
+    <string name="invalid_mobile_number_txt">Invalid mobile number</string>
 </resources>

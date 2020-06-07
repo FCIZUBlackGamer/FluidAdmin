@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -15,8 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.listeners.OnConfirmLinkToFacilityListener;
-import com.thetatechno.fluidadmin.model.Facility;
-import com.thetatechno.fluidadmin.model.FacilityCodes;
+import com.thetatechno.fluidadmin.model.facility_model.Facility;
+import com.thetatechno.fluidadmin.model.facility_model.FacilityCodes;
 import com.thetatechno.fluidadmin.ui.EspressoTestingIdlingResource;
 
 import java.util.ArrayList;

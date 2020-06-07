@@ -1,8 +1,10 @@
 package com.thetatechno.fluidadmin.ui.clientList;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
@@ -12,14 +14,15 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.FragmentManager;
+import androidx.navigation.NavController;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.listeners.OnDeleteListener;
-import com.thetatechno.fluidadmin.model.Facility;
 import com.thetatechno.fluidadmin.model.Person;
 import com.thetatechno.fluidadmin.utils.Constants;
 import com.thetatechno.fluidadmin.utils.EnumCode;
@@ -33,14 +36,16 @@ import io.sentry.event.UserBuilder;
 
 
 public class ClientListViewAdapter extends RecyclerView.Adapter<ClientListViewAdapter.vHolder> implements Filterable {
+    private static final String ARG_CLIENT_ID = "clientId";
     Context context;
     FragmentManager fragmentManager;
     List<Person> personList;
     List<Person> filteredClientList;
     OnDeleteListener listener;
+    NavController navController;
 
 
-    public ClientListViewAdapter(Context context, @Nullable List<Person> personList, FragmentManager fragmentManager) {
+    public ClientListViewAdapter(Context context, @Nullable List<Person> personList, FragmentManager fragmentManager, NavController navController) {
         Gson gson = new Gson();
         Log.e("Images", gson.toJson(personList));
 
@@ -52,6 +57,7 @@ public class ClientListViewAdapter extends RecyclerView.Adapter<ClientListViewAd
             listener = (OnDeleteListener) context;
         else
             listener = null;
+        this.navController = navController;
     }
 
     @NonNull
@@ -118,6 +124,37 @@ public class ClientListViewAdapter extends RecyclerView.Adapter<ClientListViewAd
                     holder.personImg.setImageResource(R.drawable.man);
                 }
             }
+
+            holder.clientOptionMenuTxt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    PopupMenu popup = new PopupMenu(context, holder.clientOptionMenuTxt);
+                    //inflating agents_menu from xml resource
+                    popup.inflate(R.menu.client_menu);
+                    //adding click listener
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            switch (item.getItemId()) {
+
+                                case R.id.bookAppointment:
+                                    //handle edit click
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString(ARG_CLIENT_ID,  filteredClientList.get(position).getId());
+                                    navController.navigate(R.id.action_clientList_to_selectSpecialityAndProviderAndDisplayCalender, bundle);
+                                    break;
+                                case R.id.deleteBranch:
+                                    //handle delete click
+                                    if (listener != null)
+                                        listener.onDeleteButtonClicked(filteredClientList.get(position));
+                                    break;
+                            }
+                            return false;
+                        }
+                    });
+                    popup.show();
+                }
+            });
         } catch (Exception e) {
             Sentry.capture(e);
         }
@@ -167,7 +204,7 @@ public class ClientListViewAdapter extends RecyclerView.Adapter<ClientListViewAd
     public class vHolder extends RecyclerView.ViewHolder {
         ImageView personImg;
         TextView fullNameTxt, mailTxt, phoneTxt;
-        TextView idTxt;
+        TextView idTxt,clientOptionMenuTxt;
 
 
         public vHolder(@NonNull View itemView) {
@@ -177,6 +214,7 @@ public class ClientListViewAdapter extends RecyclerView.Adapter<ClientListViewAd
             mailTxt = itemView.findViewById(R.id.client_email_txt);
             phoneTxt = itemView.findViewById(R.id.client_phone_txt);
             idTxt = itemView.findViewById(R.id.clientIdTxt);
+            clientOptionMenuTxt = itemView.findViewById(R.id.clientTxtViewOptions);
 
         }
     }

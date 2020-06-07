@@ -6,10 +6,12 @@ import androidx.lifecycle.ViewModel;
 
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.listeners.OnDataChangedCallBackListener;
+import com.thetatechno.fluidadmin.model.branches_model.BranchesResponse;
 import com.thetatechno.fluidadmin.model.device_model.Device;
 import com.thetatechno.fluidadmin.model.device_model.DeviceListData;
-import com.thetatechno.fluidadmin.model.Facilities;
-import com.thetatechno.fluidadmin.model.Facility;
+import com.thetatechno.fluidadmin.model.facility_model.Facilities;
+import com.thetatechno.fluidadmin.model.facility_model.Facility;
+import com.thetatechno.fluidadmin.network.repositories.BranchesRepository;
 import com.thetatechno.fluidadmin.network.repositories.DeviceRepository;
 import com.thetatechno.fluidadmin.network.repositories.FacilityRepository;
 import com.thetatechno.fluidadmin.utils.App;
@@ -25,6 +27,7 @@ public class FacilityAddViewModel extends ViewModel {
 
     private MutableLiveData<String> facilityAddOrUpdateMessage = new MutableLiveData<>();
     private FacilityRepository facilityRepository = new FacilityRepository();
+    private BranchesRepository branchesRepository = new BranchesRepository();
     private DeviceRepository deviceRepository = new DeviceRepository();
     private MutableLiveData<List<Facility>> facilitiesWaitListStringMutableLiveData = new MutableLiveData<List<Facility>>();
     private MutableLiveData<List<String>> devicesStringMutableLiveData = new MutableLiveData<List<String>>();
@@ -166,6 +169,9 @@ public class FacilityAddViewModel extends ViewModel {
 
         return devicesStringMutableLiveData;
 
+    }
+    public  MutableLiveData<BranchesResponse> getAllBranches(){
+        return branchesRepository.getAllBranches(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
     }
 
     public String validateFacilityType(String facilityType) {

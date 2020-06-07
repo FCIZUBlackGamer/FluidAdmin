@@ -16,5 +16,7 @@ public interface Constants {
     public static String ADD_DELETE_OR_UPDATE_FAIL_STATE = "-1";
     public static String ERROR_HAVE_SCHEDULE = "-2292";
 public static String DELETE_SUCCESS_STATE = "1";
+    String APPOINTMENT_LENGTH = "20";
+
 
 }

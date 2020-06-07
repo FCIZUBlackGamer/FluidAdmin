@@ -81,7 +81,14 @@
         android:id="@+id/clientList"
         android:name="com.thetatechno.fluidadmin.ui.clientList.ClientListFragment"
         android:label="@string/client"
-        tools:layout="@layout/fragment_client_list" />
+        tools:layout="@layout/fragment_client_list" >
+        <action
+            android:id="@+id/action_clientList_to_selectSpecialityAndProviderAndDisplayCalender"
+            app:destination="@id/selectSpecialityAndProviderAndDisplayCalender" />
+        <action
+            android:id="@+id/action_clientList_to_registerPage3"
+            app:destination="@id/registerPage3" />
+    </fragment>
     <fragment
         android:id="@+id/codeList"
         android:name="com.thetatechno.fluidadmin.ui.codeList.CodeListFragment"
@@ -104,7 +111,12 @@
     <fragment
         android:id="@+id/appointments"
         android:name="com.thetatechno.fluidadmin.ui.appointments.Appointments"
-        android:label="Appointments" />
+        android:label="Appointments" >
+
+        <action
+            android:id="@+id/action_appointments_to_selectSpecialityAndProviderAndDisplayCalender"
+            app:destination="@id/selectSpecialityAndProviderAndDisplayCalender" />
+    </fragment>
     <fragment
         android:id="@+id/addOrUpdateBranch"
         android:name="com.thetatechno.fluidadmin.ui.addOrUpdateBranch.AddOrUpdateBranch"
@@ -113,4 +125,29 @@
             android:id="@+id/action_addOrUpdateBranch_to_branches"
             app:destination="@id/branches" />
     </fragment>
+    <fragment
+        android:id="@+id/timeSlotList"
+        android:name="com.thetatechno.fluidadmin.ui.timeSlotList.TimeSlotList"
+        android:label="@string/book_appointment_txt" >
+        <action
+            android:id="@+id/action_timeSlotList_to_confirmAppointment"
+            app:destination="@id/confirmAppointment" />
+    </fragment>
+    <fragment
+        android:id="@+id/selectSpecialityAndProviderAndDisplayCalender"
+        android:name="com.thetatechno.fluidadmin.ui.SelectSpecialityAndProviderAndDisplayCalender.SelectSpecialityAndProviderAndDisplayCalender"
+        android:label="@string/book_appointment_txt" >
+        <action
+            android:id="@+id/action_selectSpecialityAndProviderAndDisplayCalender_to_timeSlotList"
+            app:destination="@id/timeSlotList" />
+    </fragment>
+    <fragment
+        android:id="@+id/confirmAppointment"
+        android:name="com.thetatechno.fluidadmin.ui.ConfirmAppointment"
+        android:label="ConfirmAppointment" />
+    <fragment
+        android:id="@+id/registerPage3"
+        android:name="com.thetatechno.fluidadmin.ui.RegisterPage3"
+        android:label="Add new client" />
+
 </navigation>

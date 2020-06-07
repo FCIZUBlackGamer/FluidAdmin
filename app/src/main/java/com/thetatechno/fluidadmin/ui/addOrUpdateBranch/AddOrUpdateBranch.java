@@ -41,12 +41,11 @@ public class AddOrUpdateBranch extends Fragment implements TextWatcher, View.OnC
     private TextInputLayout branchDescriptionInputLayout, branchEmailInputLayout, branchAddressInputLayout, branchPhoneInputLayout;
     private NavController navController;
     private Button cancelBtn, addOrUpdateBranchBtn;
-    boolean isBranchHasData;
-    AddOrUpdateBranchViewModel viewModel;
+    private boolean isBranchHasData;
+    private AddOrUpdateBranchViewModel viewModel;
     private String addNewBranchMessage;
     private String updateBranchMessage;
     private String descriptionValidateMessage, addressValidateMessage, emailValidateMessage, phoneValidateMessage;
-    private static String TAG = AddOrUpdateBranch.class.getSimpleName();
 
     public AddOrUpdateBranch() {
 
@@ -58,7 +57,6 @@ public class AddOrUpdateBranch extends Fragment implements TextWatcher, View.OnC
         if (this.getArguments() != null) {
             branch = (Branch) getArguments().getSerializable(ARG_BRANCH);
         }
-        navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
             @Override
             public void handleOnBackPressed() {
@@ -250,10 +248,10 @@ public class AddOrUpdateBranch extends Fragment implements TextWatcher, View.OnC
 
     private void addNewAgent() {
 
-        viewModel.addNewBranch(branchEmailEditTxt.getText().toString(),
-                branchPhoneEditTxt.getText().toString(),
-                branchDescriptionEditTxt.getText().toString(),
-                branchAddressEditTxt.getText().toString()
+        viewModel.addNewBranch(branchDescriptionEditTxt.getText().toString(),
+                branchAddressEditTxt.getText().toString(),
+                branchEmailEditTxt.getText().toString(),
+                branchPhoneEditTxt.getText().toString()
         ).observe(getActivity(), new Observer<String>() {
             @Override
             public void onChanged(String s) {
@@ -262,11 +260,8 @@ public class AddOrUpdateBranch extends Fragment implements TextWatcher, View.OnC
                     EspressoTestingIdlingResource.increment();
                     Log.i("AddOrUpdate", "add agent message" + addNewBranchMessage);
                     if (Integer.parseInt(addNewBranchMessage) > 0) {
-
                         onAddOrUpdateSuccessfully();
                         Toast.makeText(getContext(), "added successfully", Toast.LENGTH_SHORT).show();
-
-
                     } else if (Integer.parseInt(addNewBranchMessage) == -9999) {
 
                         Toast.makeText(getActivity(), "null parameter", Toast.LENGTH_SHORT).show();

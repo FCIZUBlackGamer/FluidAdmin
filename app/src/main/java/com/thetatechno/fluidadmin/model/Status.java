@@ -3,24 +3,10 @@ package com.thetatechno.fluidadmin.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
-
-public class CustomerList {
-    @SerializedName("data")
-    @Expose
-    private List<Person> personList = null;
+public class Status {
     @SerializedName("status")
     @Expose
     private String status;
-
-    public List<Person> getPersonList() {
-        return personList;
-    }
-
-    public void setFacilities(List<Person> data) {
-        this.personList = data;
-    }
-
 
     public String getStatus() {
         return status;

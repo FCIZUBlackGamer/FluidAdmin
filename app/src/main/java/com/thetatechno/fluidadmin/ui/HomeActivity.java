@@ -13,21 +13,28 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.view.GravityCompat;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.navigation.NavigationView;
 import com.thetatechno.fluidadmin.R;
+import com.thetatechno.fluidadmin.listeners.OnClickedCommunicator;
+import com.thetatechno.fluidadmin.listeners.OnConfirmAppointmentListener;
 import com.thetatechno.fluidadmin.listeners.OnConfirmDeleteListener;
 import com.thetatechno.fluidadmin.listeners.OnConfirmLinkToFacilityListener;
 import com.thetatechno.fluidadmin.listeners.OnDataChangedCallBackListener;
 import com.thetatechno.fluidadmin.listeners.OnDeleteListener;
+import com.thetatechno.fluidadmin.listeners.OnItemClickedListener;
 import com.thetatechno.fluidadmin.listeners.OnLinkToFacilityClickedListener;
+import com.thetatechno.fluidadmin.listeners.OnOpenCancelAppointmentDialogListener;
+import com.thetatechno.fluidadmin.model.Status;
+import com.thetatechno.fluidadmin.model.time_slot_model.TimeSlot;
 import com.thetatechno.fluidadmin.model.branches_model.Branch;
 import com.thetatechno.fluidadmin.model.code_model.Code;
-import com.thetatechno.fluidadmin.model.Facilities;
-import com.thetatechno.fluidadmin.model.Facility;
-import com.thetatechno.fluidadmin.model.FacilityCodes;
+import com.thetatechno.fluidadmin.model.facility_model.Facilities;
+import com.thetatechno.fluidadmin.model.facility_model.Facility;
+import com.thetatechno.fluidadmin.model.facility_model.FacilityCodes;
 import com.thetatechno.fluidadmin.model.Staff;
 import com.thetatechno.fluidadmin.ui.dialogs.ConfirmDeleteDialog;
 import com.thetatechno.fluidadmin.ui.dialogs.FacilitiesListDialog;
@@ -42,6 +49,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.NavController;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
@@ -55,7 +63,7 @@ import io.sentry.android.AndroidSentryClientFactory;
 import io.sentry.event.UserBuilder;
 
 
-public class HomeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, OnDeleteListener, OnConfirmDeleteListener, OnLinkToFacilityClickedListener, OnConfirmLinkToFacilityListener {
+public class HomeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, OnDeleteListener, OnConfirmDeleteListener, OnLinkToFacilityClickedListener, OnConfirmLinkToFacilityListener, OnClickedCommunicator, OnConfirmAppointmentListener, OnOpenCancelAppointmentDialogListener {
     private MainViewModel mainViewModel;
     private FacilityListViewModel facilityListViewModel;
     private NavigationView navigationView;
@@ -92,7 +100,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.agentList, R.id.providerList, R.id.clientList,
-                R.id.codeList, R.id.facility,R.id.branches,R.id.appointments)
+                R.id.codeList, R.id.facility, R.id.branches, R.id.appointments)
                 .setDrawerLayout(drawer)
                 .build();
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -181,22 +189,19 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 mainViewModel.deleteFacility((Facility) itemDeleted);
 
 
-        }
-        else if (itemDeleted instanceof Staff) {
+        } else if (itemDeleted instanceof Staff) {
             Log.i("Object", "staff type " + ((Staff) itemDeleted).getStaffId());
             if (deleteStaffMessage.isEmpty())
                 deleteAgentOrProvider((Staff) itemDeleted);
             else
                 mainViewModel.deleteAgentOrProvider((Staff) itemDeleted);
-        }
-       else if (itemDeleted instanceof Code) {
+        } else if (itemDeleted instanceof Code) {
             Log.i("Object", "code type " + ((Code) itemDeleted).getCode());
             if (deleteCodeMessage.isEmpty())
                 deleteCode((Code) itemDeleted);
             else
                 mainViewModel.deleteCode((Code) itemDeleted);
-        }
-        else if (itemDeleted instanceof Branch) {
+        } else if (itemDeleted instanceof Branch) {
             Log.i("Object", "code type " + ((Branch) itemDeleted).getDescription());
             if (deleteBranchMessage.isEmpty())
                 deleteBranch((Branch) itemDeleted);
@@ -420,13 +425,65 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             }
         });
     }
-    private void deleteBranch(Branch branch){
+
+    private void deleteBranch(Branch branch) {
         mainViewModel.deleteBranch(branch).observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
                 deleteBranchMessage = s;
                 Toast.makeText(HomeActivity.this, deleteBranchMessage, Toast.LENGTH_SHORT).show();
                 navigateToBranches();
+            }
+        });
+    }
+
+    @Override
+    public void onClick(TimeSlot selectedSlot) {
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+       Fragment timeSlot = navHostFragment.getChildFragmentManager().getFragments().get(0);
+
+        if (timeSlot != null) {
+            OnItemClickedListener onItemClickedListener = (OnItemClickedListener) timeSlot;
+            onItemClickedListener.onClickAtPosition(selectedSlot);
+        }
+    }
+
+    @Override
+    public void onClickOnOkBtn() {
+        navigateToClientList();
+    }
+    @Override
+    public void onOpenCancelAppointmentDialog(String appointmentId) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(HomeActivity.this);
+        dialogBuilder.setIcon(R.drawable.ic_fluid);
+        dialogBuilder.setTitle(R.string.cancel_appointment_txt);
+        dialogBuilder.setPositiveButton(R.string.ok_txt_btn, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                cancelAppointment(appointmentId);
+                dialog.dismiss();
+            }
+        });
+        dialogBuilder.setNegativeButton(R.string.cancel_btn_txt, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        dialogBuilder.show();
+    }
+    private void cancelAppointment(String appointmentId) {
+        mainViewModel.cancelAppointment(appointmentId).observe(this, new Observer<Status>() {
+            @Override
+            public void onChanged(Status status) {
+                if(status!=null) {
+                    if (status.getStatus().equals("0")) {
+                        Toast.makeText(HomeActivity.this, "cancel appointment successfully", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(HomeActivity.this, "error with status code" + status.getStatus(), Toast.LENGTH_SHORT).show();
+                    }
+                }
             }
         });
     }

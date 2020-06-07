@@ -78,4 +78,9 @@ public class Code implements Serializable {
         this.systemRequired = systemRequired;
     }
 
+    @NonNull
+    @Override
+    public String toString() {
+        return description;
+    }
 }

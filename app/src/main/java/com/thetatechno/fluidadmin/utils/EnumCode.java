@@ -24,7 +24,9 @@ public class EnumCode {
         M
     }
     public enum Code{
-        STFFGRP
+        STFFGRP,
+        IDTYP,
+        NTNLTY
     }
 
 

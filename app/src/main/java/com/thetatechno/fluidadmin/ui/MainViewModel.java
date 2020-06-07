@@ -6,12 +6,14 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.thetatechno.fluidadmin.listeners.OnDataChangedCallBackListener;
+import com.thetatechno.fluidadmin.model.Status;
 import com.thetatechno.fluidadmin.model.branches_model.Branch;
 import com.thetatechno.fluidadmin.model.code_model.Code;
-import com.thetatechno.fluidadmin.model.Facility;
-import com.thetatechno.fluidadmin.model.FacilityCodes;
+import com.thetatechno.fluidadmin.model.facility_model.Facility;
+import com.thetatechno.fluidadmin.model.facility_model.FacilityCodes;
 import com.thetatechno.fluidadmin.model.Staff;
 import com.thetatechno.fluidadmin.network.repositories.BranchesRepository;
+import com.thetatechno.fluidadmin.network.repositories.CancelAppointmentRepository;
 import com.thetatechno.fluidadmin.network.repositories.CodeRepository;
 import com.thetatechno.fluidadmin.network.repositories.FacilityRepository;
 import com.thetatechno.fluidadmin.network.repositories.StaffRepository;
@@ -23,6 +25,7 @@ public class MainViewModel extends ViewModel {
     private CodeRepository codeRepository = new CodeRepository();
     private FacilityRepository facilityRepository = new FacilityRepository();
    private BranchesRepository branchesRepository = new BranchesRepository();
+   private CancelAppointmentRepository cancelAppointmentRepository = new CancelAppointmentRepository();
     private MutableLiveData<String> deletedStaffMessageLiveData = new MutableLiveData<>();
     private MutableLiveData<String> deletedCodeMessageLiveData = new MutableLiveData<>();
     private  MutableLiveData<String> deletedFacilityMessageLiveData = new MutableLiveData<>();
@@ -129,6 +132,9 @@ public class MainViewModel extends ViewModel {
                 onDataChangedCallBackListener.onResponse(b);
             }
         });
+    }
+    MutableLiveData<Status> cancelAppointment(String appointmentId) {
+        return cancelAppointmentRepository.cancelAppointment(appointmentId);
     }
 
 }

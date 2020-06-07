@@ -6,10 +6,9 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
 import com.thetatechno.fluidadmin.listeners.OnDataChangedCallBackListener;
-import com.thetatechno.fluidadmin.model.State;
+import com.thetatechno.fluidadmin.model.Status;
 import com.thetatechno.fluidadmin.model.branches_model.Branch;
 import com.thetatechno.fluidadmin.model.branches_model.BranchesResponse;
-import com.thetatechno.fluidadmin.model.code_model.Code;
 import com.thetatechno.fluidadmin.network.interfaces.MyServicesInterface;
 import com.thetatechno.fluidadmin.network.interfaces.RetrofitInstance;
 import com.thetatechno.fluidadmin.utils.Constants;
@@ -52,11 +51,11 @@ public class BranchesRepository {
     public MutableLiveData<String> addNewBranch(final Branch branch) {
 
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
-        Call<State> call = myServicesInterface.addBranch(branch);
-        call.enqueue(new Callback<State>() {
+        Call<Status> call = myServicesInterface.addBranch(branch);
+        call.enqueue(new Callback<Status>() {
 
             @Override
-            public void onResponse(@NotNull Call<State> call, @NotNull Response<State> response) {
+            public void onResponse(@NotNull Call<Status> call, @NotNull Response<Status> response) {
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
                         if (response.body().getStatus() != null)
@@ -71,7 +70,7 @@ public class BranchesRepository {
             }
 
             @Override
-            public void onFailure(@NotNull Call<State> call, Throwable t) {
+            public void onFailure(@NotNull Call<Status> call, Throwable t) {
                 call.cancel();
                 t.printStackTrace();
                 addNewBranchMutableLiveData.setValue(null);
@@ -85,11 +84,11 @@ public class BranchesRepository {
     public void updateBranch(final Branch branch, final OnDataChangedCallBackListener<String> onDataChangedCallBackListener) {
 
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
-        Call<State> call = myServicesInterface.updateBranch(branch);
-        call.enqueue(new Callback<State>() {
+        Call<Status> call = myServicesInterface.updateBranch(branch);
+        call.enqueue(new Callback<Status>() {
 
             @Override
-            public void onResponse(@NonNull Call<State> call, @NonNull Response<State> response) {
+            public void onResponse(@NonNull Call<Status> call, @NonNull Response<Status> response) {
                 if (response.isSuccessful()) {
                     Log.i(TAG, "updateBranch: response " + response.toString());
                     if (response.body().getStatus() != null)
@@ -101,7 +100,7 @@ public class BranchesRepository {
             }
 
             @Override
-            public void onFailure(Call<State> call, Throwable t) {
+            public void onFailure(Call<Status> call, Throwable t) {
                 call.cancel();
                 t.printStackTrace();
                 onDataChangedCallBackListener.onResponse(null);
@@ -114,11 +113,11 @@ public class BranchesRepository {
     public void deleteBranch(final String branchId, final OnDataChangedCallBackListener<String> onDataChangedCallBackListener) {
 
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
-        Call<State> call = myServicesInterface.deleteBranch(branchId);
-        call.enqueue(new Callback<State>() {
+        Call<Status> call = myServicesInterface.deleteBranch(branchId);
+        call.enqueue(new Callback<Status>() {
 
             @Override
-            public void onResponse(@NonNull Call<State> call, @NonNull Response<State> response) {
+            public void onResponse(@NonNull Call<Status> call, @NonNull Response<Status> response) {
                 if (response.isSuccessful()) {
                     Log.i(TAG, "deleteBranch response " + response.toString());
                     if (response.body() != null)
@@ -131,7 +130,7 @@ public class BranchesRepository {
             }
 
             @Override
-            public void onFailure(@NonNull Call<State> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<Status> call, @NonNull Throwable t) {
                 call.cancel();
                 onDataChangedCallBackListener.onResponse(null);
                 t.printStackTrace();

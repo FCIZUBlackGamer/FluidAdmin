@@ -180,20 +180,20 @@
                     app:layout_constraintStart_toStartOf="@+id/arrivalTextView"
                     app:layout_constraintTop_toBottomOf="@+id/arrivalTextView" />
 
-                <TextView
-                    android:id="@+id/optionMenu"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="0.5"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:text="@string/options_menu"
-                    android:textAppearance="?android:textAppearanceLarge"
-                    android:textColor="@color/colorPrimary"
+<!--                <TextView-->
+<!--                    android:id="@+id/optionMenu"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center_vertical"-->
+<!--                    android:layout_weight="0.5"-->
+<!--                    android:paddingStart="16dp"-->
+<!--                    android:paddingEnd="16dp"-->
+<!--                    android:text="@string/options_menu"-->
+<!--                    android:textAppearance="?android:textAppearanceLarge"-->
+<!--                    android:textColor="@color/colorPrimary"-->
 
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="parent" />-->
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

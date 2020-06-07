@@ -22,7 +22,7 @@
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/registerNewCustomer"
+        android:id="@+id/bookNewAppointmentBtn"
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

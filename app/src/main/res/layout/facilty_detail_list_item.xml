@@ -52,10 +52,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
+        android:text="@string/waiting_area"
         android:drawablePadding="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/facilityIdTxt"
-        app:layout_constraintTop_toBottomOf="@+id/facilityIdTxt" />
+        app:layout_constraintStart_toStartOf="@+id/branchTxt"
+        app:layout_constraintTop_toBottomOf="@+id/branchTxt" />
 
     <TextView
         android:id="@+id/facilityDescriptionTxt"
@@ -69,6 +70,12 @@
         app:layout_constraintBottom_toBottomOf="@+id/facilityTextViewOptions"
         app:layout_constraintStart_toEndOf="@+id/facilityImgView"
         app:layout_constraintTop_toTopOf="@+id/facilityTextViewOptions" />
-
+    <TextView
+        android:id="@+id/branchTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/facilityIdTxt"
+        app:layout_constraintStart_toStartOf="@+id/facilityIdTxt"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

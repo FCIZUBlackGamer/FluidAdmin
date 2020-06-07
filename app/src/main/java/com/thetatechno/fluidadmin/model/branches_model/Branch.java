@@ -1,9 +1,13 @@
 package com.thetatechno.fluidadmin.model.branches_model;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Branch {
+import java.io.Serializable;
+
+public class Branch implements Serializable {
     @SerializedName("siteId")
     @Expose
     private String siteId;
@@ -71,5 +75,11 @@ public class Branch {
 
     public void setLangId(String langId) {
         this.langId = langId;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return description;
     }
 }

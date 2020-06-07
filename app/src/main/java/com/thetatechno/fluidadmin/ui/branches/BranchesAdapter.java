@@ -41,6 +41,7 @@ import io.sentry.event.UserBuilder;
 import static com.thetatechno.fluidadmin.utils.Constants.ARG_STAFF;
 
 public class BranchesAdapter extends RecyclerView.Adapter<BranchesAdapter.BranchViewHolder> {
+    private static final String ARG_BRANCH = "branch";
     private Context context;
    private List<Branch> branchList;
    private OnDeleteListener listener;
@@ -76,11 +77,10 @@ public class BranchesAdapter extends RecyclerView.Adapter<BranchesAdapter.Branch
         holder.branchOptionMenuTxtView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //will show popup agents_menu here
-                //creating a popup agents_menu
+
                 PopupMenu popup = new PopupMenu(context, holder.branchOptionMenuTxtView);
                 //inflating agents_menu from xml resource
-                popup.inflate(R.menu.providers_menu);
+                popup.inflate(R.menu.branch_menu);
                 //adding click listener
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
@@ -90,10 +90,10 @@ public class BranchesAdapter extends RecyclerView.Adapter<BranchesAdapter.Branch
                             case R.id.editBranch:
                                 //handle edit click
                                 Bundle bundle = new Bundle();
-                                bundle.putSerializable(ARG_STAFF, (Serializable) branchList.get(position));
-                                navController.navigate(R.id.addOrUpdateBranch, bundle);
+                                bundle.putSerializable(ARG_BRANCH, (Serializable) branchList.get(position));
+                                navController.navigate(R.id.action_branches_to_addOrUpdateBranch, bundle);
                                 break;
-                            case R.id.deleteProvider:
+                            case R.id.deleteBranch:
                                 //handle delete click
                                 if (listener != null)
                                     listener.onDeleteButtonClicked(branchList.get(position));

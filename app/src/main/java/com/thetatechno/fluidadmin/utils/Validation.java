@@ -4,6 +4,9 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class Validation {
 
     private static String TAG = "Validation";
@@ -38,7 +41,15 @@ public class Validation {
 
         return (!TextUtils.isEmpty(word.trim()));
     }
+    public static boolean isValidNumber(String number) {
 
+        String regExpn = "^[0-9]{1,24}$";
+        CharSequence inputStr = number;
+        Pattern pattern = Pattern.compile(regExpn, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(inputStr);
+        return matcher.matches();
+
+    }
 
 }
 

@@ -32,10 +32,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/address_txt"
-            android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             app:layout_constraintStart_toStartOf="@id/branch_phone_txt"
-            app:layout_constraintTop_toBottomOf="@id/branch_phone_txt" />
+            app:layout_constraintTop_toBottomOf="@id/branch_phone_txt"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
         <TextView
             android:id="@+id/branch_email_txt"
@@ -52,7 +52,6 @@
             android:id="@+id/branch_phone_txt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:drawableStart="@drawable/ic_phone"
             android:drawablePadding="5dp"
             android:text="@string/phone_example_txt"

@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.thetatechno.fluidadmin.R;
-import com.thetatechno.fluidadmin.model.Facility;
+import com.thetatechno.fluidadmin.model.facility_model.Facility;
 import com.thetatechno.fluidadmin.ui.EspressoTestingIdlingResource;
 
 import java.util.ArrayList;

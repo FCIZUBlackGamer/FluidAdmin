@@ -1,4 +1,4 @@
-package com.thetatechno.fluidadmin.model;
+package com.thetatechno.fluidadmin.model.facility_model;
 
 import androidx.annotation.NonNull;
 
@@ -34,7 +34,15 @@ public class Facility implements Serializable {
     @SerializedName("langId")
     @Expose
     private String langId;
+
     private boolean isSelected;
+
+    @SerializedName("siteId")
+    @Expose
+    private String siteId;
+
+    @SerializedName("siteDescription")
+    private String siteDescription;
 
     public boolean isSelected() {
         return isSelected;
@@ -113,5 +121,21 @@ public class Facility implements Serializable {
     @Override
     public String toString() {
         return getDescription();
+    }
+
+    public String getSiteId() {
+        return siteId;
+    }
+
+    public void setSiteId(String siteId) {
+        this.siteId = siteId;
+    }
+
+    public String getSiteDescription() {
+        return siteDescription;
+    }
+
+    public void setSiteDescription(String siteDescription) {
+        this.siteDescription = siteDescription;
     }
 }

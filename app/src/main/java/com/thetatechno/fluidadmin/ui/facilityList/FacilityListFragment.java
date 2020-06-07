@@ -25,12 +25,10 @@ import android.view.ViewGroup;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.thetatechno.fluidadmin.R;
-import com.thetatechno.fluidadmin.model.Facilities;
-import com.thetatechno.fluidadmin.model.Facility;
+import com.thetatechno.fluidadmin.model.facility_model.Facilities;
+import com.thetatechno.fluidadmin.model.facility_model.Facility;
 import com.thetatechno.fluidadmin.ui.EspressoTestingIdlingResource;
-import com.thetatechno.fluidadmin.utils.EnumCode;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**

@@ -13,10 +13,15 @@ import com.thetatechno.fluidadmin.utils.Validation;
 public class AddOrUpdateBranchViewModel extends ViewModel {
     private BranchesRepository branchesRepository = new BranchesRepository();
     private MutableLiveData<String> updateBranchLiveData = new MutableLiveData<>();
+    Branch branch = new Branch();
+
     private  String branchDescriptionValidateMessage,branchAddressValidateMessage,emailValidateMessage,imgUrlValidateMessage,idValidateMessage , phoneNumberMessage;
     public  MutableLiveData<String> addNewBranch(String description,String address,String email,String phone)
     {
-        Branch branch = setDataToBranch(description,address,email,phone);
+        branch.setDescription(description);
+        branch.setAddress(address);
+        branch.setEmail(email);
+        branch.setMobileNumber(phone);
         return branchesRepository.addNewBranch(branch);
     }
     public MutableLiveData<String> updateBranch(Branch branch) {
@@ -32,7 +37,6 @@ public class AddOrUpdateBranchViewModel extends ViewModel {
 
 
     private Branch setDataToBranch(String description,String address,String email,String phone) {
-        Branch branch = new Branch();
         branch.setDescription(description);
         branch.setAddress(address);
         branch.setEmail(email);

@@ -10,9 +10,9 @@ import com.thetatechno.fluidadmin.utils.PreferenceController;
 public class ClientListViewModel extends ViewModel {
     ClientRepository clientRepository = new ClientRepository();
 
-    public MutableLiveData getAllClients(String facilityId) {
+    public MutableLiveData getAllClients() {
         String langId = PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase();
 
-        return clientRepository.getAllClients(facilityId, langId);
+        return clientRepository.getAllClients(langId);
     }
 }

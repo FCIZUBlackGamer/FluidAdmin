@@ -1,7 +1,8 @@
-package com.thetatechno.fluidadmin.model;
+package com.thetatechno.fluidadmin.model.facility_model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.thetatechno.fluidadmin.model.facility_model.Facility;
 
 import java.util.List;
 

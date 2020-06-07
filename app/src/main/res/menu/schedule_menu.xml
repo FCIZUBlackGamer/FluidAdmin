@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item android:title="@string/showSessions" android:id="@+id/showSession"/>
+    <item android:title="@string/edit_txt" android:id="@+id/editSchedule"/>
+    <item android:title="@string/delete_txt" android:id="@+id/deleteSchedule"/>
+</menu>

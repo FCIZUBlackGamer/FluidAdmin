@@ -6,18 +6,25 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.thetatechno.fluidadmin.listeners.OnDataChangedCallBackListener;
+import com.thetatechno.fluidadmin.model.Error;
 import com.thetatechno.fluidadmin.model.Status;
 import com.thetatechno.fluidadmin.model.branches_model.Branch;
 import com.thetatechno.fluidadmin.model.code_model.Code;
 import com.thetatechno.fluidadmin.model.facility_model.Facility;
 import com.thetatechno.fluidadmin.model.facility_model.FacilityCodes;
 import com.thetatechno.fluidadmin.model.Staff;
+import com.thetatechno.fluidadmin.model.session_model.Session;
+import com.thetatechno.fluidadmin.model.shedule.Schedule;
 import com.thetatechno.fluidadmin.network.repositories.BranchesRepository;
 import com.thetatechno.fluidadmin.network.repositories.CancelAppointmentRepository;
 import com.thetatechno.fluidadmin.network.repositories.CodeRepository;
 import com.thetatechno.fluidadmin.network.repositories.FacilityRepository;
+import com.thetatechno.fluidadmin.network.repositories.ScheduleRepository;
+import com.thetatechno.fluidadmin.network.repositories.SessionRepository;
 import com.thetatechno.fluidadmin.network.repositories.StaffRepository;
+import com.thetatechno.fluidadmin.utils.App;
 import com.thetatechno.fluidadmin.utils.Constants;
+import com.thetatechno.fluidadmin.utils.PreferenceController;
 
 public class MainViewModel extends ViewModel {
     final static private String TAG = MainViewModel.class.getSimpleName();
@@ -26,9 +33,13 @@ public class MainViewModel extends ViewModel {
     private FacilityRepository facilityRepository = new FacilityRepository();
    private BranchesRepository branchesRepository = new BranchesRepository();
    private CancelAppointmentRepository cancelAppointmentRepository = new CancelAppointmentRepository();
+    private ScheduleRepository scheduleRepository = new ScheduleRepository();
+    private SessionRepository sessionRepository = new SessionRepository();
     private MutableLiveData<String> deletedStaffMessageLiveData = new MutableLiveData<>();
     private MutableLiveData<String> deletedCodeMessageLiveData = new MutableLiveData<>();
     private  MutableLiveData<String> deletedFacilityMessageLiveData = new MutableLiveData<>();
+    private MutableLiveData<Error> deletedSessionLiveData = new MutableLiveData<>();
+    private MutableLiveData<Error> deletedScheduledLiveData = new MutableLiveData<>();
     private String messageForStaff = "";
     private String messageForCode = "";
     private  String messageForSFacility = "";
@@ -123,6 +134,16 @@ public class MainViewModel extends ViewModel {
             }
         });
         return deletedFacilityMessageLiveData;
+    }
+
+
+
+    public MutableLiveData<Error> deleteSchedule(final Schedule schedule) {
+       return scheduleRepository.deleteSchedule(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase(),schedule.getId());
+    }
+
+    public MutableLiveData<Error> deleteSession(final Session session) {
+        return sessionRepository.deleteSession(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase(),session.getId());
     }
 
     public void linkToFacility(String staffId, FacilityCodes facilityCodes, final OnDataChangedCallBackListener<String> onDataChangedCallBackListener) {

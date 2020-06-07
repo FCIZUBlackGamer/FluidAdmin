@@ -121,4 +121,6 @@
     <string name="dateTo">To</string>
     <string name="summer_schedule">Summer Schedule</string>
     <string name="day_name">Monday</string>
+    <string name="showSessions">Show Sessions</string>
+    <string name="schedules">schedules</string>
 </resources>

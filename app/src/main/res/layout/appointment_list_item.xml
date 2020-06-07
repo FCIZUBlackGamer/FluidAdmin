@@ -35,7 +35,7 @@
                 android:paddingBottom="20dp">
 
                 <TextView
-                    android:id="@+id/schedule_name_txt"
+                    android:id="@+id/dayTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/day"
@@ -142,7 +142,7 @@
                     app:layout_goneMarginStart="3dp" />
 
                 <TextView
-                    android:id="@+id/time_from_txt"
+                    android:id="@+id/expectedTimeTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
@@ -171,7 +171,7 @@
                     app:layout_constraintVertical_bias="0.0" />
 
                 <TextView
-                    android:id="@+id/time_to_txt"
+                    android:id="@+id/scheduledTimeTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"

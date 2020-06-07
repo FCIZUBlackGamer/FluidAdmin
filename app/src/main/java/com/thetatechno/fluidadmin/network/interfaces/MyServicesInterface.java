@@ -1,9 +1,12 @@
 package com.thetatechno.fluidadmin.network.interfaces;
 
 import com.thetatechno.fluidadmin.model.ClientModelForRegister;
+import com.thetatechno.fluidadmin.model.Error;
 import com.thetatechno.fluidadmin.model.appointment_model.AppointmentBooked;
 import com.thetatechno.fluidadmin.model.appointment_model.AppointmentCalenderDaysListData;
 import com.thetatechno.fluidadmin.model.appointment_model.AppointmentListData;
+import com.thetatechno.fluidadmin.model.session_model.Session;
+import com.thetatechno.fluidadmin.model.session_model.SessionResponse;
 import com.thetatechno.fluidadmin.model.shedule.Schedule;
 import com.thetatechno.fluidadmin.model.shedule.ScheduleResponse;
 import com.thetatechno.fluidadmin.model.time_slot_model.TimeSlotListData;
@@ -134,7 +137,7 @@ public interface MyServicesInterface {
 
 
     @GET ("/ords/fluid/schedule/getSchedule")
-    Call<ScheduleResponse> getSchedule(@Query("langId") String langId);
+    Call<ScheduleResponse> getAllSchedule(@Query("langId") String langId);
 
     @POST("/ords/fluid/schedule/addSchedule")
     Call<Error> addSchedule(@Body Schedule schedule);
@@ -146,13 +149,13 @@ public interface MyServicesInterface {
     Call<Error> deleteSchedule(@Query("langId") String langId, @Query("id") String id);
 
     @GET ("/ords/fluid/session/getSession")
-    Call<ScheduleResponse> getSession(@Query("langId") String langId,@Query("langId") String scheduleId);
+    Call<SessionResponse> getAllSession(@Query("langId") String langId, @Query("scheduleId") String scheduleId);
 
     @POST("/ords/fluid/session/addSession")
-    Call<Error> addSession(@Body Schedule schedule);
+    Call<Error> addSession(@Body Session session);
 
     @PUT("/ords/fluid/session/modifySession")
-    Call<Error> modifySession(@Body Schedule schedule);
+    Call<Error> modifySession(@Body Session session);
 
     @DELETE("/ords/fluid/session/deleteSession")
     Call<Error> deleteSession(@Query("langId") String langId, @Query("id") String id);

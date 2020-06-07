@@ -36,6 +36,11 @@
             android:checkableBehavior="single"
             android:icon="@drawable/ic_menu_manage"
             android:title="@string/appointments_txt"/>
+        <item
+            android:id="@+id/scheduleFragment"
+            android:checkableBehavior="single"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="@string/schedules"/>
     </group>
 
 

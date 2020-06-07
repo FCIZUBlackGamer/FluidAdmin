@@ -35,7 +35,7 @@ import static com.thetatechno.fluidadmin.utils.Constants.ARG_CODE;
 public class SessionListAdapter extends RecyclerView.Adapter<SessionListAdapter.ScheduleViewHolder> {
 
     Context context;
-    FragmentManager fragmentManager;
+
     List<Session> sessionList;
     OnDeleteListener listener;
 
@@ -43,12 +43,11 @@ public class SessionListAdapter extends RecyclerView.Adapter<SessionListAdapter.
     Bundle bundle;
 
 
-    public SessionListAdapter(NavController navControlle, Context context, List<Session> sessionList, FragmentManager fragmentManager) {
+    public SessionListAdapter(NavController navControlle, Context context, List<Session> sessionList) {
         this.sessionList = sessionList;
         this.context = context;
         navController = navControlle;
         bundle = new Bundle();
-        this.fragmentManager = fragmentManager;
         if (context instanceof OnDeleteListener)
             listener = (OnDeleteListener) context;
         else

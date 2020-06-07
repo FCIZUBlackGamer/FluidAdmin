@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 public class Session {
     @SerializedName("id")
     @Expose
-    private Integer id;
+    private String id;
     @SerializedName("providerId")
     @Expose
     private String providerId;
@@ -31,11 +31,11 @@ public class Session {
     @SerializedName("isRunning")
     @Expose
     private String isRunning;
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 

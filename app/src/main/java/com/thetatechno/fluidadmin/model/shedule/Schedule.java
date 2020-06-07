@@ -3,10 +3,18 @@ package com.thetatechno.fluidadmin.model.shedule;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Schedule {
+import java.io.Serializable;
+
+public class Schedule implements Serializable {
     @SerializedName("description")
     @Expose
-    private String description ;
+    private String description;
+    @SerializedName("sexCode")
+    @Expose
+    private String sexCode;
+    @SerializedName("imagePath")
+    @Expose
+    private String imagePath;
     @SerializedName("providerId")
     private String providerId;
     @SerializedName("providerName")
@@ -20,23 +28,24 @@ public class Schedule {
     private String facilitDescription;
     @SerializedName("startDate")
     @Expose
-    private String startDate ;
+    private String startDate;
     @SerializedName("endDate")
     @Expose
-    private String endDate ;
+    private String endDate;
     @SerializedName("endTime")
     @Expose
-    private String endTime ;
-
+    private String endTime;
+    @SerializedName("startTime")
+    private String startTime;
     @SerializedName("workingDays")
     @Expose
-    String workingDays ;
+    String workingDays;
     @SerializedName("id")
     @Expose
-    String id ;
+    String id;
     @SerializedName("langId")
     @Expose
-    String langId ;
+    String langId;
 
     public String getDescription() {
         return description;
@@ -124,5 +133,29 @@ public class Schedule {
 
     public void setFacilitDescription(String facilitDescription) {
         this.facilitDescription = facilitDescription;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getSexCode() {
+        return sexCode;
+    }
+
+    public void setSexCode(String sexCode) {
+        this.sexCode = sexCode;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 }

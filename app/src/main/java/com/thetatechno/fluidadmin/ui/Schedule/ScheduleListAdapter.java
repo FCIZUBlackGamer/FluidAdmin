@@ -30,11 +30,11 @@ import io.sentry.android.AndroidSentryClientFactory;
 import io.sentry.event.UserBuilder;
 
 import static com.thetatechno.fluidadmin.utils.Constants.ARG_CODE;
+import static com.thetatechno.fluidadmin.utils.Constants.ARG_SCHEDULE;
 
 public class ScheduleListAdapter extends RecyclerView.Adapter<ScheduleListAdapter.ScheduleViewHolder> {
 
     Context context;
-    FragmentManager fragmentManager;
     List<Schedule> scheduleList;
     OnDeleteListener listener;
 
@@ -42,12 +42,12 @@ public class ScheduleListAdapter extends RecyclerView.Adapter<ScheduleListAdapte
     Bundle bundle;
 
 
-    public ScheduleListAdapter(NavController navControlle, Context context, List<Schedule> scheduleList, FragmentManager fragmentManager) {
+    public ScheduleListAdapter(NavController navControlle, Context context, List<Schedule> scheduleList) {
         this.scheduleList = scheduleList;
         this.context = context;
         navController = navControlle;
         bundle = new Bundle();
-        this.fragmentManager = fragmentManager;
+
         if (context instanceof OnDeleteListener)
             listener = (OnDeleteListener) context;
         else
@@ -81,15 +81,15 @@ public class ScheduleListAdapter extends RecyclerView.Adapter<ScheduleListAdapte
                 holder.time_from_txt.setText(scheduleList.get(position).getStartDate());
                 holder.time_to_txt.setText(scheduleList.get(position).getEndDate());
 
-                if (!scheduleList.get(position).get().isEmpty()) {
-                    Glide.with(context).load(Constants.BASE_URL + Constants.BASE_EXTENSION_FOR_PHOTOS + scheduleList.get(position).getImageLink())
+                if (!scheduleList.get(position).getImagePath().isEmpty()) {
+                    Glide.with(context).load(Constants.BASE_URL + Constants.BASE_EXTENSION_FOR_PHOTOS + scheduleList.get(position).getImagePath())
                             .circleCrop()
                             .into(holder.doctorImg);
                 } else {
-                    if (!scheduleList.get(position).getGender().isEmpty()) {
-                        if (scheduleList.get(position).getGender().equals(EnumCode.Gender.M.toString())) {
+                    if (!scheduleList.get(position).getSexCode().isEmpty()) {
+                        if (scheduleList.get(position).getSexCode().equals(EnumCode.Gender.M.toString())) {
                             holder.doctorImg.setImageResource(R.drawable.man);
-                        } else if (scheduleList.get(position).getGender().equals(EnumCode.Gender.F.toString())) {
+                        } else if (scheduleList.get(position).getSexCode().equals(EnumCode.Gender.F.toString())) {
                             holder.doctorImg.setImageResource(R.drawable.ic_girl);
                         }
                     } else {
@@ -103,20 +103,21 @@ public class ScheduleListAdapter extends RecyclerView.Adapter<ScheduleListAdapte
 
 
                         PopupMenu popup = new PopupMenu(context, holder.optionMenu);
-                        popup.inflate(R.menu.code_menu);
+                        popup.inflate(R.menu.schedule_menu);
                         //adding click listener
                         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                             @Override
                             public boolean onMenuItemClick(MenuItem item) {
                                 switch (item.getItemId()) {
-                                    case R.id.editCode:
-                                        bundle.putSerializable(ARG_CODE, (Serializable) scheduleList.get(position));
-                                        bundle.putSerializable("type", (Serializable) EnumCode.UsageType.Code);
-                                        bundle.putSerializable("codeList", (Serializable) scheduleList);
-                                        navController.navigate(R.id.codeAddFragment, bundle);
+                                    case R.id.showSession:
+                                        bundle.putSerializable(ARG_SCHEDULE, (Serializable) scheduleList.get(position));
+                                        navController.navigate(R.id.action_scheduleFragment_to_sessionFragment, bundle);
+                                        break;
+                                    case R.id.editSchedule:
+
 
                                         break;
-                                    case R.id.deleteCode:
+                                    case R.id.deleteSchedule:
                                         //handle delete click
                                         if (listener != null)
                                             listener.onDeleteButtonClicked(scheduleList.get(position));

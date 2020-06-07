@@ -101,7 +101,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.agentList, R.id.providerList, R.id.clientList,
-                R.id.codeList, R.id.facility, R.id.branches, R.id.appointments)
+                R.id.codeList, R.id.facility, R.id.branches, R.id.appointments,R.id.scheduleFragment)
                 .setDrawerLayout(drawer)
                 .build();
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -109,8 +109,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         NavigationUI.setupWithNavController(navigationView, navController);
         checkOnTheCurrentLanguage();
         navigationView.setNavigationItemSelectedListener(this);
-
-//        navigationView.getMenu().getItem(0).setChecked(false);
 
 
     }
@@ -253,7 +251,9 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             case R.id.branches:
                 navigateToBranches();
                 break;
-
+            case R.id.scheduleFragment:
+                navigateToSchedules();
+                break;
         }
 
         return true;
@@ -361,6 +361,10 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     public void navigateToBranches() {
         navController.popBackStack();
         navController.navigate(R.id.branches);
+    }
+    public void navigateToSchedules() {
+        navController.popBackStack();
+        navController.navigate(R.id.scheduleFragment);
     }
 
     @Override

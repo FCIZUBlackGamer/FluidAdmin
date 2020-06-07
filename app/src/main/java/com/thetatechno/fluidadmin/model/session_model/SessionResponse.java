@@ -2,7 +2,7 @@ package com.thetatechno.fluidadmin.model.session_model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.thetatechno.fluidadmin.model.shedule.Schedule;
+import com.thetatechno.fluidadmin.model.Error;
 
 import java.util.List;
 

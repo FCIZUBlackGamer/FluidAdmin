@@ -2,7 +2,7 @@ package com.thetatechno.fluidadmin.model.shedule;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.thetatechno.fluidadmin.model.facility_model.Facility;
+import com.thetatechno.fluidadmin.model.Error;
 
 import java.util.List;
 

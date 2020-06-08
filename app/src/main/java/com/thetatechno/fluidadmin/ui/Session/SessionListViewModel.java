@@ -1,4 +1,4 @@
-package com.thetatechno.fluidadmin.ui.Session.Schedule;
+package com.thetatechno.fluidadmin.ui.Session;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;

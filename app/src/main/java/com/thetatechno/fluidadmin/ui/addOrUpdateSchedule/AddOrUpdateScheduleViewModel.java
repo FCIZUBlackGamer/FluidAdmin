@@ -1,4 +1,4 @@
-package com.thetatechno.fluidadmin.ui;
+package com.thetatechno.fluidadmin.ui.addOrUpdateSchedule;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -15,17 +15,8 @@ public class AddOrUpdateScheduleViewModel extends ViewModel {
     Schedule schedule;
 
     private  String branchDescriptionValidateMessage,branchAddressValidateMessage,emailValidateMessage,imgUrlValidateMessage,idValidateMessage , phoneNumberMessage;
-    public  MutableLiveData<Error> addSchedule(String description, String providerId, String facilityId, String startDate, String endDate, String startTime, String endTime, String workingDays)
+    public  MutableLiveData<Error> addSchedule(Schedule schedule)
     {
-        schedule = new Schedule();
-        schedule.setDescription(description);
-        schedule.setProviderId(providerId);
-        schedule.setFacilityId(facilityId);
-        schedule.setEndDate(endDate);
-        schedule.setStartDate(startDate);
-        schedule.setStartTime(startTime);
-        schedule.setEndTime(endTime);
-        schedule.setWorkingDays(workingDays);
         return scheduleRepository.addSchedule(schedule);
     }
     public MutableLiveData<Error> updateSchedule(Schedule schedule) {

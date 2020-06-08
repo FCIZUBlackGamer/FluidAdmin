@@ -123,4 +123,6 @@
     <string name="day_name">Monday</string>
     <string name="showSessions">Show Sessions</string>
     <string name="schedules">schedules</string>
+    <string name="site_txt">Site</string>
+    <string name="description">Description</string>
 </resources>

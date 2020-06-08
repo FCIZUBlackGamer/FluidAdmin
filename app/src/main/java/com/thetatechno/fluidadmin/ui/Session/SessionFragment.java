@@ -1,4 +1,4 @@
-package com.thetatechno.fluidadmin.ui.Session.Schedule;
+package com.thetatechno.fluidadmin.ui.Session;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.model.session_model.SessionResponse;
 import com.thetatechno.fluidadmin.model.shedule.Schedule;
-import com.thetatechno.fluidadmin.ui.Schedule.ScheduleListAdapter;
 
 public class SessionFragment extends Fragment {
     private Schedule schedule;

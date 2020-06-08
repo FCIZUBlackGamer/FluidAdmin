@@ -1,4 +1,4 @@
-package com.thetatechno.fluidadmin.ui.Session.Schedule;
+package com.thetatechno.fluidadmin.ui.Session;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -11,16 +11,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
-import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.listeners.OnDeleteListener;
 import com.thetatechno.fluidadmin.model.session_model.Session;
-import com.thetatechno.fluidadmin.model.shedule.Schedule;
-import com.thetatechno.fluidadmin.utils.Constants;
 import com.thetatechno.fluidadmin.utils.EnumCode;
 
 import java.io.Serializable;

@@ -159,7 +159,7 @@
     </fragment>
     <fragment
         android:id="@+id/sessionFragment"
-        android:name="com.thetatechno.fluidadmin.ui.Session.Schedule.SessionFragment"
+        android:name="com.thetatechno.fluidadmin.ui.Session.SessionFragment"
         android:label="Sessions" />
 
 </navigation>

@@ -99,9 +99,11 @@ public class Staff extends Person implements Parcelable {
     public void setLangId(String langId) {
         this.langId = langId;
     }
-public  Staff(){
 
-}
+    public Staff() {
+
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -119,6 +121,6 @@ public  Staff(){
     @NonNull
     @Override
     public String toString() {
-        return super.toString();
+        return getFirstName() + getFamilyName();
     }
 }

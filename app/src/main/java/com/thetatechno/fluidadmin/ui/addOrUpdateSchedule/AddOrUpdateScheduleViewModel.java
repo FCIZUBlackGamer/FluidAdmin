@@ -5,15 +5,25 @@ import androidx.lifecycle.ViewModel;
 
 import com.thetatechno.fluidadmin.listeners.OnDataChangedCallBackListener;
 import com.thetatechno.fluidadmin.model.Error;
+import com.thetatechno.fluidadmin.model.Staff;
+import com.thetatechno.fluidadmin.model.StaffData;
 import com.thetatechno.fluidadmin.model.branches_model.Branch;
+import com.thetatechno.fluidadmin.model.facility_model.Facilities;
 import com.thetatechno.fluidadmin.model.shedule.Schedule;
+import com.thetatechno.fluidadmin.network.repositories.FacilityRepository;
 import com.thetatechno.fluidadmin.network.repositories.ScheduleRepository;
+import com.thetatechno.fluidadmin.network.repositories.StaffRepository;
+import com.thetatechno.fluidadmin.utils.App;
+import com.thetatechno.fluidadmin.utils.EnumCode;
+import com.thetatechno.fluidadmin.utils.PreferenceController;
+
+import java.util.List;
 
 public class AddOrUpdateScheduleViewModel extends ViewModel {
     private ScheduleRepository scheduleRepository = new ScheduleRepository();
     private MutableLiveData<String> updateBranchLiveData = new MutableLiveData<>();
-    Schedule schedule;
-
+    FacilityRepository facilityRepository = new FacilityRepository();
+StaffRepository staffRepository = new StaffRepository();
     private  String branchDescriptionValidateMessage,branchAddressValidateMessage,emailValidateMessage,imgUrlValidateMessage,idValidateMessage , phoneNumberMessage;
     public  MutableLiveData<Error> addSchedule(Schedule schedule)
     {
@@ -22,4 +32,15 @@ public class AddOrUpdateScheduleViewModel extends ViewModel {
     public MutableLiveData<Error> updateSchedule(Schedule schedule) {
        return scheduleRepository.modifySchedule(schedule);
     }
+
+
+    public MutableLiveData<Facilities> getAllFacilities() {
+
+        return facilityRepository.getAllFacilities("", PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
+    }
+    public MutableLiveData<StaffData> getStaffData() {
+
+        return staffRepository.getAllStuff(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase(), EnumCode.StaffTypeCode.PRVDR.toString());
+    }
+
 }

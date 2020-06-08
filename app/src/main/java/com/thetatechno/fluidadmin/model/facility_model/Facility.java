@@ -138,4 +138,5 @@ public class Facility implements Serializable {
     public void setSiteDescription(String siteDescription) {
         this.siteDescription = siteDescription;
     }
+
 }

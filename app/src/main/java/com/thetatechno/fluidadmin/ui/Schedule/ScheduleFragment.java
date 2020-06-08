@@ -16,6 +16,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.model.shedule.ScheduleResponse;
 
@@ -25,6 +26,7 @@ public class ScheduleFragment extends Fragment {
     ScheduleListAdapter scheduleListAdapter;
     ScheduleListViewModel scheduleListViewModel;
     NavController navController;
+    FloatingActionButton floatingActionButton;
 
 
     @Nullable
@@ -34,6 +36,7 @@ public class ScheduleFragment extends Fragment {
         scheduleListViewModel = ViewModelProviders.of(this).get(ScheduleListViewModel.class);
         navController = Navigation.findNavController(requireActivity(),R.id.nav_host_fragment);
         recyclerView = view.findViewById(R.id.rec);
+        floatingActionButton = view.findViewById(R.id.fab);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false));
         scheduleListViewModel.getAllSchedules().observe(getViewLifecycleOwner(), new Observer<ScheduleResponse>() {
             @Override
@@ -62,5 +65,8 @@ public class ScheduleFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
+        floatingActionButton.setOnClickListener(v -> {
+            navController.navigate(R.id.action_scheduleFragment_to_fragmentAddOrUpdateSchedule);
+        });
     }
 }

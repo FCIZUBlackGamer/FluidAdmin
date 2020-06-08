@@ -156,10 +156,17 @@
         <action
             android:id="@+id/action_scheduleFragment_to_sessionFragment"
             app:destination="@id/sessionFragment" />
+        <action
+            android:id="@+id/action_scheduleFragment_to_fragmentAddOrUpdateSchedule"
+            app:destination="@id/fragmentAddOrUpdateSchedule" />
     </fragment>
     <fragment
         android:id="@+id/sessionFragment"
         android:name="com.thetatechno.fluidadmin.ui.Session.SessionFragment"
         android:label="Sessions" />
+    <fragment
+        android:id="@+id/fragmentAddOrUpdateSchedule"
+        android:name="com.thetatechno.fluidadmin.ui.addOrUpdateSchedule.FragmentAddOrUpdateSchedule"
+        android:label="FragmentAddOrUpdateSchedule" />
 
 </navigation>

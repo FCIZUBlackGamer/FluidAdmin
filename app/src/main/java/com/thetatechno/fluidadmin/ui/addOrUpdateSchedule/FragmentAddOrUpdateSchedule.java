@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -25,6 +26,8 @@ import androidx.navigation.Navigation;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.databinding.AddScheduleLayoutBinding;
 import com.thetatechno.fluidadmin.model.Staff;
+import com.thetatechno.fluidadmin.model.branches_model.Branch;
+import com.thetatechno.fluidadmin.model.branches_model.BranchesResponse;
 import com.thetatechno.fluidadmin.model.facility_model.Facility;
 import com.thetatechno.fluidadmin.model.shedule.Schedule;
 
@@ -32,13 +35,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class FragmentAddOrUpdateSchedule extends Fragment {
-    AddScheduleLayoutBinding binding;
-    AddOrUpdateScheduleViewModel addOrUpdateScheduleViewModel;
-    ArrayList<Staff> providerArrayList = new ArrayList<>();
-    ArrayList<Facility> facilityArrayList = new ArrayList<>();
+    private AddScheduleLayoutBinding binding;
+    private AddOrUpdateScheduleViewModel addOrUpdateScheduleViewModel;
+    private ArrayList<Staff> providerArrayList = new ArrayList<>();
+    private ArrayList<Facility> facilityArrayList = new ArrayList<>();
+    private ArrayList<Branch> branchesList = new ArrayList<>();
     private String providerId;
-    String facilityId;
-    NavController navController;
+    private String facilityId;
+    private String siteId;
+    private NavController navController;
 
     @Nullable
     @Override
@@ -66,6 +71,7 @@ public class FragmentAddOrUpdateSchedule extends Fragment {
                 binding.facilityAutoCompleteTextView.setAdapter(facilityArrayAdapter);
             }
         });
+        getBranchesList();
         binding.providerAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -102,11 +108,32 @@ public class FragmentAddOrUpdateSchedule extends Fragment {
             requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
 
         });
+        binding.siteAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                siteId = branchesList.get(position).getSiteId();
+            }
+        });
 
     }
 
     private void onCancelOrBackButtonPressed() {
         navController.popBackStack();
+    }
+
+    private void getBranchesList() {
+        addOrUpdateScheduleViewModel.getAllBranches().observe(getViewLifecycleOwner(), new Observer<BranchesResponse>() {
+            @Override
+            public void onChanged(BranchesResponse branchesResponse) {
+                if (branchesResponse != null) {
+                    if (branchesResponse.getBranchList() != null) {
+                        branchesList = (ArrayList<Branch>) branchesResponse.getBranchList();
+                        ArrayAdapter<Branch> branchArrayAdapter = new ArrayAdapter<Branch>(getContext(), R.layout.dropdown_menu_popup_item, branchesList);
+                        binding.siteAutoCompleteTextView.setAdapter(branchArrayAdapter);
+                    }
+                }
+            }
+        });
     }
 
     private void showDatePicker(TextView date, TextView time) {
@@ -160,6 +187,7 @@ public class FragmentAddOrUpdateSchedule extends Fragment {
         schedule.setStartTime(binding.timeFromTxt.getText().toString());
         schedule.setEndTime(binding.timeToTxt.getText().toString());
         schedule.setWorkingDays(getSelectedDays());
+        schedule.setSiteId(siteId);
         addOrUpdateScheduleViewModel.addSchedule(schedule).observe(this, error -> {
             //Handle Error Message
             Toast.makeText(requireActivity(), error.getErrorMessage(), Toast.LENGTH_SHORT).show();

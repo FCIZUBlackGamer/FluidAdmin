@@ -8,8 +8,10 @@ import com.thetatechno.fluidadmin.model.Error;
 import com.thetatechno.fluidadmin.model.Staff;
 import com.thetatechno.fluidadmin.model.StaffData;
 import com.thetatechno.fluidadmin.model.branches_model.Branch;
+import com.thetatechno.fluidadmin.model.branches_model.BranchesResponse;
 import com.thetatechno.fluidadmin.model.facility_model.Facilities;
 import com.thetatechno.fluidadmin.model.shedule.Schedule;
+import com.thetatechno.fluidadmin.network.repositories.BranchesRepository;
 import com.thetatechno.fluidadmin.network.repositories.FacilityRepository;
 import com.thetatechno.fluidadmin.network.repositories.ScheduleRepository;
 import com.thetatechno.fluidadmin.network.repositories.StaffRepository;
@@ -22,15 +24,17 @@ import java.util.List;
 public class AddOrUpdateScheduleViewModel extends ViewModel {
     private ScheduleRepository scheduleRepository = new ScheduleRepository();
     private MutableLiveData<String> updateBranchLiveData = new MutableLiveData<>();
-    FacilityRepository facilityRepository = new FacilityRepository();
-StaffRepository staffRepository = new StaffRepository();
-    private  String branchDescriptionValidateMessage,branchAddressValidateMessage,emailValidateMessage,imgUrlValidateMessage,idValidateMessage , phoneNumberMessage;
-    public  MutableLiveData<Error> addSchedule(Schedule schedule)
-    {
+    private FacilityRepository facilityRepository = new FacilityRepository();
+    private StaffRepository staffRepository = new StaffRepository();
+    private BranchesRepository branchesRepository = new BranchesRepository();
+    private String branchDescriptionValidateMessage, branchAddressValidateMessage, emailValidateMessage, imgUrlValidateMessage, idValidateMessage, phoneNumberMessage;
+
+    public MutableLiveData<Error> addSchedule(Schedule schedule) {
         return scheduleRepository.addSchedule(schedule);
     }
+
     public MutableLiveData<Error> updateSchedule(Schedule schedule) {
-       return scheduleRepository.modifySchedule(schedule);
+        return scheduleRepository.modifySchedule(schedule);
     }
 
 
@@ -38,9 +42,13 @@ StaffRepository staffRepository = new StaffRepository();
 
         return facilityRepository.getAllFacilities("", PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
     }
+
     public MutableLiveData<StaffData> getStaffData() {
 
         return staffRepository.getAllStuff(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase(), EnumCode.StaffTypeCode.PRVDR.toString());
     }
 
+    public MutableLiveData<BranchesResponse> getAllBranches() {
+        return branchesRepository.getAllBranches(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
+    }
 }

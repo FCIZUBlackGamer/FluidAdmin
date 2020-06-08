@@ -23,6 +23,9 @@ public class Schedule implements Serializable {
     @SerializedName("facilityId")
     @Expose
     private String facilityId;
+    @SerializedName("siteId")
+    @Expose
+    private String siteId;
     @SerializedName("facilitDescription")
     @Expose
     private String facilitDescription;
@@ -157,5 +160,13 @@ public class Schedule implements Serializable {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    public String getSiteId() {
+        return siteId;
+    }
+
+    public void setSiteId(String siteId) {
+        this.siteId = siteId;
     }
 }

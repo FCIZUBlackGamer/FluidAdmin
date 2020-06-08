@@ -28,7 +28,10 @@ import com.thetatechno.fluidadmin.listeners.OnDeleteListener;
 import com.thetatechno.fluidadmin.listeners.OnItemClickedListener;
 import com.thetatechno.fluidadmin.listeners.OnLinkToFacilityClickedListener;
 import com.thetatechno.fluidadmin.listeners.OnOpenCancelAppointmentDialogListener;
+import com.thetatechno.fluidadmin.model.Error;
 import com.thetatechno.fluidadmin.model.Status;
+import com.thetatechno.fluidadmin.model.session_model.Session;
+import com.thetatechno.fluidadmin.model.shedule.Schedule;
 import com.thetatechno.fluidadmin.model.time_slot_model.TimeSlot;
 import com.thetatechno.fluidadmin.model.branches_model.Branch;
 import com.thetatechno.fluidadmin.model.code_model.Code;
@@ -80,6 +83,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     private String deleteCodeMessage = "";
     private String deleteFacilityMessage = "";
     private String deleteBranchMessage = "";
+    private String deleteScheduleMessage = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +105,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.agentList, R.id.providerList, R.id.clientList,
-                R.id.codeList, R.id.facility, R.id.branches, R.id.appointments,R.id.scheduleFragment)
+                R.id.codeList, R.id.facility, R.id.branches, R.id.appointments, R.id.scheduleFragment)
                 .setDrawerLayout(drawer)
                 .build();
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -201,11 +205,18 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             else
                 mainViewModel.deleteCode((Code) itemDeleted);
         } else if (itemDeleted instanceof Branch) {
-            Log.i("Object", "code type " + ((Branch) itemDeleted).getDescription());
+            Log.i("Object", "branch " + ((Branch) itemDeleted).getDescription());
             if (deleteBranchMessage.isEmpty())
                 deleteBranch((Branch) itemDeleted);
             else
                 mainViewModel.deleteBranch((Branch) itemDeleted);
+        }
+        else if (itemDeleted instanceof Schedule) {
+            Log.i("Object", "schedule " + ((Schedule) itemDeleted).getDescription());
+            if (deleteScheduleMessage.isEmpty())
+                deleteSchedule((Schedule) itemDeleted);
+            else
+                mainViewModel.deleteSchedule((Schedule) itemDeleted);
         }
         if (alertDialog.isShowing()) {
             alertDialog.dismiss();
@@ -222,7 +233,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         drawer.closeDrawers();
         id = item.getItemId();
         switch (id) {
-
             case R.id.language_reference:
                 changeLanguage((String) item.getTitle());
                 break;
@@ -362,6 +372,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         navController.popBackStack();
         navController.navigate(R.id.branches);
     }
+
     public void navigateToSchedules() {
         navController.popBackStack();
         navController.navigate(R.id.scheduleFragment);
@@ -442,10 +453,35 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         });
     }
 
+    private void deleteSchedule(Schedule schedule) {
+        mainViewModel.deleteSchedule(schedule).observe(this, new Observer<Error>() {
+            @Override
+            public void onChanged(Error error) {
+                if (error.getErrorCode() == 0) {
+                    deleteScheduleMessage = error.getErrorMessage();
+                    Toast.makeText(HomeActivity.this, error.getErrorMessage(), Toast.LENGTH_SHORT).show();
+                    navigateToSchedules();
+                }
+                else {
+                    Toast.makeText(HomeActivity.this, error.getErrorMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void deleteSession(Session session) {
+        mainViewModel.deleteSession(session).observe(this, new Observer<Error>() {
+            @Override
+            public void onChanged(Error error) {
+                    Toast.makeText(HomeActivity.this, error.getErrorMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     @Override
     public void onClick(TimeSlot selectedSlot) {
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
-       Fragment timeSlot = navHostFragment.getChildFragmentManager().getFragments().get(0);
+        Fragment timeSlot = navHostFragment.getChildFragmentManager().getFragments().get(0);
 
         if (timeSlot != null) {
             OnItemClickedListener onItemClickedListener = (OnItemClickedListener) timeSlot;
@@ -457,6 +493,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     public void onClickOnOkBtn() {
         navigateToClientList();
     }
+
     @Override
     public void onOpenCancelAppointmentDialog(String appointmentId) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(HomeActivity.this);
@@ -478,11 +515,12 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
         dialogBuilder.show();
     }
+
     private void cancelAppointment(String appointmentId) {
         mainViewModel.cancelAppointment(appointmentId).observe(this, new Observer<Status>() {
             @Override
             public void onChanged(Status status) {
-                if(status!=null) {
+                if (status != null) {
                     if (status.getStatus().equals("0")) {
                         Toast.makeText(HomeActivity.this, "cancel appointment successfully", Toast.LENGTH_SHORT).show();
                     } else {

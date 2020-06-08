@@ -115,7 +115,6 @@ public class ScheduleListAdapter extends RecyclerView.Adapter<ScheduleListAdapte
                                         break;
                                     case R.id.editSchedule:
 
-
                                         break;
                                     case R.id.deleteSchedule:
                                         //handle delete click

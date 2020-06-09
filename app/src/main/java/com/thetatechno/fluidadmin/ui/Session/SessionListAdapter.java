@@ -27,6 +27,8 @@ import io.sentry.android.AndroidSentryClientFactory;
 import io.sentry.event.UserBuilder;
 
 import static com.thetatechno.fluidadmin.utils.Constants.ARG_CODE;
+import static com.thetatechno.fluidadmin.utils.Constants.ARG_SESSION;
+import static com.thetatechno.fluidadmin.utils.Constants.ARG_STAFF;
 
 public class SessionListAdapter extends RecyclerView.Adapter<SessionListAdapter.ScheduleViewHolder> {
 
@@ -78,33 +80,22 @@ public class SessionListAdapter extends RecyclerView.Adapter<SessionListAdapter.
                 holder.optionMenu.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
-
                         PopupMenu popup = new PopupMenu(context, holder.optionMenu);
-                        popup.inflate(R.menu.code_menu);
-                        //adding click listener
-                        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                            @Override
-                            public boolean onMenuItemClick(MenuItem item) {
-                                switch (item.getItemId()) {
-                                    case R.id.editCode:
-                                        bundle.putSerializable(ARG_CODE, (Serializable) sessionList.get(position));
-                                        bundle.putSerializable("type", (Serializable) EnumCode.UsageType.Code);
-                                        bundle.putSerializable("codeList", (Serializable) sessionList);
-                                        navController.navigate(R.id.codeAddFragment, bundle);
+                        popup.inflate(R.menu.session_menu);
+                        popup.setOnMenuItemClickListener((PopupMenu.OnMenuItemClickListener) item -> {
+                            switch (item.getItemId()) {
+                                case R.id.editSession:
+                                    bundle.putSerializable(ARG_SESSION, (Serializable) sessionList.get(position));
+                                    navController.navigate(R.id.action_sessionFragment_to_fragmentAddOrUpdateSesssion, bundle);
+                                    break;
+                                case R.id.deleteCode:
+                                    if (listener != null)
+                                        listener.onDeleteButtonClicked(sessionList.get(position));
 
-                                        break;
-                                    case R.id.deleteCode:
-                                        //handle delete click
-                                        if (listener != null)
-                                            listener.onDeleteButtonClicked(sessionList.get(position));
-
-                                        break;
-                                }
-                                return false;
+                                    break;
                             }
+                            return false;
                         });
-                        //displaying the popup
                         popup.show();
                     }
                 });

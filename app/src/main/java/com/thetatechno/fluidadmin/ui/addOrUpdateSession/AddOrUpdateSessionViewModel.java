@@ -9,10 +9,6 @@ import com.thetatechno.fluidadmin.network.repositories.SessionRepository;
 
 public class AddOrUpdateSessionViewModel extends ViewModel {
     private SessionRepository sessionRepository = new SessionRepository();
-    private MutableLiveData<String> updateBranchLiveData = new MutableLiveData<>();
-    Session session;
-
-    private  String branchDescriptionValidateMessage,branchAddressValidateMessage,emailValidateMessage,imgUrlValidateMessage,idValidateMessage , phoneNumberMessage;
     public  MutableLiveData<Error> addSession(Session session)
     {
         return sessionRepository.addSession(session);

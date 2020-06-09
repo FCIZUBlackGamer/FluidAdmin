@@ -152,10 +152,10 @@ public interface MyServicesInterface {
     Call<SessionResponse> getAllSession(@Query("langId") String langId, @Query("scheduleId") String scheduleId);
 
     @POST("/ords/fluid/session/addSession")
-    Call<Error> addSession(@Body Session session, @Query("langId") String langId);
+    Call<Error> addSession(@Body Session session);
 
     @PUT("/ords/fluid/session/modifySession")
-    Call<Error> modifySession(@Body Session session, @Query("langId") String langId);
+    Call<Error> modifySession(@Body Session session);
 
     @DELETE("/ords/fluid/session/deleteSession")
     Call<Error> deleteSession(@Query("langId") String langId, @Query("id") String id);

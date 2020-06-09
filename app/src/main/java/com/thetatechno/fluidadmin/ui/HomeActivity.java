@@ -105,7 +105,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.agentList, R.id.providerList, R.id.clientList,
-                R.id.codeList, R.id.facility, R.id.branches, R.id.appointments, R.id.scheduleFragment)
+                R.id.codeList, R.id.facility, R.id.branches, R.id.appointments, R.id.scheduleFragment,R.id.sessionFragment)
                 .setDrawerLayout(drawer)
                 .build();
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);

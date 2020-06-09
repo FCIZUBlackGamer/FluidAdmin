@@ -36,6 +36,9 @@ public class Session implements Serializable {
     @SerializedName("isRunning")
     @Expose
     private String isRunning;
+    @SerializedName("langId")
+    @Expose
+    private String langId;
     public String getId() {
         return id;
     }
@@ -114,5 +117,13 @@ public class Session implements Serializable {
 
     public void setSiteId(String siteId) {
         this.siteId = siteId;
+    }
+
+    public String getLangId() {
+        return langId;
+    }
+
+    public void setLangId(String langId) {
+        this.langId = langId;
     }
 }

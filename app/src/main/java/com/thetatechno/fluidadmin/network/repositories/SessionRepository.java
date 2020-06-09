@@ -62,7 +62,7 @@ public class SessionRepository {
     public MutableLiveData<Error> addSession(final Session session) {
 
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
-        Call<Error> call = myServicesInterface.addSession(session, PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
+        Call<Error> call = myServicesInterface.addSession(session);
         call.enqueue(new Callback<Error>() {
 
             @Override
@@ -87,7 +87,7 @@ public class SessionRepository {
     public MutableLiveData<Error> modifySession(final Session session) {
 
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
-        Call<Error> call = myServicesInterface.addSession(session, PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
+        Call<Error> call = myServicesInterface.modifySession(session);
         call.enqueue(new Callback<Error>() {
 
             @Override

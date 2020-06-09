@@ -25,13 +25,16 @@ import androidx.navigation.Navigation;
 
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.databinding.AddSessionLayoutBinding;
+import com.thetatechno.fluidadmin.model.Error;
 import com.thetatechno.fluidadmin.model.Staff;
 import com.thetatechno.fluidadmin.model.branches_model.Branch;
 import com.thetatechno.fluidadmin.model.branches_model.BranchesResponse;
 import com.thetatechno.fluidadmin.model.facility_model.Facility;
 import com.thetatechno.fluidadmin.model.session_model.Session;
 import com.thetatechno.fluidadmin.ui.addOrUpdateSchedule.AddOrUpdateScheduleViewModel;
+import com.thetatechno.fluidadmin.utils.App;
 import com.thetatechno.fluidadmin.utils.Constants;
+import com.thetatechno.fluidadmin.utils.PreferenceController;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -215,11 +218,14 @@ public class FragmentAddOrUpdateSesssion extends Fragment {
             session.setScheduledEnd(binding.timeToTxt.getText().toString());
             session.setSessionDate(binding.dateTxt.getText().toString());
             session.setSiteId(siteId);
-            addOrUpdateSessionViewModel.addSession(session).observe(this, error -> {
+            session.setLangId(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
+            addOrUpdateSessionViewModel.addSession(session).observe(this, (Error error) -> {
                 //Handle Error Message
-                Toast.makeText(requireActivity(), error.getErrorMessage(), Toast.LENGTH_SHORT).show();
-                if (error.getErrorCode() == 0) {
-                    onCancelOrBackButtonPressed();
+                if (error != null) {
+                    Toast.makeText(requireActivity(), error.getErrorMessage(), Toast.LENGTH_SHORT).show();
+                    if (error.getErrorCode() == 0) {
+                        onCancelOrBackButtonPressed();
+                    }
                 }
             });
         } else {
@@ -229,11 +235,14 @@ public class FragmentAddOrUpdateSesssion extends Fragment {
             session.setScheduledEnd(binding.timeToTxt.getText().toString());
             session.setSessionDate(binding.dateTxt.getText().toString());
             session.setSiteId(siteId);
+            session.setLangId(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
+
             addOrUpdateSessionViewModel.updateSession(session).observe(this, error -> {
-                //Handle Error Message
-                Toast.makeText(requireActivity(), error.getErrorMessage(), Toast.LENGTH_SHORT).show();
-                if (error.getErrorCode() == 0) {
-                    onCancelOrBackButtonPressed();
+                if (error != null) {
+                    Toast.makeText(requireActivity(), error.getErrorMessage(), Toast.LENGTH_SHORT).show();
+                    if (error.getErrorCode() == 0) {
+                        onCancelOrBackButtonPressed();
+                    }
                 }
             });
         }

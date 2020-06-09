@@ -41,6 +41,11 @@
             android:checkableBehavior="single"
             android:icon="@drawable/ic_menu_manage"
             android:title="@string/schedules"/>
+        <item
+            android:id="@+id/sessionFragment"
+            android:checkableBehavior="single"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="@string/sessions"/>
     </group>
 
 

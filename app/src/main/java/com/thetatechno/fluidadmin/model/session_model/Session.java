@@ -3,7 +3,9 @@ package com.thetatechno.fluidadmin.model.session_model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Session {
+import java.io.Serializable;
+
+public class Session implements Serializable {
     @SerializedName("id")
     @Expose
     private String id;
@@ -28,6 +30,9 @@ public class Session {
     @SerializedName("scheduledEnd")
     @Expose
     private String scheduledEnd;
+    @SerializedName("siteId")
+    @Expose
+    private String siteId;
     @SerializedName("isRunning")
     @Expose
     private String isRunning;
@@ -101,5 +106,13 @@ public class Session {
 
     public void setFacilitDescription(String facilitDescription) {
         this.facilitDescription = facilitDescription;
+    }
+
+    public String getSiteId() {
+        return siteId;
+    }
+
+    public void setSiteId(String siteId) {
+        this.siteId = siteId;
     }
 }

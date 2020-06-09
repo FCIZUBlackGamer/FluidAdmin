@@ -140,10 +140,10 @@ public interface MyServicesInterface {
     Call<ScheduleResponse> getAllSchedule(@Query("langId") String langId);
 
     @POST("/ords/fluid/schedule/addSchedule")
-    Call<Error> addSchedule(@Body Schedule schedule);
+    Call<Error> addSchedule(@Body Schedule schedule, @Query("langId") String langId);
 
     @PUT("/ords/fluid/schedule/modifySchedule")
-    Call<Error> updateSchedule(@Body Schedule schedule);
+    Call<Error> updateSchedule(@Body Schedule schedule, @Query("langId") String langId);
 
     @DELETE("/ords/fluid/schedule/deleteSchedule")
     Call<Error> deleteSchedule(@Query("langId") String langId, @Query("id") String id);
@@ -152,10 +152,10 @@ public interface MyServicesInterface {
     Call<SessionResponse> getAllSession(@Query("langId") String langId, @Query("scheduleId") String scheduleId);
 
     @POST("/ords/fluid/session/addSession")
-    Call<Error> addSession(@Body Session session);
+    Call<Error> addSession(@Body Session session, @Query("langId") String langId);
 
     @PUT("/ords/fluid/session/modifySession")
-    Call<Error> modifySession(@Body Session session);
+    Call<Error> modifySession(@Body Session session, @Query("langId") String langId);
 
     @DELETE("/ords/fluid/session/deleteSession")
     Call<Error> deleteSession(@Query("langId") String langId, @Query("id") String id);

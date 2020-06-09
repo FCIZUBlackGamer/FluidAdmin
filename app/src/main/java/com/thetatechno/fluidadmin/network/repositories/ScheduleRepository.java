@@ -11,7 +11,9 @@ import com.thetatechno.fluidadmin.model.shedule.Schedule;
 import com.thetatechno.fluidadmin.model.shedule.ScheduleResponse;
 import com.thetatechno.fluidadmin.network.interfaces.MyServicesInterface;
 import com.thetatechno.fluidadmin.network.interfaces.RetrofitInstance;
+import com.thetatechno.fluidadmin.utils.App;
 import com.thetatechno.fluidadmin.utils.Constants;
+import com.thetatechno.fluidadmin.utils.PreferenceController;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -56,7 +58,7 @@ public class ScheduleRepository {
     public MutableLiveData<Error> addSchedule(final Schedule schedule) {
 
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
-        Call<Error> call = myServicesInterface.addSchedule(schedule);
+        Call<Error> call = myServicesInterface.addSchedule(schedule, PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
         call.enqueue(new Callback<Error>() {
 
             @Override
@@ -81,7 +83,7 @@ public class ScheduleRepository {
     public MutableLiveData<Error> modifySchedule(final Schedule schedule) {
 
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
-        Call<Error> call = myServicesInterface.addSchedule(schedule);
+        Call<Error> call = myServicesInterface.addSchedule(schedule, PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
         call.enqueue(new Callback<Error>() {
 
             @Override

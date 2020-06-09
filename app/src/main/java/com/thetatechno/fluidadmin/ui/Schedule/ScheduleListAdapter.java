@@ -114,7 +114,8 @@ public class ScheduleListAdapter extends RecyclerView.Adapter<ScheduleListAdapte
                                         navController.navigate(R.id.action_scheduleFragment_to_sessionFragment, bundle);
                                         break;
                                     case R.id.editSchedule:
-
+                                        bundle.putSerializable(ARG_SCHEDULE, (Serializable) scheduleList.get(position));
+                                        navController.navigate(R.id.action_scheduleFragment_to_fragmentAddOrUpdateSchedule, bundle);
                                         break;
                                     case R.id.deleteSchedule:
                                         //handle delete click

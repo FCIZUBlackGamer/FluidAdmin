@@ -168,5 +168,9 @@
         android:id="@+id/fragmentAddOrUpdateSchedule"
         android:name="com.thetatechno.fluidadmin.ui.addOrUpdateSchedule.FragmentAddOrUpdateSchedule"
         android:label="FragmentAddOrUpdateSchedule" />
+    <fragment
+        android:id="@+id/fragmentAddOrUpdateSesssion"
+        android:name="com.thetatechno.fluidadmin.ui.addOrUpdateSession.FragmentAddOrUpdateSesssion"
+        android:label="FragmentAddOrUpdateSesssion" />
 
 </navigation>

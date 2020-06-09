@@ -1,4 +1,4 @@
-package com.thetatechno.fluidadmin.ui.addOrUpdateSchedule;
+package com.thetatechno.fluidadmin.ui.addOrUpdateSession;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
@@ -24,20 +24,22 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.thetatechno.fluidadmin.R;
-import com.thetatechno.fluidadmin.databinding.AddScheduleLayoutBinding;
+import com.thetatechno.fluidadmin.databinding.AddSessionLayoutBinding;
 import com.thetatechno.fluidadmin.model.Staff;
 import com.thetatechno.fluidadmin.model.branches_model.Branch;
 import com.thetatechno.fluidadmin.model.branches_model.BranchesResponse;
 import com.thetatechno.fluidadmin.model.facility_model.Facility;
-import com.thetatechno.fluidadmin.model.shedule.Schedule;
+import com.thetatechno.fluidadmin.model.session_model.Session;
+import com.thetatechno.fluidadmin.ui.addOrUpdateSchedule.AddOrUpdateScheduleViewModel;
 import com.thetatechno.fluidadmin.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class FragmentAddOrUpdateSchedule extends Fragment {
-    private AddScheduleLayoutBinding binding;
+public class FragmentAddOrUpdateSesssion extends Fragment {
+    private AddSessionLayoutBinding binding;
     private AddOrUpdateScheduleViewModel addOrUpdateScheduleViewModel;
+    private AddOrUpdateSessionViewModel addOrUpdateSessionViewModel;
     private ArrayList<Staff> providerArrayList = new ArrayList<>();
     private ArrayList<Facility> facilityArrayList = new ArrayList<>();
     private ArrayList<Branch> branchesList = new ArrayList<>();
@@ -45,13 +47,14 @@ public class FragmentAddOrUpdateSchedule extends Fragment {
     private String facilityId;
     private String siteId;
     private NavController navController;
-    Schedule schedule;
+    Session session;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.add_schedule_layout, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.add_session_layout, container, false);
         addOrUpdateScheduleViewModel = ViewModelProviders.of(this).get(AddOrUpdateScheduleViewModel.class);
+        addOrUpdateSessionViewModel = ViewModelProviders.of(this).get(AddOrUpdateSessionViewModel.class);
         navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
         return binding.getRoot();
     }
@@ -59,23 +62,21 @@ public class FragmentAddOrUpdateSchedule extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        if (getArguments().getSerializable(Constants.ARG_SCHEDULE) != null) {
-            schedule = (Schedule) getArguments().getSerializable(Constants.ARG_SCHEDULE);
-            binding.scheduleDescriptionTiet.setText(schedule.getDescription());
-            binding.timeToTxt.setText(schedule.getEndTime());
-            binding.timeFromTxt.setText(schedule.getStartTime());
-            binding.dateFromTxt.setText(schedule.getStartDate());
-            binding.dateToTxt.setText(schedule.getEndDate());
+        if (getArguments() != null && getArguments().getSerializable(Constants.ARG_SESSION) != null) {
+            session = (Session) getArguments().getSerializable(Constants.ARG_SESSION);
+            binding.timeToTxt.setText(session.getScheduledEnd());
+            binding.timeFromTxt.setText(session.getScheduledStart());
+            binding.dateTxt.setText(session.getSessionDate());
         } else {
-            schedule = null;
+            session = null;
         }
         addOrUpdateScheduleViewModel.getStaffData().observe(getViewLifecycleOwner(), staffData -> {
             if (staffData != null) {
                 providerArrayList = (ArrayList<Staff>) staffData.getStaffList();
                 ArrayAdapter<Staff> staffArrayAdapter = new ArrayAdapter<Staff>(getContext(), R.layout.dropdown_menu_popup_item, providerArrayList);
                 binding.providerAutoCompleteTextView.setAdapter(staffArrayAdapter);
-                if (schedule != null) {
-                    binding.providerAutoCompleteTextView.setText(schedule.getProviderName());
+                if (session != null) {
+                    binding.providerAutoCompleteTextView.setText(session.getProviderName());
                 }
             }
         });
@@ -84,8 +85,8 @@ public class FragmentAddOrUpdateSchedule extends Fragment {
                 facilityArrayList = (ArrayList<Facility>) staffData.getFacilities();
                 ArrayAdapter<Facility> facilityArrayAdapter = new ArrayAdapter<Facility>(getContext(), R.layout.dropdown_menu_popup_item, facilityArrayList);
                 binding.facilityAutoCompleteTextView.setAdapter(facilityArrayAdapter);
-                if (schedule != null) {
-                    binding.facilityAutoCompleteTextView.setText(schedule.getFacilitDescription());
+                if (session != null) {
+                    binding.facilityAutoCompleteTextView.setText(session.getFacilitDescription());
                 }
             }
         });
@@ -103,16 +104,12 @@ public class FragmentAddOrUpdateSchedule extends Fragment {
 
             }
         });
-        binding.selectDateFromimg.setOnClickListener(v -> {
-            showDatePicker(binding.dateFromTxt, binding.timeFromTxt);
-        });
-
-        binding.selectDateToimg.setOnClickListener(v -> {
-            showDatePicker(binding.dateToTxt, binding.timeToTxt);
+        binding.selectDateimg.setOnClickListener(v -> {
+            showDatePicker(binding.dateTxt, binding.timeFromTxt, binding.timeToTxt);
         });
 
         binding.addOrUpdateScheduleBtn.setOnClickListener(v -> {
-                CollectDate();
+            CollectDate();
         });
 
         binding.cancelBtn.setOnClickListener(v -> {
@@ -148,8 +145,8 @@ public class FragmentAddOrUpdateSchedule extends Fragment {
                         branchesList = (ArrayList<Branch>) branchesResponse.getBranchList();
                         ArrayAdapter<Branch> branchArrayAdapter = new ArrayAdapter<Branch>(getContext(), R.layout.dropdown_menu_popup_item, branchesList);
                         binding.siteAutoCompleteTextView.setAdapter(branchArrayAdapter);
-                        if (schedule != null) {
-                            binding.siteAutoCompleteTextView.setText(schedule.getSiteId());
+                        if (session != null) {
+                            binding.siteAutoCompleteTextView.setText(session.getSiteId());
                         }
                     }
                 }
@@ -157,19 +154,19 @@ public class FragmentAddOrUpdateSchedule extends Fragment {
         });
     }
 
-    private void showDatePicker(TextView date, TextView time) {
+    private void showDatePicker(TextView date, TextView stime, TextView etime) {
         final Calendar newCalendar = Calendar.getInstance();
         @SuppressLint("SetTextI18n")
         DatePickerDialog StartTime = new DatePickerDialog(getContext(), R.style.DialogTheme, (DatePickerDialog.OnDateSetListener) (view, year, monthOfYear, dayOfMonth) -> {
             Calendar newDate = Calendar.getInstance();
             newDate.set(year, monthOfYear, dayOfMonth);
             date.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
-            showTimePicker(time);
+            showTimePicker(stime, etime, true);
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
         StartTime.show();
     }
 
-    private void showTimePicker(TextView txt) {
+    private void showTimePicker(TextView stime, TextView etime, boolean start) {
 
         final Calendar newCalendar = Calendar.getInstance();
         int hour = newCalendar.get(Calendar.HOUR_OF_DAY);
@@ -190,27 +187,35 @@ public class FragmentAddOrUpdateSchedule extends Fragment {
                 } else {
                     minuteSelected = selectedMinute + "";
                 }
-                txt.setText(hourSelected + ":" + minuteSelected);
+                if (start) {
+                    stime.setText(hourSelected + ":" + minuteSelected);
+                    showTimePicker(stime, etime, false);
+                } else {
+                    etime.setText(hourSelected + ":" + minuteSelected);
+                }
+
 
             }
         }, hour, minute, true);
-        mTimePicker.setTitle("Select Time");
+        if (start) {
+            mTimePicker.setTitle("Time From");
+        } else {
+            mTimePicker.setTitle("Time To");
+        }
+
         mTimePicker.show();
     }
 
     private void CollectDate() {
-        if (schedule == null) {
-            schedule = new Schedule();
-            schedule.setDescription(binding.scheduleDescriptionTiet.getText().toString());
-            schedule.setProviderId(providerId);
-            schedule.setFacilityId(facilityId);
-            schedule.setEndDate(binding.dateToTxt.getText().toString());
-            schedule.setStartDate(binding.dateFromTxt.getText().toString());
-            schedule.setStartTime(binding.timeFromTxt.getText().toString());
-            schedule.setEndTime(binding.timeToTxt.getText().toString());
-            schedule.setWorkingDays(getSelectedDays());
-            schedule.setSiteId(siteId);
-            addOrUpdateScheduleViewModel.addSchedule(schedule).observe(this, error -> {
+        if (session == null) {
+            session = new Session();
+            session.setProviderId(providerId);
+            session.setFacilityId(facilityId);
+            session.setScheduledStart(binding.timeFromTxt.getText().toString());
+            session.setScheduledEnd(binding.timeToTxt.getText().toString());
+            session.setSessionDate(binding.dateTxt.getText().toString());
+            session.setSiteId(siteId);
+            addOrUpdateSessionViewModel.addSession(session).observe(this, error -> {
                 //Handle Error Message
                 Toast.makeText(requireActivity(), error.getErrorMessage(), Toast.LENGTH_SHORT).show();
                 if (error.getErrorCode() == 0) {
@@ -218,16 +223,13 @@ public class FragmentAddOrUpdateSchedule extends Fragment {
                 }
             });
         } else {
-            schedule.setDescription(binding.scheduleDescriptionTiet.getText().toString());
-            schedule.setProviderId(providerId);
-            schedule.setFacilityId(facilityId);
-            schedule.setEndDate(binding.dateToTxt.getText().toString());
-            schedule.setStartDate(binding.dateFromTxt.getText().toString());
-            schedule.setStartTime(binding.timeFromTxt.getText().toString());
-            schedule.setEndTime(binding.timeToTxt.getText().toString());
-            schedule.setWorkingDays(getSelectedDays());
-            schedule.setSiteId(siteId);
-            addOrUpdateScheduleViewModel.updateSchedule(schedule).observe(this, error -> {
+            session.setProviderId(providerId);
+            session.setFacilityId(facilityId);
+            session.setScheduledStart(binding.timeFromTxt.getText().toString());
+            session.setScheduledEnd(binding.timeToTxt.getText().toString());
+            session.setSessionDate(binding.dateTxt.getText().toString());
+            session.setSiteId(siteId);
+            addOrUpdateSessionViewModel.updateSession(session).observe(this, error -> {
                 //Handle Error Message
                 Toast.makeText(requireActivity(), error.getErrorMessage(), Toast.LENGTH_SHORT).show();
                 if (error.getErrorCode() == 0) {
@@ -235,25 +237,5 @@ public class FragmentAddOrUpdateSchedule extends Fragment {
                 }
             });
         }
-    }
-
-    private String getSelectedDays() {
-        String daysChar = "";
-        if (binding.SAT.isChecked())
-            daysChar += "SAT";
-        if (binding.SUN.isChecked())
-            daysChar += "SUN";
-        if (binding.MON.isChecked())
-            daysChar += "MON";
-        if (binding.TUE.isChecked())
-            daysChar += "TUE";
-        if (binding.WED.isChecked())
-            daysChar += "WED";
-        if (binding.THU.isChecked())
-            daysChar += "THU";
-        if (binding.FRI.isChecked())
-            daysChar += "FRI";
-
-        return daysChar;
     }
 }

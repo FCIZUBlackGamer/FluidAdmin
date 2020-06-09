@@ -1,4 +1,4 @@
-package com.thetatechno.fluidadmin.ui;
+package com.thetatechno.fluidadmin.ui.addOrUpdateSession;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -13,14 +13,8 @@ public class AddOrUpdateSessionViewModel extends ViewModel {
     Session session;
 
     private  String branchDescriptionValidateMessage,branchAddressValidateMessage,emailValidateMessage,imgUrlValidateMessage,idValidateMessage , phoneNumberMessage;
-    public  MutableLiveData<Error> addSession( String providerId, String facilityId, String sessionDate, String scheduledStart, String scheduledEnd)
+    public  MutableLiveData<Error> addSession(Session session)
     {
-        session = new Session();
-        session.setSessionDate(sessionDate);
-        session.setProviderId(providerId);
-        session.setFacilityId(facilityId);
-        session.setScheduledStart(scheduledStart);
-        session.setScheduledEnd(scheduledEnd);
         return sessionRepository.addSession(session);
     }
 

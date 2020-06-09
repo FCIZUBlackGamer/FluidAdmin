@@ -210,8 +210,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 deleteBranch((Branch) itemDeleted);
             else
                 mainViewModel.deleteBranch((Branch) itemDeleted);
-        }
-        else if (itemDeleted instanceof Schedule) {
+        } else if (itemDeleted instanceof Schedule) {
             Log.i("Object", "schedule " + ((Schedule) itemDeleted).getDescription());
             if (deleteScheduleMessage.isEmpty())
                 deleteSchedule((Schedule) itemDeleted);
@@ -264,10 +263,18 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             case R.id.scheduleFragment:
                 navigateToSchedules();
                 break;
+            case R.id.sessionFragment:
+                navigateToSessions();
+                break;
         }
 
         return true;
 
+    }
+
+    private void navigateToSessions() {
+        navController.popBackStack();
+        navController.navigate(R.id.sessionFragment);
     }
 
     public void getFacilities() {
@@ -461,8 +468,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                     deleteScheduleMessage = error.getErrorMessage();
                     Toast.makeText(HomeActivity.this, error.getErrorMessage(), Toast.LENGTH_SHORT).show();
                     navigateToSchedules();
-                }
-                else {
+                } else {
                     Toast.makeText(HomeActivity.this, error.getErrorMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
@@ -473,7 +479,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         mainViewModel.deleteSession(session).observe(this, new Observer<Error>() {
             @Override
             public void onChanged(Error error) {
-                    Toast.makeText(HomeActivity.this, error.getErrorMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(HomeActivity.this, error.getErrorMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -16,7 +16,9 @@ import com.thetatechno.fluidadmin.model.session_model.SessionResponse;
 import com.thetatechno.fluidadmin.network.interfaces.MyServicesInterface;
 import com.thetatechno.fluidadmin.network.interfaces.RetrofitInstance;
 import com.thetatechno.fluidadmin.ui.EspressoTestingIdlingResource;
+import com.thetatechno.fluidadmin.utils.App;
 import com.thetatechno.fluidadmin.utils.Constants;
+import com.thetatechno.fluidadmin.utils.PreferenceController;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -60,7 +62,7 @@ public class SessionRepository {
     public MutableLiveData<Error> addSession(final Session session) {
 
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
-        Call<Error> call = myServicesInterface.addSession(session);
+        Call<Error> call = myServicesInterface.addSession(session, PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
         call.enqueue(new Callback<Error>() {
 
             @Override
@@ -85,7 +87,7 @@ public class SessionRepository {
     public MutableLiveData<Error> modifySession(final Session session) {
 
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
-        Call<Error> call = myServicesInterface.addSession(session);
+        Call<Error> call = myServicesInterface.addSession(session, PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
         call.enqueue(new Callback<Error>() {
 
             @Override

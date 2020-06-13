@@ -59,7 +59,7 @@ public class FragmentAddOrUpdateSchedule extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        if (getArguments().getSerializable(Constants.ARG_SCHEDULE) != null) {
+        if (getArguments() != null && getArguments().getSerializable(Constants.ARG_SCHEDULE) != null) {
             schedule = (Schedule) getArguments().getSerializable(Constants.ARG_SCHEDULE);
             binding.scheduleDescriptionTiet.setText(schedule.getDescription());
             binding.timeToTxt.setText(schedule.getEndTime());

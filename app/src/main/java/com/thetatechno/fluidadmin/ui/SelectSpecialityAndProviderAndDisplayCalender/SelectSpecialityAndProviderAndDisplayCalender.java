@@ -36,6 +36,7 @@ import com.thetatechno.fluidadmin.model.branches_model.BranchesResponse;
 import com.thetatechno.fluidadmin.model.code_model.Code;
 import com.thetatechno.fluidadmin.model.code_model.CodeList;
 import com.thetatechno.fluidadmin.ui.EspressoTestingIdlingResource;
+import com.thetatechno.fluidadmin.utils.Constants;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -122,7 +123,7 @@ binding.clientListTxtView.setOnItemClickListener(new AdapterView.OnItemClickList
         selectSpecialityAndProviderAndDisplayCalenderViewModel.getSpecialities().removeObserver(codeListObserver);
         selectSpecialityAndProviderAndDisplayCalenderViewModel.getSites().removeObserver(siteListObserver);
         selectSpecialityAndProviderAndDisplayCalenderViewModel.getAllProviders(specialityCode, "").removeObserver(providerListObserver);
-        selectSpecialityAndProviderAndDisplayCalenderViewModel.getScheduledCalenderDaysList(date, specialityCode, providerId).removeObserver(calenderDaysListDataObserver);
+        selectSpecialityAndProviderAndDisplayCalenderViewModel.getScheduledCalenderDaysList(date, specialityCode, providerId, Constants.APPOINTMENT_LENGTH, "N").removeObserver(calenderDaysListDataObserver);
         selectSpecialityAndProviderAndDisplayCalenderViewModel.getAllClients().removeObserver(clientListObserver);
         super.onDestroyView();
 
@@ -170,7 +171,7 @@ binding.clientListTxtView.setOnItemClickListener(new AdapterView.OnItemClickList
                         = new SimpleDateFormat("dd-MM-yyyy");
                 String formatedDate = formattedDate.format(calender.getTime());
                 date = formatedDate;
-                selectSpecialityAndProviderAndDisplayCalenderViewModel.getScheduledCalenderDaysList(date, specialityCode, providerId);
+                selectSpecialityAndProviderAndDisplayCalenderViewModel.getScheduledCalenderDaysList(date, specialityCode, providerId, Constants.APPOINTMENT_LENGTH, "N");
             } else {
                 Toast.makeText(getActivity(), "No Appointments Available", Toast.LENGTH_SHORT).show();
             }
@@ -187,7 +188,7 @@ binding.clientListTxtView.setOnItemClickListener(new AdapterView.OnItemClickList
                     = new SimpleDateFormat("dd-MM-yyyy");
             String dateFormatted = formattedDate.format(calender.getTime());
             date = dateFormatted;
-            selectSpecialityAndProviderAndDisplayCalenderViewModel.getScheduledCalenderDaysList(date, specialityCode, providerId);
+            selectSpecialityAndProviderAndDisplayCalenderViewModel.getScheduledCalenderDaysList(date, specialityCode, providerId, Constants.APPOINTMENT_LENGTH, "N");
 
         });
     }
@@ -209,7 +210,7 @@ binding.clientListTxtView.setOnItemClickListener(new AdapterView.OnItemClickList
         super.onActivityCreated(savedInstanceState);
         selectSpecialityAndProviderAndDisplayCalenderViewModel.getSpecialities().observe(getViewLifecycleOwner(), codeListObserver);
         selectSpecialityAndProviderAndDisplayCalenderViewModel.getSites().observe(getViewLifecycleOwner(), siteListObserver);
-        selectSpecialityAndProviderAndDisplayCalenderViewModel.getScheduledCalenderDaysList(date, specialityCode, providerId).observe(getViewLifecycleOwner(), calenderDaysListDataObserver);
+        selectSpecialityAndProviderAndDisplayCalenderViewModel.getScheduledCalenderDaysList(date, specialityCode, providerId, Constants.APPOINTMENT_LENGTH, "N").observe(getViewLifecycleOwner(), calenderDaysListDataObserver);
         if (!specialityCode.isEmpty())
             selectSpecialityAndProviderAndDisplayCalenderViewModel.getAllProviders(specialityCode, "").observe(getViewLifecycleOwner(), providerListObserver);
         selectSpecialityAndProviderAndDisplayCalenderViewModel.getAllClients().observe(getViewLifecycleOwner(), clientListObserver);
@@ -228,7 +229,7 @@ binding.clientListTxtView.setOnItemClickListener(new AdapterView.OnItemClickList
         if (providerId.equals(""))
             selectSpecialityAndProviderAndDisplayCalenderViewModel.getScheduledCalenderDaysList(specialityCode);
         else
-            selectSpecialityAndProviderAndDisplayCalenderViewModel.getScheduledCalenderDaysList(date, specialityCode, providerId);
+            selectSpecialityAndProviderAndDisplayCalenderViewModel.getScheduledCalenderDaysList(date, specialityCode, providerId, Constants.APPOINTMENT_LENGTH, "N");
         EspressoTestingIdlingResource.decrement();
 
     }

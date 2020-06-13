@@ -21,21 +21,21 @@ public class TimeSlotListViewModel extends ViewModel {
     private StaffRepository providerRepository = new StaffRepository();
     private MutableLiveData<Staff> providerMutableLiveData = new MutableLiveData<>();
 
-    public MutableLiveData<TimeSlotListData> getAvailableTimeSlots(String dayToBook, String sessionCode, String providerId) {
-        return appointmentCalenderRepository.getTimeSlotForSpecificDay(dayToBook, providerId, sessionCode, Constants.APPOINTMENT_LENGTH);
+    public MutableLiveData<TimeSlotListData> getAvailableTimeSlots(String dayToBook, String sessionId, String providerId, String apptLength, String apptType) {
+        return appointmentCalenderRepository.getTimeSlotForSpecificDay(dayToBook, providerId, sessionId, apptLength, apptType);
     }
 
     public MutableLiveData<Status> bookAppointment(String appointmentId,String clientId) {
         AppointmentBooked appointmentBooked = new AppointmentBooked();
-        appointmentBooked.setAppointmentId(appointmentId);
+        appointmentBooked.setApptType(appointmentId);
         appointmentBooked.setClientId(clientId);
-        appointmentBooked.setAppointmentType("BN");
+        appointmentBooked.setSessionId("BN");
         return appointmentCalenderRepository.bookAppointment(appointmentBooked);
     }
 
-    public MutableLiveData<AppointmentCalenderDaysListData> getScheduledCalenderDaysListForSpecificProvider(String selectedDate, String specialityCode, String providerId) {
+    public MutableLiveData<AppointmentCalenderDaysListData> getScheduledCalenderDaysListForSpecificProvider(String selectedDate, String specialityCode, String providerId, String apptLength, String apptType) {
 
-        return appointmentCalenderRepository.getAppointmentData(selectedDate, specialityCode, providerId);
+        return appointmentCalenderRepository.getAppointmentData(selectedDate, specialityCode, providerId, apptLength, apptType);
 
     }
 

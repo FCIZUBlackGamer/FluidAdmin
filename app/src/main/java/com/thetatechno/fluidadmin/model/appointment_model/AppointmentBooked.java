@@ -2,19 +2,29 @@ package com.thetatechno.fluidadmin.model.appointment_model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.thetatechno.fluidadmin.utils.Constants;
 
 public class AppointmentBooked {
     @SerializedName("clientId")
     @Expose
     String clientId;
 
-    @SerializedName("apptId")
-    @Expose
-    // slot id
-            String appointmentId;
     @SerializedName("apptType")
     @Expose
-    String appointmentType;
+    // slot id
+    String apptType;
+    @SerializedName("sessionId")
+    @Expose
+    String sessionId;
+    @SerializedName("startTime")
+    @Expose
+    String startTime;
+    @SerializedName("apptId")
+    @Expose
+    String apptId;
+    @SerializedName(Constants.LANG_ID)
+    @Expose
+    String langId;
 
     public String getClientId() {
         return clientId;
@@ -24,21 +34,44 @@ public class AppointmentBooked {
         this.clientId = clientId;
     }
 
-    public String getAppointmentId() {
-        return appointmentId;
+    public String getApptType() {
+        return apptType;
     }
 
-    public void setAppointmentId(String appointmentId) {
-        this.appointmentId = appointmentId;
+    public void setApptType(String apptType) {
+        this.apptType = apptType;
     }
 
-    public String getAppointmentType() {
-        return appointmentType;
+    public String getSessionId() {
+        return sessionId;
     }
 
-    public void setAppointmentType(String appointmentType) {
-        this.appointmentType = appointmentType;
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
     }
 
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getApptId() {
+        return apptId;
+    }
+
+    public void setApptId(String apptId) {
+        this.apptId = apptId;
+    }
+
+    public String getLangId() {
+        return langId;
+    }
+
+    public void setLangId(String langId) {
+        this.langId = langId;
+    }
 
 }

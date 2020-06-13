@@ -216,6 +216,12 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 deleteSchedule((Schedule) itemDeleted);
             else
                 mainViewModel.deleteSchedule((Schedule) itemDeleted);
+        } else if (itemDeleted instanceof Session) {
+            Log.i("Object", "session " + ((Session) itemDeleted).getId());
+            if (deleteScheduleMessage.isEmpty())
+                deleteSession((Session) itemDeleted);
+            else
+                mainViewModel.deleteSession((Session) itemDeleted);
         }
         if (alertDialog.isShowing()) {
             alertDialog.dismiss();

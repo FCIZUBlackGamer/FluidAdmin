@@ -12,6 +12,9 @@ import com.thetatechno.fluidadmin.model.time_slot_model.TimeSlotListData;
 import com.thetatechno.fluidadmin.network.interfaces.MyServicesInterface;
 import com.thetatechno.fluidadmin.network.interfaces.RetrofitInstance;
 import com.thetatechno.fluidadmin.ui.EspressoTestingIdlingResource;
+import com.thetatechno.fluidadmin.utils.App;
+import com.thetatechno.fluidadmin.utils.Constants;
+import com.thetatechno.fluidadmin.utils.PreferenceController;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -23,10 +26,10 @@ public class AppointmentCalenderRepository {
     private MutableLiveData<TimeSlotListData> timeSlotListMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<Status> statusMutableLiveData = new MutableLiveData<>();
 
-    public MutableLiveData<AppointmentCalenderDaysListData> getAppointmentData(String dateOfSpecificDay, String specialtyCode, String providerId) {
+    public MutableLiveData<AppointmentCalenderDaysListData> getAppointmentData(String dateOfSpecificDay, String specialtyCode, String providerId, String apptLength, String apptType) {
         EspressoTestingIdlingResource.increment();
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
-        Call<AppointmentCalenderDaysListData> call = myServicesInterface.getAppointmentCalender(dateOfSpecificDay, specialtyCode, providerId);
+        Call<AppointmentCalenderDaysListData> call = myServicesInterface.getAppointmentCalender(dateOfSpecificDay, specialtyCode, providerId, apptLength, apptType, PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
         call.enqueue(new Callback<AppointmentCalenderDaysListData>() {
             @Override
             public void onResponse(Call<AppointmentCalenderDaysListData> call, Response<AppointmentCalenderDaysListData> response) {
@@ -81,10 +84,10 @@ public class AppointmentCalenderRepository {
         return mutableLiveData;
     }
 
-    public MutableLiveData<TimeSlotListData> getTimeSlotForSpecificDay(String dayToBook, String providerId, String sessionCode, String apptLength) {
+    public MutableLiveData<TimeSlotListData> getTimeSlotForSpecificDay(String dayToBook, String providerId, String sessionId, String apptLength, String apptType) {
 
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
-        Call<TimeSlotListData> call = myServicesInterface.getAvailableSlots(dayToBook, providerId, sessionCode, apptLength);
+        Call<TimeSlotListData> call = myServicesInterface.getAvailableSlots(dayToBook,sessionId, providerId, apptLength, apptType, PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
         call.enqueue(new Callback<TimeSlotListData>() {
             @Override
             public void onResponse(Call<TimeSlotListData> call, Response<TimeSlotListData> response) {

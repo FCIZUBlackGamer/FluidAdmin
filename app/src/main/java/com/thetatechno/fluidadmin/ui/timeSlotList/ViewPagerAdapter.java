@@ -22,7 +22,7 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        Fragment fragment = DisplayAppointmentSlotsInSpecificDay.newInstance(appointmentDayDetailsArrayList.get(position).getDate(),appointmentDayDetailsArrayList.get(position).getProviderId(), appointmentDayDetailsArrayList.get(position).getSessionCode());
+        Fragment fragment = DisplayAppointmentSlotsInSpecificDay.newInstance(appointmentDayDetailsArrayList.get(position).getDate(),appointmentDayDetailsArrayList.get(position).getProviderId(), appointmentDayDetailsArrayList.get(position).getSessionId());
         return fragment;
     }
 

@@ -19,6 +19,7 @@ import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.databinding.FragmentAppointmentSlotsBinding;
 import com.thetatechno.fluidadmin.model.time_slot_model.TimeSlot;
 import com.thetatechno.fluidadmin.model.time_slot_model.TimeSlotListData;
+import com.thetatechno.fluidadmin.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,24 +29,25 @@ public class DisplayAppointmentSlotsInSpecificDay extends Fragment {
     private TimeSlotListViewModel timeSlotListViewModel;
     private GridView gridView;
     private TextView dateTextView;
-    private String bookDate, providerId, sessionCode;
+    private String bookDate, providerId, sessionId;
     private timeSlotListAdapter timeSlotListAdapter;
     FragmentAppointmentSlotsBinding binding;
     private static String ARG_PROVIDER_ID = "providerList";
     private static String ARG_BOOK_DATE = "bookDate";
-    private static String ARG_SESSION_CODE = "sessionCode";
+    private static String ARG_SESSION_ID = "sessionId";
     private List<TimeSlot> timeSlotList = new ArrayList<>();
-private static String TAG = DisplayAppointmentSlotsInSpecificDay.class.getSimpleName();
+    private static String TAG = DisplayAppointmentSlotsInSpecificDay.class.getSimpleName();
+
     public DisplayAppointmentSlotsInSpecificDay() {
         // Required empty public constructor
     }
 
-    public static DisplayAppointmentSlotsInSpecificDay newInstance(String bookDate, String providerId, String sessionCode) {
+    public static DisplayAppointmentSlotsInSpecificDay newInstance(String bookDate, String providerId, String sessionId) {
 
         Bundle args = new Bundle();
         args.putString(ARG_BOOK_DATE, bookDate);
         args.putString(ARG_PROVIDER_ID, providerId);
-        args.putString(ARG_SESSION_CODE, sessionCode);
+        args.putString(ARG_SESSION_ID, sessionId);
         DisplayAppointmentSlotsInSpecificDay fragment = new DisplayAppointmentSlotsInSpecificDay();
         fragment.setArguments(args);
         return fragment;
@@ -55,7 +57,7 @@ private static String TAG = DisplayAppointmentSlotsInSpecificDay.class.getSimple
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            sessionCode = getArguments().getString(ARG_SESSION_CODE);
+            sessionId = getArguments().getString(ARG_SESSION_ID);
             providerId = getArguments().getString(ARG_PROVIDER_ID);
             bookDate = getArguments().getString(ARG_BOOK_DATE);
         }
@@ -69,7 +71,7 @@ private static String TAG = DisplayAppointmentSlotsInSpecificDay.class.getSimple
         gridView = binding.gridview;
         dateTextView = binding.dateTxtView;
         dateTextView.setText(bookDate);
-        Log.i(TAG,"onCreateView method");
+        Log.i(TAG, "onCreateView method");
         timeSlotListViewModel = new ViewModelProvider(this).get(TimeSlotListViewModel.class);
         timeSlotListAdapter = new timeSlotListAdapter(getContext(), timeSlotList);
         gridView.setAdapter(timeSlotListAdapter);
@@ -79,23 +81,23 @@ private static String TAG = DisplayAppointmentSlotsInSpecificDay.class.getSimple
     @Override
     public void onStart() {
         super.onStart();
-        Log.i(TAG,"onStart method");
+        Log.i(TAG, "onStart method");
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.i(TAG,"onResume");
+        Log.i(TAG, "onResume");
         gridView.scheduleLayoutAnimation();
-        if(timeSlotList.size()>0)
-        timeSlotListViewModel.getAvailableTimeSlots(bookDate,sessionCode,providerId);
+        if (timeSlotList.size() > 0)
+            timeSlotListViewModel.getAvailableTimeSlots(bookDate, sessionId, providerId, Constants.APPOINTMENT_LENGTH, "N");
         else
             getAvailableTimeSlots();
 
     }
 
     private void getAvailableTimeSlots() {
-        timeSlotListViewModel.getAvailableTimeSlots(bookDate, sessionCode, providerId).observe(getViewLifecycleOwner(), new Observer<TimeSlotListData>() {
+        timeSlotListViewModel.getAvailableTimeSlots(bookDate, sessionId, providerId, Constants.APPOINTMENT_LENGTH, "N").observe(getViewLifecycleOwner(), new Observer<TimeSlotListData>() {
             @Override
             public void onChanged(TimeSlotListData timeSlotsData) {
                 if (timeSlotsData != null) {
@@ -106,6 +108,7 @@ private static String TAG = DisplayAppointmentSlotsInSpecificDay.class.getSimple
             }
         });
     }
+
     private void updateGridView() {
         timeSlotListAdapter.updateList(timeSlotList);
         timeSlotListAdapter.notifyDataSetChanged();

@@ -107,20 +107,20 @@ public interface MyServicesInterface {
     Call<Status> deleteBranch(@Query("siteId") String siteId);
 
 
-    @GET("/ords/fluid/api/getApptCalendar")
-    Call<AppointmentCalenderDaysListData> getAppointmentCalender(@Query("monthDate") String dateOfSpecificDay, @Query("specialtyCode") String specialtyCode, @Query("providerId") String providerId);
+    @GET("/ords/fluid/appt/getApptCalendar")
+    Call<AppointmentCalenderDaysListData> getAppointmentCalender(@Query("monthDate") String dateOfSpecificDay, @Query("specialtyCode") String specialtyCode, @Query("providerId") String providerId, @Query("apptLength") String apptLength, @Query("apptType") String apptType, @Query(Constants.LANG_ID) String langId);
 
-    @GET("/ords/fluid/api/getApptCalendar")
+    @GET("/ords/fluid/appt/getApptCalendar")
     Call<AppointmentCalenderDaysListData> getAppointmentCalender(@Query("monthDate") String dateOfSpecificDay, @Query("specialtyCode") String specialtyCode);
 
-    @GET("/ords/fluid/api/getAvailableSlots")
-    Call<TimeSlotListData> getAvailableSlots(@Query("bookDay") String bookDay, @Query("providerId") String providerId, @Query("sessionCode") String sessionCode, @Query("apptLength") String apptLength);
+    @GET("/ords/fluid/appt/getAvailableSlots")
+    Call<TimeSlotListData> getAvailableSlots(@Query("bookDay") String bookDay,@Query("sessionId") String sessionId, @Query("providerId") String providerId, @Query("apptLength") String apptLength, @Query("apptType") String apptType, @Query(Constants.LANG_ID) String langId);
 
-    @POST("/ords/fluid/api/bookAppt")
+    @POST("/ords/fluid/appt/bookAppointment")
     Call<Status> bookAppointment(@Body AppointmentBooked appointmentBooked);
 
-    @POST("/ords/fluid/api/cancelAppt")
-    Call<Status> cancelAppointment(@Query("apptId") String appointmentId);
+    @POST("/ords/fluid/appt/cancelAppointment")
+    Call<Status> cancelAppointment(@Query("apptId") String appointmentId, @Query(Constants.LANG_ID) String langId);
 
     @GET("/ords/fluid/api/appointment")
     Call<AppointmentListData> getAppointments(@Query("providerId") String providerId, @Query("apptDate") String date,@Query("clientID") String clientID);

@@ -61,15 +61,15 @@ public class SelectSpecialityAndProviderAndDisplayCalenderViewModel extends View
     }
 
 
-    public MutableLiveData<AppointmentCalenderDaysListData> getScheduledCalenderDaysList(String date, String specialityCode, String providerId) {
+    public MutableLiveData<AppointmentCalenderDaysListData> getScheduledCalenderDaysList(String date, String specialityCode, String providerId, String apptLength, String apptType) {
         EspressoTestingIdlingResource.increment();
         if (date.isEmpty()) {
             SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
             Date todayDate = new Date();
             EspressoTestingIdlingResource.decrement();
-            return appointmentCalenderRepository.getAppointmentData(formatter.format(todayDate), specialityCode, providerId);
+            return appointmentCalenderRepository.getAppointmentData(formatter.format(todayDate), specialityCode, providerId, apptLength, apptType);
         } else
-            return appointmentCalenderRepository.getAppointmentData(date, specialityCode, providerId);
+            return appointmentCalenderRepository.getAppointmentData(date, specialityCode, providerId, apptLength, apptType);
     }
 
     public MutableLiveData<AppointmentCalenderDaysListData> getScheduledCalenderDaysList(String specialityCode) {

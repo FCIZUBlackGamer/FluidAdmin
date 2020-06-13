@@ -34,15 +34,15 @@ import static com.thetatechno.fluidadmin.utils.Constants.ARG_SCHEDULE;
 
 public class ScheduleListAdapter extends RecyclerView.Adapter<ScheduleListAdapter.ScheduleViewHolder> {
 
-    Context context;
-    List<Schedule> scheduleList;
-    OnDeleteListener listener;
+    private Context context;
+    private List<Schedule> scheduleList;
+    private OnDeleteListener listener;
 
-    NavController navController;
-    Bundle bundle;
+    private NavController navController;
+    private Bundle bundle;
 
 
-    public ScheduleListAdapter(NavController navControlle, Context context, List<Schedule> scheduleList) {
+    ScheduleListAdapter(NavController navControlle, Context context, List<Schedule> scheduleList) {
         this.scheduleList = scheduleList;
         this.context = context;
         navController = navControlle;

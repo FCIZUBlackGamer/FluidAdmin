@@ -74,14 +74,14 @@ public class CalendarView extends LinearLayout {
 
     private CalendarProperties mCalendarProperties;
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+    
     public CalendarView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initControl(context, attrs);
         initCalendar();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+    
     public CalendarView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initControl(context, attrs);
@@ -89,7 +89,7 @@ public class CalendarView extends LinearLayout {
     }
 
     //protected constructor to create CalendarView for the dialog date picker
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+    
     protected CalendarView(Context context, CalendarProperties calendarProperties) {
         super(context);
         mContext = context;
@@ -103,7 +103,7 @@ public class CalendarView extends LinearLayout {
         initCalendar();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+    
     private void initControl(Context context, AttributeSet attrs) {
         mContext = context;
         mCalendarProperties = new CalendarProperties(context);
@@ -120,7 +120,7 @@ public class CalendarView extends LinearLayout {
      *
      * @param attrs A set of xml attributes
      */
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+    
     private void setAttributes(AttributeSet attrs) {
         TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.CalendarView);
 
@@ -194,7 +194,7 @@ public class CalendarView extends LinearLayout {
         mCalendarProperties.setForwardButtonSrc(forwardButtonSrc);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+    
     private void initAttributes() {
         AppearanceUtils.setHeaderColor(getRootView(), mCalendarProperties.getHeaderColor());
 
@@ -223,7 +223,6 @@ public class CalendarView extends LinearLayout {
         setCalendarRowLayout();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     public void setHeaderColor(Drawable color) {
         mCalendarProperties.setHeaderColor(color);
         AppearanceUtils.setHeaderColor(getRootView(), mCalendarProperties.getHeaderColor());

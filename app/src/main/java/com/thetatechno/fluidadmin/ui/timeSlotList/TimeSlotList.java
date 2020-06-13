@@ -92,7 +92,7 @@ public class TimeSlotList extends Fragment implements OnItemClickedListener {
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
             @Override
             public void handleOnBackPressed() {
-navController.popBackStack();
+                navController.popBackStack();
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
@@ -224,7 +224,7 @@ navController.popBackStack();
         Log.e("androidBottomNavigator", androidBottomNavigator + "");
 
         ViewGroup.LayoutParams layoutParams = binding.timeSlotsViewPager.getLayoutParams();
-        layoutParams.height = (int) (screenHeight - (actionBarHeight + docNameHeight + controlHeight + bottomNavigationHeight/2) * 3 ) /*+ androidBottomNavigator*/; // is in pixels
+        layoutParams.height = (int) (screenHeight - (actionBarHeight + docNameHeight + controlHeight + bottomNavigationHeight / 2) * 3) /*+ androidBottomNavigator*/; // is in pixels
         Log.e("ViewPager Height", layoutParams.height + "");
         binding.timeSlotsViewPager.setLayoutParams(layoutParams);
 
@@ -257,7 +257,7 @@ navController.popBackStack();
 
     private void updateDataWhileSwipingOnProviderList() {
         timeSlotListViewModel.getProviderData(specialityCode, providerWorkingInSelectedDayList.get(selectedProviderIndex).getProviderId());
-        timeSlotListViewModel.getScheduledCalenderDaysListForSpecificProvider(bookDate, specialityCode, providerWorkingInSelectedDayList.get(selectedProviderIndex).getProviderId());
+        timeSlotListViewModel.getScheduledCalenderDaysListForSpecificProvider(bookDate, specialityCode, providerWorkingInSelectedDayList.get(selectedProviderIndex).getProviderId(), Constants.APPOINTMENT_LENGTH, "N");
     }
 
 
@@ -325,7 +325,7 @@ navController.popBackStack();
     }
 
     private void getScheduledCalenderDaysList() {
-        timeSlotListViewModel.getScheduledCalenderDaysListForSpecificProvider(bookDate, specialityCode, providerWorkingInSelectedDayList.get(selectedProviderIndex).getProviderId()).observe(getViewLifecycleOwner(), appointmentCalenderDaysListData -> {
+        timeSlotListViewModel.getScheduledCalenderDaysListForSpecificProvider(bookDate, specialityCode, providerWorkingInSelectedDayList.get(selectedProviderIndex).getProviderId(), Constants.APPOINTMENT_LENGTH, "N").observe(getViewLifecycleOwner(), appointmentCalenderDaysListData -> {
 
             if (appointmentCalenderDaysListData != null && appointmentCalenderDaysListData.getDayDetailsList() != null)
                 appointmentDayDetailsForSpecificProviderArrayList = appointmentCalenderDaysListData.getDayDetailsList();
@@ -345,18 +345,18 @@ navController.popBackStack();
     }
 
     private void confirmAppointmentBooking(String appointmentId) {
-        timeSlotListViewModel.bookAppointment(clientId,appointmentId).observe(getViewLifecycleOwner(), new Observer<Status>() {
+        timeSlotListViewModel.bookAppointment(clientId, appointmentId).observe(getViewLifecycleOwner(), new Observer<Status>() {
             @Override
             public void onChanged(Status status) {
                 if (status != null) {
                     if (status.getStatus().equals("0")) {
                         Toast.makeText(getContext(), "booking success", Toast.LENGTH_SHORT).show();
                         Bundle bundle = new Bundle();
-                        bundle.putString(ARG_PROVIDER_NAME,providerNameTxtView.getText().toString());
-                        bundle.putString(ARG_BOOK_DATE,appointmentDayDetailsForSpecificProviderArrayList.get(timeSlotsViewPager.getCurrentItem()).getDate());
-                        bundle.putString(ARG_BOOK_TIME,selectedTimeSlot.getTime());
-                        bundle.putString(ARG_SPECIALITY_CODE,specialityCode);
-                        navController.navigate(R.id.action_timeSlotList_to_confirmAppointment,bundle);
+                        bundle.putString(ARG_PROVIDER_NAME, providerNameTxtView.getText().toString());
+                        bundle.putString(ARG_BOOK_DATE, appointmentDayDetailsForSpecificProviderArrayList.get(timeSlotsViewPager.getCurrentItem()).getDate());
+                        bundle.putString(ARG_BOOK_TIME, selectedTimeSlot.getTime());
+                        bundle.putString(ARG_SPECIALITY_CODE, specialityCode);
+                        navController.navigate(R.id.action_timeSlotList_to_confirmAppointment, bundle);
                     }
                     Toast.makeText(getContext(), status.getStatus(), Toast.LENGTH_SHORT).show();
                 }

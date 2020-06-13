@@ -8,6 +8,8 @@ import androidx.lifecycle.MutableLiveData;
 import com.thetatechno.fluidadmin.model.Status;
 import com.thetatechno.fluidadmin.network.interfaces.MyServicesInterface;
 import com.thetatechno.fluidadmin.network.interfaces.RetrofitInstance;
+import com.thetatechno.fluidadmin.utils.App;
+import com.thetatechno.fluidadmin.utils.PreferenceController;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -19,7 +21,7 @@ public class CancelAppointmentRepository {
     public MutableLiveData<Status> cancelAppointment(String appointmentId) {
 
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
-        Call<Status> call = myServicesInterface.cancelAppointment(appointmentId);
+        Call<Status> call = myServicesInterface.cancelAppointment(appointmentId, PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
         call.enqueue(new Callback<Status>() {
             @Override
             public void onResponse(Call<Status> call, Response<Status> response) {

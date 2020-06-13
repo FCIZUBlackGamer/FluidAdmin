@@ -14,10 +14,10 @@ public class AppointmentDayDetails implements Parcelable {
     @Expose
 
     int availableSlots;
-    @SerializedName("sessionCode")
+    @SerializedName("sessionId")
     @Expose
 
-    String sessionCode;
+    String sessionId;
 
     @SerializedName("providerId")
     @Expose
@@ -27,7 +27,7 @@ public class AppointmentDayDetails implements Parcelable {
     protected AppointmentDayDetails(Parcel in) {
         date = in.readString();
         availableSlots = in.readInt();
-        sessionCode = in.readString();
+        sessionId = in.readString();
         providerId = in.readString();
     }
 
@@ -59,12 +59,12 @@ public class AppointmentDayDetails implements Parcelable {
         this.availableSlots = availableSlots;
     }
 
-    public String getSessionCode() {
-        return sessionCode;
+    public String getSessionId() {
+        return sessionId;
     }
 
-    public void setSessionCode(String sessionCode) {
-        this.sessionCode = sessionCode;
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
     }
 
     public String getProviderId() {
@@ -84,7 +84,7 @@ public class AppointmentDayDetails implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(date);
         dest.writeInt(availableSlots);
-        dest.writeString(sessionCode);
+        dest.writeString(sessionId);
         dest.writeString(providerId);
     }
 }

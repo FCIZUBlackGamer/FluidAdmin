@@ -29,8 +29,8 @@ import com.thetatechno.fluidadmin.model.ClientData;
 import com.thetatechno.fluidadmin.model.Person;
 import com.thetatechno.fluidadmin.model.appointment_model.AppointmentCalenderDaysListData;
 import com.thetatechno.fluidadmin.model.appointment_model.AppointmentDayDetails;
-import com.thetatechno.fluidadmin.model.Staff;
-import com.thetatechno.fluidadmin.model.StaffData;
+import com.thetatechno.fluidadmin.model.staff_model.Staff;
+import com.thetatechno.fluidadmin.model.staff_model.StaffData;
 import com.thetatechno.fluidadmin.model.branches_model.Branch;
 import com.thetatechno.fluidadmin.model.branches_model.BranchesResponse;
 import com.thetatechno.fluidadmin.model.code_model.Code;
@@ -124,7 +124,7 @@ binding.clientListTxtView.setOnItemClickListener(new AdapterView.OnItemClickList
         selectSpecialityAndProviderAndDisplayCalenderViewModel.getSites().removeObserver(siteListObserver);
         selectSpecialityAndProviderAndDisplayCalenderViewModel.getAllProviders(specialityCode, "").removeObserver(providerListObserver);
         selectSpecialityAndProviderAndDisplayCalenderViewModel.getScheduledCalenderDaysList(date, specialityCode, providerId, Constants.APPOINTMENT_LENGTH, "N").removeObserver(calenderDaysListDataObserver);
-        selectSpecialityAndProviderAndDisplayCalenderViewModel.getAllClients().removeObserver(clientListObserver);
+//        selectSpecialityAndProviderAndDisplayCalenderViewModel.getAllClients().removeObserver(clientListObserver);
         super.onDestroyView();
 
     }

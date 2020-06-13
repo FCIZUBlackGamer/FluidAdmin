@@ -1,4 +1,4 @@
-package com.thetatechno.fluidadmin.model;
+package com.thetatechno.fluidadmin.model.staff_model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

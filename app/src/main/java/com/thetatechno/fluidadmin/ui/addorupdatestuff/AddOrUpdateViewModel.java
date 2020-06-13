@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.listeners.OnDataChangedCallBackListener;
-import com.thetatechno.fluidadmin.model.Staff;
+import com.thetatechno.fluidadmin.model.staff_model.Staff;
 import com.thetatechno.fluidadmin.network.repositories.StaffRepository;
 import com.thetatechno.fluidadmin.utils.App;
 import com.thetatechno.fluidadmin.utils.Constants;

@@ -24,8 +24,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.model.ClientData;
+import com.thetatechno.fluidadmin.model.ClientListModel;
 import com.thetatechno.fluidadmin.model.Person;
 import com.thetatechno.fluidadmin.ui.EspressoTestingIdlingResource;
 
@@ -69,21 +71,27 @@ public class ClientListFragment extends Fragment implements SearchView.OnQueryTe
         clientListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         clientSwipeLayout = view.findViewById(R.id.clientSwipeLayout);
         setHasOptionsMenu(true);
-        clientListViewModel.getAllClients().observe(getViewLifecycleOwner(), new Observer<ClientData>() {
+        clientListViewModel.getAllClients();
+        clientListViewModel.getClientData().observe(getViewLifecycleOwner(), new Observer<ClientListModel>() {
             @Override
-            public void onChanged(ClientData clientData) {
+            public void onChanged(ClientListModel clientData) {
                 EspressoTestingIdlingResource.increment();
                 clientSwipeLayout.setRefreshing(true);
                 if (clientData != null) {
-                    if (clientData.getPersonList() != null) {
+                    if (clientData.getClientData() != null) {
                         EspressoTestingIdlingResource.increment();
-                        clientList = clientData.getPersonList();
+                        clientList = clientData.getClientData().getPersonList();
                         clientListViewAdapter = new ClientListViewAdapter(getContext(), clientList, getActivity().getSupportFragmentManager(),navController);
                         clientListRecyclerView.setAdapter(clientListViewAdapter);
 
                         EspressoTestingIdlingResource.decrement();
                     } else {
-                        Log.e(TAG, "clientList Is Null");
+                        Snackbar.make(clientSwipeLayout,clientData.getFailureErrorMessage(),Snackbar.LENGTH_LONG).setAction(R.string.retry, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                clientListViewModel.getAllClients();
+                            }
+                        }).setAnchorView(bookAppointmentBtn).show();
                     }
 
                 } else {
@@ -94,6 +102,8 @@ public class ClientListFragment extends Fragment implements SearchView.OnQueryTe
 
             }
         });
+
+
         clientSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

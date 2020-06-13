@@ -1,9 +1,7 @@
 package com.thetatechno.fluidadmin.utils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 
 public class CheckForNetwork {
     /*
@@ -13,10 +11,10 @@ public class CheckForNetwork {
      * @return true if the internet connection is one
      * false if the internet connection is off
      */
-    public static boolean isConnectionOn(Activity activity) {
-        ConnectivityManager connectivityManager = (ConnectivityManager) activity
+    public static boolean isConnectionOn(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null;
+        return connectivityManager.getActiveNetworkInfo() != null
+                && connectivityManager.getActiveNetworkInfo().isConnected();
     }
 }

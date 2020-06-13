@@ -126,4 +126,7 @@
     <string name="site_txt">Site</string>
     <string name="description">Description</string>
     <string name="sessions">Sessions</string>
+    <string name="retry">Retry</string>
+    <string name="no_internet_connection">No internet connection</string>
+    <string name="error_try_again_txt">Error, Try Again</string>
 </resources>

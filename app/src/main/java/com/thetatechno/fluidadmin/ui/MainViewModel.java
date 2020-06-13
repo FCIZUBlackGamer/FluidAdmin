@@ -12,7 +12,7 @@ import com.thetatechno.fluidadmin.model.branches_model.Branch;
 import com.thetatechno.fluidadmin.model.code_model.Code;
 import com.thetatechno.fluidadmin.model.facility_model.Facility;
 import com.thetatechno.fluidadmin.model.facility_model.FacilityCodes;
-import com.thetatechno.fluidadmin.model.Staff;
+import com.thetatechno.fluidadmin.model.staff_model.Staff;
 import com.thetatechno.fluidadmin.model.session_model.Session;
 import com.thetatechno.fluidadmin.model.shedule.Schedule;
 import com.thetatechno.fluidadmin.network.repositories.BranchesRepository;

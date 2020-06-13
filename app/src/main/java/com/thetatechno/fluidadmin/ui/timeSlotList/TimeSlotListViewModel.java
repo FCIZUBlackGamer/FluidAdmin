@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.thetatechno.fluidadmin.model.appointment_model.AppointmentBooked;
 import com.thetatechno.fluidadmin.model.appointment_model.AppointmentCalenderDaysListData;
-import com.thetatechno.fluidadmin.model.Staff;
+import com.thetatechno.fluidadmin.model.staff_model.Staff;
 import com.thetatechno.fluidadmin.model.Status;
 import com.thetatechno.fluidadmin.model.time_slot_model.TimeSlotListData;
 import com.thetatechno.fluidadmin.network.repositories.AppointmentCalenderRepository;

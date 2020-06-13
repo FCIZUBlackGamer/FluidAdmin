@@ -7,7 +7,7 @@ import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.listeners.OnDataChangedCallBackListener;
 import com.thetatechno.fluidadmin.model.code_model.Code;
 import com.thetatechno.fluidadmin.model.code_model.CodeList;
-import com.thetatechno.fluidadmin.model.Staff;
+import com.thetatechno.fluidadmin.model.staff_model.Staff;
 import com.thetatechno.fluidadmin.network.repositories.CodeRepository;
 import com.thetatechno.fluidadmin.network.repositories.StaffRepository;
 import com.thetatechno.fluidadmin.utils.App;

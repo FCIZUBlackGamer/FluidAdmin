@@ -19,8 +19,8 @@ import com.thetatechno.fluidadmin.model.device_model.DeviceListData;
 import com.thetatechno.fluidadmin.model.facility_model.Facilities;
 import com.thetatechno.fluidadmin.model.facility_model.Facility;
 import com.thetatechno.fluidadmin.model.facility_model.FacilityCodes;
-import com.thetatechno.fluidadmin.model.Staff;
-import com.thetatechno.fluidadmin.model.StaffData;
+import com.thetatechno.fluidadmin.model.staff_model.Staff;
+import com.thetatechno.fluidadmin.model.staff_model.StaffData;
 import com.thetatechno.fluidadmin.model.Status;
 import com.thetatechno.fluidadmin.utils.Constants;
 

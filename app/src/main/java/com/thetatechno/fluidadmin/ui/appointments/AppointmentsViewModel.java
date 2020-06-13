@@ -5,8 +5,9 @@ import android.annotation.SuppressLint;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.thetatechno.fluidadmin.model.StaffData;
+import com.thetatechno.fluidadmin.model.staff_model.StaffData;
 import com.thetatechno.fluidadmin.model.appointment_model.AppointmentListData;
+import com.thetatechno.fluidadmin.model.staff_model.StaffListModel;
 import com.thetatechno.fluidadmin.network.repositories.AppointmentListRepository;
 import com.thetatechno.fluidadmin.network.repositories.StaffRepository;
 import com.thetatechno.fluidadmin.utils.App;
@@ -20,7 +21,7 @@ public class AppointmentsViewModel extends ViewModel {
     private StaffRepository staffRepository = new StaffRepository();
     private AppointmentListRepository appointmentListRepository = new AppointmentListRepository();
 
-    public MutableLiveData<StaffData> getStaffData() {
+    public MutableLiveData<StaffListModel> getStaffData() {
 
         return staffRepository.getAllStuff(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase(), EnumCode.StaffTypeCode.PRVDR.toString());
     }

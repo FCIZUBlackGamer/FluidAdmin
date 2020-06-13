@@ -26,7 +26,7 @@ import androidx.navigation.Navigation;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.databinding.AddSessionLayoutBinding;
 import com.thetatechno.fluidadmin.model.Error;
-import com.thetatechno.fluidadmin.model.Staff;
+import com.thetatechno.fluidadmin.model.staff_model.Staff;
 import com.thetatechno.fluidadmin.model.branches_model.Branch;
 import com.thetatechno.fluidadmin.model.branches_model.BranchesResponse;
 import com.thetatechno.fluidadmin.model.facility_model.Facility;
@@ -74,13 +74,16 @@ public class FragmentAddOrUpdateSesssion extends Fragment {
             session = null;
         }
         addOrUpdateScheduleViewModel.getStaffData().observe(getViewLifecycleOwner(), staffData -> {
-            if (staffData != null) {
-                providerArrayList = (ArrayList<Staff>) staffData.getStaffList();
+            if (staffData.getStaffData() != null) {
+                providerArrayList = (ArrayList<Staff>) staffData.getStaffData().getStaffList();
                 ArrayAdapter<Staff> staffArrayAdapter = new ArrayAdapter<Staff>(getContext(), R.layout.dropdown_menu_popup_item, providerArrayList);
                 binding.providerAutoCompleteTextView.setAdapter(staffArrayAdapter);
                 if (session != null) {
                     binding.providerAutoCompleteTextView.setText(session.getProviderName());
                 }
+            }
+            else {
+                Toast.makeText(getContext(),staffData.getErrorMessage(),Toast.LENGTH_SHORT).show();
             }
         });
         addOrUpdateScheduleViewModel.getAllFacilities().observe(getViewLifecycleOwner(), staffData -> {

@@ -35,7 +35,7 @@ import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.databinding.FragmentTimeSlotListBinding;
 import com.thetatechno.fluidadmin.listeners.OnItemClickedListener;
 import com.thetatechno.fluidadmin.model.appointment_model.AppointmentDayDetails;
-import com.thetatechno.fluidadmin.model.Staff;
+import com.thetatechno.fluidadmin.model.staff_model.Staff;
 import com.thetatechno.fluidadmin.model.Status;
 import com.thetatechno.fluidadmin.model.time_slot_model.TimeSlot;
 import com.thetatechno.fluidadmin.utils.Constants;

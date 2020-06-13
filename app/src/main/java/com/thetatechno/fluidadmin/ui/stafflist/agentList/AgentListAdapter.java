@@ -1,15 +1,12 @@
 package com.thetatechno.fluidadmin.ui.stafflist.agentList;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageButton;
@@ -29,13 +26,11 @@ import com.bumptech.glide.Glide;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.listeners.OnDeleteListener;
 import com.thetatechno.fluidadmin.listeners.OnLinkToFacilityClickedListener;
-import com.thetatechno.fluidadmin.model.Staff;
+import com.thetatechno.fluidadmin.model.staff_model.Staff;
 import com.thetatechno.fluidadmin.ui.EspressoTestingIdlingResource;
 import com.thetatechno.fluidadmin.utils.Constants;
 import com.thetatechno.fluidadmin.utils.EnumCode;
 
-import java.io.FileFilter;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 

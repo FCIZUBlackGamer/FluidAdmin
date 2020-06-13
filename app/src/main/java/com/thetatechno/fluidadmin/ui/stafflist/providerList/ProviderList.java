@@ -22,11 +22,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.thetatechno.fluidadmin.R;
-import com.thetatechno.fluidadmin.model.Staff;
-import com.thetatechno.fluidadmin.model.StaffData;
+import com.thetatechno.fluidadmin.model.staff_model.Staff;
+import com.thetatechno.fluidadmin.model.staff_model.StaffData;
+import com.thetatechno.fluidadmin.model.staff_model.StaffListModel;
 import com.thetatechno.fluidadmin.ui.EspressoTestingIdlingResource;
 import com.thetatechno.fluidadmin.ui.stafflist.StaffListViewModel;
 import com.thetatechno.fluidadmin.utils.App;
@@ -73,23 +75,20 @@ public class ProviderList extends Fragment implements SearchView.OnQueryTextList
         providerListViewModel = ViewModelProviders.of(this).get(StaffListViewModel.class);
         providerListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         EspressoTestingIdlingResource.increment();
-        providerListViewModel.getStaffData(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase(), EnumCode.StaffTypeCode.PRVDR.toString()).observe(getViewLifecycleOwner(), new Observer<StaffData>() {
+        providerListViewModel.getStaffData(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase(), EnumCode.StaffTypeCode.PRVDR.toString()).observe(getViewLifecycleOwner(), new Observer<StaffListModel>() {
             @Override
-            public void onChanged(StaffData staffData) {
+            public void onChanged(StaffListModel staffData) {
 
-                if (staffData != null) {
-                    if (staffData.getStaffList() != null) {
+                if (staffData.getStaffData() != null) {
                         EspressoTestingIdlingResource.increment();
-                        providerList = staffData.getStaffList();
+                        providerList = staffData.getStaffData().getStaffList();
                         providerListAdapter = new ProviderListAdapter(navController, getContext(), providerList, getActivity().getSupportFragmentManager());
                         providerListRecyclerView.setAdapter(providerListAdapter);
                         EspressoTestingIdlingResource.decrement();
 
-                    } else {
-                        Log.e(TAG, "provider List Is Null");
-                    }
                 } else {
-                    Log.e(TAG, "no data returns");
+                    Toast.makeText(getContext(),staffData.getErrorMessage(),Toast.LENGTH_SHORT).show();
+
                 }
             }
         });

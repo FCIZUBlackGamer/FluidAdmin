@@ -64,4 +64,7 @@
     <string name="link_btn_txt">اربط</string>
     <string name="room_txt">غرفة</string>
     <string name="female_txt">انثي</string>
+    <string name="retry">اعد المحاولة</string>
+    <string name="no_internet_connection">لا يوجد اتصال بالشبكة</string>
+    <string name="error_try_again_txt">خطأ, حاول مرة اخري</string>
 </resources>

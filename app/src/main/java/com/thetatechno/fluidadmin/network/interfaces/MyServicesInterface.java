@@ -132,7 +132,7 @@ public interface MyServicesInterface {
     @GET("/ords/fluid/api/appointment")
     Call<AppointmentListData> getAppointments(@Query("providerId") String providerId, @Query("apptDate") String date, @Query("clientID") String clientID);
 
-    @GET("/ords/fluid/api/appointment")
+    @GET("/ords/fluid/appt/getProviderAppts")
     Call<AppointmentListData> getAppointments(@Query("providerId") String providerId, @Query("apptDate") String date);
 
     // apis for register new customer

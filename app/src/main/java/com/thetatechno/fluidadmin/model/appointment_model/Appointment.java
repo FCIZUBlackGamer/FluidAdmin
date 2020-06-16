@@ -9,13 +9,13 @@ public class Appointment {
     private String sltoId;
     @SerializedName("scheduledTime")
     @Expose
-    private String scheduledTime;
+    private String scheduledTime = "";
     @SerializedName("expectedTime")
     @Expose
-    private String expectedTime;
+    private String expectedTime = "";
     @SerializedName("arrivalTime")
     @Expose
-    private String arrivalTime;
+    private String arrivalTime = "";
     @SerializedName("isFollowup")
     @Expose
     private String isFollowup;

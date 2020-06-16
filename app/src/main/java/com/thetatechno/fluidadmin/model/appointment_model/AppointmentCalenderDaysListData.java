@@ -10,6 +10,8 @@ public class AppointmentCalenderDaysListData {
     @SerializedName("items")
     @Expose
     private ArrayList<AppointmentDayDetails> dayDetailsList ;
+    @SerializedName("error")
+    private Error error;
 
     public ArrayList<AppointmentDayDetails> getDayDetailsList() {
         return dayDetailsList;
@@ -19,4 +21,11 @@ public class AppointmentCalenderDaysListData {
         this.dayDetailsList = appointments;
     }
 
+    public Error getError() {
+        return error;
+    }
+
+    public void setError(Error error) {
+        this.error = error;
+    }
 }

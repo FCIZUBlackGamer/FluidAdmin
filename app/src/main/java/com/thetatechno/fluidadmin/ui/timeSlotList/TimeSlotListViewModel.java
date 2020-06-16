@@ -41,9 +41,8 @@ public class TimeSlotListViewModel extends ViewModel {
 
     public MutableLiveData<Staff> getProviderData(String specialityCode, String providerId) {
 
-        providerRepository.getProviderData(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase(), EnumCode.StaffTypeCode.PRVDR.toString(), specialityCode, providerId);
+        return   providerRepository.getProviderData(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase(), EnumCode.StaffTypeCode.PRVDR.toString(), specialityCode, providerId);
 
-        return providerMutableLiveData;
     }
 
 

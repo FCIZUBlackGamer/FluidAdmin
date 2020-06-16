@@ -183,6 +183,7 @@ public class TimeSlotList extends Fragment implements OnItemClickedListener {
     @Override
     public void onStart() {
         super.onStart();
+
         Toast.makeText(getActivity(), bookDate, Toast.LENGTH_SHORT).show();
         TypedValue tv = new TypedValue();
         if (getActivity().getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
@@ -314,7 +315,7 @@ public class TimeSlotList extends Fragment implements OnItemClickedListener {
 
                 } else {
                     providerImgView.setImageResource(R.drawable.man);
-                    providerNameTxtView.setText("");
+                    providerNameTxtView.setText("name 3f3f4f4f");
                     binding.providerClinicTxtView.setText("");
 
 

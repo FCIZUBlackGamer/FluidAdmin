@@ -86,23 +86,14 @@ public class StaffRepository {
             public void onResponse(Call<StaffData> call, Response<StaffData> response) {
                 if (response.code() == Constants.STATE_OK && response.body() != null) {
 
-                    if (response.body() != null) {
-                        if (response.body().getStaffList() != null) {
-
-                            Staff provider = response.body().getStaffList().get(0);
-                            staffMutableLiveData.setValue(provider);
-                        }
-                        else
-                            staffMutableLiveData.setValue(null);
+                    if (response.body().getStaffList() != null) {
+                        Staff provider = response.body().getStaffList().get(0);
+                        staffMutableLiveData.setValue(provider);
                     }
-                    staffMutableLiveData.setValue(null);
-
+                    else
+                        staffMutableLiveData.setValue(null);
 
                 }
-                    else if(response.body().getStatus()!=null)
-                    staffMutableLiveData.setValue(null);
-
-
             }
 
             @Override

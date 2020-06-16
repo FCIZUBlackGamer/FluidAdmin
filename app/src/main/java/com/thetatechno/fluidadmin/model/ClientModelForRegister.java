@@ -1,5 +1,7 @@
 package com.thetatechno.fluidadmin.model;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -230,5 +232,11 @@ public class ClientModelForRegister {
 
     public void setGardianId(String gardianId) {
         this.gardianId = gardianId;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return firstName + " "+ familyName;
     }
 }

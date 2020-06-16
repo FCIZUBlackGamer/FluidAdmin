@@ -4,6 +4,7 @@ import com.thetatechno.fluidadmin.model.AddNewOrModifyClientResponse;
 import com.thetatechno.fluidadmin.model.AddOrUpdateScheduleResponse;
 import com.thetatechno.fluidadmin.model.APIResponse;
 import com.thetatechno.fluidadmin.model.ClientModelForRegister;
+import com.thetatechno.fluidadmin.model.ConfirmAppointmentResponse;
 import com.thetatechno.fluidadmin.model.Error;
 import com.thetatechno.fluidadmin.model.appointment_model.AppointmentBooked;
 import com.thetatechno.fluidadmin.model.appointment_model.AppointmentCalenderDaysListData;
@@ -74,6 +75,7 @@ public interface MyServicesInterface {
 
     @GET("/ords/fluid/api/staff")
     Call<StaffData> getAllProviderInSpeciality(@Query("langId") String langId, @Query("typeCode") String specialityCode);
+
     @POST("/ords/fluid/api/staff")
     Call<Status> insertNewStuff(@Body Staff staff);
 
@@ -85,8 +87,10 @@ public interface MyServicesInterface {
 
     @GET("/ords/fluid/clnt/getClient")
     Call<ClientData> getAllClients(@Query("langId") String langId);
+
     @GET("/ords/fluid/api/client")
     Call<ClientData> getSpecificClientWithId(@Query("clientId") String clientId, @Query("langId") String langId);
+
     @PUT("/ords/fluid/api/addAgentFacilities")
     Call<Status> addToFacilities(@Query("staffId") String staffId, @Body FacilityCodes facilityCodes);
 
@@ -117,29 +121,31 @@ public interface MyServicesInterface {
     Call<AppointmentCalenderDaysListData> getAppointmentCalender(@Query("monthDate") String dateOfSpecificDay, @Query("specialtyCode") String specialtyCode);
 
     @GET("/ords/fluid/appt/getAvailableSlots")
-    Call<TimeSlotListData> getAvailableSlots(@Query("bookDay") String bookDay,@Query("sessionId") String sessionId, @Query("providerId") String providerId, @Query("apptLength") String apptLength, @Query("apptType") String apptType, @Query(Constants.LANG_ID) String langId);
+    Call<TimeSlotListData> getAvailableSlots(@Query("bookDay") String bookDay, @Query("sessionId") String sessionId, @Query("providerId") String providerId, @Query("apptLength") String apptLength, @Query("apptType") String apptType, @Query(Constants.LANG_ID) String langId);
 
     @POST("/ords/fluid/appt/bookAppointment")
-    Call<Status> bookAppointment(@Body AppointmentBooked appointmentBooked);
+    Call<ConfirmAppointmentResponse> bookAppointment(@Body AppointmentBooked appointmentBooked);
 
     @POST("/ords/fluid/appt/cancelAppointment")
     Call<Status> cancelAppointment(@Query("apptId") String appointmentId, @Query(Constants.LANG_ID) String langId);
 
     @GET("/ords/fluid/api/appointment")
-    Call<AppointmentListData> getAppointments(@Query("providerId") String providerId, @Query("apptDate") String date,@Query("clientID") String clientID);
+    Call<AppointmentListData> getAppointments(@Query("providerId") String providerId, @Query("apptDate") String date, @Query("clientID") String clientID);
 
     @GET("/ords/fluid/api/appointment")
     Call<AppointmentListData> getAppointments(@Query("providerId") String providerId, @Query("apptDate") String date);
+
     // apis for register new customer
     @GET("/ords/fluid/api/code")
     Call<CodeList> getIDTypesCode(@Query("codeType") String idTypeCode, @Query(Constants.LANG_ID) String langId);
+
     @POST("/ords/fluid/api/patient")
     Call<Status> addNewPatient(@Body ClientModelForRegister clientModelForRegister);
 
     @POST("/ords/fluid/clnt/addClient")
     Call<AddNewOrModifyClientResponse> addNewClient(@Body ClientModelForRegister customer);
 
-    @GET ("/ords/fluid/schedule/getSchedule")
+    @GET("/ords/fluid/schedule/getSchedule")
     Call<ScheduleResponse> getAllSchedule(@Query("langId") String langId);
 
     @POST("/ords/fluid/schedule/addSchedule")
@@ -151,7 +157,7 @@ public interface MyServicesInterface {
     @DELETE("/ords/fluid/schedule/deleteSchedule")
     Call<Error> deleteSchedule(@Query("langId") String langId, @Query("id") String id);
 
-    @GET ("/ords/fluid/session/getSession")
+    @GET("/ords/fluid/session/getSession")
     Call<SessionResponse> getAllSession(@Query("langId") String langId, @Query("scheduleId") String scheduleId);
 
     @POST("/ords/fluid/session/addSession")

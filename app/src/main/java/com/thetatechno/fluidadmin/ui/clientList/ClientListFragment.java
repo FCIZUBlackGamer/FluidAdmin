@@ -28,6 +28,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.model.ClientData;
 import com.thetatechno.fluidadmin.model.ClientListModel;
+import com.thetatechno.fluidadmin.model.ClientModelForRegister;
 import com.thetatechno.fluidadmin.model.Person;
 import com.thetatechno.fluidadmin.ui.EspressoTestingIdlingResource;
 
@@ -35,7 +36,7 @@ import java.util.List;
 
 public class ClientListFragment extends Fragment implements SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener {
 
-    private List<Person> clientList;
+    private List<ClientModelForRegister> clientList;
     private RecyclerView clientListRecyclerView;
     private ClientListViewAdapter clientListViewAdapter;
     private ClientListViewModel clientListViewModel;
@@ -74,7 +75,7 @@ public class ClientListFragment extends Fragment implements SearchView.OnQueryTe
                     if (clientData.getClientData() != null) {
                         EspressoTestingIdlingResource.increment();
                         clientList = clientData.getClientData().getPersonList();
-                        clientListViewAdapter = new ClientListViewAdapter(getContext(), clientList, getActivity().getSupportFragmentManager(),navController);
+                        clientListViewAdapter = new ClientListViewAdapter(getContext(), clientList,navController);
                         clientListRecyclerView.setAdapter(clientListViewAdapter);
                         EspressoTestingIdlingResource.decrement();
                     } else {

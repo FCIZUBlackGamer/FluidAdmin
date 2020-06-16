@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 
 
+import com.thetatechno.fluidadmin.model.ConfirmAppointmentResponse;
 import com.thetatechno.fluidadmin.model.appointment_model.AppointmentBooked;
 import com.thetatechno.fluidadmin.model.appointment_model.AppointmentCalenderDaysListData;
 import com.thetatechno.fluidadmin.model.Status;
@@ -24,7 +25,7 @@ public class AppointmentCalenderRepository {
 
     private MutableLiveData<AppointmentCalenderDaysListData> mutableLiveData = new MutableLiveData<>();
     private MutableLiveData<TimeSlotListData> timeSlotListMutableLiveData = new MutableLiveData<>();
-    private MutableLiveData<Status> statusMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<ConfirmAppointmentResponse> statusMutableLiveData = new MutableLiveData<>();
 
     public MutableLiveData<AppointmentCalenderDaysListData> getAppointmentData(String dateOfSpecificDay, String specialtyCode, String providerId, String apptLength, String apptType) {
         EspressoTestingIdlingResource.increment();
@@ -108,13 +109,13 @@ public class AppointmentCalenderRepository {
         return timeSlotListMutableLiveData;
     }
 
-    public MutableLiveData<Status> bookAppointment(AppointmentBooked appointmentBooked) {
+    public MutableLiveData<ConfirmAppointmentResponse> bookAppointment(AppointmentBooked appointmentBooked) {
 
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
-        Call<Status> call = myServicesInterface.bookAppointment(appointmentBooked);
-        call.enqueue(new Callback<Status>() {
+        Call<ConfirmAppointmentResponse> call = myServicesInterface.bookAppointment(appointmentBooked);
+        call.enqueue(new Callback<ConfirmAppointmentResponse>() {
             @Override
-            public void onResponse(Call<Status> call, Response<Status> response) {
+            public void onResponse(Call<ConfirmAppointmentResponse> call, Response<ConfirmAppointmentResponse> response) {
                 if (response.isSuccessful()) {
                     statusMutableLiveData.setValue(response.body());
                 } else {
@@ -123,7 +124,7 @@ public class AppointmentCalenderRepository {
             }
 
             @Override
-            public void onFailure(Call<Status> call, Throwable t) {
+            public void onFailure(Call<ConfirmAppointmentResponse> call, Throwable t) {
                 t.printStackTrace();
                 statusMutableLiveData.setValue(null);
             }

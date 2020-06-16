@@ -34,6 +34,7 @@ import com.bumptech.glide.Glide;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.databinding.FragmentTimeSlotListBinding;
 import com.thetatechno.fluidadmin.listeners.OnItemClickedListener;
+import com.thetatechno.fluidadmin.model.ConfirmAppointmentResponse;
 import com.thetatechno.fluidadmin.model.appointment_model.AppointmentDayDetails;
 import com.thetatechno.fluidadmin.model.staff_model.Staff;
 import com.thetatechno.fluidadmin.model.Status;
@@ -253,7 +254,7 @@ public class TimeSlotList extends Fragment implements OnItemClickedListener {
         cancelBtn.setOnClickListener(v -> {
             navController.popBackStack();
         });
-        confirmBtn.setOnClickListener(v -> confirmAppointmentBooking(selectedTimeSlot.getSlotId()));
+        confirmBtn.setOnClickListener(v -> confirmAppointmentBooking(selectedTimeSlot.getTime()));
     }
 
     private void updateDataWhileSwipingOnProviderList() {
@@ -345,12 +346,12 @@ public class TimeSlotList extends Fragment implements OnItemClickedListener {
         handlingPreviousAndNextPages();
     }
 
-    private void confirmAppointmentBooking(String appointmentId) {
-        timeSlotListViewModel.bookAppointment(clientId, appointmentId).observe(getViewLifecycleOwner(), new Observer<Status>() {
+    private void confirmAppointmentBooking(String appointmentTime) {
+        timeSlotListViewModel.bookAppointment(appointmentDayDetailsForSpecificProviderArrayList.get(timeSlotsViewPager.getCurrentItem()).getSessionCode(), appointmentTime,clientId).observe(getViewLifecycleOwner(), new Observer<ConfirmAppointmentResponse>() {
             @Override
-            public void onChanged(Status status) {
+            public void onChanged(ConfirmAppointmentResponse status) {
                 if (status != null) {
-                    if (status.getStatus().equals("0")) {
+                    if (status.getError().getErrorCode()==0) {
                         Toast.makeText(getContext(), "booking success", Toast.LENGTH_SHORT).show();
                         Bundle bundle = new Bundle();
                         bundle.putString(ARG_PROVIDER_NAME, providerNameTxtView.getText().toString());
@@ -359,7 +360,7 @@ public class TimeSlotList extends Fragment implements OnItemClickedListener {
                         bundle.putString(ARG_SPECIALITY_CODE, specialityCode);
                         navController.navigate(R.id.action_timeSlotList_to_confirmAppointment, bundle);
                     }
-                    Toast.makeText(getContext(), status.getStatus(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), status.getError().getErrorMessage(), Toast.LENGTH_SHORT).show();
                 }
 
             }

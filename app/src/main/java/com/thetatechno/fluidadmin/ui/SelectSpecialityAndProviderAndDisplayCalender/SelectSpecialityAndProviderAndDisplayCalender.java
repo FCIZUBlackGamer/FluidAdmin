@@ -26,6 +26,7 @@ import androidx.navigation.Navigation;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.databinding.FragmentBookAppointmentBinding;
 import com.thetatechno.fluidadmin.model.ClientData;
+import com.thetatechno.fluidadmin.model.ClientModelForRegister;
 import com.thetatechno.fluidadmin.model.Person;
 import com.thetatechno.fluidadmin.model.appointment_model.AppointmentCalenderDaysListData;
 import com.thetatechno.fluidadmin.model.appointment_model.AppointmentDayDetails;
@@ -50,7 +51,7 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
     private ArrayList<Code> specialitiesList = new ArrayList<>();
     private ArrayList<Branch> sitesList = new ArrayList<>();
     private ArrayList<Staff> providerList = new ArrayList<>();
-    private ArrayList<Person> clientList = new ArrayList<>();
+    private ArrayList<ClientModelForRegister> clientList = new ArrayList<>();
     private FragmentBookAppointmentBinding binding;
     private String specialityCode = "";
     private String siteCode = "";
@@ -99,7 +100,7 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
         binding.clientListTxtView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                clientId = clientList.get(position).getId();
+                clientId = clientList.get(position).getClientId();
             }
         });
 
@@ -387,9 +388,9 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
 
             if (clientData != null) {
                 if (clientData.getPersonList() != null)
-                    clientList = (ArrayList<Person>) clientData.getPersonList();
-                ArrayAdapter<Person> adapter =
-                        new ArrayAdapter<Person>(getContext(), R.layout.dropdown_menu_popup_item, clientList);
+                    clientList = (ArrayList<ClientModelForRegister>) clientData.getPersonList();
+                ArrayAdapter<ClientModelForRegister> adapter =
+                        new ArrayAdapter<ClientModelForRegister>(getContext(), R.layout.dropdown_menu_popup_item, clientList);
                 binding.clientListTxtView.setAdapter(adapter);
 
             }

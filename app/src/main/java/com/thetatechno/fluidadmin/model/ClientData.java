@@ -8,12 +8,12 @@ import java.util.List;
 public class ClientData {
     @SerializedName("items")
     @Expose
-    private List<Person> personList = null;
+    private List<ClientModelForRegister> personList = null;
     @SerializedName("error")
     @Expose
     private Error error;
 
-    public void setPersonList(List<Person> personList) {
+    public void setPersonList(List<ClientModelForRegister> personList) {
         this.personList = personList;
     }
 
@@ -25,11 +25,11 @@ public class ClientData {
         this.error = error;
     }
 
-    public List<Person> getPersonList() {
+    public List<ClientModelForRegister> getPersonList() {
         return personList;
     }
 
-    public void setFacilities(List<Person> data) {
+    public void setFacilities(List<ClientModelForRegister> data) {
         this.personList = data;
     }
 

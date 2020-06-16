@@ -14,9 +14,8 @@ public class AppointmentDayDetails implements Parcelable {
     @Expose
 
     int availableSlots;
-    @SerializedName("sessionId")
+    @SerializedName("sessionCode")
     @Expose
-
     String sessionId;
 
     @SerializedName("providerId")

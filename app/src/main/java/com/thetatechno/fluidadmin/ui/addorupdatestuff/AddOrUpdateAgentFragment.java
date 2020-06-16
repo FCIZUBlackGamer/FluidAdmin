@@ -91,7 +91,6 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_add_or_update_agent, container, false);
     }
 
@@ -127,7 +126,6 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 agentIdInputLayout.setErrorEnabled(false);
-                agentIdInputLayout.setHelperTextEnabled(false);
 
             }
 
@@ -144,7 +142,6 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 agentFirstNameInputLayout.setErrorEnabled(false);
-                agentFirstNameInputLayout.setHelperTextEnabled(false);
 
             }
 
@@ -162,7 +159,6 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 agentFamilyNameInputLayout.setErrorEnabled(false);
-                agentFamilyNameInputLayout.setHelperTextEnabled(false);
 
 
             }
@@ -225,11 +221,6 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
         addBtn = view.findViewById(R.id.addOrUpdateAgentBtn);
         cancelBtn = view.findViewById(R.id.cancel_btn);
         addProfileImg = view.findViewById(R.id.addProfileImg);
-        agentIdInputLayout.setHelperText("Id is mandatory");
-        agentFamilyNameInputLayout.setHelperText("Family Name is mandatory");
-        agentFirstNameInputLayout.setHelperText("First Name is mandatory");
-
-
     }
 
     private void getDataFromUi() {
@@ -249,7 +240,6 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
     }
 
     private void onAddOrUpdateSuccessfully() {
-
         EspressoTestingIdlingResource.increment();
 
         navController.navigate(R.id.agentList, null,
@@ -259,7 +249,6 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
         EspressoTestingIdlingResource.decrement();
 
     }
-
 
     private void updateData() {
         if (staff != null) {
@@ -293,7 +282,7 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
                 }
 
             }
-            ((HomeActivity) getActivity()).getSupportActionBar().setTitle("update agent");
+            ((HomeActivity) requireActivity()).getSupportActionBar().setTitle("update agent");
 
         } else {
             staff = new Staff();
@@ -429,10 +418,8 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
                 EspressoTestingIdlingResource.increment();
                 Log.i("AddOrUpdate", "add agent message" + addNewAgentMessage);
                 if (addNewAgentMessage.contains("success")) {
-
                     onAddOrUpdateSuccessfully();
                     Toast.makeText(getContext(), addNewAgentMessage, Toast.LENGTH_SHORT).show();
-
 
                 } else if (addNewAgentMessage.contains("Failed")) {
 

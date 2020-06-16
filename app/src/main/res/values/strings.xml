@@ -129,4 +129,7 @@
     <string name="retry">Retry</string>
     <string name="no_internet_connection">No internet connection</string>
     <string name="error_try_again_txt">Error, Try Again</string>
+    <string name="working_hours_txt">Working Hours</string>
+    <string name="working_days_txt">Working Days</string>
+    <string name="guard_id">Guard ID</string>
 </resources>

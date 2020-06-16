@@ -120,6 +120,7 @@ public class Appointments extends Fragment {
                 navController.navigate(R.id.action_appointments_to_selectSpecialityAndProviderAndDisplayCalender);
             }
         });
+        date = appointmentsViewModel.getTodayDateInFormat();
         appointmentsViewModel.getAppointments(providerId,date).observe(getViewLifecycleOwner(), appointmentsObserver);
 
         return binding.getRoot();

@@ -88,7 +88,7 @@ public class SessionListAdapter extends RecyclerView.Adapter<SessionListAdapter.
                                     bundle.putSerializable(ARG_SESSION, (Serializable) sessionList.get(position));
                                     navController.navigate(R.id.action_sessionFragment_to_fragmentAddOrUpdateSesssion, bundle);
                                     break;
-                                case R.id.deleteCode:
+                                case R.id.deleteSession:
                                     if (listener != null)
                                         listener.onDeleteButtonClicked(sessionList.get(position));
 

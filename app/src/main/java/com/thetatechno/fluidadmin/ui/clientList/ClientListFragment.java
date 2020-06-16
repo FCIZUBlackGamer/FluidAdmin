@@ -33,9 +33,6 @@ import com.thetatechno.fluidadmin.ui.EspressoTestingIdlingResource;
 
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class ClientListFragment extends Fragment implements SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener {
 
     private List<Person> clientList;
@@ -52,11 +49,9 @@ public class ClientListFragment extends Fragment implements SearchView.OnQueryTe
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_client_list, container, false);
     }
 
@@ -64,7 +59,6 @@ public class ClientListFragment extends Fragment implements SearchView.OnQueryTe
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
-
         clientListRecyclerView = view.findViewById(R.id.clientListView);
         clientListViewModel = ViewModelProviders.of(this).get(ClientListViewModel.class);
         bookAppointmentBtn = view.findViewById(R.id.bookNewAppointmentBtn);
@@ -76,14 +70,12 @@ public class ClientListFragment extends Fragment implements SearchView.OnQueryTe
             @Override
             public void onChanged(ClientListModel clientData) {
                 EspressoTestingIdlingResource.increment();
-                clientSwipeLayout.setRefreshing(true);
                 if (clientData != null) {
                     if (clientData.getClientData() != null) {
                         EspressoTestingIdlingResource.increment();
                         clientList = clientData.getClientData().getPersonList();
                         clientListViewAdapter = new ClientListViewAdapter(getContext(), clientList, getActivity().getSupportFragmentManager(),navController);
                         clientListRecyclerView.setAdapter(clientListViewAdapter);
-
                         EspressoTestingIdlingResource.decrement();
                     } else {
                         Snackbar.make(clientSwipeLayout,clientData.getFailureErrorMessage(),Snackbar.LENGTH_LONG).setAction(R.string.retry, new View.OnClickListener() {
@@ -97,7 +89,6 @@ public class ClientListFragment extends Fragment implements SearchView.OnQueryTe
                 } else {
                     Log.e(TAG, "no data returns");
                 }
-                clientSwipeLayout.setRefreshing(false);
                 EspressoTestingIdlingResource.decrement();
 
             }
@@ -145,7 +136,6 @@ public class ClientListFragment extends Fragment implements SearchView.OnQueryTe
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-
         inflater.inflate(R.menu.home, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
         searchView = (SearchView) searchItem.getActionView();

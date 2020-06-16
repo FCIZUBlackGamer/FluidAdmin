@@ -25,6 +25,7 @@ import androidx.navigation.Navigation;
 
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.databinding.FragmentRegisterPage3Binding;
+import com.thetatechno.fluidadmin.model.AddNewOrModifyClientResponse;
 import com.thetatechno.fluidadmin.model.ClientModelForRegister;
 import com.thetatechno.fluidadmin.model.Status;
 import com.thetatechno.fluidadmin.model.code_model.Code;
@@ -35,7 +36,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 
-public class RegisterPage3 extends Fragment implements TextWatcher {
+public class AddNewClient extends Fragment implements TextWatcher {
     private RegisterViewModel viewModel;
     private FragmentRegisterPage3Binding binding;
     private ArrayList<Code> nationalityList;
@@ -75,10 +76,9 @@ public class RegisterPage3 extends Fragment implements TextWatcher {
         }
     };
 
-    public RegisterPage3() {
+    public AddNewClient() {
         // Required empty public constructor
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -91,7 +91,7 @@ public class RegisterPage3 extends Fragment implements TextWatcher {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_register_page_3, container, false);
         viewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
-        navController = Navigation.findNavController(requireActivity(),R.id.nav_host_fragment);
+        navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
         viewModel.getNationalityList().observe(getViewLifecycleOwner(), nationalityListObserver);
         viewModel.getIDTypes().observe(getViewLifecycleOwner(), idTypesObserver);
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
@@ -149,37 +149,31 @@ public class RegisterPage3 extends Fragment implements TextWatcher {
     }
 
     private void addNewPatient() {
-        viewModel.addNewClient(binding.firstnameEditTxt.getText().toString(),
+        viewModel.addNewCustomer(binding.firstnameEditTxt.getText().toString(),
                 binding.middleNameEdtTxt.getText().toString(),
                 binding.lastNameEdtTxt.getText().toString(),
                 binding.emailEditTxt.getText().toString(),
                 binding.phoneTextEditTxt.getText().toString(),
                 binding.dateOfBirthEdtTxt.getText().toString(),
-                gender, nationalityCode, idTypeCode, binding.identityNumberTxt.getText().toString()).observe(getViewLifecycleOwner(), new Observer<Status>() {
-
+                binding.guardIdEdtTxt.getText().toString(),
+                gender, nationalityCode, idTypeCode, binding.identityNumberTxt.getText().toString()).observe(getViewLifecycleOwner(), new Observer<AddNewOrModifyClientResponse>() {
             @Override
-            public void onChanged(Status status) {
-                if (status != null) {
-                    if (Integer.parseInt(status.getStatus()) > 0) {
-                        Toast.makeText(getContext(), R.string.user_created_sueccfully, Toast.LENGTH_SHORT).show();
+            public void onChanged(AddNewOrModifyClientResponse addNewOrModifyClientResponse) {
+                if (addNewOrModifyClientResponse != null) {
+                    if (addNewOrModifyClientResponse.getError() != null && addNewOrModifyClientResponse.getError().getErrorCode() == 0) {
                         redirectToClientList();
-                    } else if (Integer.parseInt(status.getStatus()) == NULL_PARAMETER) {
-                        Toast.makeText(getContext(), R.string.null_parameter_txt, Toast.LENGTH_SHORT).show();
-
-                    }else if (Integer.parseInt(status.getStatus()) == USER_NOT_EXIST) {
-                        Toast.makeText(getContext(), R.string.user_not_exist, Toast.LENGTH_SHORT).show();
                     }
-                    else {
-                        Toast.makeText(getContext(), getString(R.string.error_with_status_code_txt) + status.getStatus(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), addNewOrModifyClientResponse.getError().getErrorMessage(), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "Error, Try later", Toast.LENGTH_SHORT).show();
 
-                    }
                 }
             }
         });
     }
 
     private void redirectToClientList() {
-navController.popBackStack();
+        navController.popBackStack();
     }
 
     private void showDatePicker() {
@@ -279,6 +273,7 @@ navController.popBackStack();
     public void afterTextChanged(Editable s) {
 
     }
+
 }
 
 

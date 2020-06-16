@@ -22,7 +22,8 @@
             android:layout_height="70dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -39,30 +40,31 @@
             android:textAppearance="?android:textAppearanceLarge"
             android:textColor="@color/colorPrimary"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/person_img" />
+            app:layout_constraintTop_toTopOf="@+id/fullNameTxt" />
 
         <TextView
             android:id="@+id/fullNameTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:paddingStart="5dp"
+            android:paddingEnd="4dp"
             android:text="@string/name_txt"
             android:textColor="@color/colorPrimary"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:paddingStart="5dp"
-            android:paddingEnd="4dp"
             app:layout_constraintStart_toEndOf="@+id/person_img"
-            app:layout_constraintTop_toTopOf="@+id/person_img" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/idTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="@string/agent_id"
-            android:paddingEnd="4dp"
             android:paddingStart="5dp"
+            android:paddingEnd="4dp"
+            android:text="@string/agent_id"
             app:layout_constraintStart_toStartOf="@+id/fullNameTxt"
             app:layout_constraintTop_toBottomOf="@+id/fullNameTxt" />
 
@@ -96,9 +98,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
-            android:layout_marginTop="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

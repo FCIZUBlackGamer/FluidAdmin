@@ -477,6 +477,7 @@ public class AddOrUpdateProviderFragment extends Fragment {
             providerfirstNameEditTxt.setText(staff.getFirstName());
             providerLastNameEditTxt.setText(staff.getFamilyName());
             providerEmailEditTxt.setText(staff.getEmail());
+            providerMobileEditTxt.setText(staff.getMobileNumber());
             if (staff.getGender() == EnumCode.Gender.F.toString())
                 genderRadioGroup.check(R.id.femaleRadioButton);
             else if (staff.getGender().equals(EnumCode.Gender.M.toString()))

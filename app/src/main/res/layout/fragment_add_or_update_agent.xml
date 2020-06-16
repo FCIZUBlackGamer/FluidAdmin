@@ -27,7 +27,9 @@
 
             android:id="@+id/agentIdTxtInputLayout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_marginStart="@dimen/_32sdp"
+            android:layout_marginEnd="@dimen/_32sdp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -36,9 +38,8 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/agentIdEdtTxt"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="12"
                 android:hint="@string/id_txt"
                 android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -46,7 +47,9 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/agentFirstNameInputLayout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_marginStart="@dimen/_32sdp"
+            android:layout_marginEnd="@dimen/_32sdp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             app:layout_constraintStart_toStartOf="@+id/agentIdTxtInputLayout"
@@ -54,9 +57,8 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/agentFirstNameEdtTxt"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="12"
                 android:hint="@string/first_name"
                 android:inputType="textPersonName" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -64,18 +66,19 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/agentFamilyNameInputLayout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
+            android:layout_marginStart="@dimen/_32sdp"
+            android:layout_marginEnd="@dimen/_32sdp"
             android:hint="@string/family_name_txt"
             app:layout_constraintStart_toStartOf="@id/agentFirstNameInputLayout"
             app:layout_constraintTop_toBottomOf="@+id/agentFirstNameInputLayout">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/agentFamilyNameEdtTxt"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="12"
                 android:inputType="textPersonName"
 
                 />
@@ -84,9 +87,11 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/agentEmailInputLayout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
+            android:layout_marginStart="@dimen/_32sdp"
+            android:layout_marginEnd="@dimen/_32sdp"
             app:layout_constraintEnd_toEndOf="@id/agentFamilyNameInputLayout"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="@id/agentFamilyNameInputLayout"
@@ -94,9 +99,8 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/agentEmailEditTxt"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="12"
                 android:hint="@string/email_prompt"
                 android:inputType="textEmailAddress" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -105,7 +109,9 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/agentMobileInputLayout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_marginStart="@dimen/_32sdp"
+            android:layout_marginEnd="@dimen/_32sdp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:hint="@string/number_prompt"
@@ -116,16 +122,15 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/agentMobileEdtTxt"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="12"
                 android:inputType="phone" />
         </com.google.android.material.textfield.TextInputLayout>
         <TextView
             android:id="@+id/gender_txt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/_16sdp"
             android:autoSizeTextType="uniform"
             android:text="@string/gender_txt"
             android:textColor="@color/colorPrimary"

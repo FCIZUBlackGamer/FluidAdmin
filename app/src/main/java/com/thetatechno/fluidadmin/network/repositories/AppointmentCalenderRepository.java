@@ -117,8 +117,6 @@ public class AppointmentCalenderRepository {
             public void onResponse(Call<Status> call, Response<Status> response) {
                 if (response.isSuccessful()) {
                     statusMutableLiveData.setValue(response.body());
-                    if (response.body() != null)
-                        Log.i("Response", response.body().getStatus());
                 } else {
                     statusMutableLiveData.setValue(null);
                 }

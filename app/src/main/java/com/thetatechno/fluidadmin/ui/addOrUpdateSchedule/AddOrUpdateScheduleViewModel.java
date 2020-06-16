@@ -3,6 +3,7 @@ package com.thetatechno.fluidadmin.ui.addOrUpdateSchedule;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.thetatechno.fluidadmin.model.AddOrUpdateScheduleResponse;
 import com.thetatechno.fluidadmin.model.Error;
 import com.thetatechno.fluidadmin.model.staff_model.StaffData;
 import com.thetatechno.fluidadmin.model.branches_model.BranchesResponse;
@@ -25,11 +26,13 @@ public class AddOrUpdateScheduleViewModel extends ViewModel {
     private BranchesRepository branchesRepository = new BranchesRepository();
     private String branchDescriptionValidateMessage, branchAddressValidateMessage, emailValidateMessage, imgUrlValidateMessage, idValidateMessage, phoneNumberMessage;
 
-    public MutableLiveData<Error> addSchedule(Schedule schedule) {
+    public MutableLiveData<AddOrUpdateScheduleResponse> addSchedule(Schedule schedule) {
+        schedule.setLangId(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE));
         return scheduleRepository.addSchedule(schedule);
     }
 
-    public MutableLiveData<Error> updateSchedule(Schedule schedule) {
+    public MutableLiveData<AddOrUpdateScheduleResponse> updateSchedule(Schedule schedule) {
+        schedule.setLangId(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE));
         return scheduleRepository.modifySchedule(schedule);
     }
 

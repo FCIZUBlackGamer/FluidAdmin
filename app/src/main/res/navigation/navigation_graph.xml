@@ -147,7 +147,7 @@
         android:label="ConfirmAppointment" />
     <fragment
         android:id="@+id/registerPage3"
-        android:name="com.thetatechno.fluidadmin.ui.RegisterPage3"
+        android:name="com.thetatechno.fluidadmin.ui.AddNewClient"
         android:label="Add new client" />
     <fragment
         android:id="@id/scheduleFragment"

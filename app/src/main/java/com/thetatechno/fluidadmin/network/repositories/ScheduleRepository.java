@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
+import com.thetatechno.fluidadmin.model.AddOrUpdateScheduleResponse;
 import com.thetatechno.fluidadmin.model.Error;
 
 import com.thetatechno.fluidadmin.model.shedule.Schedule;
@@ -22,8 +23,8 @@ import retrofit2.Response;
 public class ScheduleRepository {
 
     private MutableLiveData<ScheduleResponse> scheduleResponseLiveData = new MutableLiveData<>();
-    private MutableLiveData<Error> addScheduleLiveData = new MutableLiveData<>();
-    private MutableLiveData<Error> updateScheduleLiveData = new MutableLiveData<>();
+    private MutableLiveData<AddOrUpdateScheduleResponse> addScheduleLiveData = new MutableLiveData<>();
+    private MutableLiveData<AddOrUpdateScheduleResponse> updateScheduleLiveData = new MutableLiveData<>();
     private MutableLiveData<Error> deleteScheduleLiveData = new MutableLiveData<>();
 
     private static String TAG = CodeRepository.class.getSimpleName();
@@ -55,14 +56,14 @@ public class ScheduleRepository {
         return scheduleResponseLiveData;
     }
 
-    public MutableLiveData<Error> addSchedule(final Schedule schedule) {
+    public MutableLiveData<AddOrUpdateScheduleResponse> addSchedule(final Schedule schedule) {
 
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
-        Call<Error> call = myServicesInterface.addSchedule(schedule, PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
-        call.enqueue(new Callback<Error>() {
+        Call<AddOrUpdateScheduleResponse> call = myServicesInterface.addSchedule(schedule);
+        call.enqueue(new Callback<AddOrUpdateScheduleResponse>() {
 
             @Override
-            public void onResponse(Call<Error> call, Response<Error> response) {
+            public void onResponse(Call<AddOrUpdateScheduleResponse> call, Response<AddOrUpdateScheduleResponse> response) {
                 Log.i(TAG, "insertCode: response " + response.toString());
                 if (response.isSuccessful()) {
                     addScheduleLiveData.setValue(response.body());
@@ -71,7 +72,7 @@ public class ScheduleRepository {
             }
 
             @Override
-            public void onFailure(Call<Error> call, Throwable t) {
+            public void onFailure(Call<AddOrUpdateScheduleResponse> call, Throwable t) {
                 addScheduleLiveData.setValue(null);
                 t.printStackTrace();
             }
@@ -80,14 +81,14 @@ public class ScheduleRepository {
         return addScheduleLiveData;
     }
 
-    public MutableLiveData<Error> modifySchedule(final Schedule schedule) {
+    public MutableLiveData<AddOrUpdateScheduleResponse> modifySchedule(final Schedule schedule) {
 
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
-        Call<Error> call = myServicesInterface.addSchedule(schedule, PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
-        call.enqueue(new Callback<Error>() {
+        Call<AddOrUpdateScheduleResponse> call = myServicesInterface.updateSchedule(schedule);
+        call.enqueue(new Callback<AddOrUpdateScheduleResponse>() {
 
             @Override
-            public void onResponse(Call<Error> call, Response<Error> response) {
+            public void onResponse(Call<AddOrUpdateScheduleResponse> call, Response<AddOrUpdateScheduleResponse> response) {
                 Log.i(TAG, "insertCode: response " + response.toString());
                 if (response.isSuccessful()) {
                     updateScheduleLiveData.setValue(response.body());
@@ -96,7 +97,7 @@ public class ScheduleRepository {
             }
 
             @Override
-            public void onFailure(Call<Error> call, Throwable t) {
+            public void onFailure(Call<AddOrUpdateScheduleResponse> call, Throwable t) {
                 updateScheduleLiveData.setValue(null);
                 t.printStackTrace();
             }

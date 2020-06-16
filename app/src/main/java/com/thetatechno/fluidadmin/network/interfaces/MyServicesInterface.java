@@ -1,5 +1,8 @@
 package com.thetatechno.fluidadmin.network.interfaces;
 
+import com.thetatechno.fluidadmin.model.AddNewOrModifyClientResponse;
+import com.thetatechno.fluidadmin.model.AddOrUpdateScheduleResponse;
+import com.thetatechno.fluidadmin.model.APIResponse;
 import com.thetatechno.fluidadmin.model.ClientModelForRegister;
 import com.thetatechno.fluidadmin.model.Error;
 import com.thetatechno.fluidadmin.model.appointment_model.AppointmentBooked;
@@ -80,7 +83,7 @@ public interface MyServicesInterface {
     @DELETE("/ords/fluid/api/staff")
     Call<Status> deleteStuff(@Query("staffId") String staffId);
 
-    @GET("/ords/fluid/api/client")
+    @GET("/ords/fluid/clnt/getClient")
     Call<ClientData> getAllClients(@Query("langId") String langId);
     @GET("/ords/fluid/api/client")
     Call<ClientData> getSpecificClientWithId(@Query("clientId") String clientId, @Query("langId") String langId);
@@ -128,22 +131,22 @@ public interface MyServicesInterface {
     @GET("/ords/fluid/api/appointment")
     Call<AppointmentListData> getAppointments(@Query("providerId") String providerId, @Query("apptDate") String date);
     // apis for register new customer
-
     @GET("/ords/fluid/api/code")
     Call<CodeList> getIDTypesCode(@Query("codeType") String idTypeCode, @Query(Constants.LANG_ID) String langId);
-
     @POST("/ords/fluid/api/patient")
     Call<Status> addNewPatient(@Body ClientModelForRegister clientModelForRegister);
 
+    @POST("/ords/fluid/clnt/addClient")
+    Call<AddNewOrModifyClientResponse> addNewClient(@Body ClientModelForRegister customer);
 
     @GET ("/ords/fluid/schedule/getSchedule")
     Call<ScheduleResponse> getAllSchedule(@Query("langId") String langId);
 
     @POST("/ords/fluid/schedule/addSchedule")
-    Call<Error> addSchedule(@Body Schedule schedule, @Query("langId") String langId);
+    Call<AddOrUpdateScheduleResponse> addSchedule(@Body Schedule schedule);
 
     @PUT("/ords/fluid/schedule/modifySchedule")
-    Call<Error> updateSchedule(@Body Schedule schedule, @Query("langId") String langId);
+    Call<AddOrUpdateScheduleResponse> updateSchedule(@Body Schedule schedule);
 
     @DELETE("/ords/fluid/schedule/deleteSchedule")
     Call<Error> deleteSchedule(@Query("langId") String langId, @Query("id") String id);
@@ -152,10 +155,10 @@ public interface MyServicesInterface {
     Call<SessionResponse> getAllSession(@Query("langId") String langId, @Query("scheduleId") String scheduleId);
 
     @POST("/ords/fluid/session/addSession")
-    Call<Error> addSession(@Body Session session);
+    Call<APIResponse> addSession(@Body Session session);
 
     @PUT("/ords/fluid/session/modifySession")
-    Call<Error> modifySession(@Body Session session);
+    Call<APIResponse> modifySession(@Body Session session);
 
     @DELETE("/ords/fluid/session/deleteSession")
     Call<Error> deleteSession(@Query("langId") String langId, @Query("id") String id);

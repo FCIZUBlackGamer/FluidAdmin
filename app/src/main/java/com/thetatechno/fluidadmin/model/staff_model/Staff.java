@@ -14,25 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Staff extends Person implements Parcelable {
-    @SerializedName("staffId")
-    @Expose
-    private String staffId;
-    @SerializedName("specialityCode")
-    @Expose
-    private String specialityCode;
-    @SerializedName("typeCode")
-    @Expose
-    private String typeCode;
-    @SerializedName("FACLITIES")
-    @Expose
-    private List<Facility> facilityList = new ArrayList<>();
-    @SerializedName("speciality")
-    @Expose
-    private String speciality;
-    @SerializedName("langId")
-    @Expose
-    private String langId;
-
     public Staff(Parcel in) {
         staffId = in.readString();
         specialityCode = in.readString();
@@ -52,6 +33,25 @@ public class Staff extends Person implements Parcelable {
             return new Staff[size];
         }
     };
+
+    @SerializedName("staffId")
+    @Expose
+    private String staffId;
+    @SerializedName("specialityCode")
+    @Expose
+    private String specialityCode;
+    @SerializedName("typeCode")
+    @Expose
+    private String typeCode;
+    @SerializedName("FACLITIES")
+    @Expose
+    private List<Facility> facilityList = new ArrayList<>();
+    @SerializedName("speciality")
+    @Expose
+    private String speciality;
+    @SerializedName("langId")
+    @Expose
+    private String langId;
 
     public String getStaffId() {
         return staffId;
@@ -122,6 +122,6 @@ public class Staff extends Person implements Parcelable {
     @NonNull
     @Override
     public String toString() {
-        return getFirstName() + getFamilyName();
+        return getFirstName() + " " + getFamilyName();
     }
 }

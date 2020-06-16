@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.thetatechno.fluidadmin.listeners.OnDataChangedCallBackListener;
 import com.thetatechno.fluidadmin.listeners.OnHandlingErrorCallback;
+import com.thetatechno.fluidadmin.model.AddNewOrModifyClientResponse;
 import com.thetatechno.fluidadmin.model.ClientData;
 import com.thetatechno.fluidadmin.model.ClientListModel;
 import com.thetatechno.fluidadmin.model.ClientModelForRegister;
@@ -19,7 +20,7 @@ import retrofit2.Response;
 public class ClientRepository {
     MutableLiveData<ClientListModel> clientListModelMutableLiveData = new MutableLiveData<>();
     MutableLiveData<ClientData> clientsMutableLiveData = new MutableLiveData<>();
-
+    private MutableLiveData<AddNewOrModifyClientResponse> addNewOrModifyClientResponseMutableLiveData = new MutableLiveData<>();
     MutableLiveData<Status> statusMutableLiveData = new MutableLiveData<>();
     private static String TAG = ClientRepository.class.getSimpleName();
 
@@ -91,4 +92,29 @@ public class ClientRepository {
         });
         return statusMutableLiveData;
     }
+
+    public MutableLiveData<AddNewOrModifyClientResponse> addNewCustomer(ClientModelForRegister customer){
+        MyServicesInterface myServicesInterface = RetrofitInstance.getService();
+        Call<AddNewOrModifyClientResponse> call = myServicesInterface.addNewClient(customer);
+        call.enqueue(new Callback<AddNewOrModifyClientResponse>() {
+
+            @Override
+            public void onResponse(Call<AddNewOrModifyClientResponse> call, Response<AddNewOrModifyClientResponse> response) {
+                if (response.isSuccessful()) {
+                    addNewOrModifyClientResponseMutableLiveData.setValue(response.body());
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<AddNewOrModifyClientResponse> call, Throwable t) {
+
+                addNewOrModifyClientResponseMutableLiveData.setValue(null);
+                t.printStackTrace();
+            }
+
+        });
+        return  addNewOrModifyClientResponseMutableLiveData;
+    }
+
 }

@@ -67,9 +67,9 @@
         android:textColor="@color/colorPrimary"
         android:textSize="@dimen/name_txt_size"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/facilityTextViewOptions"
+        app:layout_constraintBottom_toBottomOf="@id/facilityTextViewOptions"
         app:layout_constraintStart_toEndOf="@+id/facilityImgView"
-        app:layout_constraintTop_toTopOf="@+id/facilityTextViewOptions" />
+        app:layout_constraintTop_toTopOf="@id/facilityTextViewOptions" />
     <TextView
         android:id="@+id/branchTxt"
         android:layout_width="wrap_content"

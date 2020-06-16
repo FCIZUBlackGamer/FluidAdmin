@@ -21,7 +21,7 @@ public class AddOrUpdateViewModel extends ViewModel {
         staffRepository.insertNewStaff(staff, new OnDataChangedCallBackListener<String>() {
             @Override
             public void onResponse(String b) {
-                if (Integer.parseInt(b) > 0) {
+                if (Integer.parseInt(b) == 0) {
                     message = "Added successfully";
                     addedSuccessLiveData.setValue(message);
                 } else if (b.equals(Constants.ADD_DELETE_OR_UPDATE_FAIL_STATE))
@@ -37,7 +37,7 @@ public class AddOrUpdateViewModel extends ViewModel {
         staffRepository.updateStaff(staff, new OnDataChangedCallBackListener<String>() {
             @Override
             public void onResponse(String b) {
-                if (Integer.parseInt(b) > 0) {
+                if (Integer.parseInt(b) == 0) {
                     message = "updated successfully";
                     addedSuccessLiveData.setValue(message);
                 } else if (b.equals(Constants.ADD_DELETE_OR_UPDATE_FAIL_STATE))

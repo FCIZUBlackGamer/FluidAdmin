@@ -96,16 +96,18 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-binding.clientListTxtView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        clientId = clientList.get(position).getId();
-    }
-});
+        binding.clientListTxtView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                clientId = clientList.get(position).getId();
+            }
+        });
 
         binding.specialityList.setOnItemClickListener((parent, view, position, id) -> {
             // TODO: get Doctor List with selected speciality
-            getCodeOfSpeciality();
+            specialityCode = specialitiesList.get(position).getCode();
+
+            getProviderList();
             hideKeyboardFrom(getActivity(), binding.getRoot());
 
         });
@@ -210,7 +212,6 @@ binding.clientListTxtView.setOnItemClickListener(new AdapterView.OnItemClickList
         super.onActivityCreated(savedInstanceState);
         selectSpecialityAndProviderAndDisplayCalenderViewModel.getSpecialities().observe(getViewLifecycleOwner(), codeListObserver);
         selectSpecialityAndProviderAndDisplayCalenderViewModel.getSites().observe(getViewLifecycleOwner(), siteListObserver);
-        selectSpecialityAndProviderAndDisplayCalenderViewModel.getScheduledCalenderDaysList(date, specialityCode, providerId, Constants.APPOINTMENT_LENGTH, "N").observe(getViewLifecycleOwner(), calenderDaysListDataObserver);
         if (!specialityCode.isEmpty())
             selectSpecialityAndProviderAndDisplayCalenderViewModel.getAllProviders(specialityCode, "").observe(getViewLifecycleOwner(), providerListObserver);
         selectSpecialityAndProviderAndDisplayCalenderViewModel.getAllClients().observe(getViewLifecycleOwner(), clientListObserver);
@@ -226,25 +227,26 @@ binding.clientListTxtView.setOnItemClickListener(new AdapterView.OnItemClickList
 
     private void getCalenderData() {
         EspressoTestingIdlingResource.increment();
-        if (providerId.equals(""))
-            selectSpecialityAndProviderAndDisplayCalenderViewModel.getScheduledCalenderDaysList(specialityCode);
-        else
             selectSpecialityAndProviderAndDisplayCalenderViewModel.getScheduledCalenderDaysList(date, specialityCode, providerId, Constants.APPOINTMENT_LENGTH, "N");
         EspressoTestingIdlingResource.decrement();
 
     }
 
-    private void getCodeOfSpeciality() {
+    private void getProviderList() {
 
-        for (int i = 0; i < specialitiesList.size(); i++) {
-            if (specialitiesList.get(i).getDescription().equals(binding.specialityList.getText().toString()))
-                specialityCode = specialitiesList.get(i).getCode();
-        }
         if (providerList.size() == 0) {
             selectSpecialityAndProviderAndDisplayCalenderViewModel.getAllProviders(specialityCode, "").observe(getViewLifecycleOwner(), providerListObserver);
 
         } else {
             selectSpecialityAndProviderAndDisplayCalenderViewModel.getAllProviders(specialityCode, "");
+        }
+        if(appointmentDayDetailsArrayList.size()==0)
+        {
+            selectSpecialityAndProviderAndDisplayCalenderViewModel.getScheduledCalenderDaysList(date, specialityCode, providerId, Constants.APPOINTMENT_LENGTH, "N").observe(getViewLifecycleOwner(), calenderDaysListDataObserver);
+
+        }
+        else{
+            selectSpecialityAndProviderAndDisplayCalenderViewModel.getScheduledCalenderDaysList(date, specialityCode, providerId, Constants.APPOINTMENT_LENGTH, "N");
         }
 
     }

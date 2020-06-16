@@ -487,7 +487,13 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         mainViewModel.deleteSession(session).observe(this, new Observer<Error>() {
             @Override
             public void onChanged(Error error) {
-                Toast.makeText(HomeActivity.this, error.getErrorMessage(), Toast.LENGTH_SHORT).show();
+                if(error!=null) {
+                    Toast.makeText(HomeActivity.this, error.getErrorMessage(), Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(HomeActivity.this, "error, try again", Toast.LENGTH_SHORT).show();
+
+                }
             }
         });
     }

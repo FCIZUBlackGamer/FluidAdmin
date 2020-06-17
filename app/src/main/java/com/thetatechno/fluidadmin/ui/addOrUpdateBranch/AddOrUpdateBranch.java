@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.thetatechno.fluidadmin.R;
+import com.thetatechno.fluidadmin.model.AddOrUpdateStatusResponse;
 import com.thetatechno.fluidadmin.model.branches_model.Branch;
 import com.thetatechno.fluidadmin.ui.EspressoTestingIdlingResource;
 import com.thetatechno.fluidadmin.ui.HomeActivity;
@@ -43,8 +44,8 @@ public class AddOrUpdateBranch extends Fragment implements TextWatcher, View.OnC
     private Button cancelBtn, addOrUpdateBranchBtn;
     private boolean isBranchHasData;
     private AddOrUpdateBranchViewModel viewModel;
-    private String addNewBranchMessage;
-    private String updateBranchMessage;
+    private AddOrUpdateStatusResponse addNewBranchResponse;
+    private AddOrUpdateStatusResponse updateBranchResponse;
     private String descriptionValidateMessage, addressValidateMessage, emailValidateMessage, phoneValidateMessage;
 
     public AddOrUpdateBranch() {
@@ -158,8 +159,8 @@ public class AddOrUpdateBranch extends Fragment implements TextWatcher, View.OnC
 
                 if (isDataValid()) {
                     if (!isBranchHasData) {
-                        if (addNewBranchMessage == null)
-                            addNewAgent();
+                        if (addNewBranchResponse == null)
+                            addNewBranch();
                         else {
                             viewModel.addNewBranch(branchDescriptionEditTxt.getText().toString()
                                     , branchAddressEditTxt.getText().toString(),
@@ -167,10 +168,13 @@ public class AddOrUpdateBranch extends Fragment implements TextWatcher, View.OnC
                                     branchPhoneEditTxt.getText().toString());
                         }
                     } else {
-                        if (updateBranchMessage == null)
-                            updateAgent();
+                        if (updateBranchResponse == null)
+                            updateBranch();
                         else
-                            viewModel.updateBranch(branch);
+                            viewModel.updateBranch(branch,branchDescriptionEditTxt.getText().toString(),
+                                    branchAddressEditTxt.getText().toString(),
+                                    branchEmailEditTxt.getText().toString(),
+                                    branchPhoneEditTxt.getText().toString());
                     }
                     EspressoTestingIdlingResource.decrement();
 
@@ -246,27 +250,26 @@ public class AddOrUpdateBranch extends Fragment implements TextWatcher, View.OnC
         }
     }
 
-    private void addNewAgent() {
+    private void addNewBranch() {
 
         viewModel.addNewBranch(branchDescriptionEditTxt.getText().toString(),
                 branchAddressEditTxt.getText().toString(),
                 branchEmailEditTxt.getText().toString(),
                 branchPhoneEditTxt.getText().toString()
-        ).observe(getActivity(), new Observer<String>() {
+        ).observe(getActivity(), new Observer<AddOrUpdateStatusResponse>() {
             @Override
-            public void onChanged(String s) {
+            public void onChanged(AddOrUpdateStatusResponse s) {
                 if (s != null) {
-                    addNewBranchMessage = s;
+                    addNewBranchResponse = s;
                     EspressoTestingIdlingResource.increment();
-                    Log.i("AddOrUpdate", "add agent message" + addNewBranchMessage);
-                    if (Integer.parseInt(addNewBranchMessage) > 0) {
+                    if (addNewBranchResponse.getStatus() > 0) {
                         onAddOrUpdateSuccessfully();
                         Toast.makeText(getContext(), "added successfully", Toast.LENGTH_SHORT).show();
-                    } else if (Integer.parseInt(addNewBranchMessage) == -9999) {
+                    } else if (addNewBranchResponse.getStatus() == -9999) {
 
                         Toast.makeText(getActivity(), "null parameter", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(getContext(), "other error " + addNewBranchMessage, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "other error " + addNewBranchResponse.getStatus(), Toast.LENGTH_SHORT).show();
 
                     }
                     EspressoTestingIdlingResource.decrement();
@@ -276,16 +279,19 @@ public class AddOrUpdateBranch extends Fragment implements TextWatcher, View.OnC
 
     }
 
-    private void updateAgent() {
-        viewModel.updateBranch(branch).observe(getActivity(), new Observer<String>() {
+    private void updateBranch() {
+        viewModel.updateBranch(branch,branchDescriptionEditTxt.getText().toString(),
+                branchAddressEditTxt.getText().toString(),
+                branchEmailEditTxt.getText().toString(),
+                branchPhoneEditTxt.getText().toString()).observe(getActivity(), new Observer<AddOrUpdateStatusResponse>() {
             @Override
-            public void onChanged(String s) {
+            public void onChanged(AddOrUpdateStatusResponse s) {
                 EspressoTestingIdlingResource.increment();
-                updateBranchMessage = s;
-                Log.i("AddOrUpdate", "Update agent message" + s);
-                Toast.makeText(getContext(), updateBranchMessage, Toast.LENGTH_SHORT).show();
-                if (updateBranchMessage.contains("success")) {
+                updateBranchResponse = s;
+                Log.i("AddOrUpdate", "Update agent status" + s.getStatus());
+                if (updateBranchResponse.getStatus() >= 0 ) {
                     onAddOrUpdateSuccessfully();
+                    Toast.makeText(getContext(), "added successfully", Toast.LENGTH_SHORT).show();
                 }
                 EspressoTestingIdlingResource.decrement();
 

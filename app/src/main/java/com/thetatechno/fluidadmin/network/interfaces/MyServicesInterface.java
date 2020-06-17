@@ -3,6 +3,7 @@ package com.thetatechno.fluidadmin.network.interfaces;
 import com.thetatechno.fluidadmin.model.AddNewOrModifyClientResponse;
 import com.thetatechno.fluidadmin.model.AddOrUpdateScheduleResponse;
 import com.thetatechno.fluidadmin.model.APIResponse;
+import com.thetatechno.fluidadmin.model.AddOrUpdateStatusResponse;
 import com.thetatechno.fluidadmin.model.ClientModelForRegister;
 import com.thetatechno.fluidadmin.model.ConfirmAppointmentResponse;
 import com.thetatechno.fluidadmin.model.Error;
@@ -105,10 +106,10 @@ public interface MyServicesInterface {
     Call<BranchesResponse> getBranches(@Query("langId") String language);
 
     @POST("/ords/fluid/api/site")
-    Call<Status> addBranch(@Body Branch newBranch);
+    Call<AddOrUpdateStatusResponse> addBranch(@Body Branch newBranch);
 
     @PUT("/ords/fluid/api/site")
-    Call<Status> updateBranch(@Body Branch newBranch);
+    Call<AddOrUpdateStatusResponse> updateBranch(@Body Branch newBranch);
 
     @DELETE("/ords/fluid/api/site")
     Call<Status> deleteBranch(@Query("siteId") String siteId);

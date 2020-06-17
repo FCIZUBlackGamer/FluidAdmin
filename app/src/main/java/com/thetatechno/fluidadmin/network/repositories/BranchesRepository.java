@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
 import com.thetatechno.fluidadmin.listeners.OnDataChangedCallBackListener;
+import com.thetatechno.fluidadmin.model.AddOrUpdateStatusResponse;
 import com.thetatechno.fluidadmin.model.Status;
 import com.thetatechno.fluidadmin.model.branches_model.Branch;
 import com.thetatechno.fluidadmin.model.branches_model.BranchesResponse;
@@ -21,7 +22,8 @@ import retrofit2.Response;
 
 public class BranchesRepository {
     MutableLiveData<BranchesResponse> branchesMutableLiveData = new MutableLiveData<>();
-    MutableLiveData<String> addNewBranchMutableLiveData = new MutableLiveData<>();
+    MutableLiveData<AddOrUpdateStatusResponse> addNewBranchMutableLiveData = new MutableLiveData<>();
+    MutableLiveData<AddOrUpdateStatusResponse> updateBranchMutableLiveData = new MutableLiveData<>();
     private static String TAG = BranchesRepository.class.getSimpleName();
 
     public MutableLiveData<BranchesResponse> getAllBranches(String language) {
@@ -48,18 +50,17 @@ public class BranchesRepository {
         return branchesMutableLiveData;
     }
 
-    public MutableLiveData<String> addNewBranch(final Branch branch) {
+    public MutableLiveData<AddOrUpdateStatusResponse> addNewBranch(final Branch branch) {
 
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
-        Call<Status> call = myServicesInterface.addBranch(branch);
-        call.enqueue(new Callback<Status>() {
+        Call<AddOrUpdateStatusResponse> call = myServicesInterface.addBranch(branch);
+        call.enqueue(new Callback<AddOrUpdateStatusResponse>() {
 
             @Override
-            public void onResponse(@NotNull Call<Status> call, @NotNull Response<Status> response) {
+            public void onResponse(@NotNull Call<AddOrUpdateStatusResponse> call, @NotNull Response<AddOrUpdateStatusResponse> response) {
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
-                        if (response.body().getStatus() != null)
-                            addNewBranchMutableLiveData.setValue(response.body().getStatus());
+                            addNewBranchMutableLiveData.setValue(response.body());
 
                     } else
                         addNewBranchMutableLiveData.setValue(null);
@@ -70,7 +71,7 @@ public class BranchesRepository {
             }
 
             @Override
-            public void onFailure(@NotNull Call<Status> call, Throwable t) {
+            public void onFailure(@NotNull Call<AddOrUpdateStatusResponse> call, Throwable t) {
                 call.cancel();
                 t.printStackTrace();
                 addNewBranchMutableLiveData.setValue(null);
@@ -81,32 +82,29 @@ public class BranchesRepository {
 
     }
 
-    public void updateBranch(final Branch branch, final OnDataChangedCallBackListener<String> onDataChangedCallBackListener) {
+    public MutableLiveData<AddOrUpdateStatusResponse> updateBranch(final Branch branch) {
 
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
-        Call<Status> call = myServicesInterface.updateBranch(branch);
-        call.enqueue(new Callback<Status>() {
+        Call<AddOrUpdateStatusResponse> call = myServicesInterface.updateBranch(branch);
+        call.enqueue(new Callback<AddOrUpdateStatusResponse>() {
 
             @Override
-            public void onResponse(@NonNull Call<Status> call, @NonNull Response<Status> response) {
+            public void onResponse(@NonNull Call<AddOrUpdateStatusResponse> call, @NonNull Response<AddOrUpdateStatusResponse> response) {
                 if (response.isSuccessful()) {
                     Log.i(TAG, "updateBranch: response " + response.toString());
-                    if (response.body().getStatus() != null)
-                        onDataChangedCallBackListener.onResponse(response.body().getStatus());
-
-
+                    updateBranchMutableLiveData.setValue(response.body());
                 } else
-                    onDataChangedCallBackListener.onResponse(null);
+                    updateBranchMutableLiveData.setValue(response.body());
             }
 
             @Override
-            public void onFailure(Call<Status> call, Throwable t) {
-                call.cancel();
+            public void onFailure(Call<AddOrUpdateStatusResponse> call, Throwable t) {
                 t.printStackTrace();
-                onDataChangedCallBackListener.onResponse(null);
+                updateBranchMutableLiveData.setValue(null);
             }
 
         });
+        return updateBranchMutableLiveData;
 
     }
 

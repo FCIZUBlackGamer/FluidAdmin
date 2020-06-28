@@ -18,10 +18,10 @@ public class AddOrUpdateViewModel extends ViewModel {
     private  String firstNameValidateMessage,familyNameValidateMessage,emailValidateMessage,imgUrlValidateMessage,idValidateMessage , phoneNumberMessage;
 
     public MutableLiveData<String> addNewAgent(Staff staff) {
-        staffRepository.insertNewStaff(staff, new OnDataChangedCallBackListener<String>() {
+        staffRepository.insertNewStaff(staff, new OnDataChangedCallBackListener<Integer>() {
             @Override
-            public void onResponse(String b) {
-                if (Integer.parseInt(b) == 0) {
+            public void onResponse(Integer b) {
+                if (b == 0) {
                     message = "Added successfully";
                     addedSuccessLiveData.setValue(message);
                 } else if (b.equals(Constants.ADD_DELETE_OR_UPDATE_FAIL_STATE))
@@ -34,16 +34,15 @@ public class AddOrUpdateViewModel extends ViewModel {
     }
 
     public MutableLiveData<String> updateAgent(Staff staff) {
-        staffRepository.updateStaff(staff, new OnDataChangedCallBackListener<String>() {
+        staffRepository.updateStaff(staff, new OnDataChangedCallBackListener<Integer>() {
             @Override
-            public void onResponse(String b) {
-                if (Integer.parseInt(b) == 0) {
+            public void onResponse(Integer b) {
+                if (b== 0) {
                     message = "updated successfully";
-                    addedSuccessLiveData.setValue(message);
-                } else if (b.equals(Constants.ADD_DELETE_OR_UPDATE_FAIL_STATE))
+                } else if (b == Constants.ADD_DELETE_OR_UPDATE_FAIL_STATE)
                     message = "Failed to update.";
-                addedSuccessLiveData.setValue(message);
 
+                addedSuccessLiveData.setValue(message);
             }
         });
         return addedSuccessLiveData;

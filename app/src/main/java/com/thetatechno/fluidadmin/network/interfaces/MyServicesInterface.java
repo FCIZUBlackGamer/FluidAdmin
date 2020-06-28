@@ -3,6 +3,7 @@ package com.thetatechno.fluidadmin.network.interfaces;
 import com.thetatechno.fluidadmin.model.AddNewOrModifyClientResponse;
 import com.thetatechno.fluidadmin.model.AddOrUpdateScheduleResponse;
 import com.thetatechno.fluidadmin.model.APIResponse;
+import com.thetatechno.fluidadmin.model.AddOrUpdateStatus;
 import com.thetatechno.fluidadmin.model.AddOrUpdateStatusResponse;
 import com.thetatechno.fluidadmin.model.ClientModelForRegister;
 import com.thetatechno.fluidadmin.model.ConfirmAppointmentResponse;
@@ -47,25 +48,25 @@ public interface MyServicesInterface {
     Call<Facilities> getAllFacilities(@Query(Constants.FACILITY_ID) String facilityId, @Query(Constants.LANG_ID) String langId);
 
     @POST("/ords/fluid/api/facility")
-    Call<Status> addFacility(@Body Facility facility);
+    Call<AddOrUpdateStatus> addFacility(@Body Facility facility);
 
     @DELETE("/ords/fluid/api/facility")
     Call<Status> deleteFacility(@Query(Constants.ID) String facilityId);
 
     @PUT("/ords/fluid/api/facility")
-    Call<Status> updateFacility(@Body Facility facility);
+    Call<AddOrUpdateStatus> updateFacility(@Body Facility facility);
 
     @GET("/ords/fluid/api/code")
     Call<CodeList> getCodes(@Query("codeType") String codeType, @Query(Constants.LANG_ID) String langId);
 
     @POST("/ords/fluid/api/code")
-    Call<Status> addCode(@Body Code code);
+    Call<AddOrUpdateStatus> addCode(@Body Code code);
 
     @DELETE("/ords/fluid/api/code")
     Call<Status> deleteCode(@Query("code") String code, @Query("codeType") String codeType);
 
     @PUT("/ords/fluid/api/code")
-    Call<Status> updateCode(@Body Code code);
+    Call<AddOrUpdateStatus> updateCode(@Body Code code);
 
     @GET("/ords/fluid/api/staff")
     Call<StaffData> getAllStuff(@Query("langId") String langId, @Query("typeCode") String typeCode);
@@ -78,13 +79,13 @@ public interface MyServicesInterface {
     Call<StaffData> getAllProviderInSpeciality(@Query("langId") String langId, @Query("typeCode") String specialityCode);
 
     @POST("/ords/fluid/api/staff")
-    Call<Status> insertNewStuff(@Body Staff staff);
+    Call<AddOrUpdateStatus> insertNewStuff(@Body Staff staff);
 
     @PUT("/ords/fluid/api/staff")
-    Call<Status> updateStaff(@Body Staff staff);
+    Call<AddOrUpdateStatus> updateStaff(@Body Staff staff);
 
     @DELETE("/ords/fluid/api/staff")
-    Call<Status> deleteStuff(@Query("staffId") String staffId);
+    Call<AddOrUpdateStatus> deleteStuff(@Query("staffId") String staffId);
 
     @GET("/ords/fluid/clnt/getClient")
     Call<ClientData> getAllClients(@Query("langId") String langId);

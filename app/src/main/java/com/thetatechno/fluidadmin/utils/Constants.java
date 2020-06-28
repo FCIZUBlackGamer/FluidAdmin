@@ -15,9 +15,9 @@ public interface Constants {
     public static String ARG_STAFF = "staff";
     public static String ARG_SCHEDULE = "schedule";
     public static String ARG_SESSION = "session";
-    public static String ADD_DELETE_OR_UPDATE_FAIL_STATE = "-1";
-    public static String ERROR_HAVE_SCHEDULE = "-2292";
-    public static String DELETE_SUCCESS_STATE = "1";
+    public static int ADD_DELETE_OR_UPDATE_FAIL_STATE = -1;
+    public static int ERROR_HAVE_SCHEDULE = -2292;
+    public static int DELETE_SUCCESS_STATE = 1;
     String APPOINTMENT_LENGTH = "20";
 
 

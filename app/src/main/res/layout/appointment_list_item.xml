@@ -35,13 +35,13 @@
                 android:paddingBottom="20dp">
 
                 <TextView
-                    android:id="@+id/dayTxt"
+                    android:id="@+id/day_txt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/day"
                     android:textColor="@color/colorWhite"
-                    android:textSize="20sp"
                     android:textStyle="bold"
+                    android:textSize="@dimen/_16sdp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.494"
                     app:layout_constraintStart_toStartOf="parent"
@@ -51,26 +51,25 @@
                     android:id="@+id/month_txt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="2dp"
                     android:text="@string/month"
                     android:textColor="@color/colorWhite"
-                    android:textSize="18sp"
-                    app:layout_constraintEnd_toEndOf="@+id/schedule_name_txt"
-                    app:layout_constraintStart_toStartOf="@+id/schedule_name_txt"
-                    app:layout_constraintTop_toBottomOf="@+id/schedule_name_txt" />
+                    android:textSize="@dimen/_14sdp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/day_txt" />
 
                 <TextView
                     android:id="@+id/year_txt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
                     android:layout_marginBottom="8dp"
                     android:text="@string/year"
                     android:textColor="@color/colorWhite"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/_14sdp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/month_txt"
-                    app:layout_constraintStart_toStartOf="@+id/month_txt"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/month_txt" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 

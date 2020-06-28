@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
 import com.thetatechno.fluidadmin.listeners.OnDataChangedCallBackListener;
+import com.thetatechno.fluidadmin.model.AddOrUpdateStatus;
 import com.thetatechno.fluidadmin.model.staff_model.Staff;
 import com.thetatechno.fluidadmin.model.staff_model.StaffData;
 import com.thetatechno.fluidadmin.model.Status;
@@ -20,9 +21,9 @@ import retrofit2.Response;
 
 public class StaffRepository {
 
-   private MutableLiveData<StaffListModel> agentMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<StaffListModel> agentMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<StaffData> facilitiesMutableLiveData = new MutableLiveData<>();
-   private MutableLiveData<Staff> staffMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<Staff> staffMutableLiveData = new MutableLiveData<>();
     private static String TAG = StaffRepository.class.getSimpleName();
 
     public MutableLiveData<StaffListModel> getAllStuff(final String langId, final String typeCode) {
@@ -42,6 +43,7 @@ public class StaffRepository {
 
                 }
             }
+
             @Override
             public void onFailure(Call<StaffData> call, Throwable t) {
                 agentMutableLiveData.setValue(new StaffListModel(" Error, Try again "));
@@ -89,8 +91,7 @@ public class StaffRepository {
                     if (response.body().getStaffList() != null) {
                         Staff provider = response.body().getStaffList().get(0);
                         staffMutableLiveData.setValue(provider);
-                    }
-                    else
+                    } else
                         staffMutableLiveData.setValue(null);
 
                 }
@@ -108,25 +109,21 @@ public class StaffRepository {
     public void insertNewStaff(final Staff staff, final OnDataChangedCallBackListener onDataChangedCallBackListener) {
 
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
-        Call<Status> call = myServicesInterface.insertNewStuff(staff);
-        call.enqueue(new Callback<Status>() {
+        Call<AddOrUpdateStatus> call = myServicesInterface.insertNewStuff(staff);
+        call.enqueue(new Callback<AddOrUpdateStatus>() {
 
             @Override
-            public void onResponse(@NonNull Call<Status> call, @NonNull Response<Status> response) {
+            public void onResponse(@NonNull Call<AddOrUpdateStatus> call, @NonNull Response<AddOrUpdateStatus> response) {
                 if (response.isSuccessful()) {
-
-                    if (response.body().getStatus() != null) {
-                        onDataChangedCallBackListener.onResponse(response.body().getStatus());
-                        Log.i(TAG, "insertNewStaff: response " + response.body().getStatus());
-                    }
-
+                    onDataChangedCallBackListener.onResponse(response.body().getStatus());
+                    Log.i(TAG, "insertNewStaff: response " + response.body().getStatus());
 
                 } else
                     onDataChangedCallBackListener.onResponse(null);
             }
 
             @Override
-            public void onFailure(Call<Status> call, Throwable t) {
+            public void onFailure(Call<AddOrUpdateStatus> call, Throwable t) {
                 call.cancel();
                 onDataChangedCallBackListener.onResponse(null);
                 t.printStackTrace();
@@ -139,24 +136,24 @@ public class StaffRepository {
     public void updateStaff(final Staff staff, final OnDataChangedCallBackListener onDataChangedCallBackListener) {
 
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
-        Call<Status> call = myServicesInterface.updateStaff(staff);
-        call.enqueue(new Callback<Status>() {
+        Call<AddOrUpdateStatus> call = myServicesInterface.updateStaff(staff);
+        call.enqueue(new Callback<AddOrUpdateStatus>() {
 
             @Override
-            public void onResponse(@NonNull Call<Status> call, @NonNull Response<Status> response) {
+            public void onResponse(@NonNull Call<AddOrUpdateStatus> call, @NonNull Response<AddOrUpdateStatus> response) {
                 if (response.isSuccessful()) {
                     Log.i(TAG, "updateAgent: response " + response.body().getStatus());
-                    if (response.body().getStatus() != null) {
-                        Log.i(TAG, "updateAgent: response " + response.body().getStatus());
-                        onDataChangedCallBackListener.onResponse(response.body().getStatus());
-                    }
+
+                    Log.i(TAG, "updateAgent: response " + response.body().getStatus());
+                    onDataChangedCallBackListener.onResponse(response.body().getStatus());
+
 
                 } else
                     onDataChangedCallBackListener.onResponse(null);
             }
 
             @Override
-            public void onFailure(Call<Status> call, Throwable t) {
+            public void onFailure(Call<AddOrUpdateStatus> call, Throwable t) {
                 call.cancel();
                 onDataChangedCallBackListener.onResponse(null);
                 t.printStackTrace();
@@ -170,22 +167,21 @@ public class StaffRepository {
     public void deleteStaff(final String staffId, final OnDataChangedCallBackListener onDataChangedCallBackListener) {
 
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
-        Call<Status> call = myServicesInterface.deleteStuff(staffId);
-        call.enqueue(new Callback<Status>() {
+        Call<AddOrUpdateStatus> call = myServicesInterface.deleteStuff(staffId);
+        call.enqueue(new Callback<AddOrUpdateStatus>() {
 
             @Override
-            public void onResponse(@NonNull Call<Status> call, @NonNull Response<Status> response) {
+            public void onResponse(@NonNull Call<AddOrUpdateStatus> call, @NonNull Response<AddOrUpdateStatus> response) {
                 if (response.isSuccessful()) {
                     Log.i(TAG, "deleteStaff: response " + response.toString());
-                    if (response.body().getStatus() != null)
-                        onDataChangedCallBackListener.onResponse(response.body().getStatus());
+                    onDataChangedCallBackListener.onResponse(response.body().getStatus());
 
                 } else
                     onDataChangedCallBackListener.onResponse(null);
             }
 
             @Override
-            public void onFailure(Call<Status> call, Throwable t) {
+            public void onFailure(Call<AddOrUpdateStatus> call, Throwable t) {
                 call.cancel();
                 onDataChangedCallBackListener.onResponse(null);
                 t.printStackTrace();

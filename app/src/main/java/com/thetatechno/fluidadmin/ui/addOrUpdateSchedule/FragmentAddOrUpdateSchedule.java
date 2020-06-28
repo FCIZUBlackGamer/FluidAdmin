@@ -30,6 +30,7 @@ import com.thetatechno.fluidadmin.model.branches_model.Branch;
 import com.thetatechno.fluidadmin.model.branches_model.BranchesResponse;
 import com.thetatechno.fluidadmin.model.facility_model.Facility;
 import com.thetatechno.fluidadmin.model.shedule.Schedule;
+import com.thetatechno.fluidadmin.ui.HomeActivity;
 import com.thetatechno.fluidadmin.utils.Constants;
 
 import java.util.ArrayList;
@@ -67,8 +68,14 @@ public class FragmentAddOrUpdateSchedule extends Fragment {
             binding.dateFromTxt.setText(schedule.getStartDate());
             binding.dateToTxt.setText(schedule.getEndDate());
             displaySelectedDays();
+            binding.addOrUpdateScheduleBtn.setText(R.string.update_txt);
+            ((HomeActivity) requireActivity()).getSupportActionBar().setTitle(R.string.update_schedule_txt);
+
         } else {
             schedule = null;
+            binding.addOrUpdateScheduleBtn.setText(R.string.add_txt);
+            ((HomeActivity) requireActivity()).getSupportActionBar().setTitle(R.string.add_Schedule_txt);
+
         }
         addOrUpdateScheduleViewModel.getStaffData().observe(getViewLifecycleOwner(), staffData -> {
             if (staffData.getStaffData() != null) {
@@ -107,13 +114,16 @@ public class FragmentAddOrUpdateSchedule extends Fragment {
 
             }
         });
-        binding.selectDateFromimg.setOnClickListener(v -> {
-            showDatePicker(binding.dateFromTxt, binding.timeFromTxt);
+        binding.cardView2.setOnClickListener(v -> {
+            showDatePicker(binding.dateFromTxt);
         });
-
-        binding.selectDateToimg.setOnClickListener(v -> {
-            showDatePicker(binding.dateToTxt, binding.timeToTxt);
+        binding.cardView3.setOnClickListener(v -> {
+            showTimePicker(binding.timeFromTxt);
         });
+        binding.cardView.setOnClickListener(v -> {
+            showDatePicker(binding.dateToTxt);
+        });
+        binding.cardView4.setOnClickListener(v -> showTimePicker( binding.timeToTxt));
 
         binding.addOrUpdateScheduleBtn.setOnClickListener(v -> {
             CollectDate();
@@ -165,14 +175,13 @@ public class FragmentAddOrUpdateSchedule extends Fragment {
         });
     }
 
-    private void showDatePicker(TextView date, TextView time) {
+    private void showDatePicker(TextView date) {
         final Calendar newCalendar = Calendar.getInstance();
         @SuppressLint("SetTextI18n")
         DatePickerDialog StartTime = new DatePickerDialog(getContext(), R.style.DialogTheme, (DatePickerDialog.OnDateSetListener) (view, year, monthOfYear, dayOfMonth) -> {
             Calendar newDate = Calendar.getInstance();
             newDate.set(year, monthOfYear, dayOfMonth);
             date.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
-            showTimePicker(time);
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
         StartTime.show();
     }
@@ -220,9 +229,16 @@ public class FragmentAddOrUpdateSchedule extends Fragment {
             schedule.setSiteId(siteId);
             addOrUpdateScheduleViewModel.addSchedule(schedule).observe(this, response -> {
                 //Handle Error Message
-                Toast.makeText(requireActivity(), response.getError().getErrorMessage(), Toast.LENGTH_SHORT).show();
-                if (response.getError().getErrorCode() == 0) {
-                    onCancelOrBackButtonPressed();
+                if(response.getError()!=null) {
+                    Toast.makeText(requireActivity(), response.getError().getErrorMessage(), Toast.LENGTH_SHORT).show();
+                    if (response.getError().getErrorCode() == 0) {
+                        onCancelOrBackButtonPressed();
+                    }
+                }
+                else
+                {
+                    Toast.makeText(requireActivity(), "Error,Try later", Toast.LENGTH_SHORT).show();
+
                 }
             });
         } else {

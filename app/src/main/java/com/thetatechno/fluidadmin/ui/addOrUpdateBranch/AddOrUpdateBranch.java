@@ -117,17 +117,16 @@ public class AddOrUpdateBranch extends Fragment implements TextWatcher, View.OnC
             branchPhoneEditTxt.setText(branch.getMobileNumber());
             isBranchHasData = true;
             addOrUpdateBranchBtn.setHint(getResources().getString(R.string.update_txt));
-            ((HomeActivity) getActivity()).getSupportActionBar().setTitle("update branch");
+            updateTitle(R.string.update_branch_txt);
 
         } else {
-
             branch = new Branch();
             isBranchHasData = false;
             branchDescriptionEditTxt.setText("");
             branchAddressEditTxt.setEnabled(true);
             branchEmailEditTxt.setText("");
             branchPhoneEditTxt.setText("");
-            ((HomeActivity) getActivity()).getSupportActionBar().setTitle("add branch");
+            updateTitle(R.string.add_branch_txt);
             addOrUpdateBranchBtn.setHint(getResources().getString(R.string.add_txt));
 
         }
@@ -300,15 +299,16 @@ public class AddOrUpdateBranch extends Fragment implements TextWatcher, View.OnC
     }
 
     private void onAddOrUpdateSuccessfully() {
-
         EspressoTestingIdlingResource.increment();
-
         navController.navigate(R.id.action_addOrUpdateBranch_to_branches, null,
                 new NavOptions.Builder()
                         .setPopUpTo(R.id.branches,
                                 true).build());
         EspressoTestingIdlingResource.decrement();
-
     }
 
+    private void updateTitle(int resourceID) {
+        ((HomeActivity) requireActivity()).getSupportActionBar().setTitle(resourceID);
+
+    }
 }

@@ -45,7 +45,7 @@ public class Staff extends Person implements Parcelable {
     private String typeCode;
     @SerializedName("FACLITIES")
     @Expose
-    private List<Facility> facilityList = new ArrayList<>();
+    private List<Facility> facilityList ;
     @SerializedName("speciality")
     @Expose
     private String speciality;

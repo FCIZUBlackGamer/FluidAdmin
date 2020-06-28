@@ -282,7 +282,7 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
                 }
 
             }
-            ((HomeActivity) requireActivity()).getSupportActionBar().setTitle("update agent");
+            ((HomeActivity) requireActivity()).getSupportActionBar().setTitle(R.string.update_agent_txt);
 
         } else {
             staff = new Staff();
@@ -293,7 +293,7 @@ public class AddOrUpdateAgentFragment extends Fragment implements View.OnClickLi
             agentEmailEditTxt.setText("");
             addBtn.setHint(getResources().getString(R.string.add_txt));
             addProfileImg.setImageResource(R.drawable.ic_girl);
-            ((HomeActivity) getActivity()).getSupportActionBar().setTitle("add agent");
+            ((HomeActivity) getActivity()).getSupportActionBar().setTitle(R.string.add_Agent_txt);
 
         }
     }

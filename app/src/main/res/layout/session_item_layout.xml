@@ -54,7 +54,7 @@
                 android:textSize="@dimen/_10sdp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/optionMenu"
+                app:layout_constraintTop_toBottomOf="@id/optionMenu"
                 app:layout_goneMarginStart="3dp" />
 
             <TextView

@@ -3,6 +3,7 @@ package com.thetatechno.fluidadmin.ui.stafflist.agentList;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -139,6 +140,13 @@ public class AgentListAdapter extends RecyclerView.Adapter<AgentListAdapter.Agen
                 @Override
                 public void onPageSelected(int vposition) {
                     super.onPageSelected(vposition);
+
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int state) {
+                    super.onPageScrollStateChanged(state);
+                    Log.e("position", agentList.get(position).toString());
                     if (holder.pager.getCurrentItem() == agentList.get(position).getFacilityList().size() - 1) {
                         holder.nextBtn.setVisibility(View.GONE);
                         holder.previousBtn.setVisibility(View.VISIBLE);
@@ -150,11 +158,6 @@ public class AgentListAdapter extends RecyclerView.Adapter<AgentListAdapter.Agen
                         holder.previousBtn.setVisibility(View.GONE);
                         holder.nextBtn.setVisibility(View.VISIBLE);
                     }
-                }
-
-                @Override
-                public void onPageScrollStateChanged(int state) {
-                    super.onPageScrollStateChanged(state);
                 }
             });
             holder.nextBtn.setOnClickListener(new View.OnClickListener() {

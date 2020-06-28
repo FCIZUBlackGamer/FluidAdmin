@@ -137,9 +137,12 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     public void checkOnTheCurrentLanguage() {
 
         if (PreferenceController.getInstance(this).get(PreferenceController.LANGUAGE).equals(Constants.ARABIC)) {
+            PreferenceController.getInstance(this).persist(PreferenceController.LANGUAGE, Constants.ARABIC);
+
             navigationView.getMenu().findItem(R.id.language_reference).setTitle(R.string.menu_english_language);
 
         } else if (PreferenceController.getInstance(this).get(PreferenceController.LANGUAGE).equals(Constants.ENGLISH)) {
+            PreferenceController.getInstance(this).persist(PreferenceController.LANGUAGE, Constants.ENGLISH);
             navigationView.getMenu().findItem(R.id.language_reference).setTitle(R.string.menu_arabic_language);
 
         }

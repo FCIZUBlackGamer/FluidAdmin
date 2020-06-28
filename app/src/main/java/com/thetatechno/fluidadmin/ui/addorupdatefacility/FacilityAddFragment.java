@@ -59,7 +59,7 @@ public class FacilityAddFragment extends Fragment {
     private String addOrUpdateMessage, addNewFacilityMessage;
 private String selectedBranchId;
     private String idTxt, descriptionTxt, facilityTypeTxt;
-    private String idValidateMessage, descriptionValidateMessage, facilityTypeValidateMessage;
+    private String idValidateMessage, descriptionValidateMessage, facilityTypeValidateMessage, siteValidateMessage;
 
     public FacilityAddFragment() {
         // Required empty public constructor
@@ -108,6 +108,8 @@ private String selectedBranchId;
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectedBranchId = branchesList.get(position).getSiteId();
+                facility.setSiteId(selectedBranchId);
+
             }
         });
         facilityIdEditTxt.addTextChangedListener(new TextWatcher() {
@@ -196,6 +198,8 @@ private String selectedBranchId;
                         branchesList = branchesResponse.getBranchList();
                         ArrayAdapter<Branch> branchArrayAdapter = new ArrayAdapter<Branch>(getContext(),R.layout.dropdown_menu_popup_item,branchesList);
                         branchesTextView.setAdapter(branchArrayAdapter);
+                        if(facility !=null)
+                            branchesTextView.setText(facility.getSiteDescription());
                     }
                 }
             }
@@ -292,7 +296,7 @@ private String selectedBranchId;
 
     }
 
-    void onAddOrUpdateClicked() {
+   private void onAddOrUpdateClicked() {
         EspressoTestingIdlingResource.increment();
         navController.navigate(R.id.action_facilityAddFragment_to_clinicList);
         EspressoTestingIdlingResource.decrement();
@@ -333,7 +337,6 @@ private String selectedBranchId;
         facility.setDescription(descriptionTxt);
         facility.setType(facilityTypeTxt);
         facility.setLangId(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
-        facility.setSiteId(selectedBranchId);
     }
 
     private void updateDropdownListInUiWhenRoomTypeSelected() {
@@ -357,7 +360,7 @@ private String selectedBranchId;
     }
 
     private void updateTitle(String message) {
-        ((HomeActivity) getActivity()).getSupportActionBar().setTitle(message);
+        ((HomeActivity) requireActivity()).getSupportActionBar().setTitle(message);
 
     }
 
@@ -371,13 +374,12 @@ private String selectedBranchId;
                 if (!addOrUpdateMessage.isEmpty())
                 if (addOrUpdateMessage.contains("success")) {
                     EspressoTestingIdlingResource.increment();
-                    Toast.makeText(getActivity(), addOrUpdateMessage, Toast.LENGTH_SHORT);
+                    Toast.makeText(getActivity(), addOrUpdateMessage, Toast.LENGTH_SHORT).show();
                     onAddOrUpdateClicked();
                     EspressoTestingIdlingResource.decrement();
                 }
                 else {
-                    Toast.makeText(getActivity(), addOrUpdateMessage, Toast.LENGTH_SHORT);
-
+                    Toast.makeText(getActivity(), addOrUpdateMessage, Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -386,10 +388,21 @@ private String selectedBranchId;
     }
 
     private boolean isDataValid() {
-        if (isIdValid(idTxt) && isDescriptionValid(descriptionTxt) && isFacilityTypeSelected(facilityTypeTxt))
+        if (isIdValid(idTxt) && isDescriptionValid(descriptionTxt) && isFacilityTypeSelected(facilityTypeTxt) && isSiteSelected())
             return true;
         else
             return false;
+    }
+
+    private boolean isSiteSelected() {
+        facilityTypeValidateMessage = facilityAddViewModel.validateSite(branchesTextView.getText().toString());
+        if (facilityTypeValidateMessage.isEmpty())
+            return true;
+        else {
+            Toast.makeText(getContext(), facilityTypeValidateMessage, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
     }
 
     private boolean isIdValid(String id) {

@@ -104,6 +104,7 @@ public class SessionListAdapter extends RecyclerView.Adapter<SessionListAdapter.
             }
 
         } catch (Exception e) {
+            e.printStackTrace();
             Sentry.capture(e);
         }
 

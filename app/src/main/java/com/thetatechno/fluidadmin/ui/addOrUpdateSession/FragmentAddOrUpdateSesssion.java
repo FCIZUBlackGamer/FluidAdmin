@@ -31,6 +31,7 @@ import com.thetatechno.fluidadmin.model.branches_model.Branch;
 import com.thetatechno.fluidadmin.model.branches_model.BranchesResponse;
 import com.thetatechno.fluidadmin.model.facility_model.Facility;
 import com.thetatechno.fluidadmin.model.session_model.Session;
+import com.thetatechno.fluidadmin.ui.HomeActivity;
 import com.thetatechno.fluidadmin.ui.addOrUpdateSchedule.AddOrUpdateScheduleViewModel;
 import com.thetatechno.fluidadmin.utils.App;
 import com.thetatechno.fluidadmin.utils.Constants;
@@ -252,5 +253,9 @@ public class FragmentAddOrUpdateSesssion extends Fragment {
                 }
             });
         }
+    }
+    private void updateTitle(int resourceId) {
+        ((HomeActivity)requireActivity()).getSupportActionBar().setTitle(resourceId);
+
     }
 }

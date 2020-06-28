@@ -45,17 +45,17 @@ public class MainViewModel extends ViewModel {
     private  String messageForSFacility = "";
 
     public MutableLiveData<String> deleteAgentOrProvider(final Staff staff) {
-        staffRepository.deleteStaff(staff.getStaffId(), new OnDataChangedCallBackListener<String>() {
+        staffRepository.deleteStaff(staff.getStaffId(), new OnDataChangedCallBackListener<Integer>() {
             @Override
-            public void onResponse(String b) {
+            public void onResponse(Integer b) {
                 Log.i(TAG, "deleteAgentOrProvider: delete state " + b);
-                if (b.equals(Constants.DELETE_SUCCESS_STATE)) {
+                if (b == Constants.DELETE_SUCCESS_STATE) {
                     messageForStaff = "Delete " + staff.getFirstName() + " successfully";
                 }
-                else if (b.equals("-2292")){
+                else if (b == -2292){
                     messageForStaff = "Cannot delete, Provider has a schedule.";
 
-                }else if (b.equals(Constants.ADD_DELETE_OR_UPDATE_FAIL_STATE)) {
+                }else if (b == Constants.ADD_DELETE_OR_UPDATE_FAIL_STATE) {
                     messageForStaff = "Failed to delete.";
 
                 }

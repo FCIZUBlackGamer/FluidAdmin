@@ -18,12 +18,15 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         mContext = this;
-//        if (!PreferenceController.getInstance(this).get(PreferenceController.LANGUAGE).equals(ENGLISH)) {
-//            LanguageUtil.changeLanguageType(mContext, new Locale(ARABIC));
-//        } else {
-//            LanguageUtil.changeLanguageType(mContext, Locale.ENGLISH);
-//        }
-        Lingver.init(mContext, Locale.ENGLISH);
+        if (!PreferenceController.getInstance(this).get(PreferenceController.LANGUAGE).equals(ENGLISH)) {
+          //  LanguageUtil.changeLanguageType(mContext, new Locale(ARABIC));
+            Lingver.init(mContext, ARABIC);
+
+        } else {
+          //  LanguageUtil.changeLanguageType(mContext, Locale.ENGLISH);
+            Lingver.init(mContext, Locale.ENGLISH);
+
+        }
 
     }
 

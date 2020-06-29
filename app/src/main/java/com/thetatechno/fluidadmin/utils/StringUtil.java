@@ -6,6 +6,7 @@ import android.util.Log;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class StringUtil {
 
@@ -29,8 +30,8 @@ public class StringUtil {
 
     public static String displayTime(String time) {
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm aa");
-        SimpleDateFormat simpleTimeFormat = new SimpleDateFormat("HH:mm a");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm aa", Locale.ENGLISH);
+        SimpleDateFormat simpleTimeFormat = new SimpleDateFormat("HH:mm a",Locale.ENGLISH);
         try {
             Date date = simpleDateFormat.parse(time);
 
@@ -46,7 +47,7 @@ public class StringUtil {
     }
 
     public static String getDay(String date){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm aa");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm aa", Locale.ENGLISH);
         String dayTxt = "";
         try {
             Date mDate = simpleDateFormat.parse(date);
@@ -58,7 +59,7 @@ public class StringUtil {
 
     }
     public static String getMonth(String date){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm aa");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm aa", Locale.ENGLISH);
         String monthTxt = "";
         try {
             Date mDate = simpleDateFormat.parse(date);
@@ -71,7 +72,7 @@ public class StringUtil {
     }
 
     public static String getYear(String date){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm aa");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm aa", Locale.ENGLISH);
         String yearTxt = "";
         try {
             Date mDate = simpleDateFormat.parse(date);

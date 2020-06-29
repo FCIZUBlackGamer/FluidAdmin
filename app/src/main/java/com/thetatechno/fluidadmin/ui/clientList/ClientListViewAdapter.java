@@ -105,6 +105,7 @@ public class ClientListViewAdapter extends RecyclerView.Adapter<ClientListViewAd
             if (!filteredClientList.get(position).getImageFile().isEmpty()) {
                 Glide.with(context).load(Constants.BASE_URL + Constants.BASE_EXTENSION_FOR_PHOTOS + filteredClientList.get(position).getImageFile())
                         .circleCrop()
+                        .placeholder(R.drawable.man)
                         .into(holder.personImg);
             } else {
                 if (!filteredClientList.get(position).getSexCode().isEmpty()) {

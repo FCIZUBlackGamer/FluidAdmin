@@ -108,6 +108,7 @@ if(position <filteredProviderList.size()) {
 
         Glide.with(context).load(Constants.BASE_URL + Constants.BASE_EXTENSION_FOR_PHOTOS + filteredProviderList.get(position).getImageLink())
                 .circleCrop()
+                .placeholder(R.drawable.man)
                 .into(holder.personImg);
     } else {
         if (!filteredProviderList.get(position).getGender().isEmpty()) {

@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
+import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -25,23 +26,17 @@ import com.thetatechno.fluidadmin.model.session_model.SessionResponse;
 import com.thetatechno.fluidadmin.model.shedule.Schedule;
 
 public class SessionFragment extends Fragment {
-    private Schedule schedule;
     private View view;
     private RecyclerView recyclerView;
     private SessionListAdapter sessionListAdapter;
-    private TextView schedule_name_txt, doctor_name_txt, locationTxt, time_from_txt, time_to_txt;
-    private ImageView doctorImg;
     private NavController navController;
     private SessionListViewModel sessionListViewModel;
-    CardView layout;
     FloatingActionButton floatingActionButton;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            schedule = (Schedule) getArguments().getSerializable("schedule");
-        }
+
     }
 
     @Nullable
@@ -51,15 +46,8 @@ public class SessionFragment extends Fragment {
         sessionListViewModel = ViewModelProviders.of(this).get(SessionListViewModel.class);
         navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
         recyclerView = view.findViewById(R.id.rec);
-        layout = view.findViewById(R.id.layout);
         floatingActionButton = view.findViewById(R.id.fab);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false));
-        schedule_name_txt = view.findViewById(R.id.schedule_name_txt);
-        locationTxt = view.findViewById(R.id.locationTxt);
-        time_from_txt = view.findViewById(R.id.time_from_txt);
-        time_to_txt = view.findViewById(R.id.time_to_txt);
-        doctor_name_txt = view.findViewById(R.id.doctor_name_txt);
-        doctorImg = view.findViewById(R.id.doctorImg);
         return view;
     }
 
@@ -67,38 +55,6 @@ public class SessionFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        if (schedule != null) {
-            floatingActionButton.setVisibility(View.GONE);
-            layout.setVisibility(View.VISIBLE);
-            schedule_name_txt.setText(schedule.getDescription());
-            locationTxt.setText(schedule.getFacilitDescription());
-            time_from_txt.setText(schedule.getStartTime());
-            time_to_txt.setText(schedule.getEndTime());
-            doctor_name_txt.setText(schedule.getProviderName());
-        } else {
-            layout.setVisibility(View.GONE);
-            floatingActionButton.setVisibility(View.VISIBLE);
-        }
-        if (schedule != null)
-            sessionListViewModel.getAllSessionsForSpecificSchedule(schedule.getId()).observe(getViewLifecycleOwner(), new Observer<SessionResponse>() {
-                @Override
-                public void onChanged(SessionResponse sessionResponse) {
-                    if (sessionResponse != null) {
-                        if (sessionResponse.getError().getErrorCode() == 0) {
-                            if (sessionResponse.getSessions() != null) {
-                                sessionListAdapter = new SessionListAdapter(navController, getContext(), sessionResponse.getSessions());
-                                recyclerView.setAdapter(sessionListAdapter);
-                            } else {
-                                Toast.makeText(getContext(), "No sessions Found", Toast.LENGTH_SHORT).show();
-                            }
-
-                        } else {
-                            Toast.makeText(getContext(), sessionResponse.getError().getErrorMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }
-            });
-        else
             sessionListViewModel.getAllSessionsForSpecificSchedule("").observe(getViewLifecycleOwner(), new Observer<SessionResponse>() {
                 @Override
                 public void onChanged(SessionResponse sessionResponse) {

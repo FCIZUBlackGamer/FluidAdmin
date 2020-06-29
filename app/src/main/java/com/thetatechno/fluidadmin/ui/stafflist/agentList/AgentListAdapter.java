@@ -106,6 +106,7 @@ public class AgentListAdapter extends RecyclerView.Adapter<AgentListAdapter.Agen
             if (!filteredAgentList.get(position).getImageLink().isEmpty()) {
                 Glide.with(context).load(Constants.BASE_URL + Constants.BASE_EXTENSION_FOR_PHOTOS + filteredAgentList.get(position).getImageLink())
                         .circleCrop()
+                        .placeholder(R.drawable.man)
                         .into(holder.personImg);
             } else {
                 if (!filteredAgentList.get(position).getGender().isEmpty()) {

@@ -88,6 +88,7 @@ public class ScheduleListAdapter extends RecyclerView.Adapter<ScheduleListAdapte
                 if (!scheduleList.get(position).getImagePath().isEmpty()) {
                     Glide.with(context).load(Constants.BASE_URL + Constants.BASE_EXTENSION_FOR_PHOTOS + scheduleList.get(position).getImagePath())
                             .circleCrop()
+                            .placeholder(R.drawable.man)
                             .into(holder.doctorImg);
                 } else {
                     if (!scheduleList.get(position).getSexCode().isEmpty()) {
@@ -115,7 +116,7 @@ public class ScheduleListAdapter extends RecyclerView.Adapter<ScheduleListAdapte
                                 switch (item.getItemId()) {
                                     case R.id.showSession:
                                         bundle.putSerializable(ARG_SCHEDULE, (Serializable) scheduleList.get(position));
-                                        navController.navigate(R.id.action_scheduleFragment_to_sessionFragment, bundle);
+                                        navController.navigate(R.id.action_scheduleFragment_to_showSessions, bundle);
                                         break;
                                     case R.id.editSchedule:
                                         bundle.putSerializable(ARG_SCHEDULE, (Serializable) scheduleList.get(position));

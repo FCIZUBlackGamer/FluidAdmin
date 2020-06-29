@@ -16,6 +16,7 @@ import com.thetatechno.fluidadmin.utils.PreferenceController;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class AppointmentsViewModel extends ViewModel {
     private StaffRepository staffRepository = new StaffRepository();
@@ -27,7 +28,7 @@ public class AppointmentsViewModel extends ViewModel {
     }
 
     public String getTodayDateInFormat() {
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
         Date todayDate = new Date();
         return formatter.format(todayDate);
     }

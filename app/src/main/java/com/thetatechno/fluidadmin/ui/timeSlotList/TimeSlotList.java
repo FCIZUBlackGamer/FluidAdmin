@@ -340,10 +340,19 @@ public class TimeSlotList extends Fragment implements OnItemClickedListener {
     }
 
     private void setUpViewPagerWithAllTimeSlots() {
-        ViewPagerAdapter mViewPagerAdapter = new ViewPagerAdapter(getActivity(), appointmentDayDetailsForSpecificProviderArrayList);
+        int scrooled_position = -1;
+        for (AppointmentDayDetails appointmentDayDetails : appointmentDayDetailsForSpecificProviderArrayList) {
+            if (appointmentDayDetails.getDate().equals(bookDate)) {
+                scrooled_position = appointmentDayDetailsForSpecificProviderArrayList.indexOf(appointmentDayDetails);
+            }
+        }
+        ViewPagerAdapter mViewPagerAdapter = new ViewPagerAdapter(requireActivity(), appointmentDayDetailsForSpecificProviderArrayList);
         timeSlotsViewPager.setAdapter(mViewPagerAdapter);
         timeSlotsViewPager.setOffscreenPageLimit(1);
+        if (scrooled_position != -1)
+            timeSlotsViewPager.setCurrentItem(scrooled_position);
         handlingPreviousAndNextPages();
+
     }
 
     private void confirmAppointmentBooking(String appointmentTime) {

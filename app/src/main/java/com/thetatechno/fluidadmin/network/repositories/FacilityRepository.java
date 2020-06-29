@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
 import com.thetatechno.fluidadmin.listeners.OnDataChangedCallBackListener;
+import com.thetatechno.fluidadmin.model.AddOrUpdateStatus;
 import com.thetatechno.fluidadmin.model.facility_model.Facilities;
 import com.thetatechno.fluidadmin.model.facility_model.Facility;
 import com.thetatechno.fluidadmin.model.facility_model.FacilityCodes;
@@ -69,24 +70,24 @@ public class FacilityRepository {
     public void insertFacility(final Facility facility, final OnDataChangedCallBackListener onDataChangedCallBackListener) {
 
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
-        Call<Status> call = myServicesInterface.addFacility(facility);
-        call.enqueue(new Callback<Status>() {
+        Call<AddOrUpdateStatus> call = myServicesInterface.addFacility(facility);
+        call.enqueue(new Callback<AddOrUpdateStatus>() {
 
             @Override
-            public void onResponse(@NonNull Call<Status> call, @NonNull Response<Status> response) {
+            public void onResponse(@NonNull Call<AddOrUpdateStatus> call, @NonNull Response<AddOrUpdateStatus> response) {
                 if (response.isSuccessful()) {
                     Log.i(TAG, "insertFacility: response " + response.toString());
-                    if (response.body().getStatus() != null) {
+
                         onDataChangedCallBackListener.onResponse(response.body().getStatus());
                         Log.i(TAG, "insertFacility: status " + response.body().getStatus());
-                    }
+
 
                 } else
                     onDataChangedCallBackListener.onResponse(null);
             }
 
             @Override
-            public void onFailure(Call<Status> call, Throwable t) {
+            public void onFailure(Call<AddOrUpdateStatus> call, Throwable t) {
                 call.cancel();
                 onDataChangedCallBackListener.onResponse(null);
             }
@@ -99,26 +100,23 @@ public class FacilityRepository {
     public void updateFacility(final Facility facility, final OnDataChangedCallBackListener onDataChangedCallBackListener) {
 
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
-        Call<Status> call = myServicesInterface.updateFacility(facility);
-        call.enqueue(new Callback<Status>() {
+        Call<AddOrUpdateStatus> call = myServicesInterface.updateFacility(facility);
+        call.enqueue(new Callback<AddOrUpdateStatus>() {
 
             @Override
-            public void onResponse(@NonNull Call<Status> call, @NonNull Response<Status> response) {
+            public void onResponse(@NonNull Call<AddOrUpdateStatus> call, @NonNull Response<AddOrUpdateStatus> response) {
                 if (response.isSuccessful()) {
                     Log.i(TAG, "updateFacility: response " + response.toString());
-                    if (response.body().getStatus() != null) {
+
                         onDataChangedCallBackListener.onResponse(response.body().getStatus());
                         Log.i(TAG, "updateFacility: status " + response.body().getStatus());
-
-                    }
-
 
                 } else
                     onDataChangedCallBackListener.onResponse(null);
             }
 
             @Override
-            public void onFailure(Call<Status> call, Throwable t) {
+            public void onFailure(Call<AddOrUpdateStatus> call, Throwable t) {
                 call.cancel();
                 onDataChangedCallBackListener.onResponse(null);
             }

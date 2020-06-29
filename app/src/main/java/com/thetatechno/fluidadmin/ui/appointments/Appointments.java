@@ -17,12 +17,14 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.databinding.FragmentAppointmentsBinding;
 import com.thetatechno.fluidadmin.model.appointment_model.Appointment;
-import com.thetatechno.fluidadmin.model.Staff;
-import com.thetatechno.fluidadmin.model.StaffData;
+import com.thetatechno.fluidadmin.model.staff_model.Staff;
+import com.thetatechno.fluidadmin.model.staff_model.StaffData;
 import com.thetatechno.fluidadmin.model.appointment_model.AppointmentListData;
+import com.thetatechno.fluidadmin.model.staff_model.StaffListModel;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -64,16 +66,23 @@ public class Appointments extends Fragment {
         appointmentListAdapter = new AppointmentListAdapter(getContext());
         binding.appointmentRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         binding.appointmentRecyclerView.setAdapter(appointmentListAdapter);
-        appointmentsViewModel.getStaffData().observe(getViewLifecycleOwner(), new Observer<StaffData>() {
+        appointmentsViewModel.getStaffData().observe(getViewLifecycleOwner(), new Observer<StaffListModel>() {
             @Override
-            public void onChanged(StaffData staffData) {
-                if (staffData != null) {
-                    if (staffData.getStaffList() != null) {
-                        providerList = (ArrayList<Staff>) staffData.getStaffList();
+            public void onChanged(StaffListModel staffData) {
+                    if (staffData.getStaffData() != null) {
+                        providerList = (ArrayList<Staff>) staffData.getStaffData().getStaffList();
                         ArrayAdapter<Staff> staffArrayAdapter = new ArrayAdapter<>(getContext(), R.layout.dropdown_menu_popup_item, providerList);
                         binding.providerList.setAdapter(staffArrayAdapter);
                     }
-                }
+                    else {
+                        Snackbar.make(binding.providerListTxtInput,staffData.getErrorMessage(),Snackbar.LENGTH_LONG).setAction(R.string.retry, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                appointmentsViewModel.getStaffData();
+                            }
+                        }).setAnchorView(binding.addNewAppointmentFab).show();
+                    }
+
             }
         });
         // TODO : observe on appointment method from view model
@@ -111,6 +120,7 @@ public class Appointments extends Fragment {
                 navController.navigate(R.id.action_appointments_to_selectSpecialityAndProviderAndDisplayCalender);
             }
         });
+        date = appointmentsViewModel.getTodayDateInFormat();
         appointmentsViewModel.getAppointments(providerId,date).observe(getViewLifecycleOwner(), appointmentsObserver);
 
         return binding.getRoot();

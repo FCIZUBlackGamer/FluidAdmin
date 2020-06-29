@@ -6,27 +6,31 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class ClientData {
-    @SerializedName("data")
+    @SerializedName("items")
     @Expose
-    private List<Person> personList = null;
-    @SerializedName("status")
+    private List<ClientModelForRegister> personList = null;
+    @SerializedName("error")
     @Expose
-    private String status;
+    private Error error;
 
-    public List<Person> getPersonList() {
+    public void setPersonList(List<ClientModelForRegister> personList) {
+        this.personList = personList;
+    }
+
+    public Error getError() {
+        return error;
+    }
+
+    public void setError(Error error) {
+        this.error = error;
+    }
+
+    public List<ClientModelForRegister> getPersonList() {
         return personList;
     }
 
-    public void setFacilities(List<Person> data) {
+    public void setFacilities(List<ClientModelForRegister> data) {
         this.personList = data;
     }
 
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 }

@@ -23,6 +23,7 @@ import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.listeners.OnDeleteListener;
+import com.thetatechno.fluidadmin.model.ClientModelForRegister;
 import com.thetatechno.fluidadmin.model.Person;
 import com.thetatechno.fluidadmin.utils.Constants;
 import com.thetatechno.fluidadmin.utils.EnumCode;
@@ -37,20 +38,18 @@ import io.sentry.event.UserBuilder;
 
 public class ClientListViewAdapter extends RecyclerView.Adapter<ClientListViewAdapter.vHolder> implements Filterable {
     private static final String ARG_CLIENT_ID = "clientId";
-    Context context;
-    FragmentManager fragmentManager;
-    List<Person> personList;
-    List<Person> filteredClientList;
-    OnDeleteListener listener;
-    NavController navController;
+    private Context context;
+    private List<ClientModelForRegister> personList;
+    private List<ClientModelForRegister> filteredClientList;
+    private OnDeleteListener listener;
+    private NavController navController;
 
 
-    public ClientListViewAdapter(Context context, @Nullable List<Person> personList, FragmentManager fragmentManager, NavController navController) {
+    public ClientListViewAdapter(Context context, @Nullable List<ClientModelForRegister> personList, NavController navController) {
         Gson gson = new Gson();
         Log.e("Images", gson.toJson(personList));
 
         this.context = context;
-        this.fragmentManager = fragmentManager;
         this.personList = personList;
         this.filteredClientList = personList;
         if (context instanceof OnDeleteListener)
@@ -76,51 +75,46 @@ public class ClientListViewAdapter extends RecyclerView.Adapter<ClientListViewAd
     public void onBindViewHolder(@NonNull final vHolder holder, final int position) {
 
         try {
-            if(!filteredClientList.get(position).getId().isEmpty()) {
-                holder.idTxt.setText(filteredClientList.get(position).getId());
+            if (!filteredClientList.get(position).getClientId().isEmpty()) {
+                holder.idTxt.setText(filteredClientList.get(position).getClientId());
                 holder.idTxt.setVisibility(View.VISIBLE);
-            }
-            else {
+            } else {
 
                 holder.idTxt.setVisibility(View.GONE);
             }
-            if(!filteredClientList.get(position).getFirstName().isEmpty() || ! filteredClientList.get(position).getFamilyName().isEmpty()) {
+            if (!filteredClientList.get(position).getFirstName().isEmpty() || !filteredClientList.get(position).getFamilyName().isEmpty()) {
                 holder.fullNameTxt.setText(filteredClientList.get(position).getFirstName() + " " + filteredClientList.get(position).getFamilyName());
                 holder.fullNameTxt.setVisibility(View.VISIBLE);
-            }
-            else {
+            } else {
                 holder.fullNameTxt.setVisibility(View.GONE);
             }
-            if(!filteredClientList.get(position).getEmail().isEmpty()) {
+            if (!filteredClientList.get(position).getEmail().isEmpty()) {
                 holder.mailTxt.setText(filteredClientList.get(position).getEmail());
                 holder.mailTxt.setVisibility(View.VISIBLE);
-            }
-            else {
+            } else {
                 holder.mailTxt.setVisibility(View.GONE);
             }
-            if(!filteredClientList.get(position).getMobileNumber().isEmpty()) {
-                holder.phoneTxt.setText(filteredClientList.get(position).getMobileNumber());
+            if (!filteredClientList.get(position).getMobile().isEmpty()) {
+                holder.phoneTxt.setText(filteredClientList.get(position).getMobile());
                 holder.phoneTxt.setVisibility(View.VISIBLE);
-            }
-            else {
+            } else {
 
                 holder.phoneTxt.setVisibility(View.GONE);
             }
 
-            if (!filteredClientList.get(position).getImageLink().isEmpty()) {
-                Glide.with(context).load(Constants.BASE_URL + Constants.BASE_EXTENSION_FOR_PHOTOS + filteredClientList.get(position).getImageLink())
+            if (!filteredClientList.get(position).getImageFile().isEmpty()) {
+                Glide.with(context).load(Constants.BASE_URL + Constants.BASE_EXTENSION_FOR_PHOTOS + filteredClientList.get(position).getImageFile())
                         .circleCrop()
+                        .placeholder(R.drawable.man)
                         .into(holder.personImg);
-            }
-            else{
-                if(!filteredClientList.get(position).getGender().isEmpty()) {
-                    if (filteredClientList.get(position).getGender().equals(EnumCode.Gender.M.toString())) {
+            } else {
+                if (!filteredClientList.get(position).getSexCode().isEmpty()) {
+                    if (filteredClientList.get(position).getSexCode().equals(EnumCode.Gender.M.toString())) {
                         holder.personImg.setImageResource(R.drawable.man);
-                    } else if(filteredClientList.get(position).getGender().equals(EnumCode.Gender.F.toString())){
+                    } else if (filteredClientList.get(position).getSexCode().equals(EnumCode.Gender.F.toString())) {
                         holder.personImg.setImageResource(R.drawable.ic_girl);
                     }
-                }
-                else {
+                } else {
                     holder.personImg.setImageResource(R.drawable.man);
                 }
             }
@@ -140,7 +134,7 @@ public class ClientListViewAdapter extends RecyclerView.Adapter<ClientListViewAd
                                 case R.id.bookAppointment:
                                     //handle edit click
                                     Bundle bundle = new Bundle();
-                                    bundle.putString(ARG_CLIENT_ID,  filteredClientList.get(position).getId());
+                                    bundle.putString(ARG_CLIENT_ID, filteredClientList.get(position).getClientId());
                                     navController.navigate(R.id.action_clientList_to_selectSpecialityAndProviderAndDisplayCalender, bundle);
                                     break;
                                 case R.id.deleteBranch:
@@ -165,8 +159,8 @@ public class ClientListViewAdapter extends RecyclerView.Adapter<ClientListViewAd
 
     @Override
     public int getItemCount() {
-        if(filteredClientList!=null && filteredClientList.size()>0)
-        return filteredClientList.size();
+        if (filteredClientList != null && filteredClientList.size() > 0)
+            return filteredClientList.size();
         else return 0;
     }
 
@@ -177,10 +171,10 @@ public class ClientListViewAdapter extends RecyclerView.Adapter<ClientListViewAd
             protected FilterResults performFiltering(CharSequence constraint) {
                 String charSequenceString = constraint.toString();
                 if (charSequenceString.isEmpty()) {
-                    filteredClientList= personList;
+                    filteredClientList = personList;
                 } else {
-                    List<Person> filteredList = new ArrayList<>();
-                    for (Person person : personList) {
+                    List<ClientModelForRegister> filteredList = new ArrayList<>();
+                    for (ClientModelForRegister person : personList) {
                         if (person.getFirstName().contains(charSequenceString) || person.getFamilyName().contains(charSequenceString)) {
                             filteredList.add(person);
                         }
@@ -195,7 +189,7 @@ public class ClientListViewAdapter extends RecyclerView.Adapter<ClientListViewAd
 
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
-                filteredClientList = (List<Person>) results.values;
+                filteredClientList = (List<ClientModelForRegister>) results.values;
                 notifyDataSetChanged();
             }
         };
@@ -204,7 +198,7 @@ public class ClientListViewAdapter extends RecyclerView.Adapter<ClientListViewAd
     public class vHolder extends RecyclerView.ViewHolder {
         ImageView personImg;
         TextView fullNameTxt, mailTxt, phoneTxt;
-        TextView idTxt,clientOptionMenuTxt;
+        TextView idTxt, clientOptionMenuTxt;
 
 
         public vHolder(@NonNull View itemView) {

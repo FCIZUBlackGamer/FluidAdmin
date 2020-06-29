@@ -14,8 +14,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="64dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginEnd="32dp"
+            android:layout_marginStart="@dimen/_32sdp"
+            android:layout_marginEnd="@dimen/_32sdp"
             android:hint="@string/description_hint"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -31,17 +31,17 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/branchEmailInputLayout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
-            android:layout_marginStart="32dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginTop="8dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginStart="@dimen/_32sdp"
+            android:layout_marginEnd="@dimen/_32sdp"
             android:hint="@string/email_prompt"
-            android:id="@+id/branchEmailInputLayout"
+            app:layout_constraintEnd_toEndOf="@+id/branch_description_txt_input_layout"
             app:layout_constraintStart_toStartOf="@id/branch_description_txt_input_layout"
-            app:layout_constraintTop_toBottomOf="@id/branch_description_txt_input_layout"
-            >
+            app:layout_constraintTop_toBottomOf="@id/branch_description_txt_input_layout">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/branchEmailEdtTxt"
@@ -55,9 +55,9 @@
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
-            android:layout_marginStart="32dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="@dimen/_32sdp"
+            android:layout_marginEnd="@dimen/_32sdp"
+            android:layout_marginTop="4dp"
             android:layout_height="wrap_content"
             android:hint="@string/mobile_number_txt"
             android:id="@+id/branchPhoneInputLayout"
@@ -75,9 +75,9 @@
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
-            android:layout_marginTop="8dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginEnd="32dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginStart="@dimen/_32sdp"
+            android:layout_marginEnd="@dimen/_32sdp"
             android:layout_height="wrap_content"
             android:hint="@string/address_txt"
             android:id="@+id/addressInputLayout"

@@ -5,20 +5,13 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
-import com.google.gson.Gson;
-import com.thetatechno.fluidadmin.listeners.OnDataChangedCallBackListener;
+import com.thetatechno.fluidadmin.model.APIResponse;
 import com.thetatechno.fluidadmin.model.Error;
-import com.thetatechno.fluidadmin.model.Status;
-import com.thetatechno.fluidadmin.model.code_model.Code;
-import com.thetatechno.fluidadmin.model.code_model.CodeList;
 import com.thetatechno.fluidadmin.model.session_model.Session;
 import com.thetatechno.fluidadmin.model.session_model.SessionResponse;
 import com.thetatechno.fluidadmin.network.interfaces.MyServicesInterface;
 import com.thetatechno.fluidadmin.network.interfaces.RetrofitInstance;
-import com.thetatechno.fluidadmin.ui.EspressoTestingIdlingResource;
-import com.thetatechno.fluidadmin.utils.App;
 import com.thetatechno.fluidadmin.utils.Constants;
-import com.thetatechno.fluidadmin.utils.PreferenceController;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -26,8 +19,8 @@ import retrofit2.Response;
 
 public class SessionRepository {
     private MutableLiveData<SessionResponse> sessionResponseLiveData = new MutableLiveData<>();
-    private MutableLiveData<Error> addSessionLiveData = new MutableLiveData<>();
-    private MutableLiveData<Error> updateSessionLiveData = new MutableLiveData<>();
+    private MutableLiveData<APIResponse> addSessionLiveData = new MutableLiveData<>();
+    private MutableLiveData<APIResponse> updateSessionLiveData = new MutableLiveData<>();
     private MutableLiveData<Error> deleteSessionLiveData = new MutableLiveData<>();
 
     private static String TAG = CodeRepository.class.getSimpleName();
@@ -59,14 +52,14 @@ public class SessionRepository {
         return sessionResponseLiveData;
     }
 
-    public MutableLiveData<Error> addSession(final Session session) {
+    public MutableLiveData<APIResponse> addSession(final Session session) {
 
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
-        Call<Error> call = myServicesInterface.addSession(session);
-        call.enqueue(new Callback<Error>() {
+        Call<APIResponse> call = myServicesInterface.addSession(session);
+        call.enqueue(new Callback<APIResponse>() {
 
             @Override
-            public void onResponse(Call<Error> call, Response<Error> response) {
+            public void onResponse(Call<APIResponse> call, Response<APIResponse> response) {
                 Log.i(TAG, "insertCode: response " + response.toString());
                 if (response.isSuccessful()) {
                     addSessionLiveData.setValue(response.body());
@@ -75,7 +68,7 @@ public class SessionRepository {
             }
 
             @Override
-            public void onFailure(Call<Error> call, Throwable t) {
+            public void onFailure(Call<APIResponse> call, Throwable t) {
                 addSessionLiveData.setValue(null);
                 t.printStackTrace();
             }
@@ -84,14 +77,14 @@ public class SessionRepository {
         return addSessionLiveData;
     }
 
-    public MutableLiveData<Error> modifySession(final Session session) {
+    public MutableLiveData<APIResponse> modifySession(final Session session) {
 
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
-        Call<Error> call = myServicesInterface.modifySession(session);
-        call.enqueue(new Callback<Error>() {
+        Call<APIResponse> call = myServicesInterface.modifySession(session);
+        call.enqueue(new Callback<APIResponse>() {
 
             @Override
-            public void onResponse(Call<Error> call, Response<Error> response) {
+            public void onResponse(Call<APIResponse> call, Response<APIResponse> response) {
                 Log.i(TAG, "insertCode: response " + response.toString());
                 if (response.isSuccessful()) {
                     updateSessionLiveData.setValue(response.body());
@@ -100,7 +93,7 @@ public class SessionRepository {
             }
 
             @Override
-            public void onFailure(Call<Error> call, Throwable t) {
+            public void onFailure(Call<APIResponse> call, Throwable t) {
                 updateSessionLiveData.setValue(null);
                 t.printStackTrace();
             }

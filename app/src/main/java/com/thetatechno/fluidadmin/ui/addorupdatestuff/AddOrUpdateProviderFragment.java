@@ -20,7 +20,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -29,14 +28,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.thetatechno.fluidadmin.R;
-import com.thetatechno.fluidadmin.model.Staff;
+import com.thetatechno.fluidadmin.model.staff_model.Staff;
 import com.thetatechno.fluidadmin.ui.EspressoTestingIdlingResource;
 import com.thetatechno.fluidadmin.ui.HomeActivity;
 import com.thetatechno.fluidadmin.utils.App;
@@ -479,6 +477,7 @@ public class AddOrUpdateProviderFragment extends Fragment {
             providerfirstNameEditTxt.setText(staff.getFirstName());
             providerLastNameEditTxt.setText(staff.getFamilyName());
             providerEmailEditTxt.setText(staff.getEmail());
+            providerMobileEditTxt.setText(staff.getMobileNumber());
             if (staff.getGender() == EnumCode.Gender.F.toString())
                 genderRadioGroup.check(R.id.femaleRadioButton);
             else if (staff.getGender().equals(EnumCode.Gender.M.toString()))

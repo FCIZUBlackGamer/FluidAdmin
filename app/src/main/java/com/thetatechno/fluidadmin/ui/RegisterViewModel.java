@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.thetatechno.fluidadmin.R;
+import com.thetatechno.fluidadmin.model.AddNewOrModifyClientResponse;
 import com.thetatechno.fluidadmin.model.ClientModelForRegister;
 import com.thetatechno.fluidadmin.model.Status;
 import com.thetatechno.fluidadmin.model.code_model.CodeList;
@@ -44,19 +45,35 @@ public class RegisterViewModel extends ViewModel {
         return idTypeLiveData;
     }
 
-    public MutableLiveData<Status> addNewClient(String firstName, String middleName, String familyName, String email, String mobile, String dateOfBirth, String gender, String nationalityCode, String idTypeCode, String idNumber) {
+    public MutableLiveData addNewClient(String firstName, String middleName, String familyName, String email, String mobile, String dateOfBirth, String gender, String nationalityCode, String idTypeCode, String idNumber) {
         ClientModelForRegister client = new ClientModelForRegister();
         client.setFirstName(firstName);
         client.setMiddleName(middleName);
         client.setFamilyName(familyName);
-        client.setEmailAddress(email);
+        client.setEmail(email);
         client.setMobile(mobile);
         client.setDateOfBirth(dateOfBirth);
-        client.setGender(gender);
+        client.setSexCode(gender);
         client.setNationalityCode(nationalityCode);
-        client.setIdTypeCode(idTypeCode);
+        client.setPersonalIdCode(idTypeCode);
         client.setPersonalId(idNumber);
         return clientRepository.addNewClient(client);
+    }
+
+    public MutableLiveData<AddNewOrModifyClientResponse> addNewCustomer(String firstName, String middleName, String familyName, String email, String mobile, String dateOfBirth,String guardId, String gender, String nationalityCode, String idTypeCode, String idNumber) {
+        ClientModelForRegister client = new ClientModelForRegister();
+        client.setFirstName(firstName);
+        client.setMiddleName(middleName);
+        client.setFamilyName(familyName);
+        client.setEmail(email);
+        client.setMobile(mobile);
+        client.setDateOfBirth(dateOfBirth);
+        client.setSexCode(gender);
+        client.setNationalityCode(nationalityCode);
+        client.setPersonalIdCode(idTypeCode);
+        client.setGardianId(guardId);
+        client.setPersonalId(idNumber);
+        return clientRepository.addNewCustomer(client);
     }
 
     private boolean isValidEmail(String email) {

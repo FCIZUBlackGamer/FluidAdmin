@@ -25,11 +25,12 @@ import androidx.navigation.Navigation;
 
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.databinding.AddScheduleLayoutBinding;
-import com.thetatechno.fluidadmin.model.Staff;
+import com.thetatechno.fluidadmin.model.staff_model.Staff;
 import com.thetatechno.fluidadmin.model.branches_model.Branch;
 import com.thetatechno.fluidadmin.model.branches_model.BranchesResponse;
 import com.thetatechno.fluidadmin.model.facility_model.Facility;
 import com.thetatechno.fluidadmin.model.shedule.Schedule;
+import com.thetatechno.fluidadmin.ui.HomeActivity;
 import com.thetatechno.fluidadmin.utils.Constants;
 
 import java.util.ArrayList;
@@ -66,17 +67,27 @@ public class FragmentAddOrUpdateSchedule extends Fragment {
             binding.timeFromTxt.setText(schedule.getStartTime());
             binding.dateFromTxt.setText(schedule.getStartDate());
             binding.dateToTxt.setText(schedule.getEndDate());
+            displaySelectedDays();
+            binding.addOrUpdateScheduleBtn.setText(R.string.update_txt);
+            ((HomeActivity) requireActivity()).getSupportActionBar().setTitle(R.string.update_schedule_txt);
+
         } else {
             schedule = null;
+            binding.addOrUpdateScheduleBtn.setText(R.string.add_txt);
+            ((HomeActivity) requireActivity()).getSupportActionBar().setTitle(R.string.add_Schedule_txt);
+
         }
         addOrUpdateScheduleViewModel.getStaffData().observe(getViewLifecycleOwner(), staffData -> {
-            if (staffData != null) {
-                providerArrayList = (ArrayList<Staff>) staffData.getStaffList();
+            if (staffData.getStaffData() != null) {
+                providerArrayList = (ArrayList<Staff>) staffData.getStaffData().getStaffList();
                 ArrayAdapter<Staff> staffArrayAdapter = new ArrayAdapter<Staff>(getContext(), R.layout.dropdown_menu_popup_item, providerArrayList);
                 binding.providerAutoCompleteTextView.setAdapter(staffArrayAdapter);
                 if (schedule != null) {
                     binding.providerAutoCompleteTextView.setText(schedule.getProviderName());
                 }
+            } else {
+                Toast.makeText(getContext(), staffData.getErrorMessage(), Toast.LENGTH_SHORT).show();
+
             }
         });
         addOrUpdateScheduleViewModel.getAllFacilities().observe(getViewLifecycleOwner(), staffData -> {
@@ -103,16 +114,19 @@ public class FragmentAddOrUpdateSchedule extends Fragment {
 
             }
         });
-        binding.selectDateFromimg.setOnClickListener(v -> {
-            showDatePicker(binding.dateFromTxt, binding.timeFromTxt);
+        binding.cardView2.setOnClickListener(v -> {
+            showDatePicker(binding.dateFromTxt);
         });
-
-        binding.selectDateToimg.setOnClickListener(v -> {
-            showDatePicker(binding.dateToTxt, binding.timeToTxt);
+        binding.cardView3.setOnClickListener(v -> {
+            showTimePicker(binding.timeFromTxt);
         });
+        binding.cardView.setOnClickListener(v -> {
+            showDatePicker(binding.dateToTxt);
+        });
+        binding.cardView4.setOnClickListener(v -> showTimePicker( binding.timeToTxt));
 
         binding.addOrUpdateScheduleBtn.setOnClickListener(v -> {
-                CollectDate();
+            CollectDate();
         });
 
         binding.cancelBtn.setOnClickListener(v -> {
@@ -148,23 +162,26 @@ public class FragmentAddOrUpdateSchedule extends Fragment {
                         branchesList = (ArrayList<Branch>) branchesResponse.getBranchList();
                         ArrayAdapter<Branch> branchArrayAdapter = new ArrayAdapter<Branch>(getContext(), R.layout.dropdown_menu_popup_item, branchesList);
                         binding.siteAutoCompleteTextView.setAdapter(branchArrayAdapter);
-                        if (schedule != null) {
-                            binding.siteAutoCompleteTextView.setText(schedule.getSiteId());
-                        }
+                        if (schedule != null)
+                            for (Branch branch : branchesList) {
+                                if (branch.getSiteId().equals(schedule.getSiteId())) {
+                                    binding.siteAutoCompleteTextView.setText(branch.getDescription());
+                                    break;
+                                }
+                            }
                     }
                 }
             }
         });
     }
 
-    private void showDatePicker(TextView date, TextView time) {
+    private void showDatePicker(TextView date) {
         final Calendar newCalendar = Calendar.getInstance();
         @SuppressLint("SetTextI18n")
         DatePickerDialog StartTime = new DatePickerDialog(getContext(), R.style.DialogTheme, (DatePickerDialog.OnDateSetListener) (view, year, monthOfYear, dayOfMonth) -> {
             Calendar newDate = Calendar.getInstance();
             newDate.set(year, monthOfYear, dayOfMonth);
             date.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
-            showTimePicker(time);
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
         StartTime.show();
     }
@@ -210,27 +227,36 @@ public class FragmentAddOrUpdateSchedule extends Fragment {
             schedule.setEndTime(binding.timeToTxt.getText().toString());
             schedule.setWorkingDays(getSelectedDays());
             schedule.setSiteId(siteId);
-            addOrUpdateScheduleViewModel.addSchedule(schedule).observe(this, error -> {
+            addOrUpdateScheduleViewModel.addSchedule(schedule).observe(this, response -> {
                 //Handle Error Message
-                Toast.makeText(requireActivity(), error.getErrorMessage(), Toast.LENGTH_SHORT).show();
-                if (error.getErrorCode() == 0) {
-                    onCancelOrBackButtonPressed();
+                if(response.getError()!=null) {
+                    Toast.makeText(requireActivity(), response.getError().getErrorMessage(), Toast.LENGTH_SHORT).show();
+                    if (response.getError().getErrorCode() == 0) {
+                        onCancelOrBackButtonPressed();
+                    }
+                }
+                else
+                {
+                    Toast.makeText(requireActivity(), "Error,Try later", Toast.LENGTH_SHORT).show();
+
                 }
             });
         } else {
             schedule.setDescription(binding.scheduleDescriptionTiet.getText().toString());
-            schedule.setProviderId(providerId);
-            schedule.setFacilityId(facilityId);
+            if (providerId != null)
+                schedule.setProviderId(providerId);
+            if (facilityId != null)
+                schedule.setFacilityId(facilityId);
             schedule.setEndDate(binding.dateToTxt.getText().toString());
             schedule.setStartDate(binding.dateFromTxt.getText().toString());
             schedule.setStartTime(binding.timeFromTxt.getText().toString());
             schedule.setEndTime(binding.timeToTxt.getText().toString());
             schedule.setWorkingDays(getSelectedDays());
             schedule.setSiteId(siteId);
-            addOrUpdateScheduleViewModel.updateSchedule(schedule).observe(this, error -> {
+            addOrUpdateScheduleViewModel.updateSchedule(schedule).observe(this, response -> {
                 //Handle Error Message
-                Toast.makeText(requireActivity(), error.getErrorMessage(), Toast.LENGTH_SHORT).show();
-                if (error.getErrorCode() == 0) {
+                Toast.makeText(requireActivity(), response.getError().getErrorMessage(), Toast.LENGTH_SHORT).show();
+                if (response.getError().getErrorCode() == 0) {
                     onCancelOrBackButtonPressed();
                 }
             });
@@ -255,5 +281,38 @@ public class FragmentAddOrUpdateSchedule extends Fragment {
             daysChar += "FRI";
 
         return daysChar;
+    }
+
+    private void displaySelectedDays() {
+
+        String[] selectedDays = schedule.getWorkingDays().split("(?<=\\G...)");
+        for (int i = 0; i < selectedDays.length; i++) {
+            switch (selectedDays[i]) {
+                case "SAT":
+                    binding.SAT.setChecked(true);
+                    break;
+                case "SUN":
+                    binding.SUN.setChecked(true);
+                    break;
+                case "MON":
+                    binding.MON.setChecked(true);
+                    break;
+                case "TUE":
+                    binding.TUE.setChecked(true);
+                    break;
+                case "WED":
+                    binding.WED.setChecked(true);
+                    break;
+
+                case "THU":
+                    binding.THU.setChecked(true);
+                    break;
+                case "FRI":
+                    binding.FRI.setChecked(true);
+                    break;
+
+
+            }
+        }
     }
 }

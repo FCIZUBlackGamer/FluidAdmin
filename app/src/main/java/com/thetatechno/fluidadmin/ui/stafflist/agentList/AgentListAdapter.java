@@ -1,15 +1,13 @@
 package com.thetatechno.fluidadmin.ui.stafflist.agentList;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.TypedValue;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageButton;
@@ -29,13 +27,11 @@ import com.bumptech.glide.Glide;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.listeners.OnDeleteListener;
 import com.thetatechno.fluidadmin.listeners.OnLinkToFacilityClickedListener;
-import com.thetatechno.fluidadmin.model.Staff;
+import com.thetatechno.fluidadmin.model.staff_model.Staff;
 import com.thetatechno.fluidadmin.ui.EspressoTestingIdlingResource;
 import com.thetatechno.fluidadmin.utils.Constants;
 import com.thetatechno.fluidadmin.utils.EnumCode;
 
-import java.io.FileFilter;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -110,6 +106,7 @@ public class AgentListAdapter extends RecyclerView.Adapter<AgentListAdapter.Agen
             if (!filteredAgentList.get(position).getImageLink().isEmpty()) {
                 Glide.with(context).load(Constants.BASE_URL + Constants.BASE_EXTENSION_FOR_PHOTOS + filteredAgentList.get(position).getImageLink())
                         .circleCrop()
+                        .placeholder(R.drawable.man)
                         .into(holder.personImg);
             } else {
                 if (!filteredAgentList.get(position).getGender().isEmpty()) {
@@ -144,6 +141,13 @@ public class AgentListAdapter extends RecyclerView.Adapter<AgentListAdapter.Agen
                 @Override
                 public void onPageSelected(int vposition) {
                     super.onPageSelected(vposition);
+
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int state) {
+                    super.onPageScrollStateChanged(state);
+                    Log.e("position", agentList.get(position).toString());
                     if (holder.pager.getCurrentItem() == agentList.get(position).getFacilityList().size() - 1) {
                         holder.nextBtn.setVisibility(View.GONE);
                         holder.previousBtn.setVisibility(View.VISIBLE);
@@ -155,11 +159,6 @@ public class AgentListAdapter extends RecyclerView.Adapter<AgentListAdapter.Agen
                         holder.previousBtn.setVisibility(View.GONE);
                         holder.nextBtn.setVisibility(View.VISIBLE);
                     }
-                }
-
-                @Override
-                public void onPageScrollStateChanged(int state) {
-                    super.onPageScrollStateChanged(state);
                 }
             });
             holder.nextBtn.setOnClickListener(new View.OnClickListener() {

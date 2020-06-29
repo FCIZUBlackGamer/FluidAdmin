@@ -22,6 +22,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.databinding.ConfirmAppointmentBookingDialogBinding;
@@ -42,24 +44,13 @@ public class ConfirmAppointment extends Fragment {
     private static String ARG_BOOK_DATE = "bookDate";
     private static String ARG_BOOK_TIME = "bookedTime";
     private static String ARG_SPECIALITY_CODE = "specialityCode";
-
-
+    NavController navController;
     OnConfirmAppointmentListener onConfirmAppointmentListener;
     private Button okBtn, takeScreenShotBtn;
     ConfirmAppointmentBookingDialogBinding binding;
 
-    MediaPlayer mp ;
+    MediaPlayer mp;
 
-    public static ConfirmAppointment newInstance(String providerName, String bookedDate, String bookedTime, String specialityCode) {
-        ConfirmAppointment fragment = new ConfirmAppointment();
-        Bundle bundle = new Bundle();
-        bundle.putString(ARG_PROVIDER_NAME,providerName);
-        bundle.putString(ARG_BOOK_DATE, bookedDate);
-        bundle.putString(ARG_BOOK_TIME, bookedTime);
-        bundle.putString(ARG_SPECIALITY_CODE, specialityCode);
-        fragment.setArguments(bundle);
-        return fragment;
-    }
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -86,15 +77,17 @@ public class ConfirmAppointment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.confirm_appointment_booking_dialog, container, false);
-
+        navController = Navigation.findNavController(getActivity(),R.id.nav_host_fragment);
         binding.appointmentProviderNameTxtView.setText(providerName);
         binding.timeTxtView.setText(bookedTime);
         binding.appointmentDateTxtView.setText(bookedDate);
         binding.specialityTxtView.setText(specialityCode);
         binding.okBtn.setOnClickListener(v -> {
-            if (onConfirmAppointmentListener != null) {
-                onConfirmAppointmentListener.onClickOnOkBtn();
-            }
+//            if (onConfirmAppointmentListener != null) {
+//                onConfirmAppointmentListener.onClickOnOkBtn();
+//
+//            }
+navController.popBackStack();
         });
 
         binding.takeScreenShotBtn.setOnClickListener(v -> {
@@ -102,7 +95,7 @@ public class ConfirmAppointment extends Fragment {
             mp.start();
         });
 
-        if (!isStoragePermissionGranted()){
+        if (!isStoragePermissionGranted()) {
             checkPermission();
         }
 
@@ -152,7 +145,7 @@ public class ConfirmAppointment extends Fragment {
         CharSequence now = android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", date);
         String filename = Environment.getExternalStorageDirectory() + "/ScreenShooter/" + now + ".jpg";
 
-        View root =  requireActivity().getWindow().getDecorView().getRootView();
+        View root = requireActivity().getWindow().getDecorView().getRootView();
         root.setDrawingCacheEnabled(true);
         Bitmap bitmap = Bitmap.createBitmap(root.getDrawingCache());
         root.setDrawingCacheEnabled(false);
@@ -167,10 +160,6 @@ public class ConfirmAppointment extends Fragment {
             fileOutputStream.flush();
             fileOutputStream.close();
 
-//            Uri uri = Uri.fromFile(file);
-//            Intent intent = new Intent(Intent.ACTION_VIEW);
-//            intent.setDataAndType(uri, "image/*");
-//            startActivity(Intent.createChooser(intent,"Choose App"));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -186,20 +175,19 @@ public class ConfirmAppointment extends Fragment {
         startActivity(intent);
     }
 
-    public  boolean isStoragePermissionGranted() {
+    public boolean isStoragePermissionGranted() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkPermission()) {
-                Log.v("TAG","Permission is granted");
+                Log.v("TAG", "Permission is granted");
                 return true;
             } else {
 
-                Log.v("TAG","Permission is revoked");
+                Log.v("TAG", "Permission is revoked");
                 ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
                 return false;
             }
-        }
-        else { //permission is automatically granted on sdk<23 upon installation
-            Log.v("TAG","Permission is granted");
+        } else { //permission is automatically granted on sdk<23 upon installation
+            Log.v("TAG", "Permission is granted");
             return true;
         }
     }

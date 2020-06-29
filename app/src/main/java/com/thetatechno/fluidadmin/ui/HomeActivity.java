@@ -38,13 +38,14 @@ import com.thetatechno.fluidadmin.model.code_model.Code;
 import com.thetatechno.fluidadmin.model.facility_model.Facilities;
 import com.thetatechno.fluidadmin.model.facility_model.Facility;
 import com.thetatechno.fluidadmin.model.facility_model.FacilityCodes;
-import com.thetatechno.fluidadmin.model.Staff;
+import com.thetatechno.fluidadmin.model.staff_model.Staff;
 import com.thetatechno.fluidadmin.ui.dialogs.ConfirmDeleteDialog;
 import com.thetatechno.fluidadmin.ui.dialogs.FacilitiesListDialog;
 import com.thetatechno.fluidadmin.ui.facilityList.FacilityListViewModel;
 import com.thetatechno.fluidadmin.utils.Constants;
 import com.thetatechno.fluidadmin.utils.PreferenceController;
 import com.thetatechno.fluidadmin.utils.EnumCode;
+import com.yariksoffice.lingver.Lingver;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -136,9 +137,12 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     public void checkOnTheCurrentLanguage() {
 
         if (PreferenceController.getInstance(this).get(PreferenceController.LANGUAGE).equals(Constants.ARABIC)) {
+            PreferenceController.getInstance(this).persist(PreferenceController.LANGUAGE, Constants.ARABIC);
+
             navigationView.getMenu().findItem(R.id.language_reference).setTitle(R.string.menu_english_language);
 
         } else if (PreferenceController.getInstance(this).get(PreferenceController.LANGUAGE).equals(Constants.ENGLISH)) {
+            PreferenceController.getInstance(this).persist(PreferenceController.LANGUAGE, Constants.ENGLISH);
             navigationView.getMenu().findItem(R.id.language_reference).setTitle(R.string.menu_arabic_language);
 
         }
@@ -149,11 +153,13 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         if (!PreferenceController.getInstance(this).get(PreferenceController.LANGUAGE).equals(language)) {
             if (PreferenceController.getInstance(this).get(PreferenceController.LANGUAGE).equals(Constants.ARABIC)) {
                 PreferenceController.getInstance(this).persist(PreferenceController.LANGUAGE, Constants.ENGLISH);
+                Lingver.getInstance().setLocale(this, Constants.ENGLISH);
             } else {
                 PreferenceController.getInstance(this).persist(PreferenceController.LANGUAGE, Constants.ARABIC);
+                Lingver.getInstance().setLocale(this, Constants.ARABIC);
             }
             finish();
-            startActivity(new Intent(this, HomeActivity.class));
+           startActivity(new Intent(this, HomeActivity.class));
 
         }
 
@@ -254,7 +260,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 break;
             case R.id.clientList:
                 navigateToClientList();
-
                 break;
 
             case R.id.facility:
@@ -485,7 +490,13 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         mainViewModel.deleteSession(session).observe(this, new Observer<Error>() {
             @Override
             public void onChanged(Error error) {
-                Toast.makeText(HomeActivity.this, error.getErrorMessage(), Toast.LENGTH_SHORT).show();
+                if(error!=null) {
+                    Toast.makeText(HomeActivity.this, error.getErrorMessage(), Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(HomeActivity.this, "error, try again", Toast.LENGTH_SHORT).show();
+
+                }
             }
         });
     }

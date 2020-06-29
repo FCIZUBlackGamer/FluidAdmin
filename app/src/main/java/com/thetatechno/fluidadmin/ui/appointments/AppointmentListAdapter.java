@@ -63,27 +63,7 @@ public class AppointmentListAdapter extends RecyclerView.Adapter<AppointmentList
             holder.appointmentListItemBinding.monthTxt.setText(StringUtil.getMonth(appointment.getArrivalTime()));
             holder.appointmentListItemBinding.yearTxt.setText(StringUtil.getYear(appointment.getArrivalTime()));
         }
-//        holder.appointmentListItemBinding.optionMenu.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                PopupMenu popup = new PopupMenu(mContext, holder.appointmentListItemBinding.optionMenu);
-//                popup.inflate(R.menu.option_menu);
-//                popup.setOnMenuItemClickListener(item -> {
-//                    switch (item.getItemId()) {
-//                        case R.id.cancelAppointment:
-//                            if(listener!=null)
-//                            listener.onOpenCancelAppointmentDialog(appointment.getSltoId());
-//                            break;
-//                    }
-//                    return false;
-//                });
-//                //displaying the popup
-//                popup.show();
-//            }
-//        });
-
-
-        if (!appointment.getProviderImagePath().isEmpty()) {
+        if (appointment.getProviderImagePath()!=null && !appointment.getProviderImagePath().isEmpty()) {
             Glide.with(mContext)
                     .load(Constants.BASE_URL + Constants.BASE_EXTENSION_FOR_PHOTOS + appointment.getProviderImagePath())
                     .circleCrop()

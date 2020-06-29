@@ -33,13 +33,10 @@ import static com.thetatechno.fluidadmin.utils.Constants.ARG_STAFF;
 public class SessionListAdapter extends RecyclerView.Adapter<SessionListAdapter.ScheduleViewHolder> {
 
     Context context;
-
     List<Session> sessionList;
     OnDeleteListener listener;
-
     NavController navController;
     Bundle bundle;
-
 
     public SessionListAdapter(NavController navControlle, Context context, List<Session> sessionList) {
         this.sessionList = sessionList;
@@ -56,10 +53,10 @@ public class SessionListAdapter extends RecyclerView.Adapter<SessionListAdapter.
     @Override
     public ScheduleViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
-        Sentry.init("https://77af95af46ac4f068742d097b9c782c1@sentry.io/2577929", new AndroidSentryClientFactory(context));
-        Sentry.getContext().setUser(
-                new UserBuilder().setUsername("theta").build()
-        );
+//        Sentry.init("https://77af95af46ac4f068742d097b9c782c1@sentry.io/2577929", new AndroidSentryClientFactory(context));
+//        Sentry.getContext().setUser(
+//                new UserBuilder().setUsername("theta").build()
+//        );
         view = LayoutInflater.from(context).inflate(R.layout.session_item_layout, parent, false);
 
         return new ScheduleViewHolder(view);
@@ -76,7 +73,8 @@ public class SessionListAdapter extends RecyclerView.Adapter<SessionListAdapter.
                 holder.day_name_txt.setText(sessionList.get(position).getSessionDate());
                 holder.time_from_txt.setText(sessionList.get(position).getScheduledStart());
                 holder.time_to_txt.setText(sessionList.get(position).getScheduledEnd());
-
+                holder.facilityNameTxtView.setText(sessionList.get(position).getFacilitDescription());
+                holder.providerNameTxtView.setText(sessionList.get(position).getProviderName());
                 holder.optionMenu.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -88,7 +86,7 @@ public class SessionListAdapter extends RecyclerView.Adapter<SessionListAdapter.
                                     bundle.putSerializable(ARG_SESSION, (Serializable) sessionList.get(position));
                                     navController.navigate(R.id.action_sessionFragment_to_fragmentAddOrUpdateSesssion, bundle);
                                     break;
-                                case R.id.deleteCode:
+                                case R.id.deleteSession:
                                     if (listener != null)
                                         listener.onDeleteButtonClicked(sessionList.get(position));
 
@@ -104,7 +102,8 @@ public class SessionListAdapter extends RecyclerView.Adapter<SessionListAdapter.
             }
 
         } catch (Exception e) {
-            Sentry.capture(e);
+            e.printStackTrace();
+//            Sentry.capture(e);
         }
 
     }
@@ -117,6 +116,7 @@ public class SessionListAdapter extends RecyclerView.Adapter<SessionListAdapter.
 
     public class ScheduleViewHolder extends RecyclerView.ViewHolder {
         TextView optionMenu, day_name_txt, time_from_txt, time_to_txt;
+        TextView providerNameTxtView, facilityNameTxtView;
         ImageView doctorImg;
 
 
@@ -127,6 +127,8 @@ public class SessionListAdapter extends RecyclerView.Adapter<SessionListAdapter.
             time_from_txt = itemView.findViewById(R.id.time_from_txt);
             time_to_txt = itemView.findViewById(R.id.time_to_txt);
             doctorImg = itemView.findViewById(R.id.doctorImg);
+            providerNameTxtView = itemView.findViewById(R.id.provider_name_txt_view);
+            facilityNameTxtView = itemView.findViewById(R.id.FacilityNameTxt);
 
         }
     }

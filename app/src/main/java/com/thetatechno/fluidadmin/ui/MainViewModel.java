@@ -12,7 +12,7 @@ import com.thetatechno.fluidadmin.model.branches_model.Branch;
 import com.thetatechno.fluidadmin.model.code_model.Code;
 import com.thetatechno.fluidadmin.model.facility_model.Facility;
 import com.thetatechno.fluidadmin.model.facility_model.FacilityCodes;
-import com.thetatechno.fluidadmin.model.Staff;
+import com.thetatechno.fluidadmin.model.staff_model.Staff;
 import com.thetatechno.fluidadmin.model.session_model.Session;
 import com.thetatechno.fluidadmin.model.shedule.Schedule;
 import com.thetatechno.fluidadmin.network.repositories.BranchesRepository;
@@ -45,17 +45,17 @@ public class MainViewModel extends ViewModel {
     private  String messageForSFacility = "";
 
     public MutableLiveData<String> deleteAgentOrProvider(final Staff staff) {
-        staffRepository.deleteStaff(staff.getStaffId(), new OnDataChangedCallBackListener<String>() {
+        staffRepository.deleteStaff(staff.getStaffId(), new OnDataChangedCallBackListener<Integer>() {
             @Override
-            public void onResponse(String b) {
+            public void onResponse(Integer b) {
                 Log.i(TAG, "deleteAgentOrProvider: delete state " + b);
-                if (b.equals(Constants.DELETE_SUCCESS_STATE)) {
+                if (b == Constants.DELETE_SUCCESS_STATE) {
                     messageForStaff = "Delete " + staff.getFirstName() + " successfully";
                 }
-                else if (b.equals("-2292")){
+                else if (b == -2292){
                     messageForStaff = "Cannot delete, Provider has a schedule.";
 
-                }else if (b.equals(Constants.ADD_DELETE_OR_UPDATE_FAIL_STATE)) {
+                }else if (b == Constants.ADD_DELETE_OR_UPDATE_FAIL_STATE) {
                     messageForStaff = "Failed to delete.";
 
                 }

@@ -25,12 +25,13 @@ import androidx.navigation.Navigation;
 
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.databinding.AddSessionLayoutBinding;
-import com.thetatechno.fluidadmin.model.Error;
-import com.thetatechno.fluidadmin.model.Staff;
+import com.thetatechno.fluidadmin.model.APIResponse;
+import com.thetatechno.fluidadmin.model.staff_model.Staff;
 import com.thetatechno.fluidadmin.model.branches_model.Branch;
 import com.thetatechno.fluidadmin.model.branches_model.BranchesResponse;
 import com.thetatechno.fluidadmin.model.facility_model.Facility;
 import com.thetatechno.fluidadmin.model.session_model.Session;
+import com.thetatechno.fluidadmin.ui.HomeActivity;
 import com.thetatechno.fluidadmin.ui.addOrUpdateSchedule.AddOrUpdateScheduleViewModel;
 import com.thetatechno.fluidadmin.utils.App;
 import com.thetatechno.fluidadmin.utils.Constants;
@@ -74,13 +75,15 @@ public class FragmentAddOrUpdateSesssion extends Fragment {
             session = null;
         }
         addOrUpdateScheduleViewModel.getStaffData().observe(getViewLifecycleOwner(), staffData -> {
-            if (staffData != null) {
-                providerArrayList = (ArrayList<Staff>) staffData.getStaffList();
+            if (staffData.getStaffData() != null) {
+                providerArrayList = (ArrayList<Staff>) staffData.getStaffData().getStaffList();
                 ArrayAdapter<Staff> staffArrayAdapter = new ArrayAdapter<Staff>(getContext(), R.layout.dropdown_menu_popup_item, providerArrayList);
                 binding.providerAutoCompleteTextView.setAdapter(staffArrayAdapter);
                 if (session != null) {
                     binding.providerAutoCompleteTextView.setText(session.getProviderName());
                 }
+            } else {
+                Toast.makeText(getContext(), staffData.getErrorMessage(), Toast.LENGTH_SHORT).show();
             }
         });
         addOrUpdateScheduleViewModel.getAllFacilities().observe(getViewLifecycleOwner(), staffData -> {
@@ -212,39 +215,47 @@ public class FragmentAddOrUpdateSesssion extends Fragment {
     private void CollectDate() {
         if (session == null) {
             session = new Session();
-            session.setProviderId(providerId);
-            session.setFacilityId(facilityId);
+            if (providerId != null)
+                session.setProviderId(providerId);
+            if (facilityId != null)
+                session.setFacilityId(facilityId);
             session.setScheduledStart(binding.timeFromTxt.getText().toString());
             session.setScheduledEnd(binding.timeToTxt.getText().toString());
             session.setSessionDate(binding.dateTxt.getText().toString());
             session.setSiteId(siteId);
             session.setLangId(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
-            addOrUpdateSessionViewModel.addSession(session).observe(this, (Error error) -> {
-                //Handle Error Message
-                if (error != null) {
-                    Toast.makeText(requireActivity(), error.getErrorMessage(), Toast.LENGTH_SHORT).show();
-                    if (error.getErrorCode() == 0) {
+            addOrUpdateSessionViewModel.addSession(session).observe(this, (APIResponse response) -> {
+                if (response != null) {
+                    Toast.makeText(requireActivity(), response.getError().getErrorMessage(), Toast.LENGTH_SHORT).show();
+                    if (response.getError().getErrorCode() == 0) {
                         onCancelOrBackButtonPressed();
                     }
                 }
             });
         } else {
-            session.setProviderId(providerId);
-            session.setFacilityId(facilityId);
+            if (providerId != null)
+                session.setProviderId(providerId);
+            if (facilityId != null)
+                session.setFacilityId(facilityId);
             session.setScheduledStart(binding.timeFromTxt.getText().toString());
             session.setScheduledEnd(binding.timeToTxt.getText().toString());
             session.setSessionDate(binding.dateTxt.getText().toString());
+            if(siteId!=null)
             session.setSiteId(siteId);
             session.setLangId(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
 
-            addOrUpdateSessionViewModel.updateSession(session).observe(this, error -> {
-                if (error != null) {
-                    Toast.makeText(requireActivity(), error.getErrorMessage(), Toast.LENGTH_SHORT).show();
-                    if (error.getErrorCode() == 0) {
+            addOrUpdateSessionViewModel.updateSession(session).observe(this, response -> {
+                if (response != null) {
+                    Toast.makeText(requireActivity(), response.getError().getErrorMessage(), Toast.LENGTH_SHORT).show();
+                    if (response.getError().getErrorCode() == 0) {
                         onCancelOrBackButtonPressed();
                     }
                 }
             });
         }
+    }
+    private void updateTitle(int resourceId) {
+        ((HomeActivity)requireActivity()).getSupportActionBar().setTitle(resourceId);
+
     }
 }

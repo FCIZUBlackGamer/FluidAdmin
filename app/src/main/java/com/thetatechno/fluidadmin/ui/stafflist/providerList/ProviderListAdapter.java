@@ -22,8 +22,7 @@ import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.listeners.OnDeleteListener;
-import com.thetatechno.fluidadmin.model.Person;
-import com.thetatechno.fluidadmin.model.Staff;
+import com.thetatechno.fluidadmin.model.staff_model.Staff;
 import com.thetatechno.fluidadmin.utils.Constants;
 import com.thetatechno.fluidadmin.utils.EnumCode;
 
@@ -109,6 +108,7 @@ if(position <filteredProviderList.size()) {
 
         Glide.with(context).load(Constants.BASE_URL + Constants.BASE_EXTENSION_FOR_PHOTOS + filteredProviderList.get(position).getImageLink())
                 .circleCrop()
+                .placeholder(R.drawable.man)
                 .into(holder.personImg);
     } else {
         if (!filteredProviderList.get(position).getGender().isEmpty()) {

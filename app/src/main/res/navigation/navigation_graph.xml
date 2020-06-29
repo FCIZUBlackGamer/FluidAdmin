@@ -101,7 +101,7 @@
     <fragment
         android:id="@+id/branches"
         android:name="com.thetatechno.fluidadmin.ui.branches.Branches"
-        android:label="Branches" >
+        android:label="@string/branches_txt" >
 
         <action
             android:id="@+id/action_branches_to_addOrUpdateBranch"
@@ -111,7 +111,7 @@
     <fragment
         android:id="@+id/appointments"
         android:name="com.thetatechno.fluidadmin.ui.appointments.Appointments"
-        android:label="Appointments" >
+        android:label="@string/appointments_txt" >
 
         <action
             android:id="@+id/action_appointments_to_selectSpecialityAndProviderAndDisplayCalender"
@@ -120,7 +120,7 @@
     <fragment
         android:id="@+id/addOrUpdateBranch"
         android:name="com.thetatechno.fluidadmin.ui.addOrUpdateBranch.AddOrUpdateBranch"
-        android:label="AddOrUpdateBranch" >
+         >
         <action
             android:id="@+id/action_addOrUpdateBranch_to_branches"
             app:destination="@id/branches" />
@@ -144,26 +144,26 @@
     <fragment
         android:id="@+id/confirmAppointment"
         android:name="com.thetatechno.fluidadmin.ui.ConfirmAppointment"
-        android:label="ConfirmAppointment" />
+        android:label="@string/confirm_appointment_txt" />
     <fragment
         android:id="@+id/registerPage3"
-        android:name="com.thetatechno.fluidadmin.ui.RegisterPage3"
-        android:label="Add new client" />
+        android:name="com.thetatechno.fluidadmin.ui.AddNewClient"
+        android:label="@string/add_new_client" />
     <fragment
         android:id="@id/scheduleFragment"
         android:name="com.thetatechno.fluidadmin.ui.Schedule.ScheduleFragment"
-        android:label="Schedules" >
-        <action
-            android:id="@+id/action_scheduleFragment_to_sessionFragment"
-            app:destination="@id/sessionFragment" />
+        android:label="@string/schedules_txt" >
         <action
             android:id="@+id/action_scheduleFragment_to_fragmentAddOrUpdateSchedule"
             app:destination="@id/fragmentAddOrUpdateSchedule" />
+        <action
+            android:id="@+id/action_scheduleFragment_to_showSessions"
+            app:destination="@id/showSessions" />
     </fragment>
     <fragment
         android:id="@+id/sessionFragment"
         android:name="com.thetatechno.fluidadmin.ui.Session.SessionFragment"
-        android:label="Sessions" >
+        android:label="@string/sessions_txt" >
         <action
             android:id="@+id/action_sessionFragment_to_fragmentAddOrUpdateSesssion"
             app:destination="@id/fragmentAddOrUpdateSesssion" />
@@ -171,10 +171,14 @@
     <fragment
         android:id="@+id/fragmentAddOrUpdateSchedule"
         android:name="com.thetatechno.fluidadmin.ui.addOrUpdateSchedule.FragmentAddOrUpdateSchedule"
-        android:label="FragmentAddOrUpdateSchedule" />
+     />
     <fragment
         android:id="@+id/fragmentAddOrUpdateSesssion"
         android:name="com.thetatechno.fluidadmin.ui.addOrUpdateSession.FragmentAddOrUpdateSesssion"
-        android:label="FragmentAddOrUpdateSesssion" />
+ />
+    <fragment
+        android:id="@+id/showSessions"
+        android:name="com.thetatechno.fluidadmin.ui.showSession.ShowSessions"
+        android:label="@string/sessions_txt" />
 
 </navigation>

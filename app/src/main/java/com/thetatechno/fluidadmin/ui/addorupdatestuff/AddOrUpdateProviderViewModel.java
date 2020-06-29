@@ -7,7 +7,7 @@ import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.listeners.OnDataChangedCallBackListener;
 import com.thetatechno.fluidadmin.model.code_model.Code;
 import com.thetatechno.fluidadmin.model.code_model.CodeList;
-import com.thetatechno.fluidadmin.model.Staff;
+import com.thetatechno.fluidadmin.model.staff_model.Staff;
 import com.thetatechno.fluidadmin.network.repositories.CodeRepository;
 import com.thetatechno.fluidadmin.network.repositories.StaffRepository;
 import com.thetatechno.fluidadmin.utils.App;
@@ -55,15 +55,16 @@ public class AddOrUpdateProviderViewModel extends ViewModel {
         if (!specialityCode.isEmpty()) {
             staff.setSpecialityCode(specialityCode);
         }
-        staffRepository.updateStaff(staff, new OnDataChangedCallBackListener<String>() {
+        staffRepository.updateStaff(staff, new OnDataChangedCallBackListener<Integer>() {
             @Override
-            public void onResponse(String b) {
-                if (Integer.parseInt(b) > 0) {
+            public void onResponse(Integer b) {
+                if (b > 0) {
                     message = "updated successfully";
-                    addedSuccessLiveData.setValue(message);
-                } else if (b.equals(Constants.ADD_DELETE_OR_UPDATE_FAIL_STATE))
+                } else if (b == Constants.ADD_DELETE_OR_UPDATE_FAIL_STATE) {
                     message = "Failed to update.";
+                }
                 addedSuccessLiveData.setValue(message);
+
 
             }
         });

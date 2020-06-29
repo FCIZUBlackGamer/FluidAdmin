@@ -7,7 +7,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,18 +20,10 @@ import android.view.ViewGroup;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.thetatechno.fluidadmin.R;
-import com.thetatechno.fluidadmin.model.Staff;
-import com.thetatechno.fluidadmin.model.StaffData;
 import com.thetatechno.fluidadmin.model.branches_model.Branch;
 import com.thetatechno.fluidadmin.model.branches_model.BranchesResponse;
 import com.thetatechno.fluidadmin.ui.EspressoTestingIdlingResource;
-import com.thetatechno.fluidadmin.ui.stafflist.StaffListViewModel;
-import com.thetatechno.fluidadmin.ui.stafflist.agentList.AgentListAdapter;
-import com.thetatechno.fluidadmin.utils.App;
-import com.thetatechno.fluidadmin.utils.EnumCode;
-import com.thetatechno.fluidadmin.utils.PreferenceController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 

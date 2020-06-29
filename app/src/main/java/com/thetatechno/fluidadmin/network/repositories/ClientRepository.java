@@ -3,7 +3,10 @@ package com.thetatechno.fluidadmin.network.repositories;
 import androidx.lifecycle.MutableLiveData;
 
 import com.thetatechno.fluidadmin.listeners.OnDataChangedCallBackListener;
+import com.thetatechno.fluidadmin.listeners.OnHandlingErrorCallback;
+import com.thetatechno.fluidadmin.model.AddNewOrModifyClientResponse;
 import com.thetatechno.fluidadmin.model.ClientData;
+import com.thetatechno.fluidadmin.model.ClientListModel;
 import com.thetatechno.fluidadmin.model.ClientModelForRegister;
 import com.thetatechno.fluidadmin.model.Status;
 import com.thetatechno.fluidadmin.network.interfaces.MyServicesInterface;
@@ -15,36 +18,36 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ClientRepository {
+    MutableLiveData<ClientListModel> clientListModelMutableLiveData = new MutableLiveData<>();
     MutableLiveData<ClientData> clientsMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<AddNewOrModifyClientResponse> addNewOrModifyClientResponseMutableLiveData = new MutableLiveData<>();
     MutableLiveData<Status> statusMutableLiveData = new MutableLiveData<>();
     private static String TAG = ClientRepository.class.getSimpleName();
 
-    public MutableLiveData getAllClients(final String langId) {
+    public MutableLiveData<ClientListModel> getAllClients(final String langId, OnHandlingErrorCallback onHandlingErrorCallback) {
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
         Call<ClientData> call = myServicesInterface.getAllClients( langId);
         call.enqueue(new Callback<ClientData>() {
             @Override
             public void onResponse(Call<ClientData> call, Response<ClientData> response) {
                 if (response.code() == Constants.STATE_OK && response.body() != null) {
-
-                    if (response.body() != null) {
-                        clientsMutableLiveData.setValue(response.body());
-
-                    }
+                    clientListModelMutableLiveData.setValue(new ClientListModel(response.body()));
                 }
+                clientListModelMutableLiveData.setValue(null);
+
             }
 
             @Override
             public void onFailure(Call<ClientData> call, Throwable t) {
-                clientsMutableLiveData.setValue(null);
+                onHandlingErrorCallback.onError();
 
             }
         });
-        return clientsMutableLiveData;
+        return clientListModelMutableLiveData;
     }
-    public MutableLiveData getSpecificClientData(final String clientId, final String langId) {
+    public MutableLiveData getAllClients(final String langId) {
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
-        Call<ClientData> call = myServicesInterface.getSpecificClientWithId(clientId, langId);
+        Call<ClientData> call = myServicesInterface.getAllClients( langId);
         call.enqueue(new Callback<ClientData>() {
             @Override
             public void onResponse(Call<ClientData> call, Response<ClientData> response) {
@@ -89,4 +92,29 @@ public class ClientRepository {
         });
         return statusMutableLiveData;
     }
+
+    public MutableLiveData<AddNewOrModifyClientResponse> addNewCustomer(ClientModelForRegister customer){
+        MyServicesInterface myServicesInterface = RetrofitInstance.getService();
+        Call<AddNewOrModifyClientResponse> call = myServicesInterface.addNewClient(customer);
+        call.enqueue(new Callback<AddNewOrModifyClientResponse>() {
+
+            @Override
+            public void onResponse(Call<AddNewOrModifyClientResponse> call, Response<AddNewOrModifyClientResponse> response) {
+                if (response.isSuccessful()) {
+                    addNewOrModifyClientResponseMutableLiveData.setValue(response.body());
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<AddNewOrModifyClientResponse> call, Throwable t) {
+
+                addNewOrModifyClientResponseMutableLiveData.setValue(null);
+                t.printStackTrace();
+            }
+
+        });
+        return  addNewOrModifyClientResponseMutableLiveData;
+    }
+
 }

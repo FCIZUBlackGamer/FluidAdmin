@@ -14,7 +14,7 @@ public class Schedule implements Serializable {
     private String sexCode;
     @SerializedName("imagePath")
     @Expose
-    private String imagePath;
+    private String imagePath = "";
     @SerializedName("providerId")
     private String providerId;
     @SerializedName("providerName")
@@ -31,10 +31,10 @@ public class Schedule implements Serializable {
     private String facilitDescription;
     @SerializedName("startDate")
     @Expose
-    private String startDate;
+    private String startDate = "";
     @SerializedName("endDate")
     @Expose
-    private String endDate;
+    private String endDate = "";
     @SerializedName("endTime")
     @Expose
     private String endTime;

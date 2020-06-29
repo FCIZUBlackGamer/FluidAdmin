@@ -83,7 +83,6 @@
     <string name="description_error_message">Description is required field</string>
     <string name="branches_txt">Branches</string>
     <string name="facilities_txt">Facilities</string>
-    <string name="appointments_txt">Appointments</string>
     <string name="address_txt">Address</string>
     <string name="day">29</string>
     <string name="month">nov</string>
@@ -126,4 +125,21 @@
     <string name="site_txt">Site</string>
     <string name="description">Description</string>
     <string name="sessions">Sessions</string>
+    <string name="retry">Retry</string>
+    <string name="no_internet_connection">No internet connection</string>
+    <string name="error_try_again_txt">Error, Try Again</string>
+    <string name="working_hours_txt">Working Hours</string>
+    <string name="working_days_txt">Working Days</string>
+    <string name="guard_id">Guard ID</string>
+    <string name="update_agent_txt">update agent</string>
+    <string name="add_Agent_txt">add agent</string>
+    <string name="update_schedule_txt">Update Schedule</string>
+    <string name="add_Schedule_txt">Add Schedule</string>
+    <string name="appointments_txt">Appointments</string>
+    <string name="confirm_appointment_txt">Confirm Appointment</string>
+    <string name="add_new_client">Add new client</string>
+    <string name="schedules_txt">Schedules</string>
+    <string name="sessions_txt">Sessions</string>
+    <string name="update_branch_txt">update branch</string>
+    <string name="add_branch_txt">add branch</string>
 </resources>

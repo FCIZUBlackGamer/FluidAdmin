@@ -6,6 +6,7 @@ import android.util.Log;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class StringUtil {
 
@@ -27,55 +28,26 @@ public class StringUtil {
         return builder.toString();
     }
 
-    public static String displayTime(String time)  {
-        String amOrPmTxt = "";
-        String hours="";
-        String minutes="";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+    public static String displayTime(String time) {
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm aa", Locale.ENGLISH);
+        SimpleDateFormat simpleTimeFormat = new SimpleDateFormat("HH:mm a",Locale.ENGLISH);
         try {
             Date date = simpleDateFormat.parse(time);
 
-            Log.i("StringUtil",date.getHours()+" date hours");
-
-            if(date.getHours()> 12) {
-                amOrPmTxt = "PM";
-                if((date.getHours() %12) >=1 && (date.getHours()%12) <10)
-                    hours = 0 +String.valueOf(date.getHours() %12);
-                else
-                    hours = String.valueOf(date.getHours() %12);
-            }
-
-            else if(date.getHours() == 12)
-            {
-                amOrPmTxt = "PM";
-                hours = String.valueOf(date.getHours());
-            }
-            else if(date.getHours()<12 && date.getHours()>=10){
-                amOrPmTxt = "AM";
-
-                hours = String.valueOf(date.getHours());
-            }
-            else if (date.getMinutes() >=0 && date.getHours()<10)
-            {
-                amOrPmTxt = "AM";
-
-                hours = 0+ String.valueOf(date.getHours());
-            }
-
-            if(date.getMinutes() >=0 && date.getMinutes() <10)
-                minutes = 0+ String.valueOf(date.getMinutes());
-            else
-                minutes = String.valueOf(date.getMinutes());
-            return hours + ":" + minutes +" "+amOrPmTxt;
+            Log.i("StringUtil", date.getHours() + " date hours");
+            String dateString = simpleTimeFormat.format(date).toString();
+            return dateString;
 
         } catch (ParseException e) {
             e.printStackTrace();
+            return "";
         }
-        return "";
 
     }
+
     public static String getDay(String date){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm aa", Locale.ENGLISH);
         String dayTxt = "";
         try {
             Date mDate = simpleDateFormat.parse(date);
@@ -87,7 +59,7 @@ public class StringUtil {
 
     }
     public static String getMonth(String date){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm aa", Locale.ENGLISH);
         String monthTxt = "";
         try {
             Date mDate = simpleDateFormat.parse(date);
@@ -100,7 +72,7 @@ public class StringUtil {
     }
 
     public static String getYear(String date){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm aa", Locale.ENGLISH);
         String yearTxt = "";
         try {
             Date mDate = simpleDateFormat.parse(date);

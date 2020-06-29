@@ -31,8 +31,8 @@
     <string name="deviceId">رقم الجهاز التعريفي </string>
     <string name="type">النوع:</string>
     <string name="waitingAreaID">ؤقم قاعة الانتظار </string>
-    <string name="Agents">العاملين</string>
-    <string name="provider">الدكاترة</string>
+    <string name="Agents">الموظفين</string>
+    <string name="provider">الاطباء</string>
     <string name="client">المرضي</string>
     <string name="facilty">العيادات</string>
 
@@ -64,4 +64,7 @@
     <string name="link_btn_txt">اربط</string>
     <string name="room_txt">غرفة</string>
     <string name="female_txt">انثي</string>
+    <string name="retry">اعد المحاولة</string>
+    <string name="no_internet_connection">لا يوجد اتصال بالشبكة</string>
+    <string name="error_try_again_txt">خطأ, حاول مرة اخري</string>
 </resources>

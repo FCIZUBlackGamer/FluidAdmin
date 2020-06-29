@@ -22,11 +22,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.thetatechno.fluidadmin.R;
-import com.thetatechno.fluidadmin.model.Staff;
-import com.thetatechno.fluidadmin.model.StaffData;
+import com.thetatechno.fluidadmin.model.staff_model.Staff;
+import com.thetatechno.fluidadmin.model.staff_model.StaffData;
+import com.thetatechno.fluidadmin.model.staff_model.StaffListModel;
 import com.thetatechno.fluidadmin.ui.EspressoTestingIdlingResource;
 import com.thetatechno.fluidadmin.ui.stafflist.StaffListViewModel;
 import com.thetatechno.fluidadmin.utils.App;
@@ -79,22 +81,18 @@ public class AgentList extends Fragment implements SearchView.OnQueryTextListene
         agentListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         if (agentList == null) {
            EspressoTestingIdlingResource.increment();
-            staffListViewModel.getStaffData(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase(), EnumCode.StaffTypeCode.DSPTCHR.toString()).observe(getViewLifecycleOwner(), new Observer<StaffData>() {
+            staffListViewModel.getStaffData(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase(), EnumCode.StaffTypeCode.DSPTCHR.toString()).observe(getViewLifecycleOwner(), new Observer<StaffListModel>() {
                 @Override
-                public void onChanged(StaffData staffData) {
-                    if (staffData != null) {
-                        if (staffData.getStaffList() != null) {
+                public void onChanged(StaffListModel staffData) {
+                        if (staffData.getStaffData() != null) {
                             EspressoTestingIdlingResource.increment();
-                            agentList = staffData.getStaffList();
+                            agentList = staffData.getStaffData().getStaffList();
                             agentListAdapter = new AgentListAdapter(navController, getContext(), agentList, getActivity().getSupportFragmentManager());
                             agentListRecyclerView.setAdapter(agentListAdapter);
                             EspressoTestingIdlingResource.decrement();
                         } else {
-                            Log.e(TAG, "agentList Is Null");
+                            Toast.makeText(getContext(),staffData.getErrorMessage(),Toast.LENGTH_SHORT).show();
                         }
-                    }else{
-                        Log.e(TAG, "no data returns");
-                    }
 
                 }
             });

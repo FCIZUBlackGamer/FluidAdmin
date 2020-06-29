@@ -24,25 +24,30 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/providerIdTxtInputLayout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/id_txt"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="@dimen/_32sdp"
+            android:layout_marginEnd="@dimen/_32sdp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/addProfileImg">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/providerIdEdtTxt"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="12" />
+                />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/providerFirstNameTxtInputLayout"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/first_name"
+            android:layout_marginStart="@dimen/_32sdp"
+            android:layout_marginEnd="@dimen/_32sdp"
             android:layout_marginTop="4dp"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             app:layout_constraintEnd_toEndOf="@id/providerIdTxtInputLayout"
@@ -52,9 +57,8 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/providerFirstNameEdtTxt"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="12"
                 android:inputType="textPersonName"
           />
         </com.google.android.material.textfield.TextInputLayout>
@@ -63,9 +67,11 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/providerFamilyNameTxtInputLayout"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/family_name_txt"
+            android:layout_marginStart="@dimen/_32sdp"
+            android:layout_marginEnd="@dimen/_32sdp"
             android:layout_marginTop="4dp"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             app:layout_constraintEnd_toEndOf="@+id/providerFirstNameTxtInputLayout"
@@ -74,18 +80,19 @@
             app:layout_constraintTop_toBottomOf="@+id/providerFirstNameTxtInputLayout">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/providerLastNameEdtTxt"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="12"
             android:inputType="textPersonName"
             />
         </com.google.android.material.textfield.TextInputLayout>
 <com.google.android.material.textfield.TextInputLayout
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/_32sdp"
+    android:layout_marginEnd="@dimen/_32sdp"
     app:layout_constraintEnd_toEndOf="@id/providerFamilyNameTxtInputLayout"
     app:layout_constraintHorizontal_bias="1.0"
-    android:layout_marginTop="4dp"
+    android:layout_marginTop="8dp"
     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
     app:layout_constraintStart_toStartOf="@id/providerFamilyNameTxtInputLayout"
     app:layout_constraintTop_toBottomOf="@id/providerFamilyNameTxtInputLayout"
@@ -93,17 +100,18 @@
     >
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/providerEmailEditTxt"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="12"
             android:hint="@string/email_prompt"
             android:inputType="textEmailAddress"
  />
 </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_32sdp"
+            android:layout_marginEnd="@dimen/_32sdp"
             app:layout_constraintHorizontal_bias="1.0"
             android:layout_marginTop="4dp"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -115,9 +123,8 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/providerMobileEdtTxt"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="12"
             android:hint="@string/number_prompt"
             android:inputType="phone"
  />
@@ -125,21 +132,21 @@
 
         <TextView
             android:id="@+id/gender_txt"
-            android:layout_width="39dp"
-            android:layout_height="12dp"
-            android:layout_marginTop="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
             android:autoSizeTextType="uniform"
             android:text="@string/gender_txt"
             android:textColor="@color/colorPrimary"
             app:layout_constraintStart_toStartOf="@id/providerSpecialityLayout"
-            app:layout_constraintTop_toBottomOf="@id/providerSpecialityLayout" />
+            app:layout_constraintTop_toBottomOf="@+id/providerSpecialityLayout" />
 
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="32dp"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -216,8 +223,11 @@
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_32sdp"
+            android:layout_marginEnd="@dimen/_32sdp"
+            android:layout_marginTop="4dp"
             android:hint="@string/speciality_txt"
             android:id="@+id/providerSpecialityLayout"
             app:layout_constraintStart_toStartOf="@+id/providerMobileTxtInputLayout"
@@ -227,7 +237,6 @@
             <AutoCompleteTextView
                 android:id="@+id/providerSpecialityAutoCompleteTextView"
                 android:layout_width="match_parent"
-                android:ems="12"
                 android:layout_height="wrap_content"
                 android:inputType="none" />
 

@@ -4,7 +4,7 @@ public interface Constants {
     public static final int STATE_OK = 200;
     public static final String ARABIC = "ar";
     public static final String ENGLISH = "en";
-    public static final String BASE_URL = "http://192.168.1.15:8080";
+    public static final String BASE_URL = "http://196.202.24.127:8080";
     public static final String FACILITY_ID = "facilityId";
     public static final String ID = "id";
     public static final String BASE_EXTENSION_FOR_PHOTOS = "/i/";
@@ -15,9 +15,9 @@ public interface Constants {
     public static String ARG_STAFF = "staff";
     public static String ARG_SCHEDULE = "schedule";
     public static String ARG_SESSION = "session";
-    public static String ADD_DELETE_OR_UPDATE_FAIL_STATE = "-1";
-    public static String ERROR_HAVE_SCHEDULE = "-2292";
-    public static String DELETE_SUCCESS_STATE = "1";
+    public static int ADD_DELETE_OR_UPDATE_FAIL_STATE = -1;
+    public static int ERROR_HAVE_SCHEDULE = -2292;
+    public static int DELETE_SUCCESS_STATE = 1;
     String APPOINTMENT_LENGTH = "20";
 
 

@@ -1,61 +1,78 @@
 package com.thetatechno.fluidadmin.model;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class ClientModelForRegister {
+
     @SerializedName("clientId")
     @Expose
     private String clientId;
     @SerializedName("firstName")
     @Expose
-    private String firstName;
+    private String firstName= "";
     @SerializedName("middleName")
     @Expose
-    private String middleName;
+    private String middleName = "";
     @SerializedName("familyName")
     @Expose
-    private String familyName;
-    @SerializedName("emailAddress")
+    private String familyName = " ";
+    @SerializedName("email")
     @Expose
-    private String emailAddress;
+    private String email;
     @SerializedName("mobileNo")
     @Expose
     private String mobile;
     @SerializedName("password")
     @Expose
     private String password;
-    @SerializedName("genderCode")
+    @SerializedName("sexCode")
     @Expose
-    private String gender;
-    @SerializedName("genderDesc")
+    private String sexCode;
+    @SerializedName("sexDescription")
     @Expose
-    private String genderDesc;
-    @SerializedName("dob")
+    private String sexDescription;
+    @SerializedName("dateOfBirth")
     @Expose
-    private String dateOfBirth;
+    private String dateOfBirth = "";
     @SerializedName("nationalityCode")
-    private String nationalityCode;
+    private String nationalityCode = "";
     @SerializedName("nationalityDesc")
-    private String nationalityDesc;
-    @SerializedName("token")
+    private String nationalityDesc = "";
+    @SerializedName("firebaseToken")
     @Expose
-    private String token;
+    private String firebaseToken = "";
     @SerializedName("personalId")
     @Expose
     private String personalId;
-    @SerializedName("idTypeCode")
+    @SerializedName("personId")
     @Expose
-    private String idTypeCode;
-    @SerializedName("image_file")
+    private String personId;
+    @SerializedName("gardianId")
+    private String gardianId ="";
+    @SerializedName("personalIdCode")
     @Expose
-    private String imageFile;
+    private String personalIdCode;
+    @SerializedName("imagePath")
+    @Expose
+    private String imageFile = "";
     @SerializedName("langId")
     @Expose
-    private String langId;
+    private String langId = "EN";
+
+    public ClientModelForRegister(String mobile, String token) {
+
+        this.firebaseToken = token;
+        this.mobile = mobile;
+
+    }
 
     public ClientModelForRegister() {
     }
+
+
     public String getFirstName() {
         return firstName;
     }
@@ -80,20 +97,12 @@ public class ClientModelForRegister {
         this.familyName = familyName;
     }
 
-    public String getGender() {
-        return gender;
+    public String getSexCode() {
+        return sexCode;
     }
 
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public String getDob() {
-        return dateOfBirth;
-    }
-
-    public void setDob(String dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
+    public void setSexCode(String sexCode) {
+        this.sexCode = sexCode;
     }
 
     public String getNationalityCode() {
@@ -104,12 +113,12 @@ public class ClientModelForRegister {
         this.nationalityCode = nationalityCode;
     }
 
-    public String getIdTypeCode() {
-        return idTypeCode;
+    public String getPersonalIdCode() {
+        return personalIdCode;
     }
 
-    public void setIdTypeCode(String idTypeCode) {
-        this.idTypeCode = idTypeCode;
+    public void setPersonalIdCode(String personalIdCode) {
+        this.personalIdCode = personalIdCode;
     }
 
     public String getPersonalId() {
@@ -120,12 +129,12 @@ public class ClientModelForRegister {
         this.personalId = personalId;
     }
 
-    public String getEmailAddress() {
-        return emailAddress;
+    public String getEmail() {
+        return email;
     }
 
-    public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getMobile() {
@@ -153,12 +162,12 @@ public class ClientModelForRegister {
     }
 
 
-    public String getToken() {
-        return token;
+    public String getFirebaseToken() {
+        return firebaseToken;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setFirebaseToken(String token) {
+        this.firebaseToken = token;
     }
 
     public String getPhone() {
@@ -169,12 +178,12 @@ public class ClientModelForRegister {
         this.mobile = mobile;
     }
 
-    public String getGenderDesc() {
-        return genderDesc;
+    public String getSexDescription() {
+        return sexDescription;
     }
 
-    public void setGenderDesc(String genderDesc) {
-        this.genderDesc = genderDesc;
+    public void setSexDescription(String sexDescription) {
+        this.sexDescription = sexDescription;
     }
 
     public String getDateOfBirth() {
@@ -185,12 +194,12 @@ public class ClientModelForRegister {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public String getNationalityDesc() {
+    public String getNationalityDescription() {
         return nationalityDesc;
     }
 
-    public void setNationalityDesc(String nationalityDesc) {
-        this.nationalityDesc = nationalityDesc;
+    public void setNationalityDescription(String nationalityDescription) {
+        this.nationalityDesc = nationalityDescription;
     }
 
     public String getLangId() {
@@ -207,5 +216,27 @@ public class ClientModelForRegister {
 
     public void setClientId(String clientId) {
         this.clientId = clientId;
+    }
+
+    public String getPersonId() {
+        return personId;
+    }
+
+    public void setPersonId(String personId) {
+        this.personId = personId;
+    }
+
+    public String getGardianId() {
+        return gardianId;
+    }
+
+    public void setGardianId(String gardianId) {
+        this.gardianId = gardianId;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return firstName + " "+ familyName;
     }
 }

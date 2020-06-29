@@ -34,8 +34,9 @@ import com.bumptech.glide.Glide;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.databinding.FragmentTimeSlotListBinding;
 import com.thetatechno.fluidadmin.listeners.OnItemClickedListener;
+import com.thetatechno.fluidadmin.model.ConfirmAppointmentResponse;
 import com.thetatechno.fluidadmin.model.appointment_model.AppointmentDayDetails;
-import com.thetatechno.fluidadmin.model.Staff;
+import com.thetatechno.fluidadmin.model.staff_model.Staff;
 import com.thetatechno.fluidadmin.model.Status;
 import com.thetatechno.fluidadmin.model.time_slot_model.TimeSlot;
 import com.thetatechno.fluidadmin.utils.Constants;
@@ -183,6 +184,7 @@ public class TimeSlotList extends Fragment implements OnItemClickedListener {
     @Override
     public void onStart() {
         super.onStart();
+
         Toast.makeText(getActivity(), bookDate, Toast.LENGTH_SHORT).show();
         TypedValue tv = new TypedValue();
         if (getActivity().getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
@@ -252,7 +254,7 @@ public class TimeSlotList extends Fragment implements OnItemClickedListener {
         cancelBtn.setOnClickListener(v -> {
             navController.popBackStack();
         });
-        confirmBtn.setOnClickListener(v -> confirmAppointmentBooking(selectedTimeSlot.getSlotId()));
+        confirmBtn.setOnClickListener(v -> confirmAppointmentBooking(selectedTimeSlot.getTime()));
     }
 
     private void updateDataWhileSwipingOnProviderList() {
@@ -314,7 +316,7 @@ public class TimeSlotList extends Fragment implements OnItemClickedListener {
 
                 } else {
                     providerImgView.setImageResource(R.drawable.man);
-                    providerNameTxtView.setText("");
+                    providerNameTxtView.setText("name 3f3f4f4f");
                     binding.providerClinicTxtView.setText("");
 
 
@@ -338,18 +340,27 @@ public class TimeSlotList extends Fragment implements OnItemClickedListener {
     }
 
     private void setUpViewPagerWithAllTimeSlots() {
-        ViewPagerAdapter mViewPagerAdapter = new ViewPagerAdapter(getActivity(), appointmentDayDetailsForSpecificProviderArrayList);
+        int scrooled_position = -1;
+        for (AppointmentDayDetails appointmentDayDetails : appointmentDayDetailsForSpecificProviderArrayList) {
+            if (appointmentDayDetails.getDate().equals(bookDate)) {
+                scrooled_position = appointmentDayDetailsForSpecificProviderArrayList.indexOf(appointmentDayDetails);
+            }
+        }
+        ViewPagerAdapter mViewPagerAdapter = new ViewPagerAdapter(requireActivity(), appointmentDayDetailsForSpecificProviderArrayList);
         timeSlotsViewPager.setAdapter(mViewPagerAdapter);
         timeSlotsViewPager.setOffscreenPageLimit(1);
+        if (scrooled_position != -1)
+            timeSlotsViewPager.setCurrentItem(scrooled_position);
         handlingPreviousAndNextPages();
+
     }
 
-    private void confirmAppointmentBooking(String appointmentId) {
-        timeSlotListViewModel.bookAppointment(clientId, appointmentId).observe(getViewLifecycleOwner(), new Observer<Status>() {
+    private void confirmAppointmentBooking(String appointmentTime) {
+        timeSlotListViewModel.bookAppointment(appointmentDayDetailsForSpecificProviderArrayList.get(timeSlotsViewPager.getCurrentItem()).getSessionCode(), appointmentTime,clientId).observe(getViewLifecycleOwner(), new Observer<ConfirmAppointmentResponse>() {
             @Override
-            public void onChanged(Status status) {
+            public void onChanged(ConfirmAppointmentResponse status) {
                 if (status != null) {
-                    if (status.getStatus().equals("0")) {
+                    if (status.getError().getErrorCode()==0) {
                         Toast.makeText(getContext(), "booking success", Toast.LENGTH_SHORT).show();
                         Bundle bundle = new Bundle();
                         bundle.putString(ARG_PROVIDER_NAME, providerNameTxtView.getText().toString());
@@ -358,7 +369,7 @@ public class TimeSlotList extends Fragment implements OnItemClickedListener {
                         bundle.putString(ARG_SPECIALITY_CODE, specialityCode);
                         navController.navigate(R.id.action_timeSlotList_to_confirmAppointment, bundle);
                     }
-                    Toast.makeText(getContext(), status.getStatus(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), status.getError().getErrorMessage(), Toast.LENGTH_SHORT).show();
                 }
 
             }

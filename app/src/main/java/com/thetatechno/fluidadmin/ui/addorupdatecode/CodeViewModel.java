@@ -18,10 +18,10 @@ public class CodeViewModel extends ViewModel {
     private String  idValidateMessage, descriptionMessage;
 
     public MutableLiveData<String> addNewCode(Code code) {
-        codeRepository.insertCode(code, new OnDataChangedCallBackListener<String>() {
+        codeRepository.insertCode(code, new OnDataChangedCallBackListener<Integer>() {
             @Override
-            public void onResponse(String b) {
-                if (Integer.parseInt(b) > 0) {
+            public void onResponse(Integer b) {
+                if (b > 0) {
                     message = "Add code successfully";
                 } else if (b.equals(Constants.ADD_DELETE_OR_UPDATE_FAIL_STATE)) {
                     message = "Failed to add code.";
@@ -34,12 +34,12 @@ public class CodeViewModel extends ViewModel {
     }
 
     public MutableLiveData<String> updateCode(Code code) {
-        codeRepository.updateCode(code, new OnDataChangedCallBackListener<String>() {
+        codeRepository.updateCode(code, new OnDataChangedCallBackListener<Integer>() {
             @Override
-            public void onResponse(String b) {
-                if (Integer.parseInt(b) > 0) {
+            public void onResponse(Integer b) {
+                if (b > 0) {
                     message = "updated code successfully";
-                } else if (b.equals(Constants.ADD_DELETE_OR_UPDATE_FAIL_STATE)) {
+                } else if (b == Constants.ADD_DELETE_OR_UPDATE_FAIL_STATE) {
                     message = "Failed to update code.";
                 }
                 codeAddOrUpdateMessage.setValue(message);

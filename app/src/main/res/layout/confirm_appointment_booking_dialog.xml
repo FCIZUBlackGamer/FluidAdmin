@@ -23,8 +23,8 @@
 
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="128dp"
-                android:layout_height="128dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:src="@drawable/ic_checkmark"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -168,16 +168,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/take_screenshot_txt"
-            app:layout_constraintTop_toBottomOf="@id/consBookedAppointment"
-            app:layout_constraintBottom_toTopOf="@+id/okBtn"
-            android:layout_marginTop="64dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="24dp"
             app:layout_constraintStart_toStartOf="parent" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/okBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/takeScreenShotBtn"
             android:text="@string/ok_txt_btn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

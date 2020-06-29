@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.listeners.OnDataChangedCallBackListener;
+import com.thetatechno.fluidadmin.model.AddOrUpdateStatusResponse;
 import com.thetatechno.fluidadmin.model.branches_model.Branch;
 import com.thetatechno.fluidadmin.network.repositories.BranchesRepository;
 import com.thetatechno.fluidadmin.utils.App;
@@ -12,11 +13,11 @@ import com.thetatechno.fluidadmin.utils.Validation;
 
 public class AddOrUpdateBranchViewModel extends ViewModel {
     private BranchesRepository branchesRepository = new BranchesRepository();
-    private MutableLiveData<String> updateBranchLiveData = new MutableLiveData<>();
+    private MutableLiveData<Integer> updateBranchLiveData = new MutableLiveData<>();
     Branch branch = new Branch();
 
     private  String branchDescriptionValidateMessage,branchAddressValidateMessage,emailValidateMessage,imgUrlValidateMessage,idValidateMessage , phoneNumberMessage;
-    public  MutableLiveData<String> addNewBranch(String description,String address,String email,String phone)
+    public  MutableLiveData<AddOrUpdateStatusResponse> addNewBranch(String description, String address, String email, String phone)
     {
         branch.setDescription(description);
         branch.setAddress(address);
@@ -24,14 +25,13 @@ public class AddOrUpdateBranchViewModel extends ViewModel {
         branch.setMobileNumber(phone);
         return branchesRepository.addNewBranch(branch);
     }
-    public MutableLiveData<String> updateBranch(Branch branch) {
-        branchesRepository.updateBranch(branch, new OnDataChangedCallBackListener<String>() {
-            @Override
-            public void onResponse(String b) {
 
-            }
-        });
-        return updateBranchLiveData;
+    public MutableLiveData<AddOrUpdateStatusResponse> updateBranch(Branch branch,String description, String address, String email, String phone) {
+        branch.setDescription(description);
+        branch.setAddress(address);
+        branch.setEmail(email);
+        branch.setMobileNumber(phone);
+        return branchesRepository.updateBranch(branch);
     }
 
 

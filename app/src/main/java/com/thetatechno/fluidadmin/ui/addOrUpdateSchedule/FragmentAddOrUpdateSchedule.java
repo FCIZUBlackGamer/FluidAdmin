@@ -123,7 +123,7 @@ public class FragmentAddOrUpdateSchedule extends Fragment {
         binding.cardView.setOnClickListener(v -> {
             showDatePicker(binding.dateToTxt);
         });
-        binding.cardView4.setOnClickListener(v -> showTimePicker( binding.timeToTxt));
+        binding.cardView4.setOnClickListener(v -> showTimePicker(binding.timeToTxt));
 
         binding.addOrUpdateScheduleBtn.setOnClickListener(v -> {
             CollectDate();
@@ -228,19 +228,17 @@ public class FragmentAddOrUpdateSchedule extends Fragment {
             schedule.setWorkingDays(getSelectedDays());
             schedule.setSiteId(siteId);
             addOrUpdateScheduleViewModel.addSchedule(schedule).observe(this, response -> {
-                //Handle Error Message
-                if(response.getError()!=null) {
+                if (response != null && response.getError() != null) {
                     Toast.makeText(requireActivity(), response.getError().getErrorMessage(), Toast.LENGTH_SHORT).show();
                     if (response.getError().getErrorCode() == 0) {
                         onCancelOrBackButtonPressed();
                     }
-                }
-                else
-                {
-                    Toast.makeText(requireActivity(), "Error,Try later", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(requireActivity(), "Error, Failed to add schedule ", Toast.LENGTH_SHORT).show();
 
                 }
             });
+
         } else {
             schedule.setDescription(binding.scheduleDescriptionTiet.getText().toString());
             if (providerId != null)

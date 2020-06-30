@@ -25,9 +25,9 @@ public class SessionRepository {
 
     private static String TAG = CodeRepository.class.getSimpleName();
 
-    public MutableLiveData<SessionResponse> getAllSessions(final String langId, final String scheduleId) {
+    public MutableLiveData<SessionResponse> getSessionsRelatedToSchedule(final String langId, final String scheduleId) {
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
-        Call<SessionResponse> call = myServicesInterface.getAllSession(langId, scheduleId);
+        Call<SessionResponse> call = myServicesInterface.getSessionsRelatedToSchedule(langId, scheduleId);
         call.enqueue(new Callback<SessionResponse>() {
             @Override
             public void onResponse(Call<SessionResponse> call, Response<SessionResponse> response) {
@@ -51,7 +51,32 @@ public class SessionRepository {
         });
         return sessionResponseLiveData;
     }
+    public MutableLiveData<SessionResponse> getAllSessions(final String langId) {
+        MyServicesInterface myServicesInterface = RetrofitInstance.getService();
+        Call<SessionResponse> call = myServicesInterface.getAllSessions(langId);
+        call.enqueue(new Callback<SessionResponse>() {
+            @Override
+            public void onResponse(Call<SessionResponse> call, Response<SessionResponse> response) {
+                if (response.code() == Constants.STATE_OK && response.body() != null) {
+                    Log.i(TAG, "get All codes response " + response.toString());
+                    if (response.body() != null) {
+                        sessionResponseLiveData.setValue(response.body());
+                    } else {
+                        sessionResponseLiveData.setValue(null);
+                    }
 
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SessionResponse> call, Throwable t) {
+                sessionResponseLiveData.setValue(null);
+                t.printStackTrace();
+
+            }
+        });
+        return sessionResponseLiveData;
+    }
     public MutableLiveData<APIResponse> addSession(final Session session) {
 
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();

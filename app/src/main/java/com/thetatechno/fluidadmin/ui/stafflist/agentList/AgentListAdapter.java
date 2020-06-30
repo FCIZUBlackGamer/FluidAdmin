@@ -31,6 +31,7 @@ import com.thetatechno.fluidadmin.model.staff_model.Staff;
 import com.thetatechno.fluidadmin.ui.EspressoTestingIdlingResource;
 import com.thetatechno.fluidadmin.utils.Constants;
 import com.thetatechno.fluidadmin.utils.EnumCode;
+import com.thetatechno.fluidadmin.utils.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -254,7 +255,7 @@ public class AgentListAdapter extends RecyclerView.Adapter<AgentListAdapter.Agen
                 } else {
                     List<Staff> filteredList = new ArrayList<>();
                     for (Staff agent : agentList) {
-                        if (agent.getFirstName().contains(charSequenceString) || agent.getFamilyName().contains(charSequenceString) || agent.getFirstName().equalsIgnoreCase(charSequenceString) || agent.getFamilyName().equalsIgnoreCase(charSequenceString)) {
+                        if (StringUtil.isSearchResultExist(agent.getFirstName(),charSequenceString) || StringUtil.isSearchResultExist(agent.getFamilyName(),charSequenceString)) {
                             filteredList.add(agent);
                         }
                         filteredAgentList = filteredList;

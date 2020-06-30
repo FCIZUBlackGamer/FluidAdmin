@@ -17,8 +17,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.model.branches_model.Branch;
 import com.thetatechno.fluidadmin.model.branches_model.BranchesResponse;
@@ -34,6 +36,7 @@ public class Branches extends Fragment {
     private BranchesViewModel branchesViewModel;
     private RecyclerView branchesRecyclerView;
    private FloatingActionButton addNewBranchBtn;
+   private ProgressBar loadBranchesProgressBar;
    private NavController navController;
 private static final String TAG = Branches.class.getSimpleName();
     public Branches() {
@@ -68,7 +71,7 @@ private static final String TAG = Branches.class.getSimpleName();
         addNewBranchBtn = view.findViewById(R.id.addNewBranchBtn);
         branchesRecyclerView = view.findViewById(R.id.branchesRecyclerView);
         branchesSwipeLayout = view.findViewById(R.id.branchesSwipeLayout);
-
+        loadBranchesProgressBar = view.findViewById(R.id.loadBranchesProgressBar);
         addNewBranchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,9 +82,11 @@ private static final String TAG = Branches.class.getSimpleName();
         branchesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
 
             EspressoTestingIdlingResource.increment();
+        loadBranchesProgressBar.setVisibility(View.VISIBLE);
             branchesViewModel.getAllBranches().observe(getViewLifecycleOwner(), new Observer<BranchesResponse>() {
                 @Override
                 public void onChanged(BranchesResponse branchesResponse) {
+                    loadBranchesProgressBar.setVisibility(View.GONE);
                     if (branchesResponse != null) {
                         if (branchesResponse.getBranchList()!= null) {
                             EspressoTestingIdlingResource.increment();
@@ -90,10 +95,18 @@ private static final String TAG = Branches.class.getSimpleName();
                             branchesRecyclerView.setAdapter(branchesAdapter);
                             EspressoTestingIdlingResource.decrement();
                         } else {
-
+                            Snackbar.make(branchesSwipeLayout, branchesResponse.getStatus(), Snackbar.LENGTH_LONG).setAction(R.string.retry, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    branchesViewModel.getAllBranches();                                }
+                            }).setAnchorView(addNewBranchBtn).show();
                         }
                     }else{
-                        Log.e(TAG, "no data returns");
+                        Snackbar.make(branchesSwipeLayout, "Failed to load branches", Snackbar.LENGTH_LONG).setAction(R.string.retry, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                branchesViewModel.getAllBranches();                                }
+                        }).setAnchorView(addNewBranchBtn).show();
                     }
 
                 }

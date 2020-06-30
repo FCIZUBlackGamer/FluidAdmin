@@ -40,7 +40,6 @@ public class ClientRepository {
             @Override
             public void onFailure(Call<ClientData> call, Throwable t) {
                 onHandlingErrorCallback.onError();
-
             }
         });
         return clientListModelMutableLiveData;

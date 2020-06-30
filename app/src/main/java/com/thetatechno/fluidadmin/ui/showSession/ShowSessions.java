@@ -38,7 +38,7 @@ public class ShowSessions extends Fragment {
     private TextView schedule_name_txt, doctor_name_txt, locationTxt, time_from_txt, time_to_txt;
     private ImageView doctorImg;
     private NavController navController;
-    private SessionListViewModel sessionListViewModel;
+    private ShowSessionsViewModel sessionListViewModel;
     CardView layout;
 
     @Override
@@ -53,7 +53,7 @@ public class ShowSessions extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_show_sessions, container, false);
-        sessionListViewModel = ViewModelProviders.of(this).get(SessionListViewModel.class);
+        sessionListViewModel = ViewModelProviders.of(this).get(ShowSessionsViewModel.class);
         navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
         recyclerView = view.findViewById(R.id.rec);
         layout = view.findViewById(R.id.layout);
@@ -83,7 +83,7 @@ public class ShowSessions extends Fragment {
                     .placeholder(R.drawable.man)
                     .into(doctorImg);
         }
-        sessionListViewModel.getAllSessionsForSpecificSchedule(schedule.getId()).observe(getViewLifecycleOwner(), new Observer<SessionResponse>() {
+        sessionListViewModel.getAllSessionsRelatedToSchedule(schedule.getId()).observe(getViewLifecycleOwner(), new Observer<SessionResponse>() {
             @Override
             public void onChanged(SessionResponse sessionResponse) {
                 if (sessionResponse != null) {

@@ -25,6 +25,7 @@ import com.thetatechno.fluidadmin.listeners.OnDeleteListener;
 import com.thetatechno.fluidadmin.model.staff_model.Staff;
 import com.thetatechno.fluidadmin.utils.Constants;
 import com.thetatechno.fluidadmin.utils.EnumCode;
+import com.thetatechno.fluidadmin.utils.StringUtil;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -179,7 +180,7 @@ else if(position == filteredProviderList.size()){
                 } else {
                     List<Staff> filteredList = new ArrayList<>();
                     for (Staff provider : providerList) {
-                        if (provider.getFirstName().contains(charSequenceString) || provider.getFamilyName().contains(charSequenceString) || provider.getFirstName().equalsIgnoreCase(charSequenceString) || provider.getFamilyName().equalsIgnoreCase(charSequenceString)) {
+                        if (StringUtil.isSearchResultExist(provider.getFirstName(),charSequenceString) || StringUtil.isSearchResultExist(provider.getFamilyName(),charSequenceString) ) {
                             filteredList.add(provider);
                         }
                         filteredProviderList = filteredList;

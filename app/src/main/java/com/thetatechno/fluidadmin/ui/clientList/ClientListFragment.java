@@ -22,6 +22,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -43,6 +44,7 @@ public class ClientListFragment extends Fragment implements SearchView.OnQueryTe
     private SwipeRefreshLayout clientSwipeLayout;
     private FloatingActionButton bookAppointmentBtn;
     private SearchView searchView;
+    private ProgressBar loadClientsProgressBar;
     private NavController navController;
     private static final String TAG = ClientListFragment.class.getSimpleName();
 
@@ -65,36 +67,41 @@ public class ClientListFragment extends Fragment implements SearchView.OnQueryTe
         bookAppointmentBtn = view.findViewById(R.id.bookNewAppointmentBtn);
         clientListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         clientSwipeLayout = view.findViewById(R.id.clientSwipeLayout);
+        loadClientsProgressBar = view.findViewById(R.id.loadClientsProgressBar);
         setHasOptionsMenu(true);
         clientListViewModel.getAllClients();
-        clientListViewModel.getClientData().observe(getViewLifecycleOwner(), new Observer<ClientListModel>() {
-            @Override
-            public void onChanged(ClientListModel clientData) {
-                EspressoTestingIdlingResource.increment();
-                if (clientData != null) {
-                    if (clientData.getClientData() != null) {
-                        EspressoTestingIdlingResource.increment();
-                        clientList = clientData.getClientData().getPersonList();
-                        clientListViewAdapter = new ClientListViewAdapter(getContext(), clientList,navController);
-                        clientListRecyclerView.setAdapter(clientListViewAdapter);
-                        EspressoTestingIdlingResource.decrement();
+        if (clientList == null) {
+            loadClientsProgressBar.setVisibility(View.VISIBLE);
+            clientListViewModel.getClientData().observe(getViewLifecycleOwner(), new Observer<ClientListModel>() {
+                @Override
+                public void onChanged(ClientListModel clientData) {
+                    EspressoTestingIdlingResource.increment();
+                    loadClientsProgressBar.setVisibility(View.GONE);
+
+                    if (clientData != null) {
+                        if (clientData.getClientData() != null) {
+                            EspressoTestingIdlingResource.increment();
+                            clientList = clientData.getClientData().getPersonList();
+                            clientListViewAdapter = new ClientListViewAdapter(getContext(), clientList, navController);
+                            clientListRecyclerView.setAdapter(clientListViewAdapter);
+                            EspressoTestingIdlingResource.decrement();
+                        } else {
+                            Snackbar.make(clientSwipeLayout, clientData.getFailureErrorMessage(), Snackbar.LENGTH_LONG).setAction(R.string.retry, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    clientListViewModel.getAllClients();
+                                }
+                            }).setAnchorView(bookAppointmentBtn).show();
+                        }
+
                     } else {
-                        Snackbar.make(clientSwipeLayout,clientData.getFailureErrorMessage(),Snackbar.LENGTH_LONG).setAction(R.string.retry, new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                clientListViewModel.getAllClients();
-                            }
-                        }).setAnchorView(bookAppointmentBtn).show();
+                        Log.e(TAG, "no data returns");
                     }
+                    EspressoTestingIdlingResource.decrement();
 
-                } else {
-                    Log.e(TAG, "no data returns");
                 }
-                EspressoTestingIdlingResource.decrement();
-
-            }
-        });
-
+            });
+        }
 
         clientSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -112,7 +119,7 @@ public class ClientListFragment extends Fragment implements SearchView.OnQueryTe
         });
     }
 
-      @Override
+    @Override
     public boolean onMenuItemActionExpand(MenuItem item) {
 
         return true;
@@ -143,5 +150,25 @@ public class ClientListFragment extends Fragment implements SearchView.OnQueryTe
         searchView.setOnQueryTextListener(this);
         searchView.setQueryHint("Search");
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.i("client", "onDestroy method");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.i("client", "onPause method");
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.i("client", "onStop method");
+
     }
 }

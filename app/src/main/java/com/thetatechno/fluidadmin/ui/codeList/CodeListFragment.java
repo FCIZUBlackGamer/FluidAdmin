@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,15 +30,15 @@ import com.thetatechno.fluidadmin.utils.PreferenceController;
 import java.util.List;
 
 public class CodeListFragment extends Fragment {
-    NavController navController;
-    List<Code> codeList;
-    final String TAG = CodeListFragment.class.getSimpleName();
-    RecyclerView codeListRecyclerView;
-    FloatingActionButton addNewCodeFab;
-    CodeListAdapter codeListAdapter;
-    CodeListViewModel codeListViewModel;
-    SwipeRefreshLayout codeSwipeRefreshLayout;
-
+    private NavController navController;
+    private List<Code> codeList;
+    private final String TAG = CodeListFragment.class.getSimpleName();
+    private RecyclerView codeListRecyclerView;
+    private FloatingActionButton addNewCodeFab;
+    private CodeListAdapter codeListAdapter;
+    private CodeListViewModel codeListViewModel;
+    private SwipeRefreshLayout codeSwipeRefreshLayout;
+    private ProgressBar codeListProgressBar;
 
     public CodeListFragment() {
         // Required empty public constructor
@@ -75,18 +76,19 @@ public class CodeListFragment extends Fragment {
         addNewCodeFab = view.findViewById(R.id.addNewCodeFab);
         codeListViewModel = ViewModelProviders.of(this).get(CodeListViewModel.class);
         codeSwipeRefreshLayout = view.findViewById(R.id.codeSwipeLayout);
+        codeListProgressBar = view.findViewById(R.id.loadCodeProgressBar);
         codeListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
 //       EspressoTestingIdlingResource.increment();
-        codeSwipeRefreshLayout.setRefreshing(true);
+        codeListProgressBar.setVisibility(View.VISIBLE);
         codeListViewModel.getDataForCode(EnumCode.Code.STFFGRP.toString(), PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase()).observe(getViewLifecycleOwner(), new Observer<CodeList>() {
             @Override
             public void onChanged(CodeList codeListData) {
-
+                codeListProgressBar.setVisibility(View.GONE);
                 if (codeListData != null) {
                     if (codeListData.getCodeList() != null) {
                         EspressoTestingIdlingResource.increment();
                         codeList = codeListData.getCodeList();
-                        codeListAdapter = new CodeListAdapter(navController, getContext(), codeList, getActivity().getSupportFragmentManager());
+                        codeListAdapter = new CodeListAdapter(navController, getContext(), codeList);
                         codeListRecyclerView.setAdapter(codeListAdapter);
                         EspressoTestingIdlingResource.decrement();
                     } else {
@@ -113,7 +115,6 @@ public class CodeListFragment extends Fragment {
             public void onClick(View v) {
 
                 navController.navigate(R.id.action_codeListFragment_to_codeAddFragment);
-
 
 
             }

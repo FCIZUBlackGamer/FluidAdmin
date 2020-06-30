@@ -18,7 +18,6 @@ public class StaffListViewModel extends ViewModel {
     public MutableLiveData<StaffListModel> getStaffData(String langId, String typeCode) {
         if (CheckForNetwork.isConnectionOn(App.getContext())) {
             staffListModelMutableLiveData = staffRepository.getAllStuff(langId, typeCode);
-
         }
         else
             staffListModelMutableLiveData.setValue(new StaffListModel("Error in connection"));

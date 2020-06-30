@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,20 +20,23 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.model.session_model.SessionResponse;
 import com.thetatechno.fluidadmin.model.shedule.Schedule;
 
-public class SessionFragment extends Fragment {
+public class SessionFragment extends Fragment  {
     private View view;
     private RecyclerView recyclerView;
     private SessionListAdapter sessionListAdapter;
     private NavController navController;
     private SessionListViewModel sessionListViewModel;
-    FloatingActionButton floatingActionButton;
-
+   private FloatingActionButton floatingActionButton;
+    private SwipeRefreshLayout sessionSwipeRefreshLayout;
+private ProgressBar loadSessionsProgressBar;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +51,8 @@ public class SessionFragment extends Fragment {
         navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
         recyclerView = view.findViewById(R.id.rec);
         floatingActionButton = view.findViewById(R.id.fab);
+        sessionSwipeRefreshLayout = view.findViewById(R.id.sessionSwipeRefreshLayout);
+        loadSessionsProgressBar = view.findViewById(R.id.loadSessionProgressBar);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false));
         return view;
     }
@@ -55,9 +61,12 @@ public class SessionFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-            sessionListViewModel.getAllSessionsForSpecificSchedule("").observe(getViewLifecycleOwner(), new Observer<SessionResponse>() {
+        loadSessionsProgressBar.setVisibility(View.VISIBLE);
+            sessionListViewModel.getAllSessions().observe(getViewLifecycleOwner(), new Observer<SessionResponse>() {
                 @Override
                 public void onChanged(SessionResponse sessionResponse) {
+                    loadSessionsProgressBar.setVisibility(View.GONE);
+
                     if (sessionResponse != null) {
                         if (sessionResponse.getError().getErrorCode() == 0) {
                             if (sessionResponse.getSessions() != null) {
@@ -71,8 +80,24 @@ public class SessionFragment extends Fragment {
                             Toast.makeText(getContext(), sessionResponse.getError().getErrorMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
+                    else {
+                        Snackbar.make(sessionSwipeRefreshLayout,"Failed to load session",Snackbar.LENGTH_LONG).setAction(R.string.retry, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                sessionListViewModel.getAllSessions();
+                            }
+                        }).setAnchorView(floatingActionButton).show();
+                    }
                 }
             });
+        sessionSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                sessionSwipeRefreshLayout.setRefreshing(true);
+                sessionListViewModel.getAllSessions();
+                sessionSwipeRefreshLayout.setRefreshing(false);
+            }
+        });
 
         floatingActionButton.setOnClickListener(v -> {
             navController.navigate(R.id.fragmentAddOrUpdateSesssion);

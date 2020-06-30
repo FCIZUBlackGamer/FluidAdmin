@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ProgressBar;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.thetatechno.fluidadmin.R;
@@ -42,17 +43,36 @@ public class Appointments extends Fragment {
     String providerId = "";
     DatePickerDialog StartTime;
     NavController navController;
-
     public Appointments() {
     }
 
     private Observer<AppointmentListData> appointmentsObserver = new Observer<AppointmentListData>() {
         @Override
         public void onChanged(AppointmentListData appointmentListData) {
+            binding.appointmentsLoadingProgressBar.setVisibility(View.GONE);
+
             if (appointmentListData != null) {
-                appointmentsList = (ArrayList<Appointment>) appointmentListData.getAppointments();
-                appointmentListAdapter.setAppointments(appointmentsList);
-                appointmentListAdapter.notifyDataSetChanged();
+                if(appointmentListData.getAppointments()!=null) {
+                    appointmentsList = (ArrayList<Appointment>) appointmentListData.getAppointments();
+                    appointmentListAdapter.setAppointments(appointmentsList);
+                    appointmentListAdapter.notifyDataSetChanged();
+                }
+                else {
+                    Snackbar.make(binding.providerListTxtInput,appointmentListData.getStatus(),Snackbar.LENGTH_LONG).setAction(R.string.retry, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            appointmentsViewModel.getStaffData();
+                        }
+                    }).setAnchorView(binding.addNewAppointmentFab).show();
+                }
+            }
+            else {
+                Snackbar.make(binding.providerListTxtInput,"Failed to load appointments",Snackbar.LENGTH_LONG).setAction(R.string.retry, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        appointmentsViewModel.getStaffData();
+                    }
+                }).setAnchorView(binding.addNewAppointmentFab).show();
             }
         }
     };
@@ -121,6 +141,8 @@ public class Appointments extends Fragment {
             }
         });
         date = appointmentsViewModel.getTodayDateInFormat();
+        binding.appointmentsLoadingProgressBar.setVisibility(View.VISIBLE);
+
         appointmentsViewModel.getAppointments(providerId,date).observe(getViewLifecycleOwner(), appointmentsObserver);
 
         return binding.getRoot();

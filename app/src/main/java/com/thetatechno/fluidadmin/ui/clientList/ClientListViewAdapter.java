@@ -27,6 +27,7 @@ import com.thetatechno.fluidadmin.model.ClientModelForRegister;
 import com.thetatechno.fluidadmin.model.Person;
 import com.thetatechno.fluidadmin.utils.Constants;
 import com.thetatechno.fluidadmin.utils.EnumCode;
+import com.thetatechno.fluidadmin.utils.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -175,12 +176,11 @@ public class ClientListViewAdapter extends RecyclerView.Adapter<ClientListViewAd
                 } else {
                     List<ClientModelForRegister> filteredList = new ArrayList<>();
                     for (ClientModelForRegister person : personList) {
-                        if (person.getFirstName().contains(charSequenceString) || person.getFamilyName().contains(charSequenceString)) {
+                        if (StringUtil.isSearchResultExist(person.getFirstName(),charSequenceString) ||StringUtil.isSearchResultExist(person.getFamilyName(),charSequenceString) ) {
                             filteredList.add(person);
                         }
                         filteredClientList = filteredList;
                     }
-
                 }
                 FilterResults results = new FilterResults();
                 results.values = filteredClientList;

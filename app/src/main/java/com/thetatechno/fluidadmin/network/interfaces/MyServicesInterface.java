@@ -160,8 +160,10 @@ public interface MyServicesInterface {
     Call<Error> deleteSchedule(@Query("langId") String langId, @Query("id") String id);
 
     @GET("/ords/fluid/session/getSession")
-    Call<SessionResponse> getAllSession(@Query("langId") String langId, @Query("scheduleId") String scheduleId);
+    Call<SessionResponse> getSessionsRelatedToSchedule(@Query("langId") String langId, @Query("scheduleId") String scheduleId);
 
+    @GET("/ords/fluid/session/getSession")
+    Call<SessionResponse> getAllSessions(@Query("langId") String langId);
     @POST("/ords/fluid/session/addSession")
     Call<APIResponse> addSession(@Body Session session);
 

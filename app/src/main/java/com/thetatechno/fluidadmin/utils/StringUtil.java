@@ -83,4 +83,8 @@ public class StringUtil {
         return yearTxt;
 
     }
+
+    public static boolean isSearchResultExist(String word, String searchWord){
+        return (word.contains(searchWord) || word.toUpperCase().contains(searchWord) || word.toLowerCase().contains(searchWord));
+    }
 }

@@ -14,6 +14,7 @@ import com.thetatechno.fluidadmin.model.staff_model.StaffListModel;
 import com.thetatechno.fluidadmin.network.interfaces.MyServicesInterface;
 import com.thetatechno.fluidadmin.network.interfaces.RetrofitInstance;
 import com.thetatechno.fluidadmin.utils.Constants;
+import com.thetatechno.fluidadmin.utils.EnumCode;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,7 +40,10 @@ public class StaffRepository {
                         agentMutableLiveData.setValue(new StaffListModel(response.body().getStatus()));
                     }
                 } else {
-                    agentMutableLiveData.setValue(new StaffListModel(" Try again "));
+                    if (typeCode.equals(EnumCode.StaffTypeCode.PRVDR.toString()))
+                        agentMutableLiveData.setValue(new StaffListModel(" Failed to load providers"));
+                    else if (typeCode.equals(EnumCode.StaffTypeCode.DSPTCHR.toString()))
+                        agentMutableLiveData.setValue(new StaffListModel(" Failed to load agents"));
 
                 }
             }

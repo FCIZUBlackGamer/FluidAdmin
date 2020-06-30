@@ -22,6 +22,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -50,6 +51,7 @@ public class ProviderList extends Fragment implements SearchView.OnQueryTextList
     private NavController navController;
     private SwipeRefreshLayout providerSwipeLayout;
     private SearchView searchView;
+    private ProgressBar loadProvidersProgressBar;
     static final private String TAG = ProviderList.class.getSimpleName();
 
     public ProviderList() {
@@ -72,13 +74,15 @@ public class ProviderList extends Fragment implements SearchView.OnQueryTextList
         navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
         providerSwipeLayout = view.findViewById(R.id.providerSwipeLayout);
         addNewProviderFab = view.findViewById(R.id.addProviderFab);
+        loadProvidersProgressBar = view.findViewById(R.id.loadProvidersProgressBar);
         providerListViewModel = ViewModelProviders.of(this).get(StaffListViewModel.class);
         providerListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         EspressoTestingIdlingResource.increment();
+        loadProvidersProgressBar.setVisibility(View.VISIBLE);
         providerListViewModel.getStaffData(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase(), EnumCode.StaffTypeCode.PRVDR.toString()).observe(getViewLifecycleOwner(), new Observer<StaffListModel>() {
             @Override
             public void onChanged(StaffListModel staffData) {
-
+                loadProvidersProgressBar.setVisibility(View.GONE);
                 if (staffData.getStaffData() != null) {
                         EspressoTestingIdlingResource.increment();
                         providerList = staffData.getStaffData().getStaffList();

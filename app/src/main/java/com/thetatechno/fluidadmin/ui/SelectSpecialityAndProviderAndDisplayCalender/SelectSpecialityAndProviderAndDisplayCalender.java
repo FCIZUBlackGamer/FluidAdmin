@@ -334,11 +334,7 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
                 binding.siteList.setVisibility(View.VISIBLE);
                 binding.siteLayout.setVisibility(View.VISIBLE);
             }
-            if (clientId == null) {
-                binding.clientListLayout.setVisibility(View.VISIBLE);
-            } else {
-                binding.clientListLayout.setVisibility(View.GONE);
-            }
+
 
             binding.siteList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
@@ -409,11 +405,15 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
         @Override
         public void onChanged(ClientData clientData) {
             EspressoTestingIdlingResource.increment();
-
-
             if (clientData != null) {
                 if (clientData.getPersonList() != null)
                     clientList = (ArrayList<ClientModelForRegister>) clientData.getPersonList();
+                if (clientList.size() == 1) {
+                    binding.clientListLayout.setVisibility(View.GONE);
+                } else {
+                    binding.clientListLayout.setVisibility(View.VISIBLE);
+
+                }
                 ArrayAdapter<ClientModelForRegister> adapter =
                         new ArrayAdapter<ClientModelForRegister>(getContext(), R.layout.dropdown_menu_popup_item, clientList);
                 binding.clientListTxtView.setAdapter(adapter);

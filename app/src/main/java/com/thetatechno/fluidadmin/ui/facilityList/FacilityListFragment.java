@@ -22,8 +22,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.model.facility_model.Facilities;
 import com.thetatechno.fluidadmin.model.facility_model.Facility;
@@ -42,9 +44,10 @@ public class FacilityListFragment extends Fragment implements SearchView.OnQuery
     private NavController navController;
     private FloatingActionButton addNewFacilityFab;
     private SwipeRefreshLayout facilitySwipeLayout;
+
     private final String ARG_CLINIC_TYPE = "clinic_type";
     final String TAG = FacilityListFragment.class.getSimpleName();
-
+private ProgressBar loadFacilityProgressBar ;
     public FacilityListFragment() {
         // Required empty public constructor
     }
@@ -64,14 +67,18 @@ public class FacilityListFragment extends Fragment implements SearchView.OnQuery
         navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
         addNewFacilityFab = view.findViewById(R.id.addNewFacilityFab);
         facilitySwipeLayout = view.findViewById(R.id.facilitySwipeLayout);
+        loadFacilityProgressBar = view.findViewById(R.id.loadFacilityProgressBar);
         facilityListClinicRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         facilityListViewModel = ViewModelProviders.of(this).get(FacilityListViewModel.class);
         setHasOptionsMenu(true);
         EspressoTestingIdlingResource.increment();
+        loadFacilityProgressBar.setVisibility(View.VISIBLE);
         facilityListViewModel.getAllFacilities("").observe(getViewLifecycleOwner(), new Observer<Facilities>() {
             @Override
             public void onChanged(Facilities facilities) {
                 EspressoTestingIdlingResource.increment();
+                loadFacilityProgressBar.setVisibility(View.GONE);
+
                 if (facilities != null) {
                     if (facilities.getFacilities() != null) {
 
@@ -80,11 +87,22 @@ public class FacilityListFragment extends Fragment implements SearchView.OnQuery
                         facilityListClinicRecyclerView.setAdapter(facilityListAdapter);
 
 
-                    } else {
-                        Log.e(TAG, "facilityList Is Null");
+                    } else if (facilities.getStatus() != null) {
+                        Snackbar.make(facilitySwipeLayout, facilities.getStatus(), Snackbar.LENGTH_LONG).setAction(R.string.retry, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                facilityListViewModel.getAllFacilities("");
+                            }
+                        }).setAnchorView(addNewFacilityFab).show();
                     }
                 } else {
                     Log.e(TAG, "no data returns");
+                    Snackbar.make(facilitySwipeLayout, "Failed to load facilities", Snackbar.LENGTH_LONG).setAction(R.string.retry, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            facilityListViewModel.getAllFacilities("");
+                        }
+                    }).setAnchorView(addNewFacilityFab).show();
                 }
                 EspressoTestingIdlingResource.decrement();
             }

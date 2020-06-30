@@ -13,7 +13,7 @@ public class AppointmentListData {
     private List<Appointment> appointments = new ArrayList<>();
     @SerializedName("status")
     @Expose
-    private String status = "";
+    private String status = " ";
 
     public List<Appointment> getAppointments() {
         return appointments;

@@ -22,6 +22,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -49,6 +50,7 @@ public class AgentList extends Fragment implements SearchView.OnQueryTextListene
     private AgentListAdapter agentListAdapter;
     private StaffListViewModel staffListViewModel;
     private SwipeRefreshLayout agentSwipeLayout;
+    private ProgressBar loadAgentsProgressBar;
 
     public AgentList() {
         // Required empty public constructor
@@ -77,14 +79,18 @@ public class AgentList extends Fragment implements SearchView.OnQueryTextListene
         addNewAgentFab = view.findViewById(R.id.addAgentFab);
         staffListViewModel = ViewModelProviders.of(this).get(StaffListViewModel.class);
         agentSwipeLayout = view.findViewById(R.id.agentSwipeLayout);
+        loadAgentsProgressBar = view.findViewById(R.id.loadAgentsProgressBar);
         setHasOptionsMenu(true);
         agentListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         if (agentList == null) {
            EspressoTestingIdlingResource.increment();
+            loadAgentsProgressBar.setVisibility(View.VISIBLE);
             staffListViewModel.getStaffData(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase(), EnumCode.StaffTypeCode.DSPTCHR.toString()).observe(getViewLifecycleOwner(), new Observer<StaffListModel>() {
                 @Override
                 public void onChanged(StaffListModel staffData) {
-                        if (staffData.getStaffData() != null) {
+                    loadAgentsProgressBar.setVisibility(View.GONE);
+
+                    if (staffData.getStaffData() != null) {
                             EspressoTestingIdlingResource.increment();
                             agentList = staffData.getStaffData().getStaffList();
                             agentListAdapter = new AgentListAdapter(navController, getContext(), agentList, getActivity().getSupportFragmentManager());

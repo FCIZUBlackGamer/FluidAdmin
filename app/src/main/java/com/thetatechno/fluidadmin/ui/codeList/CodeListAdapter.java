@@ -28,23 +28,20 @@ import io.sentry.event.UserBuilder;
 
 import static com.thetatechno.fluidadmin.utils.Constants.ARG_CODE;
 
-public class CodeListAdapter extends RecyclerView.Adapter<CodeListAdapter.CodeViewHolder>{
+public class CodeListAdapter extends RecyclerView.Adapter<CodeListAdapter.CodeViewHolder> {
 
-    Context context;
-    FragmentManager fragmentManager;
-    List<Code> codeList;
-    OnDeleteListener listener;
-
-    NavController navController;
-    Bundle bundle;
+    private Context context;
+    private List<Code> codeList;
+    private OnDeleteListener listener;
+    private NavController navController;
+    private Bundle bundle;
 
 
-    public CodeListAdapter(NavController navControlle, Context context, List<Code> codeList, FragmentManager fragmentManager) {
+    public CodeListAdapter(NavController navControlle, Context context, List<Code> codeList) {
         this.codeList = codeList;
         this.context = context;
         navController = navControlle;
         bundle = new Bundle();
-        this.fragmentManager = fragmentManager;
         if (context instanceof OnDeleteListener)
             listener = (OnDeleteListener) context;
         else
@@ -70,7 +67,7 @@ public class CodeListAdapter extends RecyclerView.Adapter<CodeListAdapter.CodeVi
 
         try {
 
-            if(position <codeList.size()) {
+            if (position < codeList.size()) {
                 holder.itemView.setVisibility(View.VISIBLE);
                 holder.codeTxt.setText(codeList.get(position).getCode());
 //            holder.codeTypeTxt.setText(codeList.get(position).getCodeType());
@@ -90,10 +87,7 @@ public class CodeListAdapter extends RecyclerView.Adapter<CodeListAdapter.CodeVi
                                 switch (item.getItemId()) {
                                     case R.id.editCode:
                                         bundle.putSerializable(ARG_CODE, (Serializable) codeList.get(position));
-                                        bundle.putSerializable("type", (Serializable) EnumCode.UsageType.Code);
-                                        bundle.putSerializable("codeList", (Serializable) codeList);
                                         navController.navigate(R.id.codeAddFragment, bundle);
-
                                         break;
                                     case R.id.deleteCode:
                                         //handle delete click
@@ -109,11 +103,11 @@ public class CodeListAdapter extends RecyclerView.Adapter<CodeListAdapter.CodeVi
                         popup.show();
                     }
                 });
-            }else if(position == codeList.size()){
-holder.itemView.setVisibility(View.INVISIBLE);
+            } else if (position == codeList.size()) {
+                holder.itemView.setVisibility(View.INVISIBLE);
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             Sentry.capture(e);
         }
 
@@ -122,7 +116,7 @@ holder.itemView.setVisibility(View.INVISIBLE);
     @Override
     public int getItemCount() {
 
-        return codeList.size()+1;
+        return codeList.size() + 1;
     }
 
     public class CodeViewHolder extends RecyclerView.ViewHolder {

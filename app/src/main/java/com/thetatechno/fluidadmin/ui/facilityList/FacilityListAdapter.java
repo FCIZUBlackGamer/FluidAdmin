@@ -160,7 +160,7 @@ public class FacilityListAdapter extends RecyclerView.Adapter<FacilityListAdapte
                 } else {
                     List<Facility> filteredList = new ArrayList<>();
                     for (Facility facility : facilityList) {
-                        if (facility.getDescription().contains(charSequenceString) || facility.getDescription().equalsIgnoreCase(charSequenceString)) {
+                        if (facility.getDescription().contains(charSequenceString) || facility.getDescription().toLowerCase().contains(charSequenceString) || facility.getDescription().toUpperCase().contains(charSequenceString)) {
                             filteredList.add(facility);
                         }
                         filteredFacilityList = filteredList;

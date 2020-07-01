@@ -53,16 +53,17 @@ public class Appointments extends Fragment {
             binding.appointmentsLoadingProgressBar.setVisibility(View.GONE);
 
             if (appointmentListData != null) {
-                if(appointmentListData.getAppointments()!=null && appointmentListData.getAppointments().size() >0) {
+                if(appointmentListData.getError()!=null && appointmentListData.getError().getErrorCode() == 0 && appointmentListData.getAppointments().size() >0) {
                     appointmentsList = (ArrayList<Appointment>) appointmentListData.getAppointments();
                     appointmentListAdapter.setAppointments(appointmentsList);
                     appointmentListAdapter.notifyDataSetChanged();
                 }
                 else {
-                    Snackbar.make(binding.providerListTxtInput,appointmentListData.getStatus(),Snackbar.LENGTH_LONG).setAction(R.string.retry, new View.OnClickListener() {
+                    Snackbar.make(binding.providerListTxtInput,"No appointments found.",Snackbar.LENGTH_LONG).setAction(R.string.retry, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            appointmentsViewModel.getStaffData();
+                            appointmentsViewModel.getAppointments(providerId,date);
+
                         }
                     }).setAnchorView(binding.addNewAppointmentFab).show();
                 }
@@ -71,7 +72,8 @@ public class Appointments extends Fragment {
                 Snackbar.make(binding.providerListTxtInput,"Failed to load appointments",Snackbar.LENGTH_LONG).setAction(R.string.retry, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        appointmentsViewModel.getStaffData();
+                        appointmentsViewModel.getAppointments(providerId,date);
+
                     }
                 }).setAnchorView(binding.addNewAppointmentFab).show();
             }

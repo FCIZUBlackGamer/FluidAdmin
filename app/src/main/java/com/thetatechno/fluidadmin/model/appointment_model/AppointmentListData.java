@@ -2,6 +2,8 @@ package com.thetatechno.fluidadmin.model.appointment_model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.thetatechno.fluidadmin.model.APIResponse;
+import com.thetatechno.fluidadmin.model.Error;
 import com.thetatechno.fluidadmin.model.appointment_model.Appointment;
 
 import java.util.ArrayList;
@@ -11,9 +13,9 @@ public class AppointmentListData {
     @SerializedName("items")
     @Expose
     private List<Appointment> appointments = new ArrayList<>();
-    @SerializedName("status")
+    @SerializedName("error")
     @Expose
-    private String status = " ";
+    private Error error;
 
     public List<Appointment> getAppointments() {
         return appointments;
@@ -23,11 +25,11 @@ public class AppointmentListData {
         this.appointments = appointments;
     }
 
-    public String getStatus() {
-        return status;
+    public Error getError() {
+        return error;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setError(Error error) {
+        this.error = error;
     }
 }

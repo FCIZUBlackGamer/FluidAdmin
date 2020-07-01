@@ -7,14 +7,13 @@
     <fragment
         android:id="@+id/addOrUpdateProviderFragment"
         android:name="com.thetatechno.fluidadmin.ui.addorupdatestuff.AddOrUpdateProviderFragment"
-        tools:layout="@layout/fragment_add_or_update_provider" >
+        tools:layout="@layout/fragment_add_or_update_provider">
 
         <action
             android:id="@+id/action_addOrUpdateProviderFragment_to_providerListFragment"
-            app:popUpTo="@id/providerList"
-            app:popUpToInclusive="true"
             app:destination="@id/providerList"
-            />
+            app:popUpTo="@id/providerList"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/addOrUpdateAgentFragment"
@@ -26,12 +25,12 @@
             android:id="@+id/action_addOrUpdateAgentFragment_to_agentList"
             app:destination="@id/agentList"
             app:popUpTo="@id/agentList"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true" />
     </fragment>
     <dialog
         android:id="@+id/codeAddFragment"
         android:name="com.thetatechno.fluidadmin.ui.addorupdatecode.CodeAddFragment"
-        tools:layout="@layout/code_add_view" >
+        tools:layout="@layout/code_add_view">
         <action
             android:id="@+id/action_codeAddFragment_to_codeListFragment"
             app:destination="@id/codeList"
@@ -40,7 +39,7 @@
     <fragment
         android:id="@+id/facilityAddFragment"
         android:name="com.thetatechno.fluidadmin.ui.addorupdatefacility.FacilityAddFragment"
-        tools:layout="@layout/facility_add_view" >
+        tools:layout="@layout/facility_add_view">
 
         <action
             android:id="@+id/action_facilityAddFragment_to_clinicList"
@@ -52,7 +51,7 @@
         android:id="@+id/agentList"
         android:name="com.thetatechno.fluidadmin.ui.stafflist.agentList.AgentList"
         android:label="@string/Agents"
-        tools:layout="@layout/fragment_agent_list" >
+        tools:layout="@layout/fragment_agent_list">
 
         <action
             android:id="@+id/action_agentList_to_addOrUpdateAgentFragment"
@@ -62,7 +61,7 @@
         android:id="@+id/providerList"
         android:name="com.thetatechno.fluidadmin.ui.stafflist.providerList.ProviderList"
         android:label="@string/provider"
-        tools:layout="@layout/fragment_provider_list" >
+        tools:layout="@layout/fragment_provider_list">
         <action
             android:id="@+id/action_providerListFragment_to_addOrUpdateProviderFragment"
             app:destination="@id/addOrUpdateProviderFragment" />
@@ -71,7 +70,7 @@
         android:id="@+id/facility"
         android:name="com.thetatechno.fluidadmin.ui.facilityList.FacilityListFragment"
         android:label="@string/facilty"
-        tools:layout="@layout/fragment_facility_list" >
+        tools:layout="@layout/fragment_facility_list">
 
         <action
             android:id="@+id/action_facilityListFragment_to_facilityAddFragment"
@@ -81,7 +80,7 @@
         android:id="@+id/clientList"
         android:name="com.thetatechno.fluidadmin.ui.clientList.ClientListFragment"
         android:label="@string/client"
-        tools:layout="@layout/fragment_client_list" >
+        tools:layout="@layout/fragment_client_list">
         <action
             android:id="@+id/action_clientList_to_selectSpecialityAndProviderAndDisplayCalender"
             app:destination="@id/selectSpecialityAndProviderAndDisplayCalender" />
@@ -93,7 +92,7 @@
         android:id="@+id/codeList"
         android:name="com.thetatechno.fluidadmin.ui.codeList.CodeListFragment"
         android:label="@string/id"
-        tools:layout="@layout/fragment_code_list" >
+        tools:layout="@layout/fragment_code_list">
         <action
             android:id="@+id/action_codeListFragment_to_codeAddFragment"
             app:destination="@id/codeAddFragment" />
@@ -101,7 +100,7 @@
     <fragment
         android:id="@+id/branches"
         android:name="com.thetatechno.fluidadmin.ui.branches.Branches"
-        android:label="@string/branches_txt" >
+        android:label="@string/branches_txt">
 
         <action
             android:id="@+id/action_branches_to_addOrUpdateBranch"
@@ -111,16 +110,20 @@
     <fragment
         android:id="@+id/appointments"
         android:name="com.thetatechno.fluidadmin.ui.appointments.Appointments"
-        android:label="@string/appointments_txt" >
-
+        android:label="@string/appointments_txt">
         <action
             android:id="@+id/action_appointments_to_selectSpecialityAndProviderAndDisplayCalender"
             app:destination="@id/selectSpecialityAndProviderAndDisplayCalender" />
+        <action
+            android:id="@+id/action_appointments_to_home"
+            app:destination="@id/agentList"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/agentList"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/addOrUpdateBranch"
-        android:name="com.thetatechno.fluidadmin.ui.addOrUpdateBranch.AddOrUpdateBranch"
-         >
+        android:name="com.thetatechno.fluidadmin.ui.addOrUpdateBranch.AddOrUpdateBranch">
         <action
             android:id="@+id/action_addOrUpdateBranch_to_branches"
             app:destination="@id/branches" />
@@ -128,7 +131,7 @@
     <fragment
         android:id="@+id/timeSlotList"
         android:name="com.thetatechno.fluidadmin.ui.timeSlotList.TimeSlotList"
-        android:label="@string/book_appointment_txt" >
+        android:label="@string/book_appointment_txt">
         <action
             android:id="@+id/action_timeSlotList_to_confirmAppointment"
             app:destination="@id/confirmAppointment" />
@@ -136,7 +139,7 @@
     <fragment
         android:id="@+id/selectSpecialityAndProviderAndDisplayCalender"
         android:name="com.thetatechno.fluidadmin.ui.SelectSpecialityAndProviderAndDisplayCalender.SelectSpecialityAndProviderAndDisplayCalender"
-        android:label="@string/book_appointment_txt" >
+        android:label="@string/book_appointment_txt">
         <action
             android:id="@+id/action_selectSpecialityAndProviderAndDisplayCalender_to_timeSlotList"
             app:destination="@id/timeSlotList" />
@@ -144,7 +147,14 @@
     <fragment
         android:id="@+id/confirmAppointment"
         android:name="com.thetatechno.fluidadmin.ui.ConfirmAppointment"
-        android:label="@string/confirm_appointment_txt" />
+        android:label="@string/confirm_appointment_txt">
+        <action
+            android:id="@+id/action_confirm_to_home"
+            app:destination="@id/appointments"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/appointments"
+            app:popUpToInclusive="true" />
+    </fragment>
     <fragment
         android:id="@+id/registerPage3"
         android:name="com.thetatechno.fluidadmin.ui.AddNewClient"
@@ -152,7 +162,7 @@
     <fragment
         android:id="@id/scheduleFragment"
         android:name="com.thetatechno.fluidadmin.ui.Schedule.ScheduleFragment"
-        android:label="@string/schedules_txt" >
+        android:label="@string/schedules_txt">
         <action
             android:id="@+id/action_scheduleFragment_to_fragmentAddOrUpdateSchedule"
             app:destination="@id/fragmentAddOrUpdateSchedule" />
@@ -163,19 +173,17 @@
     <fragment
         android:id="@+id/sessionFragment"
         android:name="com.thetatechno.fluidadmin.ui.Session.SessionFragment"
-        android:label="@string/sessions_txt" >
+        android:label="@string/sessions_txt">
         <action
             android:id="@+id/action_sessionFragment_to_fragmentAddOrUpdateSesssion"
             app:destination="@id/fragmentAddOrUpdateSesssion" />
     </fragment>
     <fragment
         android:id="@+id/fragmentAddOrUpdateSchedule"
-        android:name="com.thetatechno.fluidadmin.ui.addOrUpdateSchedule.FragmentAddOrUpdateSchedule"
-     />
+        android:name="com.thetatechno.fluidadmin.ui.addOrUpdateSchedule.FragmentAddOrUpdateSchedule" />
     <fragment
         android:id="@+id/fragmentAddOrUpdateSesssion"
-        android:name="com.thetatechno.fluidadmin.ui.addOrUpdateSession.FragmentAddOrUpdateSesssion"
- />
+        android:name="com.thetatechno.fluidadmin.ui.addOrUpdateSession.FragmentAddOrUpdateSesssion" />
     <fragment
         android:id="@+id/showSessions"
         android:name="com.thetatechno.fluidadmin.ui.showSession.ShowSessions"

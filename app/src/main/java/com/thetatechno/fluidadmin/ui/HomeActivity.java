@@ -45,6 +45,7 @@ import com.thetatechno.fluidadmin.ui.facilityList.FacilityListViewModel;
 import com.thetatechno.fluidadmin.utils.Constants;
 import com.thetatechno.fluidadmin.utils.PreferenceController;
 import com.thetatechno.fluidadmin.utils.EnumCode;
+import com.thetatechno.fluidadmin.utils.SaveLogFile;
 import com.yariksoffice.lingver.Lingver;
 
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -85,10 +86,13 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     private String deleteFacilityMessage = "";
     private String deleteBranchMessage = "";
     private String deleteScheduleMessage = "";
+    private String deleteSessionMessage = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SaveLogFile saveLogFile = new SaveLogFile();
+        saveLogFile.createLogFilesToSaveLogcatException();
         Sentry.init("https://77af95af46ac4f068742d097b9c782c1@sentry.io/2577929", new AndroidSentryClientFactory(this));
         Sentry.getContext().setUser(
                 new UserBuilder().setUsername("theta").build()
@@ -106,7 +110,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.agentList, R.id.providerList, R.id.clientList,
-                R.id.codeList, R.id.facility, R.id.branches, R.id.appointments, R.id.scheduleFragment,R.id.sessionFragment)
+                R.id.codeList, R.id.facility, R.id.branches, R.id.appointments, R.id.scheduleFragment, R.id.sessionFragment)
                 .setDrawerLayout(drawer)
                 .build();
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -159,7 +163,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 Lingver.getInstance().setLocale(this, Constants.ARABIC);
             }
             finish();
-           startActivity(new Intent(this, HomeActivity.class));
+            startActivity(new Intent(this, HomeActivity.class));
 
         }
 
@@ -218,13 +222,13 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 mainViewModel.deleteBranch((Branch) itemDeleted);
         } else if (itemDeleted instanceof Schedule) {
             Log.i("Object", "schedule " + ((Schedule) itemDeleted).getDescription());
-            if (deleteScheduleMessage.isEmpty())
+            if (deleteScheduleMessage != null && deleteScheduleMessage.isEmpty())
                 deleteSchedule((Schedule) itemDeleted);
             else
                 mainViewModel.deleteSchedule((Schedule) itemDeleted);
         } else if (itemDeleted instanceof Session) {
             Log.i("Object", "session " + ((Session) itemDeleted).getId());
-            if (deleteScheduleMessage.isEmpty())
+            if (deleteSessionMessage.isEmpty())
                 deleteSession((Session) itemDeleted);
             else
                 mainViewModel.deleteSession((Session) itemDeleted);
@@ -405,9 +409,13 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 EspressoTestingIdlingResource.decrement();
                 Log.i(TAG, "onConfirmLinkToFacility: status " + b);
                 EspressoTestingIdlingResource.increment();
-                if (facilitiesListDialog.isShowing()) {
-                    facilitiesListDialog.dismiss();
-                    navigateToAgentList();
+                if (b != null) {
+                    if (facilitiesListDialog.isShowing()) {
+                        facilitiesListDialog.dismiss();
+                        navigateToAgentList();
+                    }
+                } else {
+                    Toast.makeText(HomeActivity.this, "Failed to Delete ", Toast.LENGTH_SHORT).show();
                 }
                 EspressoTestingIdlingResource.decrement();
 
@@ -420,14 +428,18 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             @Override
             public void onChanged(String s) {
                 EspressoTestingIdlingResource.increment();
-                deleteStaffMessage = s;
-                if (itemDeleted.getTypeCode().equals(EnumCode.StaffTypeCode.DSPTCHR.toString())) {
-                    navigateToAgentList();
-                    Toast.makeText(HomeActivity.this, deleteStaffMessage, Toast.LENGTH_SHORT).show();
-                } else if (itemDeleted.getTypeCode().equals(EnumCode.StaffTypeCode.PRVDR.toString())) {
-                    navigateToProviderList();
-                    Toast.makeText(HomeActivity.this, deleteStaffMessage, Toast.LENGTH_SHORT).show();
+                if (s != null) {
+                    deleteStaffMessage = s;
+                    if (itemDeleted.getTypeCode().equals(EnumCode.StaffTypeCode.DSPTCHR.toString())) {
+                        navigateToAgentList();
+                        Toast.makeText(HomeActivity.this, deleteStaffMessage, Toast.LENGTH_SHORT).show();
+                    } else if (itemDeleted.getTypeCode().equals(EnumCode.StaffTypeCode.PRVDR.toString())) {
+                        navigateToProviderList();
+                        Toast.makeText(HomeActivity.this, deleteStaffMessage, Toast.LENGTH_SHORT).show();
 
+                    }
+                } else {
+                    Toast.makeText(HomeActivity.this, "Failed to Delete ", Toast.LENGTH_SHORT).show();
                 }
                 EspressoTestingIdlingResource.decrement();
             }
@@ -438,11 +450,15 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         mainViewModel.deleteFacility(facility).observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                EspressoTestingIdlingResource.increment();
-                deleteFacilityMessage = s;
-                Toast.makeText(HomeActivity.this, deleteFacilityMessage, Toast.LENGTH_SHORT).show();
-                navigateToClinicTypeList();
-                EspressoTestingIdlingResource.decrement();
+                if (s != null) {
+                    EspressoTestingIdlingResource.increment();
+                    deleteFacilityMessage = s;
+                    Toast.makeText(HomeActivity.this, deleteFacilityMessage, Toast.LENGTH_SHORT).show();
+                    navigateToClinicTypeList();
+                    EspressoTestingIdlingResource.decrement();
+                } else {
+                    Toast.makeText(HomeActivity.this, "Failed to Delete ", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -453,9 +469,13 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         mainViewModel.deleteCode(code).observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                deleteCodeMessage = s;
-                Toast.makeText(HomeActivity.this, deleteCodeMessage, Toast.LENGTH_SHORT).show();
-                navigateToCodeList();
+                if (s != null) {
+                    deleteCodeMessage = s;
+                    Toast.makeText(HomeActivity.this, deleteCodeMessage, Toast.LENGTH_SHORT).show();
+                    navigateToCodeList();
+                } else {
+                    Toast.makeText(HomeActivity.this, "Failed to Delete ", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -464,9 +484,13 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         mainViewModel.deleteBranch(branch).observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                deleteBranchMessage = s;
-                Toast.makeText(HomeActivity.this, deleteBranchMessage, Toast.LENGTH_SHORT).show();
-                navigateToBranches();
+                if (s != null) {
+                    deleteBranchMessage = s;
+                    Toast.makeText(HomeActivity.this, deleteBranchMessage, Toast.LENGTH_SHORT).show();
+                    navigateToBranches();
+                } else {
+                    Toast.makeText(HomeActivity.this, "Failed to Delete ", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -475,12 +499,16 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         mainViewModel.deleteSchedule(schedule).observe(this, new Observer<Error>() {
             @Override
             public void onChanged(Error error) {
-                if (error.getErrorCode() == 0) {
+                if (error != null) {
                     deleteScheduleMessage = error.getErrorMessage();
-                    Toast.makeText(HomeActivity.this, error.getErrorMessage(), Toast.LENGTH_SHORT).show();
-                    navigateToSchedules();
+                    if (error.getErrorCode() == 0) {
+                        Toast.makeText(HomeActivity.this, "OK", Toast.LENGTH_SHORT).show();
+                        navigateToSchedules();
+                    } else {
+                        Toast.makeText(HomeActivity.this, error.getErrorMessage(), Toast.LENGTH_SHORT).show();
+                    }
                 } else {
-                    Toast.makeText(HomeActivity.this, error.getErrorMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(HomeActivity.this, "Failed to Delete ", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -490,12 +518,11 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         mainViewModel.deleteSession(session).observe(this, new Observer<Error>() {
             @Override
             public void onChanged(Error error) {
-                if(error!=null) {
-                    Toast.makeText(HomeActivity.this, error.getErrorMessage(), Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    Toast.makeText(HomeActivity.this, "error, try again", Toast.LENGTH_SHORT).show();
-
+                if (error != null) {
+                    deleteSessionMessage = error.getErrorMessage();
+                    Toast.makeText(HomeActivity.this, "OK", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(HomeActivity.this, "Failed to Delete ", Toast.LENGTH_SHORT).show();
                 }
             }
         });

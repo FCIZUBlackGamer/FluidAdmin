@@ -27,7 +27,7 @@ public class ScheduleRepository {
     private MutableLiveData<AddOrUpdateScheduleResponse> updateScheduleLiveData = new MutableLiveData<>();
     private MutableLiveData<Error> deleteScheduleLiveData = new MutableLiveData<>();
 
-    private static String TAG = CodeRepository.class.getSimpleName();
+    private static String TAG = ScheduleRepository.class.getSimpleName();
 
     public MutableLiveData<ScheduleResponse> getAllSchedules(final String langId) {
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
@@ -91,6 +91,9 @@ public class ScheduleRepository {
             public void onResponse(Call<AddOrUpdateScheduleResponse> call, Response<AddOrUpdateScheduleResponse> response) {
                 Log.i(TAG, "insertCode: response " + response.toString());
                 if (response.isSuccessful()) {
+                    Error error = response.body().getError();
+                    error.setErrorMessage("Schedule Updated");
+                    response.body().setError(error);
                     updateScheduleLiveData.setValue(response.body());
                 } else
                     updateScheduleLiveData.setValue(null);
@@ -117,6 +120,8 @@ public class ScheduleRepository {
                 if (response.isSuccessful()) {
                     deleteScheduleLiveData.setValue(response.body());
 
+                }else {
+                    deleteScheduleLiveData.setValue(null);
                 }
             }
 

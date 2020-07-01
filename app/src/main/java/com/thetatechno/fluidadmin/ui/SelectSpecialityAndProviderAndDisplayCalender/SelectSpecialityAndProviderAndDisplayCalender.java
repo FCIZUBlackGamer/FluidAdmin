@@ -441,7 +441,7 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
                 appointmentDayDetailsArrayList = (ArrayList<AppointmentDayDetails>) appointmentCalenderDaysListData.getDayDetailsList();
             selectedDays = getDaysBundelKey();
             binding.calendarView.setSelectedDates(selectedDays);
-            binding.calendarView.setSelectedDates(getDaysBundelKey());
+//            binding.calendarView.setSelectedDates(getDaysBundelKey());
             EspressoTestingIdlingResource.decrement();
         }
     };

@@ -64,6 +64,7 @@ public class ShowSessions extends Fragment {
         time_to_txt = view.findViewById(R.id.time_to_txt);
         doctor_name_txt = view.findViewById(R.id.doctor_name_txt);
         doctorImg = view.findViewById(R.id.doctorImg);
+        view.findViewById(R.id.scheduleOptionMenu).setVisibility(View.INVISIBLE);
         return view;
     }
 

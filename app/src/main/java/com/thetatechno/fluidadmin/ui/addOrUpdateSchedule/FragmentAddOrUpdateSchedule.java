@@ -33,8 +33,10 @@ import com.thetatechno.fluidadmin.model.shedule.Schedule;
 import com.thetatechno.fluidadmin.ui.HomeActivity;
 import com.thetatechno.fluidadmin.utils.Constants;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 public class FragmentAddOrUpdateSchedule extends Fragment {
     private AddScheduleLayoutBinding binding;
@@ -54,6 +56,11 @@ public class FragmentAddOrUpdateSchedule extends Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.add_schedule_layout, container, false);
         addOrUpdateScheduleViewModel = ViewModelProviders.of(this).get(AddOrUpdateScheduleViewModel.class);
         navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
+        Date c = Calendar.getInstance().getTime();
+
+        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+        String formattedDate = df.format(c);
+        binding.dateFromTxt.setText(formattedDate);
         return binding.getRoot();
     }
 
@@ -235,7 +242,7 @@ public class FragmentAddOrUpdateSchedule extends Fragment {
                     }
                 } else {
                     Toast.makeText(requireActivity(), "Error, Failed to add schedule ", Toast.LENGTH_SHORT).show();
-
+                    schedule = null;
                 }
             });
 

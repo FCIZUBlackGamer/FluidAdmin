@@ -1,8 +1,10 @@
 package com.thetatechno.fluidadmin.ui.stafflist.agentList;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
@@ -15,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -51,6 +54,8 @@ public class AgentList extends Fragment implements SearchView.OnQueryTextListene
     private StaffListViewModel staffListViewModel;
     private SwipeRefreshLayout agentSwipeLayout;
     private ProgressBar loadAgentsProgressBar;
+    boolean doubleBackToExitPressedOnce = false;
+
 
     public AgentList() {
         // Required empty public constructor
@@ -58,6 +63,7 @@ public class AgentList extends Fragment implements SearchView.OnQueryTextListene
 
     public static AgentList newInstance() {
         AgentList fragment = new AgentList();
+
         return fragment;
     }
 
@@ -65,6 +71,7 @@ public class AgentList extends Fragment implements SearchView.OnQueryTextListene
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         return inflater.inflate(R.layout.fragment_agent_list, container, false);
 
 
@@ -126,6 +133,30 @@ public class AgentList extends Fragment implements SearchView.OnQueryTextListene
             }
         });
 
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                if (doubleBackToExitPressedOnce) {
+                    Intent intent = new Intent(Intent.ACTION_MAIN);
+                    intent.addCategory(Intent.CATEGORY_HOME);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    return;
+                }
+
+                doubleBackToExitPressedOnce = true;
+                Toast.makeText(requireActivity(), "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+                new Handler().postDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        doubleBackToExitPressedOnce=false;
+                    }
+                }, 2000);
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
     }
     @Override
     public boolean onMenuItemActionExpand(MenuItem item) {

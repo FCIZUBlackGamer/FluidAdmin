@@ -71,8 +71,10 @@ public class FragmentAddOrUpdateSesssion extends Fragment {
             binding.timeToTxt.setText(session.getScheduledEnd());
             binding.timeFromTxt.setText(session.getScheduledStart());
             binding.dateTxt.setText(session.getSessionDate());
+            binding.addOrUpdateScheduleBtn.setText("Add");
         } else {
             session = null;
+            binding.addOrUpdateScheduleBtn.setText("Update");
         }
         addOrUpdateScheduleViewModel.getStaffData().observe(getViewLifecycleOwner(), staffData -> {
             if (staffData.getStaffData() != null) {
@@ -110,8 +112,15 @@ public class FragmentAddOrUpdateSesssion extends Fragment {
 
             }
         });
-        binding.selectDateimg.setOnClickListener(v -> {
+        binding.cardView2.setOnClickListener(v -> {
             showDatePicker(binding.dateTxt, binding.timeFromTxt, binding.timeToTxt);
+        });
+
+        binding.cardView3.setOnClickListener(v -> {
+            showTimePicker(binding.timeFromTxt, binding.timeToTxt, true);
+        });
+        binding.cardView4.setOnClickListener(v -> {
+            showTimePicker(binding.timeFromTxt, binding.timeToTxt, false);
         });
 
         binding.addOrUpdateScheduleBtn.setOnClickListener(v -> {
@@ -167,7 +176,7 @@ public class FragmentAddOrUpdateSesssion extends Fragment {
             Calendar newDate = Calendar.getInstance();
             newDate.set(year, monthOfYear, dayOfMonth);
             date.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
-            showTimePicker(stime, etime, true);
+
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
         StartTime.show();
     }
@@ -230,6 +239,8 @@ public class FragmentAddOrUpdateSesssion extends Fragment {
                     if (response.getError().getErrorCode() == 0) {
                         onCancelOrBackButtonPressed();
                     }
+                }else {
+                    session = null;
                 }
             });
         } else {
@@ -240,8 +251,8 @@ public class FragmentAddOrUpdateSesssion extends Fragment {
             session.setScheduledStart(binding.timeFromTxt.getText().toString());
             session.setScheduledEnd(binding.timeToTxt.getText().toString());
             session.setSessionDate(binding.dateTxt.getText().toString());
-            if(siteId!=null)
-            session.setSiteId(siteId);
+            if (siteId != null)
+                session.setSiteId(siteId);
             session.setLangId(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
 
             addOrUpdateSessionViewModel.updateSession(session).observe(this, response -> {
@@ -250,12 +261,15 @@ public class FragmentAddOrUpdateSesssion extends Fragment {
                     if (response.getError().getErrorCode() == 0) {
                         onCancelOrBackButtonPressed();
                     }
+                }else {
+                    session = null;
                 }
             });
         }
     }
+
     private void updateTitle(int resourceId) {
-        ((HomeActivity)requireActivity()).getSupportActionBar().setTitle(resourceId);
+        ((HomeActivity) requireActivity()).getSupportActionBar().setTitle(resourceId);
 
     }
 }

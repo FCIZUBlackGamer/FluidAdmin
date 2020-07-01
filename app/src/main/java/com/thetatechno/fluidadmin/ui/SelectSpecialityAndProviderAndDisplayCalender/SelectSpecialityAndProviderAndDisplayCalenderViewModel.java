@@ -63,6 +63,7 @@ public class SelectSpecialityAndProviderAndDisplayCalenderViewModel extends View
 
     public MutableLiveData<AppointmentCalenderDaysListData> getScheduledCalenderDaysList(String date, String specialityCode, String providerId, String apptLength, String apptType) {
         EspressoTestingIdlingResource.increment();
+        
         if (date.isEmpty()) {
             SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
             Date todayDate = new Date();

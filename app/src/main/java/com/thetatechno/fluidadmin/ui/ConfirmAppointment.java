@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
@@ -77,7 +78,7 @@ public class ConfirmAppointment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.confirm_appointment_booking_dialog, container, false);
-        navController = Navigation.findNavController(getActivity(),R.id.nav_host_fragment);
+        navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
         binding.appointmentProviderNameTxtView.setText(providerName);
         binding.timeTxtView.setText(bookedTime);
         binding.appointmentDateTxtView.setText(bookedDate);
@@ -87,8 +88,15 @@ public class ConfirmAppointment extends Fragment {
 //                onConfirmAppointmentListener.onClickOnOkBtn();
 //
 //            }
-navController.popBackStack();
+            navController.navigate(R.id.action_confirm_to_home);
         });
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                navController.popBackStack();
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
 
         binding.takeScreenShotBtn.setOnClickListener(v -> {
             screenshoot();

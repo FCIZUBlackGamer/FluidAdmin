@@ -356,20 +356,23 @@ public class TimeSlotList extends Fragment implements OnItemClickedListener {
     }
 
     private void confirmAppointmentBooking(String appointmentTime) {
-        timeSlotListViewModel.bookAppointment(appointmentDayDetailsForSpecificProviderArrayList.get(timeSlotsViewPager.getCurrentItem()).getSessionCode(), appointmentTime,clientId).observe(getViewLifecycleOwner(), new Observer<ConfirmAppointmentResponse>() {
+        timeSlotListViewModel.bookAppointment(appointmentDayDetailsForSpecificProviderArrayList.get(timeSlotsViewPager.getCurrentItem()).getSessionCode(), appointmentTime, clientId).observe(getViewLifecycleOwner(), new Observer<ConfirmAppointmentResponse>() {
             @Override
             public void onChanged(ConfirmAppointmentResponse status) {
                 if (status != null) {
-                    if (status.getError().getErrorCode()==0) {
+                    if (status.getError().getErrorCode() == 0) {
                         Toast.makeText(getContext(), "booking success", Toast.LENGTH_SHORT).show();
                         Bundle bundle = new Bundle();
                         bundle.putString(ARG_PROVIDER_NAME, providerNameTxtView.getText().toString());
                         bundle.putString(ARG_BOOK_DATE, appointmentDayDetailsForSpecificProviderArrayList.get(timeSlotsViewPager.getCurrentItem()).getDate());
                         bundle.putString(ARG_BOOK_TIME, selectedTimeSlot.getTime());
                         bundle.putString(ARG_SPECIALITY_CODE, specialityCode);
-                        navController.navigate(R.id.action_timeSlotList_to_confirmAppointment, bundle);
+                        if (navController.getCurrentDestination().getId() == R.id.timeSlotList)
+                            navController.navigate(R.id.confirmAppointment, bundle);
                     }
                     Toast.makeText(getContext(), status.getError().getErrorMessage(), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(requireActivity(), "Failed to book", Toast.LENGTH_SHORT).show();
                 }
 
             }

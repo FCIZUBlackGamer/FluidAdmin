@@ -138,6 +138,8 @@ public class SessionRepository {
                 if (response.isSuccessful()) {
                     deleteSessionLiveData.setValue(response.body());
 
+                }else {
+                    deleteSessionLiveData.setValue(null);
                 }
             }
 

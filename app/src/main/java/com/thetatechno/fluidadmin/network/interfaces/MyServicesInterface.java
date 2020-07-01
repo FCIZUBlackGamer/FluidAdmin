@@ -113,7 +113,7 @@ public interface MyServicesInterface {
     Call<AddOrUpdateStatusResponse> updateBranch(@Body Branch newBranch);
 
     @DELETE("/ords/fluid/api/site")
-    Call<Status> deleteBranch(@Query("siteId") String siteId);
+    Call<AddOrUpdateStatus> deleteBranch(@Query("siteId") String siteId);
 
 
     @GET("/ords/fluid/appt/getApptCalendar")

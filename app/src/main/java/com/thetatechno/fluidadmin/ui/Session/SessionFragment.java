@@ -2,6 +2,9 @@ package com.thetatechno.fluidadmin.ui.Session;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -11,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.cardview.widget.CardView;
 import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
@@ -28,7 +32,7 @@ import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.model.session_model.SessionResponse;
 import com.thetatechno.fluidadmin.model.shedule.Schedule;
 
-public class SessionFragment extends Fragment  {
+public class SessionFragment extends Fragment implements SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener  {
     private View view;
     private RecyclerView recyclerView;
     private SessionListAdapter sessionListAdapter;
@@ -37,6 +41,8 @@ public class SessionFragment extends Fragment  {
    private FloatingActionButton floatingActionButton;
     private SwipeRefreshLayout sessionSwipeRefreshLayout;
 private ProgressBar loadSessionsProgressBar;
+    private SearchView searchView;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +56,7 @@ private ProgressBar loadSessionsProgressBar;
         sessionListViewModel = ViewModelProviders.of(this).get(SessionListViewModel.class);
         navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
         recyclerView = view.findViewById(R.id.rec);
+        setHasOptionsMenu(true);
         floatingActionButton = view.findViewById(R.id.fab);
         sessionSwipeRefreshLayout = view.findViewById(R.id.sessionSwipeRefreshLayout);
         loadSessionsProgressBar = view.findViewById(R.id.loadSessionProgressBar);
@@ -102,5 +109,39 @@ private ProgressBar loadSessionsProgressBar;
         floatingActionButton.setOnClickListener(v -> {
             navController.navigate(R.id.fragmentAddOrUpdateSesssion);
         });
+    }
+
+    @Override
+    public boolean onMenuItemActionExpand(MenuItem item) {
+
+        return true;
+    }
+
+    @Override
+    public boolean onMenuItemActionCollapse(MenuItem item) {
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        sessionListAdapter.getFilter().filter(query);
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        sessionListAdapter.getFilter().filter(newText);
+        return false;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+
+        inflater.inflate(R.menu.home, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        searchView = (SearchView) searchItem.getActionView();
+        searchView.setOnQueryTextListener(this);
+        searchView.setQueryHint("Search");
+        super.onCreateOptionsMenu(menu, inflater);
     }
 }

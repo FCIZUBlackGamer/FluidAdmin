@@ -187,6 +187,10 @@
     <fragment
         android:id="@+id/showSessions"
         android:name="com.thetatechno.fluidadmin.ui.showSession.ShowSessions"
-        android:label="@string/sessions_txt" />
+        android:label="@string/sessions_txt" >
+        <action
+            android:id="@+id/action_showSessions_to_fragmentAddOrUpdateSesssion"
+            app:destination="@id/fragmentAddOrUpdateSesssion" />
+    </fragment>
 
 </navigation>

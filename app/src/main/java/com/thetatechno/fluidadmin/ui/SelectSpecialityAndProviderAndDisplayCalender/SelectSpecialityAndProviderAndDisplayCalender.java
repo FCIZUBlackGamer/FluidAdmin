@@ -120,7 +120,7 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
 
         });
         binding.providerListTxt.setOnItemClickListener((parent, view, position, id) -> {
-            providerId = providerList.get(position).getId();
+            providerId = providerList.get(position).getStaffId();
             getCalenderData();
             hideKeyboardFrom(getActivity(), binding.getRoot());
         });
@@ -308,6 +308,11 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
             }
         }
 
+        Log.e("TAG", "Num Days Available: " + calendars.size());
+        if (calendars.size() > 0) {
+            Log.e("TAG", "First Date: " + calendars.get(0).getTime().toString());
+            Log.e("TAG", "Last Date: " + calendars.get(calendars.size() - 1).getTime().toString());
+        }
         return calendars;
     }
 

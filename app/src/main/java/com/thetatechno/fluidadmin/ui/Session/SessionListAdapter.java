@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,9 +19,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.listeners.OnDeleteListener;
 import com.thetatechno.fluidadmin.model.session_model.Session;
+import com.thetatechno.fluidadmin.model.staff_model.Staff;
 import com.thetatechno.fluidadmin.utils.EnumCode;
+import com.thetatechno.fluidadmin.utils.StringUtil;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import io.sentry.Sentry;
@@ -30,16 +35,18 @@ import static com.thetatechno.fluidadmin.utils.Constants.ARG_CODE;
 import static com.thetatechno.fluidadmin.utils.Constants.ARG_SESSION;
 import static com.thetatechno.fluidadmin.utils.Constants.ARG_STAFF;
 
-public class SessionListAdapter extends RecyclerView.Adapter<SessionListAdapter.ScheduleViewHolder> {
+public class SessionListAdapter extends RecyclerView.Adapter<SessionListAdapter.ScheduleViewHolder> implements Filterable {
 
     Context context;
     List<Session> sessionList;
+    List<Session> filteredsessionList;
     OnDeleteListener listener;
     NavController navController;
     Bundle bundle;
 
     public SessionListAdapter(NavController navControlle, Context context, List<Session> sessionList) {
         this.sessionList = sessionList;
+        this.filteredsessionList = sessionList;
         this.context = context;
         navController = navControlle;
         bundle = new Bundle();
@@ -68,13 +75,13 @@ public class SessionListAdapter extends RecyclerView.Adapter<SessionListAdapter.
 
         try {
 
-            if (position < sessionList.size()) {
+            if (position < filteredsessionList.size()) {
                 holder.itemView.setVisibility(View.VISIBLE);
-                holder.day_name_txt.setText(sessionList.get(position).getSessionDate());
-                holder.time_from_txt.setText(sessionList.get(position).getScheduledStart());
-                holder.time_to_txt.setText(sessionList.get(position).getScheduledEnd());
-                holder.facilityNameTxtView.setText(sessionList.get(position).getFacilitDescription());
-                holder.providerNameTxtView.setText(sessionList.get(position).getProviderName());
+                holder.day_name_txt.setText(filteredsessionList.get(position).getSessionDate());
+                holder.time_from_txt.setText(filteredsessionList.get(position).getScheduledStart());
+                holder.time_to_txt.setText(filteredsessionList.get(position).getScheduledEnd());
+                holder.facilityNameTxtView.setText(filteredsessionList.get(position).getFacilitDescription());
+                holder.providerNameTxtView.setText(filteredsessionList.get(position).getProviderName());
                 holder.optionMenu.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -83,12 +90,12 @@ public class SessionListAdapter extends RecyclerView.Adapter<SessionListAdapter.
                         popup.setOnMenuItemClickListener((PopupMenu.OnMenuItemClickListener) item -> {
                             switch (item.getItemId()) {
                                 case R.id.editSession:
-                                    bundle.putSerializable(ARG_SESSION, (Serializable) sessionList.get(position));
+                                    bundle.putSerializable(ARG_SESSION, (Serializable) filteredsessionList.get(position));
                                     navController.navigate(R.id.action_sessionFragment_to_fragmentAddOrUpdateSesssion, bundle);
                                     break;
                                 case R.id.deleteSession:
                                     if (listener != null)
-                                        listener.onDeleteButtonClicked(sessionList.get(position));
+                                        listener.onDeleteButtonClicked(filteredsessionList.get(position));
 
                                     break;
                             }
@@ -97,7 +104,7 @@ public class SessionListAdapter extends RecyclerView.Adapter<SessionListAdapter.
                         popup.show();
                     }
                 });
-            } else if (position == sessionList.size()) {
+            } else if (position == filteredsessionList.size()) {
                 holder.itemView.setVisibility(View.INVISIBLE);
             }
 
@@ -111,7 +118,38 @@ public class SessionListAdapter extends RecyclerView.Adapter<SessionListAdapter.
     @Override
     public int getItemCount() {
 
-        return sessionList.size() + 1;
+        return filteredsessionList.size() + 1;
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                String charSequenceString = constraint.toString();
+                if (charSequenceString.isEmpty()) {
+                    filteredsessionList= sessionList;
+                } else {
+                    List<Session> filteredList = new ArrayList<>();
+                    for (Session session : sessionList) {
+                        if (StringUtil.isSearchResultExist(session.getProviderName(),charSequenceString) || StringUtil.isSearchResultExist(session.getFacilitDescription(),charSequenceString) ) {
+                            filteredList.add(session);
+                        }
+                        filteredsessionList = filteredList;
+                    }
+
+                }
+                FilterResults results = new FilterResults();
+                results.values = filteredsessionList;
+                return results;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                filteredsessionList = (List<Session>) results.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     public class ScheduleViewHolder extends RecyclerView.ViewHolder {

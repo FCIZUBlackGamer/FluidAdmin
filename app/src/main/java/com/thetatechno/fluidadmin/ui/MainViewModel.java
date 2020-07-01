@@ -113,23 +113,21 @@ public class MainViewModel extends ViewModel {
     }
 
     public MutableLiveData<String> deleteBranch(final Branch branch) {
-        branchesRepository.deleteBranch(branch.getSiteId(), new OnDataChangedCallBackListener<String>() {
+        branchesRepository.deleteBranch(branch.getSiteId(), new OnDataChangedCallBackListener<Integer>() {
             @Override
-            public void onResponse(String b) {
+            public void onResponse(Integer b) {
                 Log.i(TAG, "deleteBranch: delete state " + b);
 
                 if (b.equals(Constants.DELETE_SUCCESS_STATE)) {
                     messageForSFacility = "Delete branch " + branch.getDescription()+ " successfully";
-                    deletedFacilityMessageLiveData.setValue(messageForSFacility);
-
                 } else if (b.equals(Constants.ADD_DELETE_OR_UPDATE_FAIL_STATE)) {
                     messageForSFacility = "Failed to delete branch " + branch.getDescription();
-                    deletedFacilityMessageLiveData.setValue(messageForSFacility);
                 }
                 else if(b.equals("-2292")) {
                     messageForSFacility = "cann't delete branch";
-                    deletedFacilityMessageLiveData.setValue(messageForSFacility);
                 }
+                deletedFacilityMessageLiveData.setValue(messageForSFacility);
+
 
             }
         });

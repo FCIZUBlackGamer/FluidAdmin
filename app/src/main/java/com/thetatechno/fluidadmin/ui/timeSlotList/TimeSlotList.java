@@ -307,7 +307,7 @@ public class TimeSlotList extends Fragment implements OnItemClickedListener {
                         Glide.with(getContext())
                                 .load(Constants.BASE_URL + Constants.BASE_EXTENSION_FOR_PHOTOS + staff.getImageLink())
                                 .circleCrop()
-                                .placeholder(circularProgressDrawable)
+                                .placeholder(R.drawable.man)
                                 .into(providerImgView);
                     } else {
                         providerImgView.setImageResource(R.drawable.man);

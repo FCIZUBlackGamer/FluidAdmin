@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
 import com.thetatechno.fluidadmin.listeners.OnDataChangedCallBackListener;
+import com.thetatechno.fluidadmin.model.AddOrUpdateStatus;
 import com.thetatechno.fluidadmin.model.AddOrUpdateStatusResponse;
 import com.thetatechno.fluidadmin.model.Status;
 import com.thetatechno.fluidadmin.model.branches_model.Branch;
@@ -108,18 +109,17 @@ public class BranchesRepository {
 
     }
 
-    public void deleteBranch(final String branchId, final OnDataChangedCallBackListener<String> onDataChangedCallBackListener) {
+    public void deleteBranch(final String branchId, final OnDataChangedCallBackListener<Integer> onDataChangedCallBackListener) {
 
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
-        Call<Status> call = myServicesInterface.deleteBranch(branchId);
-        call.enqueue(new Callback<Status>() {
+        Call<AddOrUpdateStatus> call = myServicesInterface.deleteBranch(branchId);
+        call.enqueue(new Callback<AddOrUpdateStatus>() {
 
             @Override
-            public void onResponse(@NonNull Call<Status> call, @NonNull Response<Status> response) {
+            public void onResponse(@NonNull Call<AddOrUpdateStatus> call, @NonNull Response<AddOrUpdateStatus> response) {
                 if (response.isSuccessful()) {
                     Log.i(TAG, "deleteBranch response " + response.toString());
                     if (response.body() != null)
-                        if (response.body().getStatus() != null)
                             onDataChangedCallBackListener.onResponse(response.body().getStatus());
 
 
@@ -128,7 +128,7 @@ public class BranchesRepository {
             }
 
             @Override
-            public void onFailure(@NonNull Call<Status> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<AddOrUpdateStatus> call, @NonNull Throwable t) {
                 call.cancel();
                 onDataChangedCallBackListener.onResponse(null);
                 t.printStackTrace();

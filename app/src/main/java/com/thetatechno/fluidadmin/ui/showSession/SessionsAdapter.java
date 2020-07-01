@@ -74,7 +74,7 @@ public class SessionsAdapter extends RecyclerView.Adapter<SessionsAdapter.Schedu
                         switch (item.getItemId()) {
                             case R.id.editSession:
                                 bundle.putSerializable(ARG_SESSION, (Serializable) sessionList.get(position));
-                                navController.navigate(R.id.action_sessionFragment_to_fragmentAddOrUpdateSesssion, bundle);
+                                navController.navigate(R.id.action_showSessions_to_fragmentAddOrUpdateSesssion, bundle);
                                 break;
                             case R.id.deleteSession:
                                 if (listener != null)

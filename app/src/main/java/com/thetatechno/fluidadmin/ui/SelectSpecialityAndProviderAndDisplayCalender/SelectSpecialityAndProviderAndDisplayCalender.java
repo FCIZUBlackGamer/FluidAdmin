@@ -70,6 +70,7 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
     private NavController navController;
     private List<Calendar> selectedDays;
     String daysBundelKey = "SelectedDays";
+//    Date c;
 
     public static void hideKeyboardFrom(Context context, View view) {
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
@@ -99,6 +100,10 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+//        c = Calendar.getInstance().getTime();
+//        Log.e("Month",c.getMonth()+1+"");
+        binding.calendarView.setMinimumDate(Calendar.getInstance());
+
         binding.clientListTxtView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

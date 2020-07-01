@@ -107,19 +107,19 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
         binding.clientListTxtView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                clientId = clientList.get(position).getClientId();
+                clientId = ((ClientModelForRegister) parent.getItemAtPosition(position)).getClientId();
             }
         });
 
         binding.specialityList.setOnItemClickListener((parent, view, position, id) -> {
-            specialityCode = specialitiesList.get(position).getCode();
+            specialityCode = ((Code) parent.getItemAtPosition(position)).getCode();
 
             getProviderList();
             hideKeyboardFrom(getActivity(), binding.getRoot());
 
         });
         binding.providerListTxt.setOnItemClickListener((parent, view, position, id) -> {
-            providerId = providerList.get(position).getStaffId();
+            providerId = ((Staff) parent.getItemAtPosition(position)).getStaffId();
             getCalenderData();
             hideKeyboardFrom(getActivity(), binding.getRoot());
         });

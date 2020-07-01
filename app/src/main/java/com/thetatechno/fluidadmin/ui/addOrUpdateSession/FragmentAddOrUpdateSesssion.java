@@ -71,10 +71,10 @@ public class FragmentAddOrUpdateSesssion extends Fragment {
             binding.timeToTxt.setText(session.getScheduledEnd());
             binding.timeFromTxt.setText(session.getScheduledStart());
             binding.dateTxt.setText(session.getSessionDate());
-            binding.addOrUpdateScheduleBtn.setText("Add");
+            binding.addOrUpdateScheduleBtn.setText(R.string.update_txt);
         } else {
             session = null;
-            binding.addOrUpdateScheduleBtn.setText("Update");
+            binding.addOrUpdateScheduleBtn.setText(R.string.add_txt);
         }
         addOrUpdateScheduleViewModel.getStaffData().observe(getViewLifecycleOwner(), staffData -> {
             if (staffData.getStaffData() != null) {
@@ -102,13 +102,13 @@ public class FragmentAddOrUpdateSesssion extends Fragment {
         binding.providerAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                providerId = providerArrayList.get(position).getStaffId();
+                providerId = ((Staff) parent.getItemAtPosition(position)).getStaffId();
             }
         });
         binding.facilityAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                facilityId = facilityArrayList.get(position).getId();
+                facilityId = ((Facility) parent.getItemAtPosition(position)).getId();
 
             }
         });
@@ -141,7 +141,7 @@ public class FragmentAddOrUpdateSesssion extends Fragment {
         binding.siteAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                siteId = branchesList.get(position).getSiteId();
+                siteId = ((Branch) parent.getItemAtPosition(position)).getSiteId();
             }
         });
 

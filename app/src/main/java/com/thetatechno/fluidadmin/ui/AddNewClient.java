@@ -111,6 +111,7 @@ public class AddNewClient extends Fragment implements TextWatcher {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 nationalityCode = nationalityList.get(position).getCode();
+                nationalityCode = ((Code)parent.getItemAtPosition(position)).getCode();
             }
         });
         binding.dateOfBirthEdtTxt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -124,7 +125,7 @@ public class AddNewClient extends Fragment implements TextWatcher {
         binding.identityTypeSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                idTypeCode = idTypes.get(position).getCode();
+                idTypeCode =  ((Code)parent.getItemAtPosition(position)).getCode();
             }
         });
         binding.registerClientBtn.setOnClickListener(new View.OnClickListener() {

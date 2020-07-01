@@ -53,7 +53,7 @@ public class Appointments extends Fragment {
             binding.appointmentsLoadingProgressBar.setVisibility(View.GONE);
 
             if (appointmentListData != null) {
-                if(appointmentListData.getAppointments()!=null) {
+                if(appointmentListData.getAppointments()!=null && appointmentListData.getAppointments().size() >0) {
                     appointmentsList = (ArrayList<Appointment>) appointmentListData.getAppointments();
                     appointmentListAdapter.setAppointments(appointmentsList);
                     appointmentListAdapter.notifyDataSetChanged();
@@ -110,7 +110,7 @@ public class Appointments extends Fragment {
         binding.providerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                providerId = providerList.get(position).getStaffId();
+                providerId = ((Staff) parent.getItemAtPosition(position)).getStaffId();
                 appointmentsViewModel.getAppointments(providerId,date);
             }
         });

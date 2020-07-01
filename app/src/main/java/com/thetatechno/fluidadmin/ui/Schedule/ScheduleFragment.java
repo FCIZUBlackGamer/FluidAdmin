@@ -43,7 +43,7 @@ public class ScheduleFragment extends Fragment  implements SearchView.OnQueryTex
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.schedule_list_layout, container, false);
         scheduleListViewModel = ViewModelProviders.of(this).get(ScheduleListViewModel.class);
-        navController = Navigation.findNavController(requireActivity(),R.id.nav_host_fragment);
+
         recyclerView = view.findViewById(R.id.rec);
         loadScheduleProgressBar = view.findViewById(R.id.loadScheduleProgressBar);
         swipeRefreshLayout = view.findViewById(R.id.scheduleSwipeRefreshLayout);
@@ -89,7 +89,7 @@ public class ScheduleFragment extends Fragment  implements SearchView.OnQueryTex
     @Override
     public void onStart() {
         super.onStart();
-
+        navController = Navigation.findNavController(requireActivity(),R.id.nav_host_fragment);
         floatingActionButton.setOnClickListener(v -> {
             navController.navigate(R.id.action_scheduleFragment_to_fragmentAddOrUpdateSchedule);
         });

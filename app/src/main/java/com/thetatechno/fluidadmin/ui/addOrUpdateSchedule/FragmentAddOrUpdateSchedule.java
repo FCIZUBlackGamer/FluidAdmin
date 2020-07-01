@@ -4,9 +4,13 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
@@ -111,13 +115,29 @@ public class FragmentAddOrUpdateSchedule extends Fragment {
         binding.providerAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                providerId = providerArrayList.get(position).getStaffId();
+                providerId = ((Staff) parent.getItemAtPosition(position)).getStaffId();
+
+//                for (int i = 0; i < providerArrayList.size(); i++) {
+//                    if (providerArrayList.get(i).getFirstName().concat(" "+providerArrayList.get(i).getFamilyName()).contains(binding.providerAutoCompleteTextView.getText())){
+//                        providerId = providerArrayList.get(i).getStaffId();
+//                        Log.e("providerId", providerId);
+//                    }
+//                }
+
             }
         });
+
         binding.facilityAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                facilityId = facilityArrayList.get(position).getId();
+                facilityId = ((Facility) parent.getItemAtPosition(position)).getId();
+
+//                for (int i = 0; i < facilityArrayList.size(); i++) {
+//                    if (facilityArrayList.get(i).getDescription().contains(binding.facilityAutoCompleteTextView.getText())){
+//                        facilityId = facilityArrayList.get(position).getId();
+//                        Log.e("facilityId", facilityId);
+//                    }
+//                }
 
             }
         });
@@ -150,7 +170,14 @@ public class FragmentAddOrUpdateSchedule extends Fragment {
         binding.siteAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                siteId = branchesList.get(position).getSiteId();
+                siteId = ((Branch) parent.getItemAtPosition(position)).getSiteId();
+//                for (int i = 0; i < branchesList.size(); i++) {
+//                    if (branchesList.get(i).getDescription().contains(binding.siteAutoCompleteTextView.getText())){
+//                        siteId = branchesList.get(position).getSiteId();
+//                        Log.e("SiteId", siteId);
+//                    }
+//                }
+
             }
         });
 
@@ -239,6 +266,8 @@ public class FragmentAddOrUpdateSchedule extends Fragment {
                     Toast.makeText(requireActivity(), response.getError().getErrorMessage(), Toast.LENGTH_SHORT).show();
                     if (response.getError().getErrorCode() == 0) {
                         onCancelOrBackButtonPressed();
+                    } else {
+                        schedule = null;
                     }
                 } else {
                     Toast.makeText(requireActivity(), "Error, Failed to add schedule ", Toast.LENGTH_SHORT).show();

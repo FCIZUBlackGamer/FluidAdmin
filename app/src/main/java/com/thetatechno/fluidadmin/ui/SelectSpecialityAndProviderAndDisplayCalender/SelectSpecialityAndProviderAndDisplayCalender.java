@@ -112,7 +112,6 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
         });
 
         binding.specialityList.setOnItemClickListener((parent, view, position, id) -> {
-            // TODO: get Doctor List with selected speciality
             specialityCode = specialitiesList.get(position).getCode();
 
             getProviderList();

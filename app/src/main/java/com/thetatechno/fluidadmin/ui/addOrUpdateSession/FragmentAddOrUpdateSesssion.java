@@ -238,6 +238,8 @@ public class FragmentAddOrUpdateSesssion extends Fragment {
                     Toast.makeText(requireActivity(), response.getError().getErrorMessage(), Toast.LENGTH_SHORT).show();
                     if (response.getError().getErrorCode() == 0) {
                         onCancelOrBackButtonPressed();
+                    }else {
+                        session = null;
                     }
                 }else {
                     session = null;

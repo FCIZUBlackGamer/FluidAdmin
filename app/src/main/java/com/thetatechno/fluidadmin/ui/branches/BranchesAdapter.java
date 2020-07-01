@@ -47,7 +47,6 @@ public class BranchesAdapter extends RecyclerView.Adapter<BranchesAdapter.Branch
    private OnDeleteListener listener;
   private   NavController navController;
 
-
     public BranchesAdapter(NavController navController, Context context, @Nullable List<Branch> branchList) {
 
         this.context = context;

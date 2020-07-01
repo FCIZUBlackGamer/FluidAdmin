@@ -107,7 +107,7 @@ private String selectedBranchId;
         branchesTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectedBranchId = branchesList.get(position).getSiteId();
+                selectedBranchId =( (Branch) parent.getItemAtPosition(position)).getSiteId();
                 facility.setSiteId(selectedBranchId);
 
             }

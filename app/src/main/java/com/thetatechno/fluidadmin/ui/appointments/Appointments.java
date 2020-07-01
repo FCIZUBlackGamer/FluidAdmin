@@ -57,8 +57,10 @@ public class Appointments extends Fragment {
                     appointmentsList = (ArrayList<Appointment>) appointmentListData.getAppointments();
                     appointmentListAdapter.setAppointments(appointmentsList);
                     appointmentListAdapter.notifyDataSetChanged();
+                    binding.appointmentRecyclerView.setVisibility(View.VISIBLE);
                 }
                 else {
+                    binding.appointmentRecyclerView.setVisibility(View.GONE);
                     Snackbar.make(binding.providerListTxtInput,"No appointments found.",Snackbar.LENGTH_LONG).setAction(R.string.retry, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -69,6 +71,7 @@ public class Appointments extends Fragment {
                 }
             }
             else {
+                binding.appointmentRecyclerView.setVisibility(View.GONE);
                 Snackbar.make(binding.providerListTxtInput,"Failed to load appointments",Snackbar.LENGTH_LONG).setAction(R.string.retry, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -113,8 +116,7 @@ public class Appointments extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 providerId = ((Staff) parent.getItemAtPosition(position)).getStaffId();
-                appointmentsViewModel.getAppointments(providerId,date);
-            }
+                getAllAppointmentsForSpecificProvider();            }
         });
         binding.dateEditTxt.setText(appointmentsViewModel.getTodayDateInFormat());
         binding.dateEditTxt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -144,9 +146,7 @@ public class Appointments extends Fragment {
             }
         });
         date = appointmentsViewModel.getTodayDateInFormat();
-        binding.appointmentsLoadingProgressBar.setVisibility(View.VISIBLE);
 
-        appointmentsViewModel.getAppointments(providerId,date).observe(getViewLifecycleOwner(), appointmentsObserver);
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
             @Override
             public void handleOnBackPressed() {
@@ -167,6 +167,16 @@ public class Appointments extends Fragment {
             binding.dateEditTxt.setText(date);
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
         StartTime.show();
+    }
+    private void getAllAppointmentsForSpecificProvider(){
+        if(appointmentsList!=null) {
+            binding.appointmentsLoadingProgressBar.setVisibility(View.VISIBLE);
+            appointmentsViewModel.getAppointments(providerId, date).observe(getViewLifecycleOwner(), appointmentsObserver);
+        }
+        else {
+            appointmentsViewModel.getAppointments(providerId,date);
+        }
+
     }
 
 }

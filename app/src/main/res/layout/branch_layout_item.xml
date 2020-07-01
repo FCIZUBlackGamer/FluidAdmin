@@ -33,6 +33,8 @@
             android:layout_height="wrap_content"
             android:text="@string/address_txt"
             android:layout_marginBottom="8dp"
+            android:drawablePadding="5dp"
+            android:drawableStart="@drawable/ic_location_on_black_24dp"
             app:layout_constraintStart_toStartOf="@id/branch_phone_txt"
             app:layout_constraintTop_toBottomOf="@id/branch_phone_txt"
             app:layout_constraintBottom_toBottomOf="parent"/>

@@ -21,19 +21,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager;
 import com.bumptech.glide.Glide;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.model.session_model.SessionResponse;
 import com.thetatechno.fluidadmin.model.shedule.Schedule;
-import com.thetatechno.fluidadmin.ui.Session.SessionListAdapter;
-import com.thetatechno.fluidadmin.ui.Session.SessionListViewModel;
+import com.thetatechno.fluidadmin.ui.Schedule.ChipAdapter;
 import com.thetatechno.fluidadmin.utils.Constants;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ShowSessions extends Fragment {
     private Schedule schedule;
     private View view;
-    private RecyclerView recyclerView;
+    private RecyclerView sessionRecyclerView, workingDaysRecyclerView;
     private SessionsAdapter sessionListAdapter;
     private TextView schedule_name_txt, doctor_name_txt, locationTxt, time_from_txt, time_to_txt;
     private ImageView doctorImg;
@@ -55,9 +57,11 @@ public class ShowSessions extends Fragment {
         view = inflater.inflate(R.layout.fragment_show_sessions, container, false);
         sessionListViewModel = ViewModelProviders.of(this).get(ShowSessionsViewModel.class);
         navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
-        recyclerView = view.findViewById(R.id.rec);
+        sessionRecyclerView = view.findViewById(R.id.sessionRec);
+        workingDaysRecyclerView = view.findViewById(R.id.rec);
         layout = view.findViewById(R.id.layout);
-        recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false));
+        sessionRecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false));
+        workingDaysRecyclerView.setLayoutManager(ChipsLayoutManager.newBuilder(requireActivity()).setOrientation(ChipsLayoutManager.HORIZONTAL).build());
         schedule_name_txt = view.findViewById(R.id.schedule_name_txt);
         locationTxt = view.findViewById(R.id.locationTxt);
         time_from_txt = view.findViewById(R.id.time_from_txt);
@@ -78,7 +82,7 @@ public class ShowSessions extends Fragment {
         time_from_txt.setText(schedule.getStartTime());
         time_to_txt.setText(schedule.getEndTime());
         doctor_name_txt.setText(schedule.getProviderName());
-        if(!schedule.getImagePath().isEmpty()){
+        if (!schedule.getImagePath().isEmpty()) {
             Glide.with(getContext()).load(Constants.BASE_URL + Constants.BASE_EXTENSION_FOR_PHOTOS + schedule.getImagePath())
                     .circleCrop()
                     .placeholder(R.drawable.man)
@@ -91,8 +95,20 @@ public class ShowSessions extends Fragment {
                     if (sessionResponse.getError().getErrorCode() == 0) {
                         if (sessionResponse.getSessions() != null) {
                             sessionListAdapter = new SessionsAdapter(navController, getContext(), sessionResponse.getSessions());
-                            recyclerView.setAdapter(sessionListAdapter);
-                            ViewCompat.setNestedScrollingEnabled(recyclerView, false);
+                            sessionRecyclerView.setAdapter(sessionListAdapter);
+                            ViewCompat.setNestedScrollingEnabled(sessionRecyclerView, false);
+
+                            if (sessionResponse.getSessions() != null) {
+                                List<String> selectedDays = new ArrayList<String>();
+                                int len = schedule.getWorkingDays().length();
+                                for (int i = 0; i < len; i += 3) {
+                                    selectedDays.add(schedule.getWorkingDays().substring(i, Math.min(len, i + 3)));
+                                }
+                                ChipAdapter chipAdapter = new ChipAdapter(requireActivity(), selectedDays);
+                                workingDaysRecyclerView.setAdapter(chipAdapter);
+                            } else {
+                                Toast.makeText(requireActivity(), "This Schedule doesn't have a working days", Toast.LENGTH_SHORT).show();
+                            }
                         } else {
                             Toast.makeText(getContext(), "No sessions Found", Toast.LENGTH_SHORT).show();
                         }

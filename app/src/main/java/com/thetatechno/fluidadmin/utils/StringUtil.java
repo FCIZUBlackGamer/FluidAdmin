@@ -33,11 +33,15 @@ public class StringUtil {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm aa", Locale.ENGLISH);
         SimpleDateFormat simpleTimeFormat = new SimpleDateFormat("HH:mm a",Locale.ENGLISH);
         try {
-            Date date = simpleDateFormat.parse(time);
+            if (!time.isEmpty()) {
+                Date date = simpleDateFormat.parse(time);
 
-            Log.i("StringUtil", date.getHours() + " date hours");
-            String dateString = simpleTimeFormat.format(date).toString();
-            return dateString;
+                Log.i("StringUtil", date.getHours() + " date hours");
+                String dateString = simpleTimeFormat.format(date).toString();
+                return dateString;
+            }else {
+                return "";
+            }
 
         } catch (ParseException e) {
             e.printStackTrace();

@@ -40,7 +40,7 @@ public class ChipAdapter extends RecyclerView.Adapter<ChipAdapter.ScheduleViewHo
     Context context;
 
 
-    ChipAdapter(Context context, List<String> list) {
+    public ChipAdapter(Context context, List<String> list) {
         this.list = list;
         this.context = context;
     }

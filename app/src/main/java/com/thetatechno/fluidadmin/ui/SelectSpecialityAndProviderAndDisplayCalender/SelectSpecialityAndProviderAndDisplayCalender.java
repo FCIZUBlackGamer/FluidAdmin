@@ -23,6 +23,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.applandeo.materialcalendarview.exceptions.OutOfDateRangeException;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.databinding.FragmentBookAppointmentBinding;
 import com.thetatechno.fluidadmin.model.ClientData;
@@ -100,9 +101,11 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-//        c = Calendar.getInstance().getTime();
-//        Log.e("Month",c.getMonth()+1+"");
-        binding.calendarView.setMinimumDate(Calendar.getInstance());
+        Calendar c = Calendar.getInstance();
+//        c.add(Calendar.MONTH, 1);
+//        c.add(Calendar.MONTH,1);
+        Log.e("This Month",c.getTime().getMonth()+"");
+        binding.calendarView.setMinimumDate(c);
 
         binding.clientListTxtView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -157,7 +160,7 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
                     binding.providerListTxt.setText(providerList.get(i).getFirstName() + " " + providerList.get(i).getFamilyName());
                 }
             }
-            selectSpecialityAndProviderAndDisplayCalenderViewModel.getAllProviders(specialityCode,providerId).observe(getViewLifecycleOwner(), providerListObserver);
+            selectSpecialityAndProviderAndDisplayCalenderViewModel.getAllProviders(specialityCode, providerId).observe(getViewLifecycleOwner(), providerListObserver);
         }
         if (getArguments() != null && getArguments().getSerializable(daysBundelKey) != null) {
             selectedDays = (List<Calendar>) getArguments().getSerializable(daysBundelKey);
@@ -193,20 +196,30 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
 
         binding.calendarView.setOnPreviousPageChangeListener(() -> {
             Calendar calender = binding.calendarView.getCurrentPageDate();
-            Date todayDate = new Date();
-            SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
+//            if (calender.getTime().getMonth() > Calendar.getInstance().getTime().getMonth()+1) {
+                Date todayDate = new Date();
+                SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
 
-            String dateFormatted = sdformat.format(calender.getTime());
-            String todayDateStringFormatted = sdformat.format(todayDate);
-            if (todayDateStringFormatted.compareTo(dateFormatted) <= 0) {
-                SimpleDateFormat formattedDate
-                        = new SimpleDateFormat("dd-MM-yyyy");
-                String formatedDate = formattedDate.format(calender.getTime());
-                date = formatedDate;
-                selectSpecialityAndProviderAndDisplayCalenderViewModel.getScheduledCalenderDaysList(date, specialityCode, providerId, Constants.APPOINTMENT_LENGTH, "N");
-            } else {
-                Toast.makeText(getActivity(), "No Appointments Available", Toast.LENGTH_SHORT).show();
-            }
+                String dateFormatted = sdformat.format(calender.getTime());
+                String todayDateStringFormatted = sdformat.format(todayDate);
+                if (todayDateStringFormatted.compareTo(dateFormatted) <= 0) {
+                    SimpleDateFormat formattedDate
+                            = new SimpleDateFormat("dd-MM-yyyy");
+                    String formatedDate = formattedDate.format(calender.getTime());
+                    date = formatedDate;
+                    selectSpecialityAndProviderAndDisplayCalenderViewModel.getScheduledCalenderDaysList(date, specialityCode, providerId, Constants.APPOINTMENT_LENGTH, "N");
+                } else {
+                    Toast.makeText(getActivity(), "No Appointments Available", Toast.LENGTH_SHORT).show();
+                }
+//            }else {
+//                try {
+//                    calender.add(Calendar.MONTH,1);
+//                    binding.calendarView.setDate(calender);
+//                    calender.add(Calendar.MONTH,-1);
+//                } catch (OutOfDateRangeException e) {
+//                    e.printStackTrace();
+//                }
+//            }
 
         });
 
@@ -257,7 +270,7 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
 
     private void getCalenderData() {
         EspressoTestingIdlingResource.increment();
-            selectSpecialityAndProviderAndDisplayCalenderViewModel.getScheduledCalenderDaysList(date, specialityCode, providerId, Constants.APPOINTMENT_LENGTH, "N");
+        selectSpecialityAndProviderAndDisplayCalenderViewModel.getScheduledCalenderDaysList(date, specialityCode, providerId, Constants.APPOINTMENT_LENGTH, "N");
         EspressoTestingIdlingResource.decrement();
 
     }
@@ -270,12 +283,10 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
         } else {
             selectSpecialityAndProviderAndDisplayCalenderViewModel.getAllProviders(specialityCode, "");
         }
-        if(appointmentDayDetailsArrayList.size()==0)
-        {
+        if (appointmentDayDetailsArrayList.size() == 0) {
             selectSpecialityAndProviderAndDisplayCalenderViewModel.getScheduledCalenderDaysList(date, specialityCode, providerId, Constants.APPOINTMENT_LENGTH, "N").observe(getViewLifecycleOwner(), calenderDaysListDataObserver);
 
-        }
-        else{
+        } else {
             selectSpecialityAndProviderAndDisplayCalenderViewModel.getScheduledCalenderDaysList(date, specialityCode, providerId, Constants.APPOINTMENT_LENGTH, "N");
         }
 
@@ -283,24 +294,27 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
 
     private List<Calendar> getDaysBundelKey() {
         List<Calendar> calendars = new ArrayList<>();
-        Calendar calendar = new GregorianCalendar();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(Calendar.getInstance().getTime());
         int today = calendar.get(Calendar.DAY_OF_MONTH);
         int numDaysInMonth = getNumDaysInThisMonth(calendar, Calendar.MONTH, Calendar.YEAR);
 
-        for (int i = -today + 1; i < numDaysInMonth - today; i++) {
+        for (int i = today ; i < numDaysInMonth ; i++) {
 
-            calendar = new GregorianCalendar();
-            calendar.add(Calendar.DAY_OF_MONTH, i);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(Calendar.getInstance().getTime());
+            cal.add(Calendar.DAY_OF_MONTH, i);
+            cal.add(Calendar.HOUR_OF_DAY, -24);
             SimpleDateFormat formattedDate
                     = new SimpleDateFormat("dd-MM-yyyy");
 
             String dateFormatted
                     = formattedDate.format(
-                    calendar.getTime());
+                    cal.getTime());
 
             for (AppointmentDayDetails appointmentDayDetails : appointmentDayDetailsArrayList) {
                 if (appointmentDayDetails.getDate().equals(dateFormatted) && appointmentDayDetails.getAvailableSlots() > 0) {
-                    calendars.add(calendar);
+                    calendars.add(cal);
                     break;
                 }
 

@@ -43,9 +43,9 @@ import static com.thetatechno.fluidadmin.utils.Constants.ARG_FACILITY;
 public class FacilityAddFragment extends Fragment {
     private Facility facility;
     private TextInputEditText facilityIdEditTxt, facilityDescriptionEditTxt;
-    private TextInputLayout facilityIdEditTxtInputLayout, facilityDescriptionEditTxtInputLayout,branchEditTExtInputLayout;
-    private TextInputLayout facilityWaitingAreaLayout, facilityDeviceLayout,branches;
-    private AutoCompleteTextView facilityWaitingAreaTextView,facilityDeviceTextView,branchesTextView;
+    private TextInputLayout facilityIdEditTxtInputLayout, facilityDescriptionEditTxtInputLayout, branchEditTExtInputLayout;
+    private TextInputLayout facilityWaitingAreaLayout, facilityDeviceLayout, branches;
+    private AutoCompleteTextView facilityWaitingAreaTextView, facilityDeviceTextView, branchesTextView;
     private Button cancelBtn, addOrUpdateBtn;
     private boolean isDataFound;
     private FacilityAddViewModel facilityAddViewModel;
@@ -57,7 +57,7 @@ public class FacilityAddFragment extends Fragment {
     private List<String> devicesDescriptionList;
     private List<Branch> branchesList;
     private String addOrUpdateMessage, addNewFacilityMessage;
-private String selectedBranchId;
+    private String selectedBranchId;
     private String idTxt, descriptionTxt, facilityTypeTxt;
     private String idValidateMessage, descriptionValidateMessage, facilityTypeValidateMessage, siteValidateMessage;
 
@@ -193,12 +193,12 @@ private String selectedBranchId;
         facilityAddViewModel.getAllBranches().observe(getViewLifecycleOwner(), new Observer<BranchesResponse>() {
             @Override
             public void onChanged(BranchesResponse branchesResponse) {
-                if(branchesResponse!=null){
-                    if(branchesResponse.getBranchList()!=null){
+                if (branchesResponse != null) {
+                    if (branchesResponse.getBranchList() != null) {
                         branchesList = branchesResponse.getBranchList();
-                        ArrayAdapter<Branch> branchArrayAdapter = new ArrayAdapter<Branch>(getContext(),R.layout.dropdown_menu_popup_item,branchesList);
+                        ArrayAdapter<Branch> branchArrayAdapter = new ArrayAdapter<Branch>(getContext(), R.layout.dropdown_menu_popup_item, branchesList);
                         branchesTextView.setAdapter(branchArrayAdapter);
-                        if(facility !=null)
+                        if (facility != null)
                             branchesTextView.setText(facility.getSiteDescription());
                     }
                 }
@@ -234,7 +234,7 @@ private String selectedBranchId;
         facilityTypeRadioGroup = view.findViewById(R.id.typeRadioGroup);
         facilityWaitingAreaLayout = view.findViewById(R.id.waitingAreaLayout);
         facilityDeviceLayout = view.findViewById(R.id.deviceLayout);
-        facilityDeviceTextView= view.findViewById(R.id.deviceAutoCompleteTextView);
+        facilityDeviceTextView = view.findViewById(R.id.deviceAutoCompleteTextView);
         facilityWaitingAreaTextView = view.findViewById(R.id.waitingAreaAutoCompleteTextView);
         branchEditTExtInputLayout = view.findViewById(R.id.branchLayout);
         branchesTextView = view.findViewById(R.id.branchAutoCompleteTextView);
@@ -256,7 +256,7 @@ private String selectedBranchId;
                     if (facility.getWaitingAreaId() != null) {
                         for (int i = 0; i < waitAreaDescriptionList.size(); i++) {
                             if (waitAreaDescriptionList.get(i).getDescription().equals(facility.getWaitingAreaDescription())) {
-                                facilityWaitingAreaTextView.setText(facility.getWaitingAreaDescription(),false);
+                                facilityWaitingAreaTextView.setText(facility.getWaitingAreaDescription(), false);
 
                             }
                         }
@@ -281,7 +281,7 @@ private String selectedBranchId;
                     if (facility.getDeviceId() != null) {
                         for (int i = 0; i < devicesDescriptionList.size(); i++) {
                             if (devicesDescriptionList.get(i).equals(facility.getDeviceDescription())) {
-                                facilityDeviceTextView.setText(facility.getDeviceDescription(),false);
+                                facilityDeviceTextView.setText(facility.getDeviceDescription(), false);
                             }
                         }
                     }
@@ -296,7 +296,7 @@ private String selectedBranchId;
 
     }
 
-   private void onAddOrUpdateClicked() {
+    private void onAddOrUpdateClicked() {
         EspressoTestingIdlingResource.increment();
         navController.navigate(R.id.action_facilityAddFragment_to_clinicList);
         EspressoTestingIdlingResource.decrement();
@@ -372,15 +372,14 @@ private String selectedBranchId;
                 addOrUpdateMessage = s;
                 Log.i(TAG, "update response message " + addOrUpdateMessage);
                 if (!addOrUpdateMessage.isEmpty())
-                if (addOrUpdateMessage.contains("success")) {
-                    EspressoTestingIdlingResource.increment();
-                    Toast.makeText(getActivity(), addOrUpdateMessage, Toast.LENGTH_SHORT).show();
-                    onAddOrUpdateClicked();
-                    EspressoTestingIdlingResource.decrement();
-                }
-                else {
-                    Toast.makeText(getActivity(), addOrUpdateMessage, Toast.LENGTH_SHORT).show();
-                }
+                    if (addOrUpdateMessage.contains("success")) {
+                        EspressoTestingIdlingResource.increment();
+                        Toast.makeText(getActivity(), addOrUpdateMessage, Toast.LENGTH_SHORT).show();
+                        onAddOrUpdateClicked();
+                        EspressoTestingIdlingResource.decrement();
+                    } else {
+                        Toast.makeText(getActivity(), addOrUpdateMessage, Toast.LENGTH_SHORT).show();
+                    }
 
             }
         });
@@ -424,8 +423,7 @@ private String selectedBranchId;
         if (descriptionValidateMessage.isEmpty()) {
             facilityDescriptionEditTxtInputLayout.setErrorEnabled(false);
             return true;
-        }
-        else {
+        } else {
             facilityDescriptionEditTxtInputLayout.setError(descriptionValidateMessage);
             facilityDescriptionEditTxtInputLayout.setErrorEnabled(true);
             return false;

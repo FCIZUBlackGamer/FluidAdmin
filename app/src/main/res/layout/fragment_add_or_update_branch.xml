@@ -46,6 +46,8 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/branchEmailEdtTxt"
                 android:layout_width="match_parent"
+                android:drawableLeft="@drawable/ic_email_black_24dp"
+                android:drawablePadding="5dp"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress" />
 
@@ -69,6 +71,8 @@
                 android:id="@+id/branchMobileEdtTxt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_phone"
+                android:drawablePadding="5dp"
                 android:inputType="phone" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -90,6 +94,8 @@
                 android:id="@+id/addressEdtTxt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_location_on_black_24dp"
+                android:drawablePadding="5dp"
                 android:inputType="text" />
 
         </com.google.android.material.textfield.TextInputLayout>

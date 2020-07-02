@@ -76,7 +76,7 @@ public class AddOrUpdateSessionViewModel extends ViewModel {
         if (Validation.isValidForName(providerName)) {
             providerNameValdateMessage = "";
         } else {
-            providerNameValdateMessage = App.getContext().getResources().getString(R.string.choose_facility_type_error);
+            providerNameValdateMessage = App.getContext().getResources().getString(R.string.select_provider_name);
         }
         return providerNameValdateMessage;
     }
@@ -94,7 +94,7 @@ public class AddOrUpdateSessionViewModel extends ViewModel {
         if (isValidTxt(siteDescription)) {
             siteDescriptionValidateMessage = "";
         } else {
-            siteDescriptionValidateMessage = App.getContext().getResources().getString(R.string.choose_facility_type_error);
+            siteDescriptionValidateMessage = App.getContext().getResources().getString(R.string.choose_site_message);
         }
         return siteDescriptionValidateMessage;
     }

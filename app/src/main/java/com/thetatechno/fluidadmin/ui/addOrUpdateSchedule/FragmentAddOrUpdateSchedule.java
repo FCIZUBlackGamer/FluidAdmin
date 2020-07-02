@@ -29,6 +29,7 @@ import androidx.navigation.Navigation;
 
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.databinding.AddScheduleLayoutBinding;
+import com.thetatechno.fluidadmin.model.Error;
 import com.thetatechno.fluidadmin.model.staff_model.Staff;
 import com.thetatechno.fluidadmin.model.branches_model.Branch;
 import com.thetatechno.fluidadmin.model.branches_model.BranchesResponse;
@@ -42,7 +43,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class FragmentAddOrUpdateSchedule extends Fragment {
+public class FragmentAddOrUpdateSchedule extends Fragment implements TextWatcher {
     private AddScheduleLayoutBinding binding;
     private AddOrUpdateScheduleViewModel addOrUpdateScheduleViewModel;
     private ArrayList<Staff> providerArrayList = new ArrayList<>();
@@ -50,8 +51,9 @@ public class FragmentAddOrUpdateSchedule extends Fragment {
     private ArrayList<Branch> branchesList = new ArrayList<>();
     private String providerId;
     private String facilityId;
-    private String siteId;
+    private String siteId = " ";
     private NavController navController;
+    private Error addOrUpdateResponse;
     Schedule schedule;
 
     @Nullable
@@ -73,7 +75,7 @@ public class FragmentAddOrUpdateSchedule extends Fragment {
         super.onStart();
         if (getArguments() != null && getArguments().getSerializable(Constants.ARG_SCHEDULE) != null) {
             schedule = (Schedule) getArguments().getSerializable(Constants.ARG_SCHEDULE);
-            binding.scheduleDescriptionTiet.setText(schedule.getDescription());
+            binding.scheduleDescriptionText.setText(schedule.getDescription());
             binding.timeToTxt.setText(schedule.getEndTime());
             binding.timeFromTxt.setText(schedule.getStartTime());
             binding.dateFromTxt.setText(schedule.getStartDate());
@@ -101,7 +103,7 @@ public class FragmentAddOrUpdateSchedule extends Fragment {
 
             }
         });
-        addOrUpdateScheduleViewModel.getAllFacilities().observe(getViewLifecycleOwner(), staffData -> {
+        addOrUpdateScheduleViewModel.getFacilities(siteId).observe(getViewLifecycleOwner(), staffData -> {
             if (staffData != null) {
                 facilityArrayList = (ArrayList<Facility>) staffData.getFacilities();
                 ArrayAdapter<Facility> facilityArrayAdapter = new ArrayAdapter<Facility>(getContext(), R.layout.dropdown_menu_popup_item, facilityArrayList);
@@ -116,14 +118,6 @@ public class FragmentAddOrUpdateSchedule extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 providerId = ((Staff) parent.getItemAtPosition(position)).getStaffId();
-
-//                for (int i = 0; i < providerArrayList.size(); i++) {
-//                    if (providerArrayList.get(i).getFirstName().concat(" "+providerArrayList.get(i).getFamilyName()).contains(binding.providerAutoCompleteTextView.getText())){
-//                        providerId = providerArrayList.get(i).getStaffId();
-//                        Log.e("providerId", providerId);
-//                    }
-//                }
-
             }
         });
 
@@ -131,14 +125,6 @@ public class FragmentAddOrUpdateSchedule extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 facilityId = ((Facility) parent.getItemAtPosition(position)).getId();
-
-//                for (int i = 0; i < facilityArrayList.size(); i++) {
-//                    if (facilityArrayList.get(i).getDescription().contains(binding.facilityAutoCompleteTextView.getText())){
-//                        facilityId = facilityArrayList.get(position).getId();
-//                        Log.e("facilityId", facilityId);
-//                    }
-//                }
-
             }
         });
         binding.cardView2.setOnClickListener(v -> {
@@ -153,31 +139,19 @@ public class FragmentAddOrUpdateSchedule extends Fragment {
         binding.cardView4.setOnClickListener(v -> showTimePicker(binding.timeToTxt));
 
         binding.addOrUpdateScheduleBtn.setOnClickListener(v -> {
-            CollectDate();
+            if (isValidData())
+            getDataFromUI();
+            else return;
         });
 
         binding.cancelBtn.setOnClickListener(v -> {
-            OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
-                @Override
-                public void handleOnBackPressed() {
-                    onCancelOrBackButtonPressed();
-                }
-            };
-
-            requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
-
+            onCancelOrBackButtonPressed();
         });
         binding.siteAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 siteId = ((Branch) parent.getItemAtPosition(position)).getSiteId();
-//                for (int i = 0; i < branchesList.size(); i++) {
-//                    if (branchesList.get(i).getDescription().contains(binding.siteAutoCompleteTextView.getText())){
-//                        siteId = branchesList.get(position).getSiteId();
-//                        Log.e("SiteId", siteId);
-//                    }
-//                }
-
+                addOrUpdateScheduleViewModel.getFacilities(siteId);
             }
         });
 
@@ -186,6 +160,10 @@ public class FragmentAddOrUpdateSchedule extends Fragment {
     private void onCancelOrBackButtonPressed() {
         navController.popBackStack();
     }
+private void backToSchedules(){
+    onCancelOrBackButtonPressed();
+    navController.navigate(R.id.scheduleFragment);
+}
 
     private void getBranchesList() {
         addOrUpdateScheduleViewModel.getAllBranches().observe(getViewLifecycleOwner(), new Observer<BranchesResponse>() {
@@ -241,18 +219,16 @@ public class FragmentAddOrUpdateSchedule extends Fragment {
                 } else {
                     minuteSelected = selectedMinute + "";
                 }
-                txt.setText(hourSelected + ":" + minuteSelected);
-
+                txt.setText(String.format("%s:%s", hourSelected, minuteSelected));
             }
-        }, hour, minute, true);
-        mTimePicker.setTitle("Select Time");
+        }, hour, minute, false);
         mTimePicker.show();
     }
 
-    private void CollectDate() {
+    private void getDataFromUI() {
         if (schedule == null) {
             schedule = new Schedule();
-            schedule.setDescription(binding.scheduleDescriptionTiet.getText().toString());
+            schedule.setDescription(binding.scheduleDescriptionText.getText().toString());
             schedule.setProviderId(providerId);
             schedule.setFacilityId(facilityId);
             schedule.setEndDate(binding.dateToTxt.getText().toString());
@@ -261,22 +237,13 @@ public class FragmentAddOrUpdateSchedule extends Fragment {
             schedule.setEndTime(binding.timeToTxt.getText().toString());
             schedule.setWorkingDays(getSelectedDays());
             schedule.setSiteId(siteId);
-            addOrUpdateScheduleViewModel.addSchedule(schedule).observe(this, response -> {
-                if (response != null && response.getError() != null) {
-                    Toast.makeText(requireActivity(), response.getError().getErrorMessage(), Toast.LENGTH_SHORT).show();
-                    if (response.getError().getErrorCode() == 0) {
-                        onCancelOrBackButtonPressed();
-                    } else {
-                        schedule = null;
-                    }
-                } else {
-                    Toast.makeText(requireActivity(), "Error, Failed to add schedule ", Toast.LENGTH_SHORT).show();
-                    schedule = null;
-                }
-            });
+            if(addOrUpdateResponse ==null)
+           addSchedule();
+            else
+                addOrUpdateScheduleViewModel.addSchedule(schedule);
 
         } else {
-            schedule.setDescription(binding.scheduleDescriptionTiet.getText().toString());
+            schedule.setDescription(binding.scheduleDescriptionText.getText().toString());
             if (providerId != null)
                 schedule.setProviderId(providerId);
             if (facilityId != null)
@@ -287,14 +254,38 @@ public class FragmentAddOrUpdateSchedule extends Fragment {
             schedule.setEndTime(binding.timeToTxt.getText().toString());
             schedule.setWorkingDays(getSelectedDays());
             schedule.setSiteId(siteId);
-            addOrUpdateScheduleViewModel.updateSchedule(schedule).observe(this, response -> {
-                //Handle Error Message
-                Toast.makeText(requireActivity(), response.getError().getErrorMessage(), Toast.LENGTH_SHORT).show();
-                if (response.getError().getErrorCode() == 0) {
-                    onCancelOrBackButtonPressed();
-                }
-            });
+           if(addOrUpdateResponse == null)
+               updateSchedule();
+           else
+               addOrUpdateScheduleViewModel.updateSchedule(schedule);
         }
+    }
+
+    private void addSchedule() {
+        addOrUpdateScheduleViewModel.addSchedule(schedule).observe(this, response -> {
+            if (response != null && response.getError() != null) {
+                addOrUpdateResponse = response.getError();
+                Toast.makeText(requireActivity(),addOrUpdateResponse.getErrorMessage(), Toast.LENGTH_SHORT).show();
+                if (response.getError().getErrorCode() == 0) {
+                    backToSchedules();
+
+                } else {
+                    schedule = null;
+                }
+            } else {
+                Toast.makeText(requireActivity(), R.string.fail_to_add_Schedule_txt, Toast.LENGTH_SHORT).show();
+                schedule = null;
+            }
+        });
+    }
+    private void updateSchedule(){
+        addOrUpdateScheduleViewModel.updateSchedule(schedule).observe(this, response -> {
+            //Handle Error Message
+            Toast.makeText(requireActivity(), response.getError().getErrorMessage(), Toast.LENGTH_SHORT).show();
+            if (response.getError().getErrorCode() == 0) {
+                onCancelOrBackButtonPressed();
+            }
+        });
     }
 
     private String getSelectedDays() {
@@ -348,5 +339,118 @@ public class FragmentAddOrUpdateSchedule extends Fragment {
 
             }
         }
+    }
+
+    private boolean isValidDescription() {
+        String validateDescriptionMessage = addOrUpdateScheduleViewModel.validateDescription(binding.scheduleDescriptionText.getText().toString());
+        if (validateDescriptionMessage.isEmpty()) {
+            binding.scheduleDescriptionTxtInputLayout.setErrorEnabled(false);
+
+            return true;
+        } else {
+            binding.scheduleDescriptionTxtInputLayout.setErrorEnabled(true);
+            binding.scheduleDescriptionTxtInputLayout.setError(validateDescriptionMessage);
+            return false;
+        }
+    }
+
+    private boolean isValidProviderName() {
+        String validateProviderNameMessage = addOrUpdateScheduleViewModel.validateProviderName(binding.providerAutoCompleteTextView.getText().toString());
+        if (validateProviderNameMessage.isEmpty()) {
+            binding.providerLayout.setErrorEnabled(false);
+
+            return true;
+        } else {
+            binding.providerLayout.setErrorEnabled(true);
+            binding.providerLayout.setError(validateProviderNameMessage);
+            return false;
+        }
+    }
+
+    private boolean isValidSiteDescription() {
+        String validateSiteMessage = addOrUpdateScheduleViewModel.validateSite(binding.siteAutoCompleteTextView.getText().toString());
+        if (validateSiteMessage.isEmpty()) {
+            binding.siteLayout.setErrorEnabled(false);
+            return true;
+        } else {
+            binding.siteLayout.setErrorEnabled(true);
+            binding.siteLayout.setError(validateSiteMessage);
+            return false;
+        }
+    }
+
+    private boolean isValidFacility() {
+        String validateFacilityMessage = addOrUpdateScheduleViewModel.validateFacilityType(binding.facilityAutoCompleteTextView.getText().toString());
+        if (validateFacilityMessage.isEmpty()) {
+            binding.facilityLayout.setErrorEnabled(false);
+            return true;
+        } else {
+            binding.facilityLayout.setErrorEnabled(true);
+            binding.facilityLayout.setError(validateFacilityMessage);
+            return false;
+        }
+    }
+
+    private boolean isValidStartDate() {
+        String validateStartDateMessage = addOrUpdateScheduleViewModel.validateStartDate(binding.dateFromTxt.getText().toString());
+        if (validateStartDateMessage.isEmpty()) {
+            return true;
+        } else {
+            Toast.makeText(getContext(), validateStartDateMessage, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+    }
+
+    private boolean isValidStartTime() {
+        String validateStartTimeMessage = addOrUpdateScheduleViewModel.validateStartTime(binding.timeFromTxt.getText().toString());
+        if (validateStartTimeMessage.isEmpty()) {
+            return true;
+        } else {
+            Toast.makeText(getContext(), validateStartTimeMessage, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+    }
+
+    private boolean isValidEndTime() {
+        String validateEndTimeMessage = addOrUpdateScheduleViewModel.validateEndTime(binding.timeToTxt.getText().toString(), binding.timeFromTxt.getText().toString());
+        if (validateEndTimeMessage.isEmpty()) {
+            return true;
+        } else {
+            Toast.makeText(getContext(), validateEndTimeMessage, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+    }
+
+    private boolean isValidData() {
+        if (isValidDescription() && isValidProviderName() && isValidSiteDescription() && isValidFacility() && isValidStartDate()
+                && isValidStartTime() && isValidEndTime() && isWorkingDaysSelected())
+            return true;
+        else
+            return false;
+    }
+    private boolean isWorkingDaysSelected (){
+        if(getSelectedDays().isEmpty()){
+            Toast.makeText(getContext(),"Select working days",Toast.LENGTH_SHORT).show();
+            return false;
+        }
+         return true;
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+     binding.facilityLayout.setErrorEnabled(false);
+     binding.scheduleDescriptionTxtInputLayout.setErrorEnabled(false);
+     binding.providerLayout.setErrorEnabled(false);
+     binding.siteLayout.setErrorEnabled(false);
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+
     }
 }

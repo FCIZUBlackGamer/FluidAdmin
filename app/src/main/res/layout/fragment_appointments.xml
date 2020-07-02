@@ -7,7 +7,7 @@
 
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -21,6 +21,7 @@
             android:hint="@string/provider"
             android:layout_marginStart="32dp"
             android:layout_marginEnd="32dp"
+            android:layout_alignParentTop="true"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:id="@+id/provider_list_txt_input">
 
@@ -39,6 +40,7 @@
             android:layout_marginTop="@dimen/fab_margin"
             android:layout_marginStart="32dp"
             android:layout_marginEnd="32dp"
+            android:layout_below="@+id/provider_list_txt_input"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/provider_list_txt_input"
             android:hint="@string/date_txt"
@@ -60,24 +62,27 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/appointmentRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_margin="@dimen/fab_margin"
-            app:layout_constraintTop_toBottomOf="@id/date_txt_input"
+            android:layout_below="@+id/date_txt_input"
+
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/date_txt_input" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/addNewAppointmentFab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/fab_margin"
-            android:src="@drawable/ic_plus"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="@dimen/fab_margin"
+            android:layout_marginBottom="@dimen/fab_margin"
             android:backgroundTint="@color/colorPrimary"
-            app:tint="@color/colorWhite"
+            android:src="@drawable/ic_plus"
             android:tint="@color/colorPrimary"
             app:borderWidth="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:tint="@color/colorWhite" />
 
         <ProgressBar
             android:id="@+id/appointmentsLoadingProgressBar"
@@ -89,5 +94,5 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
 </layout>

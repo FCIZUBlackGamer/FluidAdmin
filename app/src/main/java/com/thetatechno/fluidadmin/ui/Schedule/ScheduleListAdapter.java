@@ -151,36 +151,6 @@ public class ScheduleListAdapter extends RecyclerView.Adapter<ScheduleListAdapte
                 }
                 ChipAdapter chipAdapter = new ChipAdapter(context, selectedDays);
                 holder.recyclerView.setAdapter(chipAdapter);
-//                String[] selectedDays = scheduleList.get(position).getWorkingDays().split("(?<=\\G...)");
-
-//                for (int i = 0; i < selectedDays.size(); i++) {
-//                    switch (selectedDays.get(i)) {
-//                        case "SAT":
-//                            holder.satChip.setChecked(true);
-//                            break;
-//                        case "SUN":
-//                            holder.sundayChip.setChecked(true);
-//                            break;
-//                        case "MON":
-//                            holder.mondayChip.setChecked(true);
-//                            break;
-//                        case "TUE":
-//                            holder.tuesdayChip.setChecked(true);
-//                            break;
-//                        case "WED":
-//                            holder.WednesdayChip.setChecked(true);
-//                            break;
-//
-//                        case "THU":
-//                            holder.thursdayChuip.setChecked(true);
-//                            break;
-//                        case "FRI":
-//                            holder.fridayChip.setChecked(true);
-//                            break;
-//
-//                    }
-//                }
-
             } else if (position == filteredScheduleList.size()) {
                 holder.itemView.setVisibility(View.INVISIBLE);
             }
@@ -252,13 +222,6 @@ public class ScheduleListAdapter extends RecyclerView.Adapter<ScheduleListAdapte
             doctorImg = itemView.findViewById(R.id.doctorImg);
             dateToTxtView = itemView.findViewById(R.id.date_to_txt_view);
             dateFromTxtView = itemView.findViewById(R.id.date_from_txt_view);
-//            satChip = itemView.findViewById(R.id.SAT);
-//            sundayChip = itemView.findViewById(R.id.SUN);
-//            mondayChip = itemView.findViewById(R.id.MON);
-//            tuesdayChip = itemView.findViewById(R.id.TUE);
-//            WednesdayChip = itemView.findViewById(R.id.WED);
-//            thursdayChuip = itemView.findViewById(R.id.THU);
-//            fridayChip = itemView.findViewById(R.id.FRI);
             daysCardView = itemView.findViewById(R.id.daysCardV);
         }
     }

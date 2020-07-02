@@ -142,4 +142,14 @@
     <string name="sessions_txt">Sessions</string>
     <string name="update_branch_txt">update branch</string>
     <string name="add_branch_txt">add branch</string>
+    <string name="start_date_txt">Start date is mandatory</string>
+    <string name="start_time_txt">Start time is mandatory</string>
+    <string name="end_time_txt">End time is mandatory</string>
+    <string name="end_time_greater_than_error_message">End time should be greater than start time.</string>
+    <string name="select_provider_name">select provider name</string>
+    <string name="choose_site_message">Chhose site</string>
+    <string name="select_time">Select Time</string>
+    <string name="fail_to_add_Schedule_txt">Error, Failed to add schedule</string>
+    <string name="update_session">Update Session</string>
+    <string name="add_session">Add Session</string>
 </resources>

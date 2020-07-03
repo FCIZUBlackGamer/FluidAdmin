@@ -41,6 +41,7 @@ import com.thetatechno.fluidadmin.ui.EspressoTestingIdlingResource;
 import com.thetatechno.fluidadmin.utils.Constants;
 
 import java.io.Serializable;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -196,41 +197,23 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
 
         binding.calendarView.setOnPreviousPageChangeListener(() -> {
             Calendar calender = binding.calendarView.getCurrentPageDate();
-//            if (calender.getTime().getMonth() > Calendar.getInstance().getTime().getMonth()+1) {
-                Date todayDate = new Date();
-                SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat formattedDate
+                    = new SimpleDateFormat("dd-MM-yyyy");
+            Toast.makeText(requireActivity(), "Date :" + calender.getTime().toString(), Toast.LENGTH_SHORT).show();
+            String formatedDate = formattedDate.format(calender.getTime());
+            date = formatedDate;
+            selectSpecialityAndProviderAndDisplayCalenderViewModel.getScheduledCalenderDaysList(date, specialityCode, providerId, Constants.APPOINTMENT_LENGTH, "N");
 
-                String dateFormatted = sdformat.format(calender.getTime());
-                String todayDateStringFormatted = sdformat.format(todayDate);
-                if (todayDateStringFormatted.compareTo(dateFormatted) <= 0) {
-                    SimpleDateFormat formattedDate
-                            = new SimpleDateFormat("dd-MM-yyyy");
-                    String formatedDate = formattedDate.format(calender.getTime());
-                    date = formatedDate;
-                    selectSpecialityAndProviderAndDisplayCalenderViewModel.getScheduledCalenderDaysList(date, specialityCode, providerId, Constants.APPOINTMENT_LENGTH, "N");
-                } else {
-                    Toast.makeText(getActivity(), "No Appointments Available", Toast.LENGTH_SHORT).show();
-                }
-//            }else {
-//                try {
-//                    calender.add(Calendar.MONTH,1);
-//                    binding.calendarView.setDate(calender);
-//                    calender.add(Calendar.MONTH,-1);
-//                } catch (OutOfDateRangeException e) {
-//                    e.printStackTrace();
-//                }
-//            }
 
         });
 
         binding.calendarView.setOnForwardPageChangeListener(() -> {
             Toast.makeText(getActivity(), "Load next days of month", Toast.LENGTH_SHORT).show();
-
             Calendar calender = binding.calendarView.getCurrentPageDate();
-
             @SuppressLint("SimpleDateFormat")
             SimpleDateFormat formattedDate
                     = new SimpleDateFormat("dd-MM-yyyy");
+            Toast.makeText(requireActivity(), "Date :" + calender.getTime().toString(), Toast.LENGTH_SHORT).show();
             String dateFormatted = formattedDate.format(calender.getTime());
             date = dateFormatted;
             selectSpecialityAndProviderAndDisplayCalenderViewModel.getScheduledCalenderDaysList(date, specialityCode, providerId, Constants.APPOINTMENT_LENGTH, "N");
@@ -325,6 +308,26 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
         if (calendars.size() > 0) {
             Log.e("TAG", "First Date: " + calendars.get(0).getTime().toString());
             Log.e("TAG", "Last Date: " + calendars.get(calendars.size() - 1).getTime().toString());
+        }
+        return calendars;
+    }
+
+    private List<Calendar> getDaysKey(AppointmentCalenderDaysListData appointments) {
+        List<Calendar> calendars = new ArrayList<>();
+        Calendar calendar;
+
+        for (int i = 0; i < appointments.getDayDetailsList().size(); i++) {
+            SimpleDateFormat formattedDate
+                    = new SimpleDateFormat("dd-MM-yyyy");
+
+            try {
+                calendar = Calendar.getInstance();
+                calendar.setTime(formattedDate.parse(appointments.getDayDetailsList().get(i).getDate()));
+                calendars.add(calendar);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
         }
         return calendars;
     }
@@ -462,9 +465,8 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
             EspressoTestingIdlingResource.increment();
             if (appointmentCalenderDaysListData != null)
                 appointmentDayDetailsArrayList = (ArrayList<AppointmentDayDetails>) appointmentCalenderDaysListData.getDayDetailsList();
-            selectedDays = getDaysBundelKey();
+            selectedDays = getDaysKey(appointmentCalenderDaysListData);
             binding.calendarView.setSelectedDates(selectedDays);
-//            binding.calendarView.setSelectedDates(getDaysBundelKey());
             EspressoTestingIdlingResource.decrement();
         }
     };

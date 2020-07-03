@@ -34,7 +34,6 @@ public class BranchesRepository {
             @Override
             public void onResponse(Call<BranchesResponse> call, Response<BranchesResponse> response) {
                 if (response.code() == Constants.STATE_OK && response.body() != null) {
-                    Log.i(TAG, "get All codes response " + response.toString());
                     if (response.body() != null) {
                         branchesMutableLiveData.setValue(response.body());
 

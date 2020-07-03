@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
+import com.beloo.widget.chipslayoutmanager.layouter.AbstractPositionIterator;
 import com.thetatechno.fluidadmin.model.APIResponse;
 import com.thetatechno.fluidadmin.model.Error;
 import com.thetatechno.fluidadmin.model.session_model.Session;
@@ -130,13 +131,13 @@ public class SessionRepository {
     public MutableLiveData<Error> deleteSession(String languageId, String id) {
 
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
-        Call<Error> call = myServicesInterface.deleteSession(languageId, id);
-        call.enqueue(new Callback<Error>() {
+        Call<APIResponse> call = myServicesInterface.deleteSession(languageId, id);
+        call.enqueue(new Callback<APIResponse>() {
 
             @Override
-            public void onResponse(@NonNull Call<Error> call, @NonNull Response<Error> response) {
+            public void onResponse(@NonNull Call<APIResponse> call, @NonNull Response<APIResponse> response) {
                 if (response.isSuccessful()) {
-                    deleteSessionLiveData.setValue(response.body());
+                    deleteSessionLiveData.setValue(response.body().getError());
 
                 }else {
                     deleteSessionLiveData.setValue(null);
@@ -144,7 +145,7 @@ public class SessionRepository {
             }
 
             @Override
-            public void onFailure(@NonNull Call<Error> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<APIResponse> call, @NonNull Throwable t) {
                 deleteSessionLiveData.setValue(null);
                 t.printStackTrace();
 

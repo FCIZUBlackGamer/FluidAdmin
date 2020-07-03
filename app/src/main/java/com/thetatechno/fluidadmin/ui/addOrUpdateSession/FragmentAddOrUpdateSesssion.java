@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +28,7 @@ import androidx.navigation.Navigation;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.databinding.AddSessionLayoutBinding;
 import com.thetatechno.fluidadmin.model.APIResponse;
+import com.thetatechno.fluidadmin.model.Error;
 import com.thetatechno.fluidadmin.model.staff_model.Staff;
 import com.thetatechno.fluidadmin.model.branches_model.Branch;
 import com.thetatechno.fluidadmin.model.branches_model.BranchesResponse;
@@ -40,16 +43,16 @@ import com.thetatechno.fluidadmin.utils.PreferenceController;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class FragmentAddOrUpdateSesssion extends Fragment {
+public class FragmentAddOrUpdateSesssion extends Fragment implements TextWatcher {
     private AddSessionLayoutBinding binding;
-    private AddOrUpdateScheduleViewModel addOrUpdateScheduleViewModel;
     private AddOrUpdateSessionViewModel addOrUpdateSessionViewModel;
     private ArrayList<Staff> providerArrayList = new ArrayList<>();
     private ArrayList<Facility> facilityArrayList = new ArrayList<>();
     private ArrayList<Branch> branchesList = new ArrayList<>();
     private String providerId;
     private String facilityId;
-    private String siteId;
+    private String siteId = "";
+    private Error addOrUpdateResponse;
     private NavController navController;
     Session session;
 
@@ -57,7 +60,6 @@ public class FragmentAddOrUpdateSesssion extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.add_session_layout, container, false);
-        addOrUpdateScheduleViewModel = ViewModelProviders.of(this).get(AddOrUpdateScheduleViewModel.class);
         addOrUpdateSessionViewModel = ViewModelProviders.of(this).get(AddOrUpdateSessionViewModel.class);
         navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
         return binding.getRoot();
@@ -72,11 +74,17 @@ public class FragmentAddOrUpdateSesssion extends Fragment {
             binding.timeFromTxt.setText(session.getScheduledStart());
             binding.dateTxt.setText(session.getSessionDate());
             binding.addOrUpdateScheduleBtn.setText(R.string.update_txt);
+            binding.providerAutoCompleteTextView.setEnabled(false);
+            binding.facilityAutoCompleteTextView.setEnabled(false);
+            binding.siteAutoCompleteTextView.setEnabled(false);
+            binding.dateTxt.setEnabled(false);
+            updateTitle(R.string.update_session);
         } else {
             session = null;
             binding.addOrUpdateScheduleBtn.setText(R.string.add_txt);
+            updateTitle(R.string.add_session);
         }
-        addOrUpdateScheduleViewModel.getStaffData().observe(getViewLifecycleOwner(), staffData -> {
+        addOrUpdateSessionViewModel.getStaffData().observe(getViewLifecycleOwner(), staffData -> {
             if (staffData.getStaffData() != null) {
                 providerArrayList = (ArrayList<Staff>) staffData.getStaffData().getStaffList();
                 ArrayAdapter<Staff> staffArrayAdapter = new ArrayAdapter<Staff>(getContext(), R.layout.dropdown_menu_popup_item, providerArrayList);
@@ -88,7 +96,7 @@ public class FragmentAddOrUpdateSesssion extends Fragment {
                 Toast.makeText(getContext(), staffData.getErrorMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-        addOrUpdateScheduleViewModel.getAllFacilities().observe(getViewLifecycleOwner(), staffData -> {
+        addOrUpdateSessionViewModel.getFacilities(siteId).observe(getViewLifecycleOwner(), staffData -> {
             if (staffData != null) {
                 facilityArrayList = (ArrayList<Facility>) staffData.getFacilities();
                 ArrayAdapter<Facility> facilityArrayAdapter = new ArrayAdapter<Facility>(getContext(), R.layout.dropdown_menu_popup_item, facilityArrayList);
@@ -124,19 +132,12 @@ public class FragmentAddOrUpdateSesssion extends Fragment {
         });
 
         binding.addOrUpdateScheduleBtn.setOnClickListener(v -> {
-            CollectDate();
+            if(isValidData())
+            getDataFromUIAndAddOrUpdateSession();
         });
 
         binding.cancelBtn.setOnClickListener(v -> {
-            OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
-                @Override
-                public void handleOnBackPressed() {
-                    onCancelOrBackButtonPressed();
-                }
-            };
-
-            requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
-
+            onCancelOrBackButtonPressed();
         });
         binding.siteAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -152,7 +153,7 @@ public class FragmentAddOrUpdateSesssion extends Fragment {
     }
 
     private void getBranchesList() {
-        addOrUpdateScheduleViewModel.getAllBranches().observe(getViewLifecycleOwner(), new Observer<BranchesResponse>() {
+        addOrUpdateSessionViewModel.getAllBranches().observe(getViewLifecycleOwner(), new Observer<BranchesResponse>() {
             @Override
             public void onChanged(BranchesResponse branchesResponse) {
                 if (branchesResponse != null) {
@@ -161,7 +162,10 @@ public class FragmentAddOrUpdateSesssion extends Fragment {
                         ArrayAdapter<Branch> branchArrayAdapter = new ArrayAdapter<Branch>(getContext(), R.layout.dropdown_menu_popup_item, branchesList);
                         binding.siteAutoCompleteTextView.setAdapter(branchArrayAdapter);
                         if (session != null) {
-                            binding.siteAutoCompleteTextView.setText(session.getSiteId());
+                            for(Branch branch : branchesList){
+                                if(branch.getSiteId().equals(session.getSiteId()))
+                                    binding.siteAutoCompleteTextView.setText(branch.getDescription());
+                            }
                         }
                     }
                 }
@@ -211,7 +215,7 @@ public class FragmentAddOrUpdateSesssion extends Fragment {
 
 
             }
-        }, hour, minute, true);
+        }, hour, minute, false);
         if (start) {
             mTimePicker.setTitle("Time From");
         } else {
@@ -221,57 +225,162 @@ public class FragmentAddOrUpdateSesssion extends Fragment {
         mTimePicker.show();
     }
 
-    private void CollectDate() {
+    private void getDataFromUIAndAddOrUpdateSession() {
         if (session == null) {
             session = new Session();
-            if (providerId != null)
-                session.setProviderId(providerId);
-            if (facilityId != null)
-                session.setFacilityId(facilityId);
-            session.setScheduledStart(binding.timeFromTxt.getText().toString());
-            session.setScheduledEnd(binding.timeToTxt.getText().toString());
-            session.setSessionDate(binding.dateTxt.getText().toString());
-            session.setSiteId(siteId);
-            session.setLangId(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
-            addOrUpdateSessionViewModel.addSession(session).observe(this, (APIResponse response) -> {
-                if (response != null) {
-                    Toast.makeText(requireActivity(), response.getError().getErrorMessage(), Toast.LENGTH_SHORT).show();
-                    if (response.getError().getErrorCode() == 0) {
-                        onCancelOrBackButtonPressed();
-                    }else {
-                        session = null;
-                    }
-                }else {
-                    session = null;
-                }
-            });
-        } else {
-            if (providerId != null)
-                session.setProviderId(providerId);
-            if (facilityId != null)
-                session.setFacilityId(facilityId);
-            session.setScheduledStart(binding.timeFromTxt.getText().toString());
-            session.setScheduledEnd(binding.timeToTxt.getText().toString());
-            session.setSessionDate(binding.dateTxt.getText().toString());
-            if (siteId != null)
-                session.setSiteId(siteId);
-            session.setLangId(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
+            addDataToSessionObject();
+            if(addOrUpdateResponse == null)
+                addSession();
+            else
+                addOrUpdateSessionViewModel.addSession(session);
 
-            addOrUpdateSessionViewModel.updateSession(session).observe(this, response -> {
-                if (response != null) {
-                    Toast.makeText(requireActivity(), response.getError().getErrorMessage(), Toast.LENGTH_SHORT).show();
-                    if (response.getError().getErrorCode() == 0) {
-                        onCancelOrBackButtonPressed();
-                    }
-                }else {
-                    session = null;
-                }
-            });
+        } else {
+           addDataToSessionObject();
+            if(addOrUpdateResponse == null)
+                updateSession();
+            else
+                addOrUpdateSessionViewModel.updateSession(session);
+
         }
+    }
+
+    private void addDataToSessionObject() {
+
+        if (providerId != null)
+            session.setProviderId(providerId);
+        if (facilityId != null)
+            session.setFacilityId(facilityId);
+        session.setScheduledStart(binding.timeFromTxt.getText().toString());
+        session.setScheduledEnd(binding.timeToTxt.getText().toString());
+        session.setSessionDate(binding.dateTxt.getText().toString());
+        session.setSiteId(siteId);
+        session.setLangId(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
     }
 
     private void updateTitle(int resourceId) {
         ((HomeActivity) requireActivity()).getSupportActionBar().setTitle(resourceId);
+
+    }
+    private void addSession(){
+        addOrUpdateSessionViewModel.addSession(session).observe(this, (APIResponse response) -> {
+            if (response != null) {
+                Toast.makeText(requireActivity(), response.getError().getErrorMessage(), Toast.LENGTH_SHORT).show();
+                if (response.getError().getErrorCode() == 0) {
+                    onCancelOrBackButtonPressed();
+                }else {
+                    session = null;
+                }
+            }else {
+                session = null;
+            }
+        });
+    }
+    private void updateSession(){
+        addOrUpdateSessionViewModel.updateSession(session).observe(this, response -> {
+            if (response != null) {
+
+                Toast.makeText(requireActivity(), response.getError().getErrorMessage(), Toast.LENGTH_SHORT).show();
+                if (response.getError().getErrorCode() == 0) {
+                    onCancelOrBackButtonPressed();
+                }
+            }else {
+                session = null;
+            }
+        });
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            binding.facilityLayout.setErrorEnabled(false);
+            binding.providerLayout.setErrorEnabled(false);
+            binding.siteLayout.setErrorEnabled(false);
+
+    }
+
+
+    private boolean isValidProviderName() {
+        String validateProviderNameMessage = addOrUpdateSessionViewModel.validateProviderName(binding.providerAutoCompleteTextView.getText().toString());
+        if (validateProviderNameMessage.isEmpty()) {
+            binding.providerLayout.setErrorEnabled(false);
+
+            return true;
+        } else {
+            binding.providerLayout.setErrorEnabled(true);
+            binding.providerLayout.setError(validateProviderNameMessage);
+            return false;
+        }
+    }
+
+    private boolean isValidSiteDescription() {
+        String validateSiteMessage = addOrUpdateSessionViewModel.validateSite(binding.siteAutoCompleteTextView.getText().toString());
+        if (validateSiteMessage.isEmpty()) {
+            binding.siteLayout.setErrorEnabled(false);
+            return true;
+        } else {
+            binding.siteLayout.setErrorEnabled(true);
+            binding.siteLayout.setError(validateSiteMessage);
+            return false;
+        }
+    }
+
+    private boolean isValidFacility() {
+        String validateFacilityMessage = addOrUpdateSessionViewModel.validateFacilityType(binding.facilityAutoCompleteTextView.getText().toString());
+        if (validateFacilityMessage.isEmpty()) {
+            binding.facilityLayout.setErrorEnabled(false);
+            return true;
+        } else {
+            binding.facilityLayout.setErrorEnabled(true);
+            binding.facilityLayout.setError(validateFacilityMessage);
+            return false;
+        }
+    }
+
+    private boolean isValidStartDate() {
+        String validateStartDateMessage = addOrUpdateSessionViewModel.validateStartDate(binding.dateTxt.getText().toString());
+        if (validateStartDateMessage.isEmpty()) {
+            return true;
+        } else {
+            Toast.makeText(getContext(), validateStartDateMessage, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+    }
+
+    private boolean isValidStartTime() {
+        String validateStartTimeMessage = addOrUpdateSessionViewModel.validateStartTime(binding.timeFromTxt.getText().toString());
+        if (validateStartTimeMessage.isEmpty()) {
+            return true;
+        } else {
+            Toast.makeText(getContext(), validateStartTimeMessage, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+    }
+
+    private boolean isValidEndTime() {
+        String validateEndTimeMessage = addOrUpdateSessionViewModel.validateEndTime(binding.timeToTxt.getText().toString(), binding.timeFromTxt.getText().toString());
+        if (validateEndTimeMessage.isEmpty()) {
+            return true;
+        } else {
+            Toast.makeText(getContext(), validateEndTimeMessage, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+    }
+
+    private boolean isValidData() {
+        if ( isValidProviderName() && isValidSiteDescription() && isValidFacility() && isValidStartDate()
+                && isValidStartTime() && isValidEndTime() )
+            return true;
+        else
+            return false;
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
 
     }
 }

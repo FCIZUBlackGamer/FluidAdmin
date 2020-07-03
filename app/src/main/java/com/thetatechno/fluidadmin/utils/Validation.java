@@ -4,6 +4,10 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -54,6 +58,40 @@ public class Validation {
         Matcher matcher = pattern.matcher(inputStr);
         return matcher.matches();
 
+    }
+
+    public static boolean isValidDate(String date) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        simpleDateFormat.setLenient(false);
+        try {
+            simpleDateFormat.parse(date);
+        } catch (ParseException e) {
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean isValidTime(String time) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
+        simpleDateFormat.setLenient(false);
+        try {
+            simpleDateFormat.parse(time);
+        } catch (ParseException e) {
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean isValidEndAndStartTime(String endTime, String startTime) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
+        simpleDateFormat.setLenient(false);
+        try {
+            Date startDate = simpleDateFormat.parse(startTime);
+            Date endDate = simpleDateFormat.parse(endTime);
+            return endDate.after(startDate);
+        } catch (ParseException e) {
+            return false;
+        }
     }
 }
 

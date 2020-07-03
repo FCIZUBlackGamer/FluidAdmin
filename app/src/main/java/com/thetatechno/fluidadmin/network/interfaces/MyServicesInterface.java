@@ -47,6 +47,8 @@ public interface MyServicesInterface {
     @GET("/ords/fluid/api/facility")
     Call<Facilities> getAllFacilities(@Query(Constants.FACILITY_ID) String facilityId, @Query(Constants.LANG_ID) String langId);
 
+    @GET("/ords/fluid/api/facility")
+    Call<Facilities> getFacilityForSpecificSiteId(@Query("siteId") String siteId, @Query(Constants.LANG_ID) String langId);
     @POST("/ords/fluid/api/facility")
     Call<AddOrUpdateStatus> addFacility(@Body Facility facility);
 
@@ -157,7 +159,7 @@ public interface MyServicesInterface {
     Call<AddOrUpdateScheduleResponse> updateSchedule(@Body Schedule schedule);
 
     @DELETE("/ords/fluid/schedule/deleteSchedule")
-    Call<Error> deleteSchedule(@Query("langId") String langId, @Query("id") String id);
+    Call<APIResponse> deleteSchedule(@Query("langId") String langId, @Query("id") String id);
 
     @GET("/ords/fluid/session/getSession")
     Call<SessionResponse> getSessionsRelatedToSchedule(@Query("langId") String langId, @Query("scheduleId") String scheduleId);
@@ -171,5 +173,5 @@ public interface MyServicesInterface {
     Call<APIResponse> modifySession(@Body Session session);
 
     @DELETE("/ords/fluid/session/deleteSession")
-    Call<Error> deleteSession(@Query("langId") String langId, @Query("id") String id);
+    Call<APIResponse> deleteSession(@Query("langId") String langId, @Query("id") String id);
 }

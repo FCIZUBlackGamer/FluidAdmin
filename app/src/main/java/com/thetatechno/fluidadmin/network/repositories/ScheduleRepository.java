@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
+import com.thetatechno.fluidadmin.model.APIResponse;
 import com.thetatechno.fluidadmin.model.AddOrUpdateScheduleResponse;
 import com.thetatechno.fluidadmin.model.Error;
 
@@ -112,26 +113,23 @@ public class ScheduleRepository {
     public MutableLiveData<Error> deleteSchedule(String languageId, String id) {
 
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
-        Call<Error> call = myServicesInterface.deleteSchedule(languageId, id);
-        call.enqueue(new Callback<Error>() {
+        Call<APIResponse> call = myServicesInterface.deleteSchedule(languageId, id);
+        call.enqueue(new Callback<APIResponse>() {
 
             @Override
-            public void onResponse(@NonNull Call<Error> call, @NonNull Response<Error> response) {
+            public void onResponse(@NonNull Call<APIResponse> call, @NonNull Response<APIResponse> response) {
                 if (response.isSuccessful()) {
-                    deleteScheduleLiveData.setValue(response.body());
+                    deleteScheduleLiveData.setValue(response.body().getError());
 
                 }else {
                     deleteScheduleLiveData.setValue(null);
                 }
             }
-
             @Override
-            public void onFailure(@NonNull Call<Error> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<APIResponse> call, @NonNull Throwable t) {
                 deleteScheduleLiveData.setValue(null);
                 t.printStackTrace();
-
             }
-
         });
         return deleteScheduleLiveData;
     }

@@ -32,7 +32,7 @@ import com.thetatechno.fluidadmin.ui.HomeActivity;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AddOrUpdateBranch extends Fragment implements TextWatcher, View.OnClickListener {
+public class AddOrUpdateBranch extends Fragment implements View.OnClickListener {
     private Branch branch;
     private static String ARG_BRANCH = "branch";
     private TextInputEditText branchDescriptionEditTxt;
@@ -85,10 +85,71 @@ public class AddOrUpdateBranch extends Fragment implements TextWatcher, View.OnC
         viewModel = new ViewModelProvider(this).get(AddOrUpdateBranchViewModel.class);
         initiateView(view);
         updateData();
-        branchDescriptionEditTxt.addTextChangedListener(this);
-        branchEmailEditTxt.addTextChangedListener(this);
-        branchPhoneEditTxt.addTextChangedListener(this);
-        branchAddressEditTxt.addTextChangedListener(this);
+        branchDescriptionEditTxt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                branchDescriptionInputLayout.setErrorEnabled(false);
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        branchEmailEditTxt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                branchEmailInputLayout.setErrorEnabled(false);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        branchPhoneEditTxt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                branchPhoneInputLayout.setErrorEnabled(false);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        branchAddressEditTxt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                branchAddressInputLayout.setErrorEnabled(false);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         addOrUpdateBranchBtn.setOnClickListener(this);
         cancelBtn.setOnClickListener(this);
 
@@ -132,23 +193,6 @@ public class AddOrUpdateBranch extends Fragment implements TextWatcher, View.OnC
         }
     }
 
-    @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-    }
-
-    @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
-        branchPhoneInputLayout.setErrorEnabled(false);
-        branchEmailInputLayout.setErrorEnabled(false);
-        branchAddressInputLayout.setErrorEnabled(false);
-        branchDescriptionInputLayout.setErrorEnabled(false);
-    }
-
-    @Override
-    public void afterTextChanged(Editable s) {
-
-    }
 
     @Override
     public void onClick(View v) {
@@ -170,7 +214,7 @@ public class AddOrUpdateBranch extends Fragment implements TextWatcher, View.OnC
                         if (updateBranchResponse == null)
                             updateBranch();
                         else
-                            viewModel.updateBranch(branch,branchDescriptionEditTxt.getText().toString(),
+                            viewModel.updateBranch(branch, branchDescriptionEditTxt.getText().toString(),
                                     branchAddressEditTxt.getText().toString(),
                                     branchEmailEditTxt.getText().toString(),
                                     branchPhoneEditTxt.getText().toString());
@@ -189,8 +233,11 @@ public class AddOrUpdateBranch extends Fragment implements TextWatcher, View.OnC
 
     private boolean isDataValid() {
         if (isDescriptionValid(branchDescriptionEditTxt.getText().toString()) &&
-                isAddressValid(branchAddressEditTxt.getText().toString()) &&
-                isEmailValid(branchEmailEditTxt.getText().toString()) && isPhoneValid(branchPhoneEditTxt.getText().toString()))
+                isEmailValid(branchEmailEditTxt.getText().toString()) &&
+                isPhoneValid(branchPhoneEditTxt.getText().toString()) &&
+                isAddressValid(branchAddressEditTxt.getText().toString())
+        )
+
             return true;
         else
             return false;
@@ -230,7 +277,7 @@ public class AddOrUpdateBranch extends Fragment implements TextWatcher, View.OnC
             return true;
         } else {
             branchAddressInputLayout.setErrorEnabled(true);
-            branchAddressInputLayout.setError(phoneValidateMessage);
+            branchAddressInputLayout.setError(addressValidateMessage);
 
             return false;
         }
@@ -243,7 +290,7 @@ public class AddOrUpdateBranch extends Fragment implements TextWatcher, View.OnC
             return true;
         } else {
             branchDescriptionInputLayout.setErrorEnabled(true);
-            branchDescriptionInputLayout.setError(phoneValidateMessage);
+            branchDescriptionInputLayout.setError(descriptionValidateMessage);
 
             return false;
         }
@@ -279,7 +326,7 @@ public class AddOrUpdateBranch extends Fragment implements TextWatcher, View.OnC
     }
 
     private void updateBranch() {
-        viewModel.updateBranch(branch,branchDescriptionEditTxt.getText().toString(),
+        viewModel.updateBranch(branch, branchDescriptionEditTxt.getText().toString(),
                 branchAddressEditTxt.getText().toString(),
                 branchEmailEditTxt.getText().toString(),
                 branchPhoneEditTxt.getText().toString()).observe(getActivity(), new Observer<AddOrUpdateStatusResponse>() {
@@ -288,7 +335,7 @@ public class AddOrUpdateBranch extends Fragment implements TextWatcher, View.OnC
                 EspressoTestingIdlingResource.increment();
                 updateBranchResponse = s;
                 Log.i("AddOrUpdate", "Update agent status" + s.getStatus());
-                if (updateBranchResponse.getStatus() >= 0 ) {
+                if (updateBranchResponse.getStatus() >= 0) {
                     onAddOrUpdateSuccessfully();
                     Toast.makeText(getContext(), "added successfully", Toast.LENGTH_SHORT).show();
                 }

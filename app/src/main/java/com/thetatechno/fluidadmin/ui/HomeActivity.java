@@ -28,6 +28,7 @@ import com.thetatechno.fluidadmin.listeners.OnDeleteListener;
 import com.thetatechno.fluidadmin.listeners.OnItemClickedListener;
 import com.thetatechno.fluidadmin.listeners.OnLinkToFacilityClickedListener;
 import com.thetatechno.fluidadmin.listeners.OnOpenCancelAppointmentDialogListener;
+import com.thetatechno.fluidadmin.listeners.OnReloadDataListener;
 import com.thetatechno.fluidadmin.model.Error;
 import com.thetatechno.fluidadmin.model.Status;
 import com.thetatechno.fluidadmin.model.session_model.Session;
@@ -39,9 +40,11 @@ import com.thetatechno.fluidadmin.model.facility_model.Facilities;
 import com.thetatechno.fluidadmin.model.facility_model.Facility;
 import com.thetatechno.fluidadmin.model.facility_model.FacilityCodes;
 import com.thetatechno.fluidadmin.model.staff_model.Staff;
+import com.thetatechno.fluidadmin.ui.Session.SessionFragment;
 import com.thetatechno.fluidadmin.ui.dialogs.ConfirmDeleteDialog;
 import com.thetatechno.fluidadmin.ui.dialogs.FacilitiesListDialog;
 import com.thetatechno.fluidadmin.ui.facilityList.FacilityListViewModel;
+import com.thetatechno.fluidadmin.ui.showSession.ShowSessions;
 import com.thetatechno.fluidadmin.utils.Constants;
 import com.thetatechno.fluidadmin.utils.PreferenceController;
 import com.thetatechno.fluidadmin.utils.EnumCode;
@@ -87,6 +90,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     private String deleteBranchMessage = "";
     private String deleteScheduleMessage = "";
     private String deleteSessionMessage = "";
+    private OnReloadDataListener onReloadDataListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -520,7 +524,21 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             public void onChanged(Error error) {
                 if (error != null) {
                     deleteSessionMessage = error.getErrorMessage();
-                    Toast.makeText(HomeActivity.this, "OK", Toast.LENGTH_SHORT).show();
+                    if (error.getErrorCode() == 0) {
+                        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+                        switch (navController.getCurrentDestination().getId()) {
+                            case R.id.showSessions:
+                                onReloadDataListener = (ShowSessions) navHostFragment.getChildFragmentManager().getFragments().get(0);
+                                onReloadDataListener.onReload();
+                                break;
+                            case R.id.sessionFragment:
+                                onReloadDataListener = (SessionFragment) navHostFragment.getChildFragmentManager().getFragments().get(0);
+                                onReloadDataListener.onReload();
+                                break;
+                        }
+                    }
+                    Toast.makeText(HomeActivity.this, error.getErrorMessage(), Toast.LENGTH_SHORT).show();
+
                 } else {
                     Toast.makeText(HomeActivity.this, "Failed to Delete ", Toast.LENGTH_SHORT).show();
                 }

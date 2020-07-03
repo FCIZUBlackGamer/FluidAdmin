@@ -22,7 +22,7 @@ public class FacilityRepository {
     MutableLiveData<Facilities> facilitiesMutableLiveData = new MutableLiveData<>();
     private static String TAG = FacilityRepository.class.getSimpleName();
 
-    public MutableLiveData getAllFacilities(final String facilityId, final String langId) {
+    public MutableLiveData<Facilities> getAllFacilities(final String facilityId, final String langId) {
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
         Call<Facilities> call = myServicesInterface.getAllFacilities(facilityId, langId);
         call.enqueue(new Callback<Facilities>() {
@@ -44,6 +44,29 @@ public class FacilityRepository {
         });
         return facilitiesMutableLiveData;
     }
+    public MutableLiveData<Facilities> getAllFacilitiesForSpecificSiteID(final String siteId, final String langId) {
+        MyServicesInterface myServicesInterface = RetrofitInstance.getService();
+        Call<Facilities> call = myServicesInterface.getFacilityForSpecificSiteId(siteId, langId);
+        call.enqueue(new Callback<Facilities>() {
+            @Override
+            public void onResponse(Call<Facilities> call, Response<Facilities> response) {
+                if (response.isSuccessful()) {
+                    if (response.body() != null) {
+                        facilitiesMutableLiveData.setValue(response.body());
+
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Facilities> call, Throwable t) {
+                facilitiesMutableLiveData.setValue(null);
+
+            }
+        });
+        return facilitiesMutableLiveData;
+    }
+
     public void getFacilityListForSpecificType(final String facilityId, final String langId, final String typeCode, final OnDataChangedCallBackListener<Facilities> onDataChangedCallBackListener) {
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
         Call<Facilities> call = myServicesInterface.getAllWaitingListFacilities(facilityId, langId,typeCode);

@@ -29,10 +29,11 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.thetatechno.fluidadmin.R;
+import com.thetatechno.fluidadmin.listeners.OnReloadDataListener;
 import com.thetatechno.fluidadmin.model.session_model.SessionResponse;
 import com.thetatechno.fluidadmin.model.shedule.Schedule;
 
-public class SessionFragment extends Fragment implements SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener  {
+public class SessionFragment extends Fragment implements SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener, OnReloadDataListener {
     private View view;
     private RecyclerView recyclerView;
     private SessionListAdapter sessionListAdapter;
@@ -143,5 +144,11 @@ private ProgressBar loadSessionsProgressBar;
         searchView.setOnQueryTextListener(this);
         searchView.setQueryHint("Search");
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public void onReload() {
+        loadSessionsProgressBar.setVisibility(View.VISIBLE);
+        sessionListViewModel.getAllSessions();
     }
 }

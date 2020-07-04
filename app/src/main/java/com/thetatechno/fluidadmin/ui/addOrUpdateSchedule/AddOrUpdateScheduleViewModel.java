@@ -36,7 +36,6 @@ public class AddOrUpdateScheduleViewModel extends ViewModel {
         return scheduleRepository.modifySchedule(schedule);
     }
 
-
     public MutableLiveData<Facilities> getFacilities(String siteId) {
         if (siteId.isEmpty())
             return facilityRepository.getAllFacilities("", PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());

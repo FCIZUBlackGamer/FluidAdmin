@@ -49,6 +49,7 @@ public interface MyServicesInterface {
 
     @GET("/ords/fluid/api/facility")
     Call<Facilities> getFacilityForSpecificSiteId(@Query("siteId") String siteId, @Query(Constants.LANG_ID) String langId);
+
     @POST("/ords/fluid/api/facility")
     Call<AddOrUpdateStatus> addFacility(@Body Facility facility);
 
@@ -73,12 +74,11 @@ public interface MyServicesInterface {
     @GET("/ords/fluid/api/staff")
     Call<StaffData> getAllStuff(@Query("langId") String langId, @Query("typeCode") String typeCode);
 
+    @GET("/ords/fluid/api/staff")
+    Call<StaffData> getProviderData(@Query("langId") String langId, @Query("typeCode") String typeCode, @Query("specialityCode") String specialityCode, @Query("staffId") String providerId);
 
     @GET("/ords/fluid/api/staff")
-    Call<StaffData> getAllProviders(@Query("langId") String langId, @Query("typeCode") String typeCode, @Query("specialityCode") String specialityCode, @Query("staffId") String providerId);
-
-    @GET("/ords/fluid/api/staff")
-    Call<StaffData> getAllProviderInSpeciality(@Query("langId") String langId, @Query("typeCode") String specialityCode);
+    Call<StaffData> getAllProvidersInSpeciality(@Query("langId") String langId, @Query("typeCode") String typeCode, @Query("specialityCode") String specialityCode);
 
     @POST("/ords/fluid/api/staff")
     Call<AddOrUpdateStatus> insertNewStuff(@Body Staff staff);
@@ -119,7 +119,7 @@ public interface MyServicesInterface {
 
 
     @GET("/ords/fluid/appt/getApptCalendar")
-    Call<AppointmentCalenderDaysListData> getAppointmentCalender(@Query("monthDate") String dateOfSpecificDay, @Query("specialtyCode") String specialtyCode, @Query("providerId") String providerId, @Query("apptLength") String apptLength, @Query("apptType") String apptType, @Query(Constants.LANG_ID) String langId);
+    Call<AppointmentCalenderDaysListData> getAppointmentCalender(@Query("monthDate") String dateOfSpecificDay, @Query("specialtyCode") String specialtyCode, @Query("providerId") String providerId, @Query("apptLength") String apptLength, @Query("apptType") String apptType, @Query(Constants.LANG_ID) String langId, @Query("siteId") String siteId);
 
     @GET("/ords/fluid/appt/getApptCalendar")
     Call<AppointmentCalenderDaysListData> getAppointmentCalender(@Query("monthDate") String dateOfSpecificDay, @Query("specialtyCode") String specialtyCode);
@@ -166,6 +166,7 @@ public interface MyServicesInterface {
 
     @GET("/ords/fluid/session/getSession")
     Call<SessionResponse> getAllSessions(@Query("langId") String langId);
+
     @POST("/ords/fluid/session/addSession")
     Call<APIResponse> addSession(@Body Session session);
 

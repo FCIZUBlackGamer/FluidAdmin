@@ -27,10 +27,10 @@ public class AppointmentCalenderRepository {
     private MutableLiveData<TimeSlotListData> timeSlotListMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<ConfirmAppointmentResponse> statusMutableLiveData = new MutableLiveData<>();
 
-    public MutableLiveData<AppointmentCalenderDaysListData> getAppointmentData(String dateOfSpecificDay, String specialtyCode, String providerId, String apptLength, String apptType) {
+    public MutableLiveData<AppointmentCalenderDaysListData> getAppointmentData(String dateOfSpecificDay, String specialtyCode, String providerId, String apptLength, String apptType,String siteId) {
         EspressoTestingIdlingResource.increment();
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
-        Call<AppointmentCalenderDaysListData> call = myServicesInterface.getAppointmentCalender(dateOfSpecificDay, specialtyCode, providerId, apptLength, apptType, PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
+        Call<AppointmentCalenderDaysListData> call = myServicesInterface.getAppointmentCalender(dateOfSpecificDay, specialtyCode, providerId, apptLength, apptType, PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase(),siteId);
         call.enqueue(new Callback<AppointmentCalenderDaysListData>() {
             @Override
             public void onResponse(Call<AppointmentCalenderDaysListData> call, Response<AppointmentCalenderDaysListData> response) {

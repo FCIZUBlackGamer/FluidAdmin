@@ -73,7 +73,7 @@ public class AddOrUpdateSessionViewModel extends ViewModel {
     }
 
     public String validateProviderName(String providerName) {
-        if (Validation.isValidForName(providerName)) {
+        if (!providerName.trim().isEmpty()) {
             providerNameValdateMessage = "";
         } else {
             providerNameValdateMessage = App.getContext().getResources().getString(R.string.select_provider_name);

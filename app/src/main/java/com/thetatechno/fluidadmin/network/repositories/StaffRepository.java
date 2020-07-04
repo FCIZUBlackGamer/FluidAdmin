@@ -58,9 +58,9 @@ public class StaffRepository {
         return agentMutableLiveData;
     }
 
-    public MutableLiveData getAllProvidersInSpeciality(final String langId, final String typeCode, final String specialityCode, String providerId) {
+    public MutableLiveData getAllProvidersInSpeciality(final String langId, final String typeCode, final String specialityCode) {
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
-        Call<StaffData> call = myServicesInterface.getAllProviders(langId, typeCode, specialityCode, providerId);
+        Call<StaffData> call = myServicesInterface.getAllProvidersInSpeciality(langId, typeCode, specialityCode);
         call.enqueue(new Callback<StaffData>() {
             @Override
             public void onResponse(Call<StaffData> call, Response<StaffData> response) {
@@ -86,7 +86,7 @@ public class StaffRepository {
 
     public MutableLiveData<Staff> getProviderData(final String langId, final String typeCode, final String specialityCode, String providerId) {
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
-        Call<StaffData> call = myServicesInterface.getAllProviders(langId, typeCode, specialityCode, providerId);
+        Call<StaffData> call = myServicesInterface.getProviderData(langId, typeCode, specialityCode, providerId);
         call.enqueue(new Callback<StaffData>() {
             @Override
             public void onResponse(Call<StaffData> call, Response<StaffData> response) {

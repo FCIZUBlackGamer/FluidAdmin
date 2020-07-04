@@ -51,7 +51,7 @@ public class FragmentAddOrUpdateSchedule extends Fragment implements TextWatcher
     private ArrayList<Branch> branchesList = new ArrayList<>();
     private String providerId;
     private String facilityId;
-    private String siteId = " ";
+    private String siteId = "";
     private NavController navController;
     private Error addOrUpdateResponse;
     Schedule schedule;
@@ -80,6 +80,7 @@ public class FragmentAddOrUpdateSchedule extends Fragment implements TextWatcher
             binding.timeFromTxt.setText(schedule.getStartTime());
             binding.dateFromTxt.setText(schedule.getStartDate());
             binding.dateToTxt.setText(schedule.getEndDate());
+            siteId = schedule.getSiteId();
             displaySelectedDays();
             binding.addOrUpdateScheduleBtn.setText(R.string.update_txt);
             ((HomeActivity) requireActivity()).getSupportActionBar().setTitle(R.string.update_schedule_txt);
@@ -96,7 +97,7 @@ public class FragmentAddOrUpdateSchedule extends Fragment implements TextWatcher
                 ArrayAdapter<Staff> staffArrayAdapter = new ArrayAdapter<Staff>(getContext(), R.layout.dropdown_menu_popup_item, providerArrayList);
                 binding.providerAutoCompleteTextView.setAdapter(staffArrayAdapter);
                 if (schedule != null) {
-                    binding.providerAutoCompleteTextView.setText(schedule.getProviderName());
+                    binding.providerAutoCompleteTextView.setText(schedule.getProviderName(),false);
                 }
             } else {
                 Toast.makeText(getContext(), staffData.getErrorMessage(), Toast.LENGTH_SHORT).show();
@@ -109,7 +110,7 @@ public class FragmentAddOrUpdateSchedule extends Fragment implements TextWatcher
                 ArrayAdapter<Facility> facilityArrayAdapter = new ArrayAdapter<Facility>(getContext(), R.layout.dropdown_menu_popup_item, facilityArrayList);
                 binding.facilityAutoCompleteTextView.setAdapter(facilityArrayAdapter);
                 if (schedule != null) {
-                    binding.facilityAutoCompleteTextView.setText(schedule.getFacilitDescription());
+                    binding.facilityAutoCompleteTextView.setText(schedule.getFacilitDescription(),false);
                 }
             }
         });
@@ -177,7 +178,7 @@ private void backToSchedules(){
                         if (schedule != null)
                             for (Branch branch : branchesList) {
                                 if (branch.getSiteId().equals(schedule.getSiteId())) {
-                                    binding.siteAutoCompleteTextView.setText(branch.getDescription());
+                                    binding.siteAutoCompleteTextView.setText(branch.getDescription(),false);
                                     break;
                                 }
                             }

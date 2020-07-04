@@ -69,7 +69,8 @@ public class TimeSlotList extends Fragment implements OnItemClickedListener {
     private static String ARG_PROVIDER_NAME = "providerName";
     private static String ARG_BOOK_TIME = "bookedTime";
     private static String ARG_CLIENT_ID = "clientId";
-    private String clientId;
+    private static String ARG_SITE_ID = "siteId";
+    private String clientId,siteId = " ";
     private CircularProgressDrawable circularProgressDrawable;
 
     @Override
@@ -80,6 +81,7 @@ public class TimeSlotList extends Fragment implements OnItemClickedListener {
             providerWorkingInSelectedDayList = getArguments().getParcelableArrayList(ARG_PROVIDER_LIST);
             specialityCode = getArguments().getString(ARG_SPECIALITY_CODE);
             clientId = getArguments().getString(ARG_CLIENT_ID);
+            siteId = getArguments().getString(ARG_SITE_ID);
         }
 
     }
@@ -259,7 +261,7 @@ public class TimeSlotList extends Fragment implements OnItemClickedListener {
 
     private void updateDataWhileSwipingOnProviderList() {
         timeSlotListViewModel.getProviderData(specialityCode, providerWorkingInSelectedDayList.get(selectedProviderIndex).getProviderId());
-        timeSlotListViewModel.getScheduledCalenderDaysListForSpecificProvider(bookDate, specialityCode, providerWorkingInSelectedDayList.get(selectedProviderIndex).getProviderId(), Constants.APPOINTMENT_LENGTH, "N");
+        timeSlotListViewModel.getScheduledCalenderDaysListForSpecificProvider(bookDate, specialityCode, providerWorkingInSelectedDayList.get(selectedProviderIndex).getProviderId(), Constants.APPOINTMENT_LENGTH, "N",siteId);
     }
 
 
@@ -327,7 +329,7 @@ public class TimeSlotList extends Fragment implements OnItemClickedListener {
     }
 
     private void getScheduledCalenderDaysList() {
-        timeSlotListViewModel.getScheduledCalenderDaysListForSpecificProvider(bookDate, specialityCode, providerWorkingInSelectedDayList.get(selectedProviderIndex).getProviderId(), Constants.APPOINTMENT_LENGTH, "N").observe(getViewLifecycleOwner(), appointmentCalenderDaysListData -> {
+        timeSlotListViewModel.getScheduledCalenderDaysListForSpecificProvider(bookDate, specialityCode, providerWorkingInSelectedDayList.get(selectedProviderIndex).getProviderId(), Constants.APPOINTMENT_LENGTH, "N",siteId).observe(getViewLifecycleOwner(), appointmentCalenderDaysListData -> {
 
             if (appointmentCalenderDaysListData != null && appointmentCalenderDaysListData.getDayDetailsList() != null)
                 appointmentDayDetailsForSpecificProviderArrayList = appointmentCalenderDaysListData.getDayDetailsList();

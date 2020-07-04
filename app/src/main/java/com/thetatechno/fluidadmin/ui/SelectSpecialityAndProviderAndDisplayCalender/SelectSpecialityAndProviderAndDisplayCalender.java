@@ -23,12 +23,10 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import com.applandeo.materialcalendarview.exceptions.OutOfDateRangeException;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.databinding.FragmentBookAppointmentBinding;
 import com.thetatechno.fluidadmin.model.ClientData;
 import com.thetatechno.fluidadmin.model.ClientModelForRegister;
-import com.thetatechno.fluidadmin.model.Person;
 import com.thetatechno.fluidadmin.model.appointment_model.AppointmentCalenderDaysListData;
 import com.thetatechno.fluidadmin.model.appointment_model.AppointmentDayDetails;
 import com.thetatechno.fluidadmin.model.staff_model.Staff;
@@ -46,8 +44,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
     SelectSpecialityAndProviderAndDisplayCalenderViewModel selectSpecialityAndProviderAndDisplayCalenderViewModel;
@@ -68,11 +66,11 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
     private static String ARG_PROVIDER_LIST = "providerList";
     private static String ARG_BOOK_DATE = "bookDate";
     private static String ARG_SPECIALITY_CODE = "specialityCode";
+    private static String ARG_SITE_ID = "siteId";
     private String clientId;
     private NavController navController;
     private List<Calendar> selectedDays;
     String daysBundelKey = "SelectedDays";
-//    Date c;
 
     public static void hideKeyboardFrom(Context context, View view) {
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
@@ -102,11 +100,9 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Calendar c = Calendar.getInstance();
-//        c.add(Calendar.MONTH, 1);
-//        c.add(Calendar.MONTH,1);
-        Log.e("This Month",c.getTime().getMonth()+"");
-        binding.calendarView.setMinimumDate(c);
+//        Calendar c = Calendar.getInstance();
+//        Log.e("This Month",c.getTime().getMonth()+"");
+//        binding.calendarView.setMinimumDate(c);
 
         binding.clientListTxtView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -119,15 +115,24 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
             specialityCode = ((Code) parent.getItemAtPosition(position)).getCode();
 
             getProviderList();
-            hideKeyboardFrom(getActivity(), binding.getRoot());
+            hideKeyboardFrom(requireActivity(), binding.getRoot());
 
         });
         binding.providerListTxt.setOnItemClickListener((parent, view, position, id) -> {
             providerId = ((Staff) parent.getItemAtPosition(position)).getStaffId();
             getCalenderData();
+            hideKeyboardFrom(requireActivity(), binding.getRoot());
+        });
+        binding.siteList.setOnItemClickListener((parent, view, position, id) -> {
+            siteCode = ((Branch) parent.getItemAtPosition(position)).getSiteId();
+            if (appointmentDayDetailsArrayList.size() == 0) {
+                selectSpecialityAndProviderAndDisplayCalenderViewModel.getScheduledCalenderDaysList(date, specialityCode, providerId, Constants.APPOINTMENT_LENGTH, "N", siteCode).observe(getViewLifecycleOwner(), calenderDaysListDataObserver);
+
+            } else {
+                selectSpecialityAndProviderAndDisplayCalenderViewModel.getScheduledCalenderDaysList(date, specialityCode, providerId, Constants.APPOINTMENT_LENGTH, "N", siteCode);
+            }
             hideKeyboardFrom(getActivity(), binding.getRoot());
         });
-
 
     }
 
@@ -135,8 +140,8 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
     public void onDestroyView() {
         selectSpecialityAndProviderAndDisplayCalenderViewModel.getSpecialities().removeObserver(codeListObserver);
         selectSpecialityAndProviderAndDisplayCalenderViewModel.getSites().removeObserver(siteListObserver);
-        selectSpecialityAndProviderAndDisplayCalenderViewModel.getAllProviders(specialityCode, "").removeObserver(providerListObserver);
-        selectSpecialityAndProviderAndDisplayCalenderViewModel.getScheduledCalenderDaysList(date, specialityCode, providerId, Constants.APPOINTMENT_LENGTH, "N").removeObserver(calenderDaysListDataObserver);
+        selectSpecialityAndProviderAndDisplayCalenderViewModel.getAllProvidersInSpecificSpeciality(specialityCode).removeObserver(providerListObserver);
+        selectSpecialityAndProviderAndDisplayCalenderViewModel.getScheduledCalenderDaysList(date, specialityCode, providerId, Constants.APPOINTMENT_LENGTH, "N", siteCode).removeObserver(calenderDaysListDataObserver);
         super.onDestroyView();
 
     }
@@ -144,6 +149,7 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+
         if (selectedDays != null) {
             for (int i = 0; i < providerList.size(); i++) {
                 if (providerId.equals(providerList.get(i).getStaffId())) {
@@ -158,10 +164,10 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
                 if (providerId.equals(providerList.get(i).getStaffId())) {
                     //Todo: Not displaying doc name although it's existing
                     Toast.makeText(requireActivity(), providerList.get(i).getFirstName(), Toast.LENGTH_SHORT).show();
-                    binding.providerListTxt.setText(providerList.get(i).getFirstName() + " " + providerList.get(i).getFamilyName());
+                    binding.providerListTxt.setText(String.format("%s %s", providerList.get(i).getFirstName(), providerList.get(i).getFamilyName()));
                 }
             }
-            selectSpecialityAndProviderAndDisplayCalenderViewModel.getAllProviders(specialityCode, providerId).observe(getViewLifecycleOwner(), providerListObserver);
+            selectSpecialityAndProviderAndDisplayCalenderViewModel.getAllProvidersInSpecificSpeciality(specialityCode).observe(getViewLifecycleOwner(), providerListObserver);
         }
         if (getArguments() != null && getArguments().getSerializable(daysBundelKey) != null) {
             selectedDays = (List<Calendar>) getArguments().getSerializable(daysBundelKey);
@@ -189,6 +195,7 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
                 bundle.putString(ARG_SPECIALITY_CODE, specialityCode);
                 bundle.putParcelableArrayList(ARG_PROVIDER_LIST, providerWorkingInSelectedDayList);
                 bundle.putString(ARG_CLIENT_ID, clientId);
+                bundle.putString(ARG_SITE_ID, siteCode);
                 navController.navigate(R.id.action_selectSpecialityAndProviderAndDisplayCalender_to_timeSlotList, bundle);
 
             }
@@ -199,10 +206,9 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
             Calendar calender = binding.calendarView.getCurrentPageDate();
             SimpleDateFormat formattedDate
                     = new SimpleDateFormat("dd-MM-yyyy");
-            Toast.makeText(requireActivity(), "Date :" + calender.getTime().toString(), Toast.LENGTH_SHORT).show();
             String formatedDate = formattedDate.format(calender.getTime());
             date = formatedDate;
-            selectSpecialityAndProviderAndDisplayCalenderViewModel.getScheduledCalenderDaysList(date, specialityCode, providerId, Constants.APPOINTMENT_LENGTH, "N");
+            selectSpecialityAndProviderAndDisplayCalenderViewModel.getScheduledCalenderDaysList(date, specialityCode, providerId, Constants.APPOINTMENT_LENGTH, "N", siteCode);
 
 
         });
@@ -213,10 +219,9 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
             @SuppressLint("SimpleDateFormat")
             SimpleDateFormat formattedDate
                     = new SimpleDateFormat("dd-MM-yyyy");
-            Toast.makeText(requireActivity(), "Date :" + calender.getTime().toString(), Toast.LENGTH_SHORT).show();
             String dateFormatted = formattedDate.format(calender.getTime());
             date = dateFormatted;
-            selectSpecialityAndProviderAndDisplayCalenderViewModel.getScheduledCalenderDaysList(date, specialityCode, providerId, Constants.APPOINTMENT_LENGTH, "N");
+            selectSpecialityAndProviderAndDisplayCalenderViewModel.getScheduledCalenderDaysList(date, specialityCode, providerId, Constants.APPOINTMENT_LENGTH, "N", siteCode);
 
         });
     }
@@ -239,7 +244,7 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
         selectSpecialityAndProviderAndDisplayCalenderViewModel.getSpecialities().observe(getViewLifecycleOwner(), codeListObserver);
         selectSpecialityAndProviderAndDisplayCalenderViewModel.getSites().observe(getViewLifecycleOwner(), siteListObserver);
         if (!specialityCode.isEmpty())
-            selectSpecialityAndProviderAndDisplayCalenderViewModel.getAllProviders(specialityCode, "").observe(getViewLifecycleOwner(), providerListObserver);
+            selectSpecialityAndProviderAndDisplayCalenderViewModel.getAllProvidersInSpecificSpeciality(specialityCode).observe(getViewLifecycleOwner(), providerListObserver);
         selectSpecialityAndProviderAndDisplayCalenderViewModel.getAllClients().observe(getViewLifecycleOwner(), clientListObserver);
     }
 
@@ -253,7 +258,7 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
 
     private void getCalenderData() {
         EspressoTestingIdlingResource.increment();
-        selectSpecialityAndProviderAndDisplayCalenderViewModel.getScheduledCalenderDaysList(date, specialityCode, providerId, Constants.APPOINTMENT_LENGTH, "N");
+        selectSpecialityAndProviderAndDisplayCalenderViewModel.getScheduledCalenderDaysList(date, specialityCode, providerId, Constants.APPOINTMENT_LENGTH, "N", siteCode);
         EspressoTestingIdlingResource.decrement();
 
     }
@@ -261,16 +266,16 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
     private void getProviderList() {
 
         if (providerList.size() == 0) {
-            selectSpecialityAndProviderAndDisplayCalenderViewModel.getAllProviders(specialityCode, "").observe(getViewLifecycleOwner(), providerListObserver);
+            selectSpecialityAndProviderAndDisplayCalenderViewModel.getAllProvidersInSpecificSpeciality(specialityCode).observe(getViewLifecycleOwner(), providerListObserver);
 
         } else {
-            selectSpecialityAndProviderAndDisplayCalenderViewModel.getAllProviders(specialityCode, "");
+            selectSpecialityAndProviderAndDisplayCalenderViewModel.getAllProvidersInSpecificSpeciality(specialityCode);
         }
         if (appointmentDayDetailsArrayList.size() == 0) {
-            selectSpecialityAndProviderAndDisplayCalenderViewModel.getScheduledCalenderDaysList(date, specialityCode, providerId, Constants.APPOINTMENT_LENGTH, "N").observe(getViewLifecycleOwner(), calenderDaysListDataObserver);
+            selectSpecialityAndProviderAndDisplayCalenderViewModel.getScheduledCalenderDaysList(date, specialityCode, providerId, Constants.APPOINTMENT_LENGTH, "N", siteCode).observe(getViewLifecycleOwner(), calenderDaysListDataObserver);
 
         } else {
-            selectSpecialityAndProviderAndDisplayCalenderViewModel.getScheduledCalenderDaysList(date, specialityCode, providerId, Constants.APPOINTMENT_LENGTH, "N");
+            selectSpecialityAndProviderAndDisplayCalenderViewModel.getScheduledCalenderDaysList(date, specialityCode, providerId, Constants.APPOINTMENT_LENGTH, "N", siteCode);
         }
 
     }
@@ -282,8 +287,7 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
         int today = calendar.get(Calendar.DAY_OF_MONTH);
         int numDaysInMonth = getNumDaysInThisMonth(calendar, Calendar.MONTH, Calendar.YEAR);
 
-        for (int i = today ; i < numDaysInMonth ; i++) {
-
+        for (int i = today; i < numDaysInMonth; i++) {
             Calendar cal = Calendar.getInstance();
             cal.setTime(Calendar.getInstance().getTime());
             cal.add(Calendar.DAY_OF_MONTH, i);
@@ -315,20 +319,24 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
     private List<Calendar> getDaysKey(AppointmentCalenderDaysListData appointments) {
         List<Calendar> calendars = new ArrayList<>();
         Calendar calendar;
-
+        Date todayDate = new Date();
         for (int i = 0; i < appointments.getDayDetailsList().size(); i++) {
             SimpleDateFormat formattedDate
-                    = new SimpleDateFormat("dd-MM-yyyy");
+                    = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
 
             try {
                 calendar = Calendar.getInstance();
-                calendar.setTime(formattedDate.parse(appointments.getDayDetailsList().get(i).getDate()));
+                Date appointmentDate = formattedDate.parse(appointments.getDayDetailsList().get(i).getDate());
+                if (appointmentDate.after(todayDate) || appointmentDate.equals(todayDate))
+                    calendar.setTime(appointmentDate);
                 calendars.add(calendar);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
 
         }
+        binding.calendarView.setHighlightedDays(calendars);
+
         return calendars;
     }
 
@@ -360,20 +368,6 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
                 binding.siteList.setVisibility(View.VISIBLE);
                 binding.siteLayout.setVisibility(View.VISIBLE);
             }
-
-
-            binding.siteList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    siteCode = sitesList.get(position).getSiteId();
-                    hideKeyboardFrom(getActivity(), binding.getRoot());
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            });
             EspressoTestingIdlingResource.decrement();
         }
     };
@@ -403,19 +397,24 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
         @Override
         public void onChanged(StaffData staffData) {
             EspressoTestingIdlingResource.increment();
-            binding.providerListTxt.setText("");
-            providerId = "";
+
 
             if (staffData.getStaffList() != null) {
                 providerList = (ArrayList<Staff>) staffData.getStaffList();
                 ArrayAdapter<Staff> adapter =
                         new ArrayAdapter<Staff>(getContext(), R.layout.dropdown_menu_popup_item, providerList);
                 binding.providerListTxt.setAdapter(adapter);
-                getCalenderData();
-
+                for (int i = 0; i < providerList.size(); i++) {
+                    if (providerId.equals(providerList.get(i).getStaffId())) {
+//                        Toast.makeText(requireActivity(), providerList.get(i).getFirstName(), Toast.LENGTH_SHORT).show();
+                        binding.providerListTxt.setText(providerList.get(i).getFirstName() + " " + providerList.get(i).getFamilyName());
+                    }
+                }
+            } else {
+                binding.providerListTxt.setText("");
+                providerId = "";
             }
-            EspressoTestingIdlingResource.decrement();
-
+            getCalenderData();
             if (providerList != null && providerList.size() == 1) {
                 providerId = providerList.get(0).getStaffId();
                 binding.providerListTxt.setVisibility(View.GONE);
@@ -424,8 +423,10 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
                 binding.providerListTxt.setVisibility(View.VISIBLE);
                 binding.providerListLayout.setVisibility(View.VISIBLE);
             }
+            EspressoTestingIdlingResource.decrement();
 
         }
+
     };
     private Observer<ClientData> clientListObserver = new Observer<ClientData>() {
         @Override
@@ -438,7 +439,6 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
                     binding.clientListLayout.setVisibility(View.GONE);
                 } else {
                     binding.clientListLayout.setVisibility(View.VISIBLE);
-
                 }
                 ArrayAdapter<ClientModelForRegister> adapter =
                         new ArrayAdapter<ClientModelForRegister>(getContext(), R.layout.dropdown_menu_popup_item, clientList);
@@ -447,14 +447,6 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
             }
             EspressoTestingIdlingResource.decrement();
 
-            if (providerList != null && providerList.size() == 1) {
-                providerId = providerList.get(0).getStaffId();
-                binding.providerListTxt.setVisibility(View.GONE);
-                binding.providerListLayout.setVisibility(View.GONE);
-            } else {
-                binding.providerListTxt.setVisibility(View.VISIBLE);
-                binding.providerListLayout.setVisibility(View.VISIBLE);
-            }
 
         }
     };
@@ -463,10 +455,13 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
         @Override
         public void onChanged(AppointmentCalenderDaysListData appointmentCalenderDaysListData) {
             EspressoTestingIdlingResource.increment();
-            if (appointmentCalenderDaysListData != null)
-                appointmentDayDetailsArrayList = (ArrayList<AppointmentDayDetails>) appointmentCalenderDaysListData.getDayDetailsList();
-            selectedDays = getDaysKey(appointmentCalenderDaysListData);
-            binding.calendarView.setSelectedDates(selectedDays);
+            if(appointmentCalenderDaysListData!=null) {
+                if (appointmentCalenderDaysListData.getDayDetailsList() != null) {
+                    appointmentDayDetailsArrayList = (ArrayList<AppointmentDayDetails>) appointmentCalenderDaysListData.getDayDetailsList();
+                    selectedDays = getDaysKey(appointmentCalenderDaysListData);
+                    binding.calendarView.setSelectedDates(selectedDays);
+                }
+            }
             EspressoTestingIdlingResource.decrement();
         }
     };

@@ -42,9 +42,9 @@ public class TimeSlotListViewModel extends ViewModel {
         return appointmentCalenderRepository.bookAppointment(appointmentBooked);
     }
 
-    public MutableLiveData<AppointmentCalenderDaysListData> getScheduledCalenderDaysListForSpecificProvider(String selectedDate, String specialityCode, String providerId, String apptLength, String apptType) {
+    public MutableLiveData<AppointmentCalenderDaysListData> getScheduledCalenderDaysListForSpecificProvider(String selectedDate, String specialityCode, String providerId, String apptLength, String apptType,String siteCode) {
 
-        return appointmentCalenderRepository.getAppointmentData(selectedDate, specialityCode, providerId, apptLength, apptType);
+        return appointmentCalenderRepository.getAppointmentData(selectedDate, specialityCode, providerId, apptLength, apptType,siteCode);
 
     }
 

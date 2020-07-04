@@ -199,7 +199,7 @@ public class FacilityAddFragment extends Fragment {
                         ArrayAdapter<Branch> branchArrayAdapter = new ArrayAdapter<Branch>(getContext(), R.layout.dropdown_menu_popup_item, branchesList);
                         branchesTextView.setAdapter(branchArrayAdapter);
                         if (facility != null)
-                            branchesTextView.setText(facility.getSiteDescription());
+                            branchesTextView.setText(facility.getSiteDescription(),false);
                     }
                 }
             }

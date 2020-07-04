@@ -90,7 +90,7 @@ public class FragmentAddOrUpdateSesssion extends Fragment implements TextWatcher
                 ArrayAdapter<Staff> staffArrayAdapter = new ArrayAdapter<Staff>(getContext(), R.layout.dropdown_menu_popup_item, providerArrayList);
                 binding.providerAutoCompleteTextView.setAdapter(staffArrayAdapter);
                 if (session != null) {
-                    binding.providerAutoCompleteTextView.setText(session.getProviderName());
+                    binding.providerAutoCompleteTextView.setText(session.getProviderName(), false);
                 }
             } else {
                 Toast.makeText(getContext(), staffData.getErrorMessage(), Toast.LENGTH_SHORT).show();
@@ -102,7 +102,7 @@ public class FragmentAddOrUpdateSesssion extends Fragment implements TextWatcher
                 ArrayAdapter<Facility> facilityArrayAdapter = new ArrayAdapter<Facility>(getContext(), R.layout.dropdown_menu_popup_item, facilityArrayList);
                 binding.facilityAutoCompleteTextView.setAdapter(facilityArrayAdapter);
                 if (session != null) {
-                    binding.facilityAutoCompleteTextView.setText(session.getFacilitDescription());
+                    binding.facilityAutoCompleteTextView.setText(session.getFacilitDescription(), false);
                 }
             }
         });
@@ -121,19 +121,20 @@ public class FragmentAddOrUpdateSesssion extends Fragment implements TextWatcher
             }
         });
         binding.cardView2.setOnClickListener(v -> {
-            showDatePicker(binding.dateTxt, binding.timeFromTxt, binding.timeToTxt);
+            showDatePicker(binding.dateTxt);
         });
 
         binding.cardView3.setOnClickListener(v -> {
-            showTimePicker(binding.timeFromTxt, binding.timeToTxt, true);
+            showTimePicker(binding.timeFromTxt);
         });
+
         binding.cardView4.setOnClickListener(v -> {
-            showTimePicker(binding.timeFromTxt, binding.timeToTxt, false);
+            showTimePicker(binding.timeToTxt);
         });
 
         binding.addOrUpdateScheduleBtn.setOnClickListener(v -> {
-            if(isValidData())
-            getDataFromUIAndAddOrUpdateSession();
+            if (isValidData())
+                getDataFromUIAndAddOrUpdateSession();
         });
 
         binding.cancelBtn.setOnClickListener(v -> {
@@ -162,9 +163,9 @@ public class FragmentAddOrUpdateSesssion extends Fragment implements TextWatcher
                         ArrayAdapter<Branch> branchArrayAdapter = new ArrayAdapter<Branch>(getContext(), R.layout.dropdown_menu_popup_item, branchesList);
                         binding.siteAutoCompleteTextView.setAdapter(branchArrayAdapter);
                         if (session != null) {
-                            for(Branch branch : branchesList){
-                                if(branch.getSiteId().equals(session.getSiteId()))
-                                    binding.siteAutoCompleteTextView.setText(branch.getDescription());
+                            for (Branch branch : branchesList) {
+                                if (branch.getSiteId().equals(session.getSiteId()))
+                                    binding.siteAutoCompleteTextView.setText(branch.getDescription(), false);
                             }
                         }
                     }
@@ -173,7 +174,7 @@ public class FragmentAddOrUpdateSesssion extends Fragment implements TextWatcher
         });
     }
 
-    private void showDatePicker(TextView date, TextView stime, TextView etime) {
+    private void showDatePicker(TextView date) {
         final Calendar newCalendar = Calendar.getInstance();
         @SuppressLint("SetTextI18n")
         DatePickerDialog StartTime = new DatePickerDialog(getContext(), R.style.DialogTheme, (DatePickerDialog.OnDateSetListener) (view, year, monthOfYear, dayOfMonth) -> {
@@ -185,7 +186,7 @@ public class FragmentAddOrUpdateSesssion extends Fragment implements TextWatcher
         StartTime.show();
     }
 
-    private void showTimePicker(TextView stime, TextView etime, boolean start) {
+    private void showTimePicker(TextView stime) {
 
         final Calendar newCalendar = Calendar.getInstance();
         int hour = newCalendar.get(Calendar.HOUR_OF_DAY);
@@ -206,22 +207,10 @@ public class FragmentAddOrUpdateSesssion extends Fragment implements TextWatcher
                 } else {
                     minuteSelected = selectedMinute + "";
                 }
-                if (start) {
-                    stime.setText(hourSelected + ":" + minuteSelected);
-                    showTimePicker(stime, etime, false);
-                } else {
-                    etime.setText(hourSelected + ":" + minuteSelected);
-                }
-
+                stime.setText(String.format("%s:%s", hourSelected, minuteSelected));
 
             }
         }, hour, minute, false);
-        if (start) {
-            mTimePicker.setTitle("Time From");
-        } else {
-            mTimePicker.setTitle("Time To");
-        }
-
         mTimePicker.show();
     }
 
@@ -229,14 +218,14 @@ public class FragmentAddOrUpdateSesssion extends Fragment implements TextWatcher
         if (session == null) {
             session = new Session();
             addDataToSessionObject();
-            if(addOrUpdateResponse == null)
+            if (addOrUpdateResponse == null)
                 addSession();
             else
                 addOrUpdateSessionViewModel.addSession(session);
 
         } else {
-           addDataToSessionObject();
-            if(addOrUpdateResponse == null)
+            addDataToSessionObject();
+            if (addOrUpdateResponse == null)
                 updateSession();
             else
                 addOrUpdateSessionViewModel.updateSession(session);
@@ -261,21 +250,23 @@ public class FragmentAddOrUpdateSesssion extends Fragment implements TextWatcher
         ((HomeActivity) requireActivity()).getSupportActionBar().setTitle(resourceId);
 
     }
-    private void addSession(){
+
+    private void addSession() {
         addOrUpdateSessionViewModel.addSession(session).observe(this, (APIResponse response) -> {
             if (response != null) {
                 Toast.makeText(requireActivity(), response.getError().getErrorMessage(), Toast.LENGTH_SHORT).show();
                 if (response.getError().getErrorCode() == 0) {
                     onCancelOrBackButtonPressed();
-                }else {
+                } else {
                     session = null;
                 }
-            }else {
+            } else {
                 session = null;
             }
         });
     }
-    private void updateSession(){
+
+    private void updateSession() {
         addOrUpdateSessionViewModel.updateSession(session).observe(this, response -> {
             if (response != null) {
 
@@ -283,7 +274,7 @@ public class FragmentAddOrUpdateSesssion extends Fragment implements TextWatcher
                 if (response.getError().getErrorCode() == 0) {
                     onCancelOrBackButtonPressed();
                 }
-            }else {
+            } else {
                 session = null;
             }
         });
@@ -297,9 +288,9 @@ public class FragmentAddOrUpdateSesssion extends Fragment implements TextWatcher
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-            binding.facilityLayout.setErrorEnabled(false);
-            binding.providerLayout.setErrorEnabled(false);
-            binding.siteLayout.setErrorEnabled(false);
+        binding.facilityLayout.setErrorEnabled(false);
+        binding.providerLayout.setErrorEnabled(false);
+        binding.siteLayout.setErrorEnabled(false);
 
     }
 
@@ -372,8 +363,8 @@ public class FragmentAddOrUpdateSesssion extends Fragment implements TextWatcher
     }
 
     private boolean isValidData() {
-        if ( isValidProviderName() && isValidSiteDescription() && isValidFacility() && isValidStartDate()
-                && isValidStartTime() && isValidEndTime() )
+        if (isValidProviderName() && isValidSiteDescription() && isValidFacility() && isValidStartDate()
+                && isValidStartTime() && isValidEndTime())
             return true;
         else
             return false;

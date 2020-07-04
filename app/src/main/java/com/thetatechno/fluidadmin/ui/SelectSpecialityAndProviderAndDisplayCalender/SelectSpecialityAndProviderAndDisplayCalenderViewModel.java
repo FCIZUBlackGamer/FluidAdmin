@@ -42,9 +42,9 @@ public class SelectSpecialityAndProviderAndDisplayCalenderViewModel extends View
         return branchesRepository.getAllBranches(langId);
     }
 
-    public MutableLiveData getAllProviders(String specialityCode, String providerId) {
+    public MutableLiveData getAllProvidersInSpecificSpeciality(String specialityCode) {
 
-       return providerRepository.getAllProvidersInSpeciality(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase(), EnumCode.StaffTypeCode.PRVDR.toString(),specialityCode,providerId);
+       return providerRepository.getAllProvidersInSpeciality(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase(), EnumCode.StaffTypeCode.PRVDR.toString(),specialityCode);
 
     }
 
@@ -61,16 +61,16 @@ public class SelectSpecialityAndProviderAndDisplayCalenderViewModel extends View
     }
 
 
-    public MutableLiveData<AppointmentCalenderDaysListData> getScheduledCalenderDaysList(String date, String specialityCode, String providerId, String apptLength, String apptType) {
+    public MutableLiveData<AppointmentCalenderDaysListData> getScheduledCalenderDaysList(String date, String specialityCode, String providerId, String apptLength, String apptType,String siteId) {
         EspressoTestingIdlingResource.increment();
         
         if (date.isEmpty()) {
             SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
             Date todayDate = new Date();
             EspressoTestingIdlingResource.decrement();
-            return appointmentCalenderRepository.getAppointmentData(formatter.format(todayDate), specialityCode, providerId, apptLength, apptType);
+            return appointmentCalenderRepository.getAppointmentData(formatter.format(todayDate), specialityCode, providerId, apptLength, apptType,siteId);
         } else
-            return appointmentCalenderRepository.getAppointmentData(date, specialityCode, providerId, apptLength, apptType);
+            return appointmentCalenderRepository.getAppointmentData(date, specialityCode, providerId, apptLength, apptType,siteId);
     }
 
     public MutableLiveData<AppointmentCalenderDaysListData> getScheduledCalenderDaysList(String specialityCode) {

@@ -113,7 +113,8 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
 
         binding.specialityList.setOnItemClickListener((parent, view, position, id) -> {
             specialityCode = ((Code) parent.getItemAtPosition(position)).getCode();
-
+            providerId = "";
+            binding.providerListTxt.setText("");
             getProviderList();
             hideKeyboardFrom(requireActivity(), binding.getRoot());
 
@@ -149,24 +150,8 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-
-        if (selectedDays != null) {
-            for (int i = 0; i < providerList.size(); i++) {
-                if (providerId.equals(providerList.get(i).getStaffId())) {
-                    Toast.makeText(requireActivity(), providerList.get(i).getFirstName(), Toast.LENGTH_SHORT).show();
-                    binding.providerListTxt.setText(providerList.get(i).getFirstName() + " " + providerList.get(i).getFamilyName());
-                }
-            }
-        }
         if (selectedDays != null) {
             binding.calendarView.setSelectedDates(selectedDays);
-            for (int i = 0; i < providerList.size(); i++) {
-                if (providerId.equals(providerList.get(i).getStaffId())) {
-                    //Todo: Not displaying doc name although it's existing
-                    Toast.makeText(requireActivity(), providerList.get(i).getFirstName(), Toast.LENGTH_SHORT).show();
-                    binding.providerListTxt.setText(String.format("%s %s", providerList.get(i).getFirstName(), providerList.get(i).getFamilyName()));
-                }
-            }
             selectSpecialityAndProviderAndDisplayCalenderViewModel.getAllProvidersInSpecificSpeciality(specialityCode).observe(getViewLifecycleOwner(), providerListObserver);
         }
         if (getArguments() != null && getArguments().getSerializable(daysBundelKey) != null) {
@@ -188,6 +173,7 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
                     providerWorkingInSelectedDayList.add(appointmentDayDetails);
                 }
             }
+            appointmentDayDetailsArrayList.clear();
             if (providerWorkingInSelectedDayList.size() > 0) {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(daysBundelKey, (Serializable) selectedDays);
@@ -232,7 +218,6 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_book_appointment, container, false);
         navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
-
         Log.i(TAG, "onCreateView method ");
 
         return binding.getRoot();
@@ -258,6 +243,9 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
 
     private void getCalenderData() {
         EspressoTestingIdlingResource.increment();
+        if(appointmentDayDetailsArrayList.size()==0)
+            selectSpecialityAndProviderAndDisplayCalenderViewModel.getScheduledCalenderDaysList(date, specialityCode, providerId, Constants.APPOINTMENT_LENGTH, "N", siteCode).observe(getViewLifecycleOwner(),calenderDaysListDataObserver);
+        else
         selectSpecialityAndProviderAndDisplayCalenderViewModel.getScheduledCalenderDaysList(date, specialityCode, providerId, Constants.APPOINTMENT_LENGTH, "N", siteCode);
         EspressoTestingIdlingResource.decrement();
 
@@ -335,8 +323,7 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
             }
 
         }
-        binding.calendarView.setHighlightedDays(calendars);
-
+        Log.i(TAG,calendars.size()+"");
         return calendars;
     }
 
@@ -414,7 +401,7 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
                 binding.providerListTxt.setText("");
                 providerId = "";
             }
-            getCalenderData();
+
             if (providerList != null && providerList.size() == 1) {
                 providerId = providerList.get(0).getStaffId();
                 binding.providerListTxt.setVisibility(View.GONE);

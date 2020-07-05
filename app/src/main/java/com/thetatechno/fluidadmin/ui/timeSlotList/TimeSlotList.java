@@ -318,7 +318,7 @@ public class TimeSlotList extends Fragment implements OnItemClickedListener {
 
                 } else {
                     providerImgView.setImageResource(R.drawable.man);
-                    providerNameTxtView.setText("name 3f3f4f4f");
+                    providerNameTxtView.setText("");
                     binding.providerClinicTxtView.setText("");
 
 

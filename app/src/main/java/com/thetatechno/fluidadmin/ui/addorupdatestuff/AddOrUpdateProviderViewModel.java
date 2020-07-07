@@ -34,13 +34,13 @@ public class AddOrUpdateProviderViewModel extends ViewModel {
         if (!specialityCode.isEmpty()) {
             staff.setSpecialityCode(specialityCode);
         }
-        staffRepository.insertNewStaff(staff, new OnDataChangedCallBackListener<String>() {
+        staffRepository.insertNewStaff(staff, new OnDataChangedCallBackListener<Integer>() {
             @Override
-            public void onResponse(String b) {
-                if (Integer.parseInt(b) > 0) {
+            public void onResponse(Integer b) {
+                if (b >= 0) {
                     message = "Added successfully";
                     addedSuccessLiveData.setValue(message);
-                } else if (b.equals(Constants.ADD_DELETE_OR_UPDATE_FAIL_STATE))
+                } else
                     message = "Failed to add.";
                 addedSuccessLiveData.setValue(message);
 

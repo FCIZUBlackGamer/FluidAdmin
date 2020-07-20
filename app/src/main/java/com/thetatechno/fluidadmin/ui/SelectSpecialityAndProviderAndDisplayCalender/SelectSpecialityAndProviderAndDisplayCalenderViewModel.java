@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel;
 import com.thetatechno.fluidadmin.model.appointment_model.AppointmentCalenderDaysListData;
 import com.thetatechno.fluidadmin.model.branches_model.Branch;
 import com.thetatechno.fluidadmin.model.branches_model.BranchesResponse;
+import com.thetatechno.fluidadmin.model.branches_model.BranchesResponseModel;
 import com.thetatechno.fluidadmin.model.code_model.Code;
 import com.thetatechno.fluidadmin.network.repositories.AppointmentCalenderRepository;
 import com.thetatechno.fluidadmin.network.repositories.BranchesRepository;
@@ -37,7 +38,7 @@ public class SelectSpecialityAndProviderAndDisplayCalenderViewModel extends View
         return codeRepository.getAllCodes(codeType, langId);
     }
 
-    public MutableLiveData<BranchesResponse> getSites() {
+    public MutableLiveData<BranchesResponseModel> getSites() {
         String langId = PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase();
         return branchesRepository.getAllBranches(langId);
     }

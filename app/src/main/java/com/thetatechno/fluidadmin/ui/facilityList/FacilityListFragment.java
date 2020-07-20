@@ -27,8 +27,9 @@ import android.widget.ProgressBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.thetatechno.fluidadmin.R;
-import com.thetatechno.fluidadmin.model.facility_model.Facilities;
+import com.thetatechno.fluidadmin.model.facility_model.FacilitiesResponse;
 import com.thetatechno.fluidadmin.model.facility_model.Facility;
+import com.thetatechno.fluidadmin.model.facility_model.FacilityListModel;
 import com.thetatechno.fluidadmin.ui.EspressoTestingIdlingResource;
 
 import java.util.List;
@@ -73,22 +74,22 @@ private ProgressBar loadFacilityProgressBar ;
         setHasOptionsMenu(true);
         EspressoTestingIdlingResource.increment();
         loadFacilityProgressBar.setVisibility(View.VISIBLE);
-        facilityListViewModel.getAllFacilities("").observe(getViewLifecycleOwner(), new Observer<Facilities>() {
+        facilityListViewModel.getAllFacilities("").observe(getViewLifecycleOwner(), new Observer<FacilityListModel>() {
             @Override
-            public void onChanged(Facilities facilities) {
+            public void onChanged(FacilityListModel model) {
                 EspressoTestingIdlingResource.increment();
                 loadFacilityProgressBar.setVisibility(View.GONE);
 
-                if (facilities != null) {
-                    if (facilities.getFacilities() != null) {
+                if (model.getResponse() != null) {
+                    if (model.getResponse().getFacilities() != null) {
 
-                        facilityList = facilities.getFacilities();
+                        facilityList = model.getResponse().getFacilities();
                         facilityListAdapter = new FacilityListAdapter(navController, getContext(), facilityList, getActivity().getSupportFragmentManager());
                         facilityListClinicRecyclerView.setAdapter(facilityListAdapter);
 
 
-                    } else if (facilities.getStatus() != null) {
-                        Snackbar.make(facilitySwipeLayout, facilities.getStatus(), Snackbar.LENGTH_LONG).setAction(R.string.retry, new View.OnClickListener() {
+                    } else if (model.getResponse().getStatus() != null) {
+                        Snackbar.make(facilitySwipeLayout, model.getResponse().getStatus(), Snackbar.LENGTH_LONG).setAction(R.string.retry, new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 facilityListViewModel.getAllFacilities("");
@@ -96,8 +97,7 @@ private ProgressBar loadFacilityProgressBar ;
                         }).setAnchorView(addNewFacilityFab).show();
                     }
                 } else {
-                    Log.e(TAG, "no data returns");
-                    Snackbar.make(facilitySwipeLayout, "Failed to load facilities", Snackbar.LENGTH_LONG).setAction(R.string.retry, new View.OnClickListener() {
+                    Snackbar.make(facilitySwipeLayout, model.getErrorMessage(), Snackbar.LENGTH_LONG).setAction(R.string.retry, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             facilityListViewModel.getAllFacilities("");

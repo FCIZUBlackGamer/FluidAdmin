@@ -4,8 +4,9 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.thetatechno.fluidadmin.listeners.OnDataChangedCallBackListener;
-import com.thetatechno.fluidadmin.model.facility_model.Facilities;
+import com.thetatechno.fluidadmin.model.facility_model.FacilitiesResponse;
 import com.thetatechno.fluidadmin.model.facility_model.Facility;
+import com.thetatechno.fluidadmin.model.facility_model.FacilityListModel;
 import com.thetatechno.fluidadmin.network.repositories.FacilityRepository;
 import com.thetatechno.fluidadmin.utils.App;
 import com.thetatechno.fluidadmin.utils.EnumCode;
@@ -17,18 +18,18 @@ import java.util.List;
 public class FacilityListViewModel extends ViewModel {
     FacilityRepository facilityRepository = new FacilityRepository();
     MutableLiveData<List<String>> facilitiesWaitListStringMutableLiveData = new MutableLiveData<List<String>>();
-    MutableLiveData<Facilities> facilitiesMutableLiveData = new MutableLiveData<Facilities>();
+    MutableLiveData<FacilitiesResponse> facilitiesMutableLiveData = new MutableLiveData<FacilitiesResponse>();
 
-    public MutableLiveData<Facilities> getAllFacilities(String facilityId) {
+    public MutableLiveData<FacilityListModel> getAllFacilities(String facilityId) {
 
         return facilityRepository.getAllFacilities(facilityId, PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
     }
 
     public MutableLiveData<List<String>> getFacilityDataForWaitingAreaList(String facilityId) {
 
-        facilityRepository.getFacilityListForSpecificType(facilityId, PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase(), EnumCode.ClinicTypeCode.WAITAREA.toString(), new OnDataChangedCallBackListener<Facilities>() {
+        facilityRepository.getFacilityListForSpecificType(facilityId, PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase(), EnumCode.ClinicTypeCode.WAITAREA.toString(), new OnDataChangedCallBackListener<FacilitiesResponse>() {
             @Override
-            public void onResponse(Facilities facilitiesListResponse) {
+            public void onResponse(FacilitiesResponse facilitiesListResponse) {
                 if (facilitiesListResponse != null) {
                     if (!facilitiesListResponse.getFacilities().equals(null)) {
                         List<String> waitListIds = new ArrayList<>();
@@ -50,11 +51,11 @@ public class FacilityListViewModel extends ViewModel {
 
     }
 
-    public MutableLiveData<Facilities> getFacilityDataForClinicType(String facilityId) {
+    public MutableLiveData<FacilitiesResponse> getFacilityDataForClinicType(String facilityId) {
 
-        facilityRepository.getFacilityListForSpecificType(facilityId, PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase(), EnumCode.ClinicTypeCode.CLINIC.toString(), new OnDataChangedCallBackListener<Facilities>() {
+        facilityRepository.getFacilityListForSpecificType(facilityId, PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase(), EnumCode.ClinicTypeCode.CLINIC.toString(), new OnDataChangedCallBackListener<FacilitiesResponse>() {
             @Override
-            public void onResponse(Facilities facilitiesListResponse) {
+            public void onResponse(FacilitiesResponse facilitiesListResponse) {
                 if (facilitiesListResponse != null) {
 
 

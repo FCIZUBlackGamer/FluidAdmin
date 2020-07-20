@@ -1,38 +1,22 @@
 package com.thetatechno.fluidadmin.ui.Schedule;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.PopupMenu;
-import androidx.cardview.widget.CardView;
-import androidx.navigation.NavController;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager;
-import com.bumptech.glide.Glide;
 import com.google.android.material.chip.Chip;
 import com.thetatechno.fluidadmin.R;
-import com.thetatechno.fluidadmin.listeners.OnDeleteListener;
-import com.thetatechno.fluidadmin.model.shedule.Schedule;
-import com.thetatechno.fluidadmin.utils.Constants;
-import com.thetatechno.fluidadmin.utils.EnumCode;
+import com.thetatechno.fluidadmin.utils.WeekDays;
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import io.sentry.Sentry;
 import io.sentry.android.AndroidSentryClientFactory;
 import io.sentry.event.UserBuilder;
-
-import static com.thetatechno.fluidadmin.utils.Constants.ARG_SCHEDULE;
 
 public class ChipAdapter extends RecyclerView.Adapter<ChipAdapter.ScheduleViewHolder> {
 
@@ -65,9 +49,7 @@ public class ChipAdapter extends RecyclerView.Adapter<ChipAdapter.ScheduleViewHo
         try {
 
             if (position < list.size()) {
-
-                holder.day.setText(list.get(position));
-
+                holder.day.setText(WeekDays.getDay(list.get(position)));
             } else if (position == list.size()) {
                 holder.itemView.setVisibility(View.INVISIBLE);
             }

@@ -14,10 +14,6 @@ public class DeviceListData {
         return deviceList;
     }
 
-    public void setDeviceList(List<Device> deviceList) {
-        this.deviceList = deviceList;
-    }
-
     public String getStatus() {
         return status;
     }

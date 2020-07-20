@@ -9,6 +9,7 @@ import com.thetatechno.fluidadmin.listeners.OnHandlingErrorCallback;
 import com.thetatechno.fluidadmin.model.ClientListModel;
 import com.thetatechno.fluidadmin.network.repositories.ClientRepository;
 import com.thetatechno.fluidadmin.utils.App;
+import com.thetatechno.fluidadmin.utils.CheckForNetwork;
 import com.thetatechno.fluidadmin.utils.PreferenceController;
 
 public class ClientListViewModel extends ViewModel implements OnHandlingErrorCallback {
@@ -18,7 +19,11 @@ public class ClientListViewModel extends ViewModel implements OnHandlingErrorCal
     public void getAllClients() {
 
         String langId = PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase();
+        if(CheckForNetwork.isConnectionOn(App.getContext()))
         clientListModelMutableLiveData = clientRepository.getAllClients(langId,this);
+        else {
+            onNoNetworkConnection();
+        }
 
     }
 
@@ -29,7 +34,7 @@ public class ClientListViewModel extends ViewModel implements OnHandlingErrorCal
 
     @Override
     public void onError() {
-        clientListModelMutableLiveData.setValue(new ClientListModel(R.string.error_try_again_txt));
+        clientListModelMutableLiveData.setValue(new ClientListModel(R.string.fail_to_load_clients_try_again_txt));
 
     }
     public LiveData<ClientListModel> getClientData() {

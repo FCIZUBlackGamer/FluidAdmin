@@ -7,14 +7,13 @@ import com.thetatechno.fluidadmin.model.AddOrUpdateStatus;
 import com.thetatechno.fluidadmin.model.AddOrUpdateStatusResponse;
 import com.thetatechno.fluidadmin.model.ClientModelForRegister;
 import com.thetatechno.fluidadmin.model.ConfirmAppointmentResponse;
-import com.thetatechno.fluidadmin.model.Error;
 import com.thetatechno.fluidadmin.model.appointment_model.AppointmentBooked;
 import com.thetatechno.fluidadmin.model.appointment_model.AppointmentCalenderDaysListData;
 import com.thetatechno.fluidadmin.model.appointment_model.AppointmentListData;
 import com.thetatechno.fluidadmin.model.session_model.Session;
 import com.thetatechno.fluidadmin.model.session_model.SessionResponse;
-import com.thetatechno.fluidadmin.model.shedule.Schedule;
-import com.thetatechno.fluidadmin.model.shedule.ScheduleResponse;
+import com.thetatechno.fluidadmin.model.shedule_model.Schedule;
+import com.thetatechno.fluidadmin.model.shedule_model.ScheduleResponse;
 import com.thetatechno.fluidadmin.model.time_slot_model.TimeSlotListData;
 import com.thetatechno.fluidadmin.model.branches_model.Branch;
 import com.thetatechno.fluidadmin.model.branches_model.BranchesResponse;
@@ -22,7 +21,7 @@ import com.thetatechno.fluidadmin.model.code_model.Code;
 import com.thetatechno.fluidadmin.model.code_model.CodeList;
 import com.thetatechno.fluidadmin.model.ClientData;
 import com.thetatechno.fluidadmin.model.device_model.DeviceListData;
-import com.thetatechno.fluidadmin.model.facility_model.Facilities;
+import com.thetatechno.fluidadmin.model.facility_model.FacilitiesResponse;
 import com.thetatechno.fluidadmin.model.facility_model.Facility;
 import com.thetatechno.fluidadmin.model.facility_model.FacilityCodes;
 import com.thetatechno.fluidadmin.model.staff_model.Staff;
@@ -42,13 +41,13 @@ public interface MyServicesInterface {
 
 
     @GET("/ords/fluid/api/facility")
-    Call<Facilities> getAllWaitingListFacilities(@Query(Constants.FACILITY_ID) String facilityId, @Query(Constants.LANG_ID) String langId, @Query(Constants.FACILITY_TYPE_CODE) String typeCode);
+    Call<FacilitiesResponse> getAllWaitingListFacilities(@Query(Constants.FACILITY_ID) String facilityId, @Query(Constants.LANG_ID) String langId, @Query(Constants.FACILITY_TYPE_CODE) String typeCode);
 
     @GET("/ords/fluid/api/facility")
-    Call<Facilities> getAllFacilities(@Query(Constants.FACILITY_ID) String facilityId, @Query(Constants.LANG_ID) String langId);
+    Call<FacilitiesResponse> getAllFacilities(@Query(Constants.FACILITY_ID) String facilityId, @Query(Constants.LANG_ID) String langId);
 
     @GET("/ords/fluid/api/facility")
-    Call<Facilities> getFacilityForSpecificSiteId(@Query("siteId") String siteId, @Query(Constants.LANG_ID) String langId);
+    Call<FacilitiesResponse> getFacilityForSpecificSiteId(@Query("siteId") String siteId, @Query(Constants.LANG_ID) String langId, @Query(Constants.FACILITY_TYPE_CODE) String typeCode);
 
     @POST("/ords/fluid/api/facility")
     Call<AddOrUpdateStatus> addFacility(@Body Facility facility);

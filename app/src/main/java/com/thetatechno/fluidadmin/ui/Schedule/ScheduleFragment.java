@@ -24,9 +24,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.thetatechno.fluidadmin.R;
-import com.thetatechno.fluidadmin.model.shedule.ScheduleResponse;
-
-import java.util.ArrayList;
+import com.thetatechno.fluidadmin.model.shedule_model.ScheduleResponse;
+import com.thetatechno.fluidadmin.model.shedule_model.ScheduleResponseModel;
 
 public class ScheduleFragment extends Fragment  implements SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener {
     private View view;
@@ -51,24 +50,26 @@ public class ScheduleFragment extends Fragment  implements SearchView.OnQueryTex
         floatingActionButton = view.findViewById(R.id.fab);
         loadScheduleProgressBar.setVisibility(View.VISIBLE);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false));
-        scheduleListViewModel.getAllSchedules().observe(getViewLifecycleOwner(), new Observer<ScheduleResponse>() {
+        scheduleListViewModel.getAllSchedules().observe(getViewLifecycleOwner(), new Observer<ScheduleResponseModel>() {
             @Override
-            public void onChanged(ScheduleResponse scheduleResponse) {
+            public void onChanged(ScheduleResponseModel model) {
                 loadScheduleProgressBar.setVisibility(View.GONE);
-                if (scheduleResponse != null) {
-                    if (scheduleResponse.getError().getErrorCode() == 0) {
-                        if (scheduleResponse.getSchedules() != null) {
-                            scheduleListAdapter = new ScheduleListAdapter(navController, getContext(), scheduleResponse.getSchedules());
+                if (model.getScheduleResponse() != null) {
+                    if (model.getScheduleResponse().getError().getErrorCode() == 0) {
+                        if (model.getScheduleResponse().getSchedules() != null) {
+                            scheduleListAdapter = new ScheduleListAdapter(navController, getContext(), model.getScheduleResponse().getSchedules());
                             recyclerView.setAdapter(scheduleListAdapter);
-                        } else {
-                            Toast.makeText(getContext(), scheduleResponse.getError().getErrorMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            Toast.makeText(getContext(), R.string.no_schedules_found_txt, Toast.LENGTH_SHORT).show();
+
                         }
                     } else {
-                        Toast.makeText(getContext(), scheduleResponse.getError().getErrorMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), model.getScheduleResponse().getError().getErrorMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
                 else {
-                    Toast.makeText(getContext(),"", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),model.getErrorMessage(), Toast.LENGTH_SHORT).show();
 
                 }
 

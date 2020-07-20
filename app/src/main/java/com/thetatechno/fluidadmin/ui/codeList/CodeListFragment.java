@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,6 +23,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.model.code_model.Code;
 import com.thetatechno.fluidadmin.model.code_model.CodeList;
+import com.thetatechno.fluidadmin.model.specialities_model.SpecialityCodeListModel;
 import com.thetatechno.fluidadmin.ui.EspressoTestingIdlingResource;
 import com.thetatechno.fluidadmin.utils.App;
 import com.thetatechno.fluidadmin.utils.EnumCode;
@@ -78,37 +80,28 @@ public class CodeListFragment extends Fragment {
         codeSwipeRefreshLayout = view.findViewById(R.id.codeSwipeLayout);
         codeListProgressBar = view.findViewById(R.id.loadCodeProgressBar);
         codeListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-//       EspressoTestingIdlingResource.increment();
         codeListProgressBar.setVisibility(View.VISIBLE);
-        codeListViewModel.getDataForCode(EnumCode.Code.STFFGRP.toString(), PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase()).observe(getViewLifecycleOwner(), new Observer<CodeList>() {
+        codeListViewModel.getDataForCode(EnumCode.Code.STFFGRP.toString(), PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase()).observe(getViewLifecycleOwner(), new Observer<SpecialityCodeListModel>() {
             @Override
-            public void onChanged(CodeList codeListData) {
+            public void onChanged(SpecialityCodeListModel model) {
                 codeListProgressBar.setVisibility(View.GONE);
-                if (codeListData != null) {
-                    if (codeListData.getCodeList() != null) {
+                    if (model.getCodeList() !=null && model.getCodeList().getCodeList() != null) {
                         EspressoTestingIdlingResource.increment();
-                        codeList = codeListData.getCodeList();
+                        codeList = model.getCodeList().getCodeList();
                         codeListAdapter = new CodeListAdapter(navController, getContext(), codeList);
                         codeListRecyclerView.setAdapter(codeListAdapter);
                         EspressoTestingIdlingResource.decrement();
                     } else {
-                        Log.e(TAG, "codeList Is Null");
+                        Toast.makeText(getContext(),model.getErrorMessage(),Toast.LENGTH_SHORT).show();
                     }
-                } else {
-                    Log.e(TAG, "no data returns");
-                }
-                codeSwipeRefreshLayout.setRefreshing(false);
-//                EspressoTestingIdlingResource.decrement();
             }
         });
 
-        codeSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                codeSwipeRefreshLayout.setRefreshing(true);
-                codeListViewModel.getDataForCode(EnumCode.Code.STFFGRP.toString(), PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
+        codeSwipeRefreshLayout.setOnRefreshListener(() -> {
+            codeSwipeRefreshLayout.setRefreshing(true);
+            codeListViewModel.getDataForCode(EnumCode.Code.STFFGRP.toString(), PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
+            codeSwipeRefreshLayout.setRefreshing(false);
 
-            }
         });
         addNewCodeFab.setOnClickListener(new View.OnClickListener() {
             @Override

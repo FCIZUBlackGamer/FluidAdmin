@@ -5,8 +5,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
-import androidx.core.view.ViewCompat;
-import androidx.databinding.OnRebindCallback;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -15,7 +13,6 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.preference.PreferenceGroup;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +26,8 @@ import com.bumptech.glide.Glide;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.listeners.OnReloadDataListener;
 import com.thetatechno.fluidadmin.model.session_model.SessionResponse;
-import com.thetatechno.fluidadmin.model.shedule.Schedule;
+import com.thetatechno.fluidadmin.model.session_model.SessionResponseModel;
+import com.thetatechno.fluidadmin.model.shedule_model.Schedule;
 import com.thetatechno.fluidadmin.ui.Schedule.ChipAdapter;
 import com.thetatechno.fluidadmin.utils.Constants;
 
@@ -109,24 +107,26 @@ public class ShowSessions extends Fragment implements OnReloadDataListener {
             workingDaysRecyclerView.setVisibility(View.GONE);
             workingDaysTitleTxtView.setVisibility(View.GONE);
         }
-        sessionListViewModel.getAllSessionsRelatedToSchedule(schedule.getId()).observe(getViewLifecycleOwner(), new Observer<SessionResponse>() {
+        sessionListViewModel.getAllSessionsRelatedToSchedule(schedule.getId()).observe(getViewLifecycleOwner(), new Observer<SessionResponseModel>() {
             @Override
-            public void onChanged(SessionResponse sessionResponse) {
+            public void onChanged(SessionResponseModel model) {
                 loadSessionsForSpecificScheduleProgressBar.setVisibility(View.GONE);
 
-                if (sessionResponse != null) {
-                    if (sessionResponse.getError().getErrorCode() == 0) {
-                        if (sessionResponse.getSessions() != null) {
-                            sessionListAdapter = new SessionsAdapter(navController, getContext(), sessionResponse.getSessions());
+                if (model.getSessionResponse() != null) {
+                    if (model.getSessionResponse().getError().getErrorCode() == 0) {
+                        if (model.getSessionResponse().getSessions() != null) {
+                            sessionListAdapter = new SessionsAdapter(navController, getContext(), model.getSessionResponse().getSessions());
                             sessionRecyclerView.setAdapter(sessionListAdapter);
-//                            ViewCompat.setNestedScrollingEnabled(sessionRecyclerView, false);
                         } else {
                             Toast.makeText(getContext(), "No sessions Found", Toast.LENGTH_SHORT).show();
                         }
-
                     } else {
-                        Toast.makeText(getContext(), sessionResponse.getError().getErrorMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), model.getSessionResponse().getError().getErrorMessage(), Toast.LENGTH_SHORT).show();
                     }
+                }
+                else {
+                    Toast.makeText(getContext(), model.getErrorMessage(), Toast.LENGTH_SHORT).show();
+
                 }
             }
         });

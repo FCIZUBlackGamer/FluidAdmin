@@ -10,6 +10,7 @@ import com.thetatechno.fluidadmin.model.APIResponse;
 import com.thetatechno.fluidadmin.model.Error;
 import com.thetatechno.fluidadmin.model.session_model.Session;
 import com.thetatechno.fluidadmin.model.session_model.SessionResponse;
+import com.thetatechno.fluidadmin.model.session_model.SessionResponseModel;
 import com.thetatechno.fluidadmin.network.interfaces.MyServicesInterface;
 import com.thetatechno.fluidadmin.network.interfaces.RetrofitInstance;
 import com.thetatechno.fluidadmin.utils.Constants;
@@ -19,65 +20,45 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SessionRepository {
-    private MutableLiveData<SessionResponse> sessionResponseLiveData = new MutableLiveData<>();
+    private MutableLiveData<SessionResponseModel> sessionResponseLiveData = new MutableLiveData<>();
     private MutableLiveData<APIResponse> addSessionLiveData = new MutableLiveData<>();
     private MutableLiveData<APIResponse> updateSessionLiveData = new MutableLiveData<>();
     private MutableLiveData<Error> deleteSessionLiveData = new MutableLiveData<>();
-
+    private String sessionErrorMessage = "Failed to load sessions.";
     private static String TAG = CodeRepository.class.getSimpleName();
 
-    public MutableLiveData<SessionResponse> getSessionsRelatedToSchedule(final String langId, final String scheduleId) {
+    public MutableLiveData<SessionResponseModel> getSessionsRelatedToSchedule(final String langId, final String scheduleId) {
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
         Call<SessionResponse> call = myServicesInterface.getSessionsRelatedToSchedule(langId, scheduleId);
-        call.enqueue(new Callback<SessionResponse>() {
-            @Override
-            public void onResponse(Call<SessionResponse> call, Response<SessionResponse> response) {
-                if (response.code() == Constants.STATE_OK && response.body() != null) {
-                    Log.i(TAG, "get All codes response " + response.toString());
-                    if (response.body() != null) {
-                        sessionResponseLiveData.setValue(response.body());
-                    } else {
-                        sessionResponseLiveData.setValue(null);
-                    }
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<SessionResponse> call, Throwable t) {
-                sessionResponseLiveData.setValue(null);
-                t.printStackTrace();
-
-            }
-        });
+        call.enqueue(callback);
         return sessionResponseLiveData;
     }
-    public MutableLiveData<SessionResponse> getAllSessions(final String langId) {
+
+    Callback<SessionResponse> callback = new Callback<SessionResponse>() {
+        @Override
+        public void onResponse(Call<SessionResponse> call, Response<SessionResponse> response) {
+            if (response.code() == Constants.STATE_OK && response.body() != null) {
+                Log.i(TAG, "get sessions response " + response.toString());
+                sessionResponseLiveData.setValue(new SessionResponseModel(response.body()));
+            } else {
+                sessionResponseLiveData.setValue(new SessionResponseModel(sessionErrorMessage));
+            }
+        }
+        @Override
+        public void onFailure(Call<SessionResponse> call, Throwable t) {
+            sessionResponseLiveData.setValue(new SessionResponseModel("Error, try again."));
+            t.printStackTrace();
+
+        }
+    };
+
+    public MutableLiveData<SessionResponseModel> getAllSessions(final String langId) {
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
         Call<SessionResponse> call = myServicesInterface.getAllSessions(langId);
-        call.enqueue(new Callback<SessionResponse>() {
-            @Override
-            public void onResponse(Call<SessionResponse> call, Response<SessionResponse> response) {
-                if (response.code() == Constants.STATE_OK && response.body() != null) {
-                    Log.i(TAG, "get All codes response " + response.toString());
-                    if (response.body() != null) {
-                        sessionResponseLiveData.setValue(response.body());
-                    } else {
-                        sessionResponseLiveData.setValue(null);
-                    }
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<SessionResponse> call, Throwable t) {
-                sessionResponseLiveData.setValue(null);
-                t.printStackTrace();
-
-            }
-        });
+        call.enqueue(callback);
         return sessionResponseLiveData;
     }
+
     public MutableLiveData<APIResponse> addSession(final Session session) {
 
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
@@ -139,7 +120,7 @@ public class SessionRepository {
                 if (response.isSuccessful()) {
                     deleteSessionLiveData.setValue(response.body().getError());
 
-                }else {
+                } else {
                     deleteSessionLiveData.setValue(null);
                 }
             }

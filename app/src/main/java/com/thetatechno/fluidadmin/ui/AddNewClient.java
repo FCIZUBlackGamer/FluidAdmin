@@ -30,6 +30,7 @@ import com.thetatechno.fluidadmin.model.ClientModelForRegister;
 import com.thetatechno.fluidadmin.model.Status;
 import com.thetatechno.fluidadmin.model.code_model.Code;
 import com.thetatechno.fluidadmin.model.code_model.CodeList;
+import com.thetatechno.fluidadmin.model.specialities_model.SpecialityCodeListModel;
 import com.thetatechno.fluidadmin.utils.EnumCode;
 
 import java.util.ArrayList;
@@ -48,16 +49,20 @@ public class AddNewClient extends Fragment implements TextWatcher {
     private String idTypeCode;
     private String nationalityCode;
     private NavController navController;
-    private Observer<CodeList> nationalityListObserver = new Observer<CodeList>() {
+    private Observer<SpecialityCodeListModel> nationalityListObserver = new Observer<SpecialityCodeListModel>() {
         @Override
-        public void onChanged(CodeList codeList) {
-            if (codeList != null) {
-                if (codeList.getCodeList() != null) {
-                    nationalityList = (ArrayList<Code>) codeList.getCodeList();
+        public void onChanged(SpecialityCodeListModel model) {
+            if (model.getCodeList() != null) {
+                if (model.getCodeList() != null) {
+                    nationalityList = (ArrayList<Code>) model.getCodeList().getCodeList();
                     ArrayAdapter<Code> nationalitiesAdapter = new ArrayAdapter<>(getContext(), R.layout.dropdown_menu_popup_item, nationalityList);
                     binding.nationalityTxtView.setAdapter(nationalitiesAdapter);
 
                 }
+            }
+            else {
+                Toast.makeText(getContext(),model.getErrorMessage(),Toast.LENGTH_SHORT).show();
+
             }
         }
     };

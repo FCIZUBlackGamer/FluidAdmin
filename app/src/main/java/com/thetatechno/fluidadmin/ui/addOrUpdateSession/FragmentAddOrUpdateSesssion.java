@@ -29,6 +29,7 @@ import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.databinding.AddSessionLayoutBinding;
 import com.thetatechno.fluidadmin.model.APIResponse;
 import com.thetatechno.fluidadmin.model.Error;
+import com.thetatechno.fluidadmin.model.branches_model.BranchesResponseModel;
 import com.thetatechno.fluidadmin.model.staff_model.Staff;
 import com.thetatechno.fluidadmin.model.branches_model.Branch;
 import com.thetatechno.fluidadmin.model.branches_model.BranchesResponse;
@@ -40,8 +41,10 @@ import com.thetatechno.fluidadmin.utils.App;
 import com.thetatechno.fluidadmin.utils.Constants;
 import com.thetatechno.fluidadmin.utils.PreferenceController;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 public class FragmentAddOrUpdateSesssion extends Fragment implements TextWatcher {
     private AddSessionLayoutBinding binding;
@@ -52,8 +55,9 @@ public class FragmentAddOrUpdateSesssion extends Fragment implements TextWatcher
     private String providerId;
     private String facilityId;
     private String siteId = "";
-    private Error addOrUpdateResponse;
+    private APIResponse addOrUpdateResponse;
     private NavController navController;
+    ArrayAdapter<Facility> facilityArrayAdapter;
     Session session;
 
     @Nullable
@@ -68,6 +72,11 @@ public class FragmentAddOrUpdateSesssion extends Fragment implements TextWatcher
     @Override
     public void onStart() {
         super.onStart();
+        Date c = Calendar.getInstance().getTime();
+
+        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+        String formattedDate = df.format(c);
+        binding.dateTxt.setText(formattedDate);
         if (getArguments() != null && getArguments().getSerializable(Constants.ARG_SESSION) != null) {
             session = (Session) getArguments().getSerializable(Constants.ARG_SESSION);
             binding.timeToTxt.setText(session.getScheduledEnd());
@@ -96,13 +105,23 @@ public class FragmentAddOrUpdateSesssion extends Fragment implements TextWatcher
                 Toast.makeText(getContext(), staffData.getErrorMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+
         addOrUpdateSessionViewModel.getFacilities(siteId).observe(getViewLifecycleOwner(), staffData -> {
             if (staffData != null) {
-                facilityArrayList = (ArrayList<Facility>) staffData.getFacilities();
-                ArrayAdapter<Facility> facilityArrayAdapter = new ArrayAdapter<Facility>(getContext(), R.layout.dropdown_menu_popup_item, facilityArrayList);
-                binding.facilityAutoCompleteTextView.setAdapter(facilityArrayAdapter);
-                if (session != null) {
-                    binding.facilityAutoCompleteTextView.setText(session.getFacilitDescription(), false);
+                if(staffData.getFacilities()!=null) {
+                    facilityArrayList = (ArrayList<Facility>) staffData.getFacilities();
+                   facilityArrayAdapter = new ArrayAdapter<Facility>(getContext(), R.layout.dropdown_menu_popup_item, facilityArrayList);
+                    binding.facilityAutoCompleteTextView.setAdapter(facilityArrayAdapter);
+                    if (session != null) {
+                        binding.facilityAutoCompleteTextView.setText(session.getFacilitDescription(), false);
+                    }
+                }
+                else {
+                    binding.facilityAutoCompleteTextView.setText("");
+                    facilityArrayList.clear();
+                    facilityArrayAdapter = new ArrayAdapter<Facility>(getContext(), R.layout.dropdown_menu_popup_item, facilityArrayList);
+                    binding.facilityAutoCompleteTextView.setAdapter(facilityArrayAdapter);
+                    Toast.makeText(getContext(),"No facilities found in current site.",Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -116,6 +135,7 @@ public class FragmentAddOrUpdateSesssion extends Fragment implements TextWatcher
         binding.facilityAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
                 facilityId = ((Facility) parent.getItemAtPosition(position)).getId();
 
             }
@@ -144,6 +164,7 @@ public class FragmentAddOrUpdateSesssion extends Fragment implements TextWatcher
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 siteId = ((Branch) parent.getItemAtPosition(position)).getSiteId();
+                addOrUpdateSessionViewModel.getFacilities(siteId);
             }
         });
 
@@ -154,12 +175,12 @@ public class FragmentAddOrUpdateSesssion extends Fragment implements TextWatcher
     }
 
     private void getBranchesList() {
-        addOrUpdateSessionViewModel.getAllBranches().observe(getViewLifecycleOwner(), new Observer<BranchesResponse>() {
+        addOrUpdateSessionViewModel.getAllBranches().observe(getViewLifecycleOwner(), new Observer<BranchesResponseModel>() {
             @Override
-            public void onChanged(BranchesResponse branchesResponse) {
-                if (branchesResponse != null) {
-                    if (branchesResponse.getBranchList() != null) {
-                        branchesList = (ArrayList<Branch>) branchesResponse.getBranchList();
+            public void onChanged(BranchesResponseModel model) {
+
+                    if (model.getBranchesResponse().getBranchList() != null) {
+                        branchesList = (ArrayList<Branch>) model.getBranchesResponse().getBranchList();
                         ArrayAdapter<Branch> branchArrayAdapter = new ArrayAdapter<Branch>(getContext(), R.layout.dropdown_menu_popup_item, branchesList);
                         binding.siteAutoCompleteTextView.setAdapter(branchArrayAdapter);
                         if (session != null) {
@@ -169,7 +190,10 @@ public class FragmentAddOrUpdateSesssion extends Fragment implements TextWatcher
                             }
                         }
                     }
-                }
+                    else {
+                        Toast.makeText(getContext(),model.getErrorMessage(),Toast.LENGTH_SHORT).show();
+                    }
+
             }
         });
     }
@@ -190,26 +214,23 @@ public class FragmentAddOrUpdateSesssion extends Fragment implements TextWatcher
 
         final Calendar newCalendar = Calendar.getInstance();
         int hour = newCalendar.get(Calendar.HOUR_OF_DAY);
-        int minute = newCalendar.get(Calendar.MINUTE);
-        TimePickerDialog mTimePicker = new TimePickerDialog(requireActivity(), new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                String hourSelected;
-                String minuteSelected;
-                if (selectedHour < 10) {
-                    hourSelected = "0" + selectedHour;
+        int minute = 0;
+        TimePickerDialog mTimePicker = new TimePickerDialog(requireActivity(), (timePicker, selectedHour, selectedMinute) -> {
+            String hourSelected;
+            String minuteSelected;
+            if (selectedHour < 10) {
+                hourSelected = "0" + selectedHour;
 
-                } else {
-                    hourSelected = selectedHour + "";
-                }
-                if (selectedMinute < 10) {
-                    minuteSelected = "0" + selectedMinute;
-                } else {
-                    minuteSelected = selectedMinute + "";
-                }
-                stime.setText(String.format("%s:%s", hourSelected, minuteSelected));
-
+            } else {
+                hourSelected = selectedHour + "";
             }
+            if (selectedMinute < 10) {
+                minuteSelected = "0" + selectedMinute;
+            } else {
+                minuteSelected = selectedMinute + "";
+            }
+            stime.setText(String.format("%s:%s", hourSelected, minuteSelected));
+
         }, hour, minute, false);
         mTimePicker.show();
     }
@@ -254,6 +275,7 @@ public class FragmentAddOrUpdateSesssion extends Fragment implements TextWatcher
     private void addSession() {
         addOrUpdateSessionViewModel.addSession(session).observe(this, (APIResponse response) -> {
             if (response != null) {
+                addOrUpdateResponse = response;
                 Toast.makeText(requireActivity(), response.getError().getErrorMessage(), Toast.LENGTH_SHORT).show();
                 if (response.getError().getErrorCode() == 0) {
                     onCancelOrBackButtonPressed();
@@ -262,6 +284,8 @@ public class FragmentAddOrUpdateSesssion extends Fragment implements TextWatcher
                 }
             } else {
                 session = null;
+                Toast.makeText(requireActivity(), "Fail to add session", Toast.LENGTH_SHORT).show();
+
             }
         });
     }
@@ -269,13 +293,15 @@ public class FragmentAddOrUpdateSesssion extends Fragment implements TextWatcher
     private void updateSession() {
         addOrUpdateSessionViewModel.updateSession(session).observe(this, response -> {
             if (response != null) {
-
+                addOrUpdateResponse = response;
                 Toast.makeText(requireActivity(), response.getError().getErrorMessage(), Toast.LENGTH_SHORT).show();
                 if (response.getError().getErrorCode() == 0) {
                     onCancelOrBackButtonPressed();
                 }
             } else {
                 session = null;
+                Toast.makeText(requireActivity(), "Fail to update session", Toast.LENGTH_SHORT).show();
+
             }
         });
     }

@@ -7,16 +7,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
-import androidx.cardview.widget.CardView;
-import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -31,7 +27,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.listeners.OnReloadDataListener;
 import com.thetatechno.fluidadmin.model.session_model.SessionResponse;
-import com.thetatechno.fluidadmin.model.shedule.Schedule;
+import com.thetatechno.fluidadmin.model.session_model.SessionResponseModel;
 
 public class SessionFragment extends Fragment implements SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener, OnReloadDataListener {
     private View view;
@@ -39,9 +35,9 @@ public class SessionFragment extends Fragment implements SearchView.OnQueryTextL
     private SessionListAdapter sessionListAdapter;
     private NavController navController;
     private SessionListViewModel sessionListViewModel;
-   private FloatingActionButton floatingActionButton;
+    private FloatingActionButton floatingActionButton;
     private SwipeRefreshLayout sessionSwipeRefreshLayout;
-private ProgressBar loadSessionsProgressBar;
+    private ProgressBar loadSessionsProgressBar;
     private SearchView searchView;
 
     @Override
@@ -70,34 +66,29 @@ private ProgressBar loadSessionsProgressBar;
     public void onStart() {
         super.onStart();
         loadSessionsProgressBar.setVisibility(View.VISIBLE);
-            sessionListViewModel.getAllSessions().observe(getViewLifecycleOwner(), new Observer<SessionResponse>() {
-                @Override
-                public void onChanged(SessionResponse sessionResponse) {
-                    loadSessionsProgressBar.setVisibility(View.GONE);
+        sessionListViewModel.getAllSessions().observe(getViewLifecycleOwner(), new Observer<SessionResponseModel>() {
+            @Override
+            public void onChanged(SessionResponseModel model) {
+                loadSessionsProgressBar.setVisibility(View.GONE);
 
-                    if (sessionResponse != null) {
-                        if (sessionResponse.getError().getErrorCode() == 0) {
-                            if (sessionResponse.getSessions() != null) {
-                                sessionListAdapter = new SessionListAdapter(navController, getContext(), sessionResponse.getSessions());
-                                recyclerView.setAdapter(sessionListAdapter);
-                            } else {
-                                Toast.makeText(getContext(), "No sessions Found", Toast.LENGTH_SHORT).show();
-                            }
-
+                if (model.getSessionResponse() != null) {
+                    if (model.getSessionResponse().getError().getErrorCode() == 0) {
+                        if (model.getSessionResponse().getSessions() != null) {
+                            sessionListAdapter = new SessionListAdapter(navController, getContext(), model.getSessionResponse().getSessions());
+                            recyclerView.setAdapter(sessionListAdapter);
                         } else {
-                            Toast.makeText(getContext(), sessionResponse.getError().getErrorMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), R.string.no_sessions_found_txt, Toast.LENGTH_SHORT).show();
                         }
+
+                    } else {
+                        Toast.makeText(getContext(), model.getSessionResponse().getError().getErrorMessage(), Toast.LENGTH_SHORT).show();
                     }
-                    else {
-                        Snackbar.make(sessionSwipeRefreshLayout,"Failed to load session",Snackbar.LENGTH_LONG).setAction(R.string.retry, new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                sessionListViewModel.getAllSessions();
-                            }
-                        }).setAnchorView(floatingActionButton).show();
-                    }
+                } else {
+                    Toast.makeText(getContext(), model.getErrorMessage(), Toast.LENGTH_SHORT).show();
+
                 }
-            });
+            }
+        });
         sessionSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

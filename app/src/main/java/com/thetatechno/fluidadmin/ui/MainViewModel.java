@@ -14,7 +14,7 @@ import com.thetatechno.fluidadmin.model.facility_model.Facility;
 import com.thetatechno.fluidadmin.model.facility_model.FacilityCodes;
 import com.thetatechno.fluidadmin.model.staff_model.Staff;
 import com.thetatechno.fluidadmin.model.session_model.Session;
-import com.thetatechno.fluidadmin.model.shedule.Schedule;
+import com.thetatechno.fluidadmin.model.shedule_model.Schedule;
 import com.thetatechno.fluidadmin.network.repositories.BranchesRepository;
 import com.thetatechno.fluidadmin.network.repositories.CancelAppointmentRepository;
 import com.thetatechno.fluidadmin.network.repositories.CodeRepository;

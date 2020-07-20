@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel;
 
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.model.APIResponse;
-import com.thetatechno.fluidadmin.model.branches_model.BranchesResponse;
-import com.thetatechno.fluidadmin.model.facility_model.Facilities;
+import com.thetatechno.fluidadmin.model.branches_model.BranchesResponseModel;
+import com.thetatechno.fluidadmin.model.facility_model.FacilitiesResponse;
 import com.thetatechno.fluidadmin.model.session_model.Session;
 import com.thetatechno.fluidadmin.model.staff_model.StaffListModel;
 import com.thetatechno.fluidadmin.network.repositories.BranchesRepository;
@@ -34,11 +34,11 @@ public class AddOrUpdateSessionViewModel extends ViewModel {
         return sessionRepository.modifySession(session);
     }
 
-    public MutableLiveData<Facilities> getFacilities(String siteId) {
-        if (siteId.isEmpty())
-            return facilityRepository.getAllFacilities("", PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
-        else
-            return facilityRepository.getAllFacilitiesForSpecificSiteID(siteId, PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
+    public MutableLiveData<FacilitiesResponse> getFacilities(String siteId) {
+//        if (siteId.isEmpty())
+//            return facilityRepository.getAllFacilities("", PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
+//        else
+            return facilityRepository.getRoomFacilitiesForSpecificSiteID(siteId, PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase(),EnumCode.ClinicTypeCode.CLINIC.toString());
     }
 
 
@@ -47,7 +47,7 @@ public class AddOrUpdateSessionViewModel extends ViewModel {
         return staffRepository.getAllStuff(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase(), EnumCode.StaffTypeCode.PRVDR.toString());
     }
 
-    public MutableLiveData<BranchesResponse> getAllBranches() {
+    public MutableLiveData<BranchesResponseModel> getAllBranches() {
         return branchesRepository.getAllBranches(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
     }
 

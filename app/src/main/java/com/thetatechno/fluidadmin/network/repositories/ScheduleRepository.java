@@ -9,13 +9,12 @@ import com.thetatechno.fluidadmin.model.APIResponse;
 import com.thetatechno.fluidadmin.model.AddOrUpdateScheduleResponse;
 import com.thetatechno.fluidadmin.model.Error;
 
-import com.thetatechno.fluidadmin.model.shedule.Schedule;
-import com.thetatechno.fluidadmin.model.shedule.ScheduleResponse;
+import com.thetatechno.fluidadmin.model.shedule_model.Schedule;
+import com.thetatechno.fluidadmin.model.shedule_model.ScheduleResponse;
+import com.thetatechno.fluidadmin.model.shedule_model.ScheduleResponseModel;
 import com.thetatechno.fluidadmin.network.interfaces.MyServicesInterface;
 import com.thetatechno.fluidadmin.network.interfaces.RetrofitInstance;
-import com.thetatechno.fluidadmin.utils.App;
 import com.thetatechno.fluidadmin.utils.Constants;
-import com.thetatechno.fluidadmin.utils.PreferenceController;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -23,14 +22,14 @@ import retrofit2.Response;
 
 public class ScheduleRepository {
 
-    private MutableLiveData<ScheduleResponse> scheduleResponseLiveData = new MutableLiveData<>();
+    private MutableLiveData<ScheduleResponseModel> scheduleResponseLiveData = new MutableLiveData<>();
     private MutableLiveData<AddOrUpdateScheduleResponse> addScheduleLiveData = new MutableLiveData<>();
     private MutableLiveData<AddOrUpdateScheduleResponse> updateScheduleLiveData = new MutableLiveData<>();
     private MutableLiveData<Error> deleteScheduleLiveData = new MutableLiveData<>();
 
     private static String TAG = ScheduleRepository.class.getSimpleName();
 
-    public MutableLiveData<ScheduleResponse> getAllSchedules(final String langId) {
+    public MutableLiveData<ScheduleResponseModel> getAllSchedules(final String langId) {
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
         Call<ScheduleResponse> call = myServicesInterface.getAllSchedule(langId);
         call.enqueue(new Callback<ScheduleResponse>() {
@@ -38,18 +37,18 @@ public class ScheduleRepository {
             public void onResponse(Call<ScheduleResponse> call, Response<ScheduleResponse> response) {
                 if (response.code() == Constants.STATE_OK && response.body() != null) {
                     Log.i(TAG, "get All codes response " + response.toString());
-                    if (response.body() != null) {
-                        scheduleResponseLiveData.setValue(response.body());
+                        scheduleResponseLiveData.setValue(new ScheduleResponseModel(response.body()));
                     } else {
-                        scheduleResponseLiveData.setValue(null);
-                    }
+                    scheduleResponseLiveData.setValue(new ScheduleResponseModel("Failed to load schedules."));
 
                 }
+
+
             }
 
             @Override
             public void onFailure(Call<ScheduleResponse> call, Throwable t) {
-                scheduleResponseLiveData.setValue(null);
+                scheduleResponseLiveData.setValue(new ScheduleResponseModel("Error,try again."));
                 t.printStackTrace();
 
             }

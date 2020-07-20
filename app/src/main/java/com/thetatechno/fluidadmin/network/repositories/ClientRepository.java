@@ -33,8 +33,9 @@ public class ClientRepository {
                 if (response.code() == Constants.STATE_OK && response.body() != null) {
                     clientListModelMutableLiveData.setValue(new ClientListModel(response.body()));
                 }
-                clientListModelMutableLiveData.setValue(null);
-
+                else {
+                    onHandlingErrorCallback.onError();
+                }
             }
 
             @Override

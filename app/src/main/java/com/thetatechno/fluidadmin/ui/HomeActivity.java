@@ -32,11 +32,11 @@ import com.thetatechno.fluidadmin.listeners.OnReloadDataListener;
 import com.thetatechno.fluidadmin.model.Error;
 import com.thetatechno.fluidadmin.model.Status;
 import com.thetatechno.fluidadmin.model.session_model.Session;
-import com.thetatechno.fluidadmin.model.shedule.Schedule;
+import com.thetatechno.fluidadmin.model.shedule_model.Schedule;
 import com.thetatechno.fluidadmin.model.time_slot_model.TimeSlot;
 import com.thetatechno.fluidadmin.model.branches_model.Branch;
 import com.thetatechno.fluidadmin.model.code_model.Code;
-import com.thetatechno.fluidadmin.model.facility_model.Facilities;
+import com.thetatechno.fluidadmin.model.facility_model.FacilitiesResponse;
 import com.thetatechno.fluidadmin.model.facility_model.Facility;
 import com.thetatechno.fluidadmin.model.facility_model.FacilityCodes;
 import com.thetatechno.fluidadmin.model.staff_model.Staff;
@@ -298,9 +298,9 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
     public void getFacilities() {
 //        EspressoTestingIdlingResource.increment();
-        facilityListViewModel.getFacilityDataForClinicType("").observe(this, new Observer<Facilities>() {
+        facilityListViewModel.getFacilityDataForClinicType("").observe(this, new Observer<FacilitiesResponse>() {
             @Override
-            public void onChanged(Facilities facilities) {
+            public void onChanged(FacilitiesResponse facilities) {
 //                EspressoTestingIdlingResource.decrement();
                 if (facilities.getFacilities() != null) {
                     EspressoTestingIdlingResource.increment();

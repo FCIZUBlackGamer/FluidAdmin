@@ -1,4 +1,4 @@
-package com.thetatechno.fluidadmin.model.shedule;
+package com.thetatechno.fluidadmin.model.shedule_model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

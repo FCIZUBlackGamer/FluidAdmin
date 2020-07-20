@@ -6,18 +6,15 @@ import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
@@ -30,11 +27,11 @@ import androidx.navigation.Navigation;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.databinding.AddScheduleLayoutBinding;
 import com.thetatechno.fluidadmin.model.Error;
+import com.thetatechno.fluidadmin.model.branches_model.BranchesResponseModel;
 import com.thetatechno.fluidadmin.model.staff_model.Staff;
 import com.thetatechno.fluidadmin.model.branches_model.Branch;
-import com.thetatechno.fluidadmin.model.branches_model.BranchesResponse;
 import com.thetatechno.fluidadmin.model.facility_model.Facility;
-import com.thetatechno.fluidadmin.model.shedule.Schedule;
+import com.thetatechno.fluidadmin.model.shedule_model.Schedule;
 import com.thetatechno.fluidadmin.ui.HomeActivity;
 import com.thetatechno.fluidadmin.utils.Constants;
 
@@ -51,6 +48,7 @@ public class FragmentAddOrUpdateSchedule extends Fragment implements TextWatcher
     private ArrayList<Branch> branchesList = new ArrayList<>();
     private String providerId;
     private String facilityId;
+    ArrayAdapter<Facility> facilityArrayAdapter;
     private String siteId = "";
     private NavController navController;
     private Error addOrUpdateResponse;
@@ -97,7 +95,7 @@ public class FragmentAddOrUpdateSchedule extends Fragment implements TextWatcher
                 ArrayAdapter<Staff> staffArrayAdapter = new ArrayAdapter<Staff>(getContext(), R.layout.dropdown_menu_popup_item, providerArrayList);
                 binding.providerAutoCompleteTextView.setAdapter(staffArrayAdapter);
                 if (schedule != null) {
-                    binding.providerAutoCompleteTextView.setText(schedule.getProviderName(),false);
+                    binding.providerAutoCompleteTextView.setText(schedule.getProviderName(), false);
                 }
             } else {
                 Toast.makeText(getContext(), staffData.getErrorMessage(), Toast.LENGTH_SHORT).show();
@@ -106,11 +104,19 @@ public class FragmentAddOrUpdateSchedule extends Fragment implements TextWatcher
         });
         addOrUpdateScheduleViewModel.getFacilities(siteId).observe(getViewLifecycleOwner(), staffData -> {
             if (staffData != null) {
-                facilityArrayList = (ArrayList<Facility>) staffData.getFacilities();
-                ArrayAdapter<Facility> facilityArrayAdapter = new ArrayAdapter<Facility>(getContext(), R.layout.dropdown_menu_popup_item, facilityArrayList);
-                binding.facilityAutoCompleteTextView.setAdapter(facilityArrayAdapter);
-                if (schedule != null) {
-                    binding.facilityAutoCompleteTextView.setText(schedule.getFacilitDescription(),false);
+                if (staffData.getFacilities() != null) {
+                    facilityArrayList = (ArrayList<Facility>) staffData.getFacilities();
+                    facilityArrayAdapter = new ArrayAdapter<Facility>(getContext(), R.layout.dropdown_menu_popup_item, facilityArrayList);
+                    binding.facilityAutoCompleteTextView.setAdapter(facilityArrayAdapter);
+                    if (schedule != null) {
+                        binding.facilityAutoCompleteTextView.setText(schedule.getFacilitDescription(), false);
+                    }
+                } else {
+                    binding.facilityAutoCompleteTextView.setText("");
+                    facilityArrayList.clear();
+                    facilityArrayAdapter = new ArrayAdapter<Facility>(getContext(), R.layout.dropdown_menu_popup_item, facilityArrayList);
+                    binding.facilityAutoCompleteTextView.setAdapter(facilityArrayAdapter);
+                    Toast.makeText(getContext(), "No facilities found in current site.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -141,7 +147,7 @@ public class FragmentAddOrUpdateSchedule extends Fragment implements TextWatcher
 
         binding.addOrUpdateScheduleBtn.setOnClickListener(v -> {
             if (isValidData())
-            getDataFromUI();
+                getDataFromUI();
             else return;
         });
 
@@ -161,30 +167,33 @@ public class FragmentAddOrUpdateSchedule extends Fragment implements TextWatcher
     private void onCancelOrBackButtonPressed() {
         navController.popBackStack();
     }
-private void backToSchedules(){
-    onCancelOrBackButtonPressed();
-    navController.navigate(R.id.scheduleFragment);
-}
+
+    private void backToSchedules() {
+        onCancelOrBackButtonPressed();
+        navController.navigate(R.id.scheduleFragment);
+    }
 
     private void getBranchesList() {
-        addOrUpdateScheduleViewModel.getAllBranches().observe(getViewLifecycleOwner(), new Observer<BranchesResponse>() {
+        addOrUpdateScheduleViewModel.getAllBranches().observe(getViewLifecycleOwner(), new Observer<BranchesResponseModel>() {
             @Override
-            public void onChanged(BranchesResponse branchesResponse) {
-                if (branchesResponse != null) {
-                    if (branchesResponse.getBranchList() != null) {
-                        branchesList = (ArrayList<Branch>) branchesResponse.getBranchList();
-                        ArrayAdapter<Branch> branchArrayAdapter = new ArrayAdapter<Branch>(getContext(), R.layout.dropdown_menu_popup_item, branchesList);
-                        binding.siteAutoCompleteTextView.setAdapter(branchArrayAdapter);
-                        if (schedule != null)
-                            for (Branch branch : branchesList) {
-                                if (branch.getSiteId().equals(schedule.getSiteId())) {
-                                    binding.siteAutoCompleteTextView.setText(branch.getDescription(),false);
-                                    break;
-                                }
+            public void onChanged(BranchesResponseModel branchesResponseModel) {
+                if (branchesResponseModel.getBranchesResponse().getBranchList() != null) {
+                    branchesList = (ArrayList<Branch>) branchesResponseModel.getBranchesResponse().getBranchList();
+                    ArrayAdapter<Branch> branchArrayAdapter = new ArrayAdapter<Branch>(getContext(), R.layout.dropdown_menu_popup_item, branchesList);
+                    binding.siteAutoCompleteTextView.setAdapter(branchArrayAdapter);
+                    if (schedule != null)
+                        for (Branch branch : branchesList) {
+                            if (branch.getSiteId().equals(schedule.getSiteId())) {
+                                binding.siteAutoCompleteTextView.setText(branch.getDescription(), false);
+                                break;
                             }
-                    }
+                        }
+                }
+                else {
+                    Toast.makeText(getContext(),branchesResponseModel.getErrorMessage(),Toast.LENGTH_SHORT).show();
                 }
             }
+
         });
     }
 
@@ -203,7 +212,7 @@ private void backToSchedules(){
 
         final Calendar newCalendar = Calendar.getInstance();
         int hour = newCalendar.get(Calendar.HOUR_OF_DAY);
-        int minute = newCalendar.get(Calendar.MINUTE);
+        int minute = 0;
         TimePickerDialog mTimePicker = new TimePickerDialog(requireActivity(), new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
@@ -238,8 +247,8 @@ private void backToSchedules(){
             schedule.setEndTime(binding.timeToTxt.getText().toString());
             schedule.setWorkingDays(getSelectedDays());
             schedule.setSiteId(siteId);
-            if(addOrUpdateResponse ==null)
-           addSchedule();
+            if (addOrUpdateResponse == null)
+                addSchedule();
             else
                 addOrUpdateScheduleViewModel.addSchedule(schedule);
 
@@ -255,10 +264,10 @@ private void backToSchedules(){
             schedule.setEndTime(binding.timeToTxt.getText().toString());
             schedule.setWorkingDays(getSelectedDays());
             schedule.setSiteId(siteId);
-           if(addOrUpdateResponse == null)
-               updateSchedule();
-           else
-               addOrUpdateScheduleViewModel.updateSchedule(schedule);
+            if (addOrUpdateResponse == null)
+                updateSchedule();
+            else
+                addOrUpdateScheduleViewModel.updateSchedule(schedule);
         }
     }
 
@@ -266,7 +275,7 @@ private void backToSchedules(){
         addOrUpdateScheduleViewModel.addSchedule(schedule).observe(this, response -> {
             if (response != null && response.getError() != null) {
                 addOrUpdateResponse = response.getError();
-                Toast.makeText(requireActivity(),addOrUpdateResponse.getErrorMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireActivity(), addOrUpdateResponse.getErrorMessage(), Toast.LENGTH_SHORT).show();
                 if (response.getError().getErrorCode() == 0) {
                     backToSchedules();
 
@@ -279,7 +288,8 @@ private void backToSchedules(){
             }
         });
     }
-    private void updateSchedule(){
+
+    private void updateSchedule() {
         addOrUpdateScheduleViewModel.updateSchedule(schedule).observe(this, response -> {
             //Handle Error Message
             Toast.makeText(requireActivity(), response.getError().getErrorMessage(), Toast.LENGTH_SHORT).show();
@@ -429,12 +439,13 @@ private void backToSchedules(){
         else
             return false;
     }
-    private boolean isWorkingDaysSelected (){
-        if(getSelectedDays().isEmpty()){
-            Toast.makeText(getContext(),"Select working days",Toast.LENGTH_SHORT).show();
+
+    private boolean isWorkingDaysSelected() {
+        if (getSelectedDays().isEmpty()) {
+            Toast.makeText(getContext(), "Select working days", Toast.LENGTH_SHORT).show();
             return false;
         }
-         return true;
+        return true;
     }
 
     @Override
@@ -444,10 +455,10 @@ private void backToSchedules(){
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-     binding.facilityLayout.setErrorEnabled(false);
-     binding.scheduleDescriptionTxtInputLayout.setErrorEnabled(false);
-     binding.providerLayout.setErrorEnabled(false);
-     binding.siteLayout.setErrorEnabled(false);
+        binding.facilityLayout.setErrorEnabled(false);
+        binding.scheduleDescriptionTxtInputLayout.setErrorEnabled(false);
+        binding.providerLayout.setErrorEnabled(false);
+        binding.siteLayout.setErrorEnabled(false);
     }
 
     @Override

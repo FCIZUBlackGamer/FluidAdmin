@@ -24,6 +24,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.model.branches_model.Branch;
 import com.thetatechno.fluidadmin.model.branches_model.BranchesResponse;
+import com.thetatechno.fluidadmin.model.branches_model.BranchesResponseModel;
 import com.thetatechno.fluidadmin.ui.EspressoTestingIdlingResource;
 
 import java.util.List;
@@ -83,26 +84,27 @@ private static final String TAG = Branches.class.getSimpleName();
 
             EspressoTestingIdlingResource.increment();
         loadBranchesProgressBar.setVisibility(View.VISIBLE);
-            branchesViewModel.getAllBranches().observe(getViewLifecycleOwner(), new Observer<BranchesResponse>() {
+            branchesViewModel.getAllBranches().observe(getViewLifecycleOwner(), new Observer<BranchesResponseModel>() {
                 @Override
-                public void onChanged(BranchesResponse branchesResponse) {
+                public void onChanged(BranchesResponseModel model) {
                     loadBranchesProgressBar.setVisibility(View.GONE);
-                    if (branchesResponse != null) {
-                        if (branchesResponse.getBranchList()!= null) {
+                    if (model.getBranchesResponse() != null){
+                        if (model.getBranchesResponse().getBranchList() != null) {
                             EspressoTestingIdlingResource.increment();
-                            branchesList = branchesResponse.getBranchList();
-                            branchesAdapter = new BranchesAdapter(navController, getContext(),branchesList);
+                            branchesList = model.getBranchesResponse().getBranchList();
+                            branchesAdapter = new BranchesAdapter(navController, getContext(), branchesList);
                             branchesRecyclerView.setAdapter(branchesAdapter);
                             EspressoTestingIdlingResource.decrement();
                         } else {
-                            Snackbar.make(branchesSwipeLayout, branchesResponse.getStatus(), Snackbar.LENGTH_LONG).setAction(R.string.retry, new View.OnClickListener() {
+                            Snackbar.make(branchesSwipeLayout, model.getBranchesResponse().getStatus(), Snackbar.LENGTH_LONG).setAction(R.string.retry, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    branchesViewModel.getAllBranches();                                }
+                                    branchesViewModel.getAllBranches();
+                                }
                             }).setAnchorView(addNewBranchBtn).show();
                         }
-                    }else{
-                        Snackbar.make(branchesSwipeLayout, "Failed to load branches", Snackbar.LENGTH_LONG).setAction(R.string.retry, new View.OnClickListener() {
+                }else{
+                        Snackbar.make(branchesSwipeLayout, model.getErrorMessage(), Snackbar.LENGTH_LONG).setAction(R.string.retry, new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 branchesViewModel.getAllBranches();                                }

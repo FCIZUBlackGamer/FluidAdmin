@@ -24,8 +24,8 @@ public class RetrofitInstance {
             OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
                     .addInterceptor(interceptor)
                     .connectTimeout(5, TimeUnit.SECONDS)
-                    .readTimeout(40, TimeUnit.SECONDS)
-                    .writeTimeout(40, TimeUnit.SECONDS)
+                    .readTimeout(5, TimeUnit.SECONDS)
+                    .writeTimeout(5, TimeUnit.SECONDS)
                     .build();
 
             Log.i(TAG, "retrofit instance will be created");

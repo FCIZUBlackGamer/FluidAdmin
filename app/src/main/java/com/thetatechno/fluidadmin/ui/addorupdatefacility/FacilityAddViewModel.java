@@ -6,16 +6,15 @@ import androidx.lifecycle.ViewModel;
 
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.listeners.OnDataChangedCallBackListener;
-import com.thetatechno.fluidadmin.model.branches_model.BranchesResponse;
+import com.thetatechno.fluidadmin.model.branches_model.BranchesResponseModel;
 import com.thetatechno.fluidadmin.model.device_model.Device;
-import com.thetatechno.fluidadmin.model.device_model.DeviceListData;
-import com.thetatechno.fluidadmin.model.facility_model.Facilities;
+import com.thetatechno.fluidadmin.model.device_model.DeviceListModel;
+import com.thetatechno.fluidadmin.model.facility_model.FacilitiesResponse;
 import com.thetatechno.fluidadmin.model.facility_model.Facility;
 import com.thetatechno.fluidadmin.network.repositories.BranchesRepository;
 import com.thetatechno.fluidadmin.network.repositories.DeviceRepository;
 import com.thetatechno.fluidadmin.network.repositories.FacilityRepository;
 import com.thetatechno.fluidadmin.utils.App;
-import com.thetatechno.fluidadmin.utils.Constants;
 import com.thetatechno.fluidadmin.utils.EnumCode;
 import com.thetatechno.fluidadmin.utils.PreferenceController;
 import com.thetatechno.fluidadmin.utils.Validation;
@@ -29,7 +28,7 @@ public class FacilityAddViewModel extends ViewModel {
     private BranchesRepository branchesRepository = new BranchesRepository();
     private DeviceRepository deviceRepository = new DeviceRepository();
     private MutableLiveData<List<Facility>> facilitiesWaitListStringMutableLiveData = new MutableLiveData<List<Facility>>();
-    private MutableLiveData<List<String>> devicesStringMutableLiveData = new MutableLiveData<List<String>>();
+    private MutableLiveData<DeviceListModel> devicesLiveData = new MutableLiveData<DeviceListModel>();
     private String message = "";
     List<Device> deviceList = new ArrayList<>();
     List<Facility> facilities = new ArrayList<>();
@@ -108,9 +107,9 @@ public class FacilityAddViewModel extends ViewModel {
 
     public MutableLiveData<List<Facility>> getFacilityDataForWaitingAreaList(String facilityId) {
 
-        facilityRepository.getFacilityListForSpecificType(facilityId, PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase(), EnumCode.ClinicTypeCode.WAITAREA.toString(), new OnDataChangedCallBackListener<Facilities>() {
+        facilityRepository.getFacilityListForSpecificType(facilityId, PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase(), EnumCode.ClinicTypeCode.WAITAREA.toString(), new OnDataChangedCallBackListener<FacilitiesResponse>() {
             @Override
-            public void onResponse(Facilities facilitiesListResponse) {
+            public void onResponse(FacilitiesResponse facilitiesListResponse) {
                 if (facilitiesListResponse != null) {
                     if (facilitiesListResponse.getFacilities() != null) {
                         facilities = facilitiesListResponse.getFacilities();
@@ -134,34 +133,10 @@ public class FacilityAddViewModel extends ViewModel {
 
     }
 
-    public MutableLiveData<List<String>> getDevicesList() {
-
-        deviceRepository.getAllDevices(new OnDataChangedCallBackListener<DeviceListData>() {
-            @Override
-            public void onResponse(DeviceListData devicesListResponse) {
-                if (devicesListResponse != null) {
-                    if (devicesListResponse.getDeviceList() != null) {
-                        deviceList = devicesListResponse.getDeviceList();
-                        List<String> deviceListIds = new ArrayList<>();
-                        deviceListIds.add("");
-                        for (Device device : devicesListResponse.getDeviceList()) {
-                            deviceListIds.add(device.getDescription());
-                        }
-                        devicesStringMutableLiveData.setValue(deviceListIds);
-                    } else {
-                        devicesStringMutableLiveData.setValue(null);
-                    }
-
-
-                } else
-                    devicesStringMutableLiveData.setValue(null);
-            }
-        });
-
-        return devicesStringMutableLiveData;
-
+    public MutableLiveData<DeviceListModel> getDevicesList() {
+        return deviceRepository.getAllDevices();
     }
-    public  MutableLiveData<BranchesResponse> getAllBranches(){
+    public  MutableLiveData<BranchesResponseModel> getAllBranches(){
         return branchesRepository.getAllBranches(PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
     }
 

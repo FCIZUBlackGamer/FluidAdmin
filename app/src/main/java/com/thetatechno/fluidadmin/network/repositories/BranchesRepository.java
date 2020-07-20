@@ -11,6 +11,7 @@ import com.thetatechno.fluidadmin.model.AddOrUpdateStatusResponse;
 import com.thetatechno.fluidadmin.model.Status;
 import com.thetatechno.fluidadmin.model.branches_model.Branch;
 import com.thetatechno.fluidadmin.model.branches_model.BranchesResponse;
+import com.thetatechno.fluidadmin.model.branches_model.BranchesResponseModel;
 import com.thetatechno.fluidadmin.network.interfaces.MyServicesInterface;
 import com.thetatechno.fluidadmin.network.interfaces.RetrofitInstance;
 import com.thetatechno.fluidadmin.utils.Constants;
@@ -22,28 +23,29 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class BranchesRepository {
-    MutableLiveData<BranchesResponse> branchesMutableLiveData = new MutableLiveData<>();
+    MutableLiveData<BranchesResponseModel> branchesMutableLiveData = new MutableLiveData<>();
     MutableLiveData<AddOrUpdateStatusResponse> addNewBranchMutableLiveData = new MutableLiveData<>();
     MutableLiveData<AddOrUpdateStatusResponse> updateBranchMutableLiveData = new MutableLiveData<>();
     private static String TAG = BranchesRepository.class.getSimpleName();
 
-    public MutableLiveData<BranchesResponse> getAllBranches(String language) {
+    public MutableLiveData<BranchesResponseModel> getAllBranches(String language) {
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
         Call<BranchesResponse> call = myServicesInterface.getBranches(language);
         call.enqueue(new Callback<BranchesResponse>() {
             @Override
             public void onResponse(Call<BranchesResponse> call, Response<BranchesResponse> response) {
                 if (response.code() == Constants.STATE_OK && response.body() != null) {
-                    if (response.body() != null) {
-                        branchesMutableLiveData.setValue(response.body());
-
-                    }
+                        branchesMutableLiveData.setValue(new BranchesResponseModel(response.body()));
+                }
+                else  {
+                    branchesMutableLiveData.setValue(new BranchesResponseModel("Failed to load branches."));
                 }
             }
 
             @Override
             public void onFailure(Call<BranchesResponse> call, Throwable t) {
-                branchesMutableLiveData.setValue(null);
+                branchesMutableLiveData.setValue(new BranchesResponseModel("Error,Try again"));
+
                 t.printStackTrace();
             }
         });

@@ -26,6 +26,9 @@ import androidx.navigation.Navigation;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.thetatechno.fluidadmin.R;
+import com.thetatechno.fluidadmin.model.branches_model.BranchesResponseModel;
+import com.thetatechno.fluidadmin.model.device_model.Device;
+import com.thetatechno.fluidadmin.model.device_model.DeviceListModel;
 import com.thetatechno.fluidadmin.model.facility_model.Facility;
 import com.thetatechno.fluidadmin.model.branches_model.Branch;
 import com.thetatechno.fluidadmin.model.branches_model.BranchesResponse;
@@ -35,6 +38,7 @@ import com.thetatechno.fluidadmin.utils.App;
 import com.thetatechno.fluidadmin.utils.EnumCode;
 import com.thetatechno.fluidadmin.utils.PreferenceController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.thetatechno.fluidadmin.utils.Constants.ARG_FACILITY;
@@ -53,8 +57,8 @@ public class FacilityAddFragment extends Fragment {
     private RadioGroup facilityTypeRadioGroup;
     private final static String TAG = "FacilityAddFragment";
     private ArrayAdapter<Facility> waitingAreaListAdapter;
-    private List<Facility> waitAreaDescriptionList;
-    private List<String> devicesDescriptionList;
+    private List<Facility> waitAreaDescriptionList = new ArrayList<>();
+    private ArrayList<Device> devicesDescriptionList = new ArrayList<>() ;
     private List<Branch> branchesList;
     private String addOrUpdateMessage, addNewFacilityMessage;
     private String selectedBranchId;
@@ -88,7 +92,7 @@ public class FacilityAddFragment extends Fragment {
         facilityAddViewModel = ViewModelProviders.of(this).get(FacilityAddViewModel.class);
         initViews(view);
         getWaitingAreaDescriptionList();
-        getDevicesListDescription();
+        getDevicesList();
         updateUiWithFacilityData();
         getBranchesList();
         facilityTypeRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -190,19 +194,23 @@ public class FacilityAddFragment extends Fragment {
     }
 
     private void getBranchesList() {
-        facilityAddViewModel.getAllBranches().observe(getViewLifecycleOwner(), new Observer<BranchesResponse>() {
+        facilityAddViewModel.getAllBranches().observe(getViewLifecycleOwner(), new Observer<BranchesResponseModel>() {
             @Override
-            public void onChanged(BranchesResponse branchesResponse) {
-                if (branchesResponse != null) {
-                    if (branchesResponse.getBranchList() != null) {
-                        branchesList = branchesResponse.getBranchList();
+            public void onChanged(BranchesResponseModel model) {
+
+                    if (model.getBranchesResponse() != null) {
+                        branchesList = model.getBranchesResponse().getBranchList();
                         ArrayAdapter<Branch> branchArrayAdapter = new ArrayAdapter<Branch>(getContext(), R.layout.dropdown_menu_popup_item, branchesList);
                         branchesTextView.setAdapter(branchArrayAdapter);
                         if (facility != null)
                             branchesTextView.setText(facility.getSiteDescription(),false);
                     }
+                    else {
+                        Toast.makeText(getContext(),model.getErrorMessage(),Toast.LENGTH_SHORT).show();
+                    }
+
                 }
-            }
+
         });
     }
 
@@ -268,24 +276,27 @@ public class FacilityAddFragment extends Fragment {
         });
     }
 
-    private void getDevicesListDescription() {
-        facilityAddViewModel.getDevicesList().observe(getActivity(), new Observer<List<String>>() {
+    private void getDevicesList() {
+        facilityAddViewModel.getDevicesList().observe(getActivity(), new Observer<DeviceListModel>() {
             @Override
-            public void onChanged(List<String> deviceList) {
-                if (deviceList.size() > 0) {
-                    devicesDescriptionList = deviceList;
-                    ArrayAdapter<String> adapter =
-                            new ArrayAdapter<>(getContext(), R.layout.dropdown_menu_popup_item, devicesDescriptionList);
-
-                    facilityDeviceTextView.setAdapter(adapter);
-                    if (facility.getDeviceId() != null) {
-                        for (int i = 0; i < devicesDescriptionList.size(); i++) {
-                            if (devicesDescriptionList.get(i).equals(facility.getDeviceDescription())) {
-                                facilityDeviceTextView.setText(facility.getDeviceDescription(), false);
+            public void onChanged(DeviceListModel model) {
+                if (model.getDeviceListData()!=null) {
+                    if(model.getDeviceListData().getDeviceList()!=null) {
+                        devicesDescriptionList = (ArrayList<Device>) model.getDeviceListData().getDeviceList();
+                        ArrayAdapter<Device> adapter =
+                                new ArrayAdapter<>(getContext(), R.layout.dropdown_menu_popup_item, devicesDescriptionList);
+                        facilityDeviceTextView.setAdapter(adapter);
+                        if (facility.getDeviceId() != null) {
+                            for (int i = 0; i < devicesDescriptionList.size(); i++) {
+                                if (devicesDescriptionList.get(i).equals(facility.getDeviceDescription())) {
+                                    facilityDeviceTextView.setText(facility.getDeviceDescription(), false);
+                                }
                             }
                         }
                     }
-
+                }
+                else {
+                    Toast.makeText(getContext(),model.getErrorMessage(),Toast.LENGTH_SHORT).show();
                 }
             }
         });

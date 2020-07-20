@@ -11,6 +11,7 @@ import com.thetatechno.fluidadmin.model.AddOrUpdateStatus;
 import com.thetatechno.fluidadmin.model.code_model.Code;
 import com.thetatechno.fluidadmin.model.code_model.CodeList;
 import com.thetatechno.fluidadmin.model.Status;
+import com.thetatechno.fluidadmin.model.specialities_model.SpecialityCodeListModel;
 import com.thetatechno.fluidadmin.network.interfaces.MyServicesInterface;
 import com.thetatechno.fluidadmin.network.interfaces.RetrofitInstance;
 import com.thetatechno.fluidadmin.ui.EspressoTestingIdlingResource;
@@ -21,11 +22,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class CodeRepository {
-    MutableLiveData<CodeList> codesMutableLiveData = new MutableLiveData<>();
+    MutableLiveData<SpecialityCodeListModel> codesMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<CodeList> idListMutableLiveData = new MutableLiveData<>();
     private static String TAG = CodeRepository.class.getSimpleName();
 
-    public MutableLiveData getAllCodes(final String codeType, final String langId) {
+    public MutableLiveData<SpecialityCodeListModel> getAllCodes(final String codeType, final String langId) {
         MyServicesInterface myServicesInterface = RetrofitInstance.getService();
         Call<CodeList> call = myServicesInterface.getCodes(codeType, langId);
         call.enqueue(new Callback<CodeList>() {
@@ -33,19 +34,16 @@ public class CodeRepository {
             public void onResponse(Call<CodeList> call, Response<CodeList> response) {
                 if (response.code() == Constants.STATE_OK && response.body() != null) {
                     Log.i(TAG, "get All codes response " + response.toString());
-                    Gson gson = new Gson();
-                    Log.e("REsult", gson.toJson(response.body()));
-                    if (response.body() != null) {
-
-                        codesMutableLiveData.setValue(response.body());
-
-                    }
+                        codesMutableLiveData.setValue(new SpecialityCodeListModel(response.body()));
+                }
+                else {
+                    codesMutableLiveData.setValue(new SpecialityCodeListModel(" Failed to load."));
                 }
             }
 
             @Override
             public void onFailure(Call<CodeList> call, Throwable t) {
-                codesMutableLiveData.setValue(null);
+                codesMutableLiveData.setValue(new SpecialityCodeListModel("Error,Try again"));
 
             }
         });

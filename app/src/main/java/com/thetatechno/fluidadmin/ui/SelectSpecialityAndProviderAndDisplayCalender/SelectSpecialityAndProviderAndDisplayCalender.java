@@ -29,6 +29,7 @@ import com.thetatechno.fluidadmin.model.ClientData;
 import com.thetatechno.fluidadmin.model.ClientModelForRegister;
 import com.thetatechno.fluidadmin.model.appointment_model.AppointmentCalenderDaysListData;
 import com.thetatechno.fluidadmin.model.appointment_model.AppointmentDayDetails;
+import com.thetatechno.fluidadmin.model.branches_model.BranchesResponseModel;
 import com.thetatechno.fluidadmin.model.staff_model.Staff;
 import com.thetatechno.fluidadmin.model.staff_model.StaffData;
 import com.thetatechno.fluidadmin.model.branches_model.Branch;
@@ -336,24 +337,27 @@ public class SelectSpecialityAndProviderAndDisplayCalender extends Fragment {
         navController.popBackStack();
     }
 
-    private Observer<BranchesResponse> siteListObserver = new Observer<BranchesResponse>() {
+    private Observer<BranchesResponseModel> siteListObserver = new Observer<BranchesResponseModel>() {
         @Override
-        public void onChanged(BranchesResponse SiteList) {
+        public void onChanged(BranchesResponseModel model) {
             EspressoTestingIdlingResource.increment();
-            if (SiteList != null && SiteList.getBranchList() != null) {
-                sitesList = (ArrayList<Branch>) SiteList.getBranchList();
-                ArrayAdapter<Branch> adapter =
-                        new ArrayAdapter<Branch>(getContext(), R.layout.dropdown_menu_popup_item, sitesList);
-                binding.siteList.setAdapter(adapter);
-            }
+            if (model.getBranchesResponse() != null) {
+                if (model.getBranchesResponse().getBranchList() != null) {
+                    sitesList = (ArrayList<Branch>) model.getBranchesResponse().getBranchList();
+                    ArrayAdapter<Branch> adapter =
+                            new ArrayAdapter<Branch>(getContext(), R.layout.dropdown_menu_popup_item, sitesList);
+                    binding.siteList.setAdapter(adapter);
+                }
 
-            if (sitesList != null && sitesList.size() == 1) {
-                siteCode = sitesList.get(0).getSiteId();
-                binding.siteList.setVisibility(View.GONE);
-                binding.siteLayout.setVisibility(View.GONE);
-            } else {
-                binding.siteList.setVisibility(View.VISIBLE);
-                binding.siteLayout.setVisibility(View.VISIBLE);
+                if (sitesList != null && sitesList.size() == 1) {
+                    siteCode = sitesList.get(0).getSiteId();
+                    binding.siteList.setVisibility(View.GONE);
+                    binding.siteLayout.setVisibility(View.GONE);
+                } else {
+                    binding.siteList.setVisibility(View.VISIBLE);
+                    binding.siteLayout.setVisibility(View.VISIBLE);
+                }
+
             }
             EspressoTestingIdlingResource.decrement();
         }

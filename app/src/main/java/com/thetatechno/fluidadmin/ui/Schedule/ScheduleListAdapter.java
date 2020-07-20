@@ -9,23 +9,20 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.cardview.widget.CardView;
-import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager;
 import com.bumptech.glide.Glide;
-import com.google.android.material.chip.Chip;
 import com.thetatechno.fluidadmin.R;
 import com.thetatechno.fluidadmin.listeners.OnDeleteListener;
-import com.thetatechno.fluidadmin.model.facility_model.Facility;
-import com.thetatechno.fluidadmin.model.shedule.Schedule;
+import com.thetatechno.fluidadmin.model.shedule_model.Schedule;
 import com.thetatechno.fluidadmin.utils.Constants;
 import com.thetatechno.fluidadmin.utils.EnumCode;
 import com.thetatechno.fluidadmin.utils.StringUtil;
@@ -38,7 +35,6 @@ import io.sentry.Sentry;
 import io.sentry.android.AndroidSentryClientFactory;
 import io.sentry.event.UserBuilder;
 
-import static com.thetatechno.fluidadmin.utils.Constants.ARG_CODE;
 import static com.thetatechno.fluidadmin.utils.Constants.ARG_SCHEDULE;
 
 public class ScheduleListAdapter extends RecyclerView.Adapter<ScheduleListAdapter.ScheduleViewHolder> implements Filterable {
@@ -80,10 +76,7 @@ public class ScheduleListAdapter extends RecyclerView.Adapter<ScheduleListAdapte
 
     @Override
     public void onBindViewHolder(@NonNull final ScheduleViewHolder holder, final int position) {
-
-
         try {
-
             if (position < filteredScheduleList.size()) {
                 holder.itemView.setVisibility(View.VISIBLE);
                 holder.schedule_name_txt.setText(filteredScheduleList.get(position).getDescription());
@@ -113,8 +106,6 @@ public class ScheduleListAdapter extends RecyclerView.Adapter<ScheduleListAdapte
                 holder.optionMenu.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
-
                         PopupMenu popup = new PopupMenu(context, holder.optionMenu);
                         popup.inflate(R.menu.schedule_menu);
                         //adding click listener
@@ -152,6 +143,7 @@ public class ScheduleListAdapter extends RecyclerView.Adapter<ScheduleListAdapte
                 ChipAdapter chipAdapter = new ChipAdapter(context, selectedDays);
                 holder.recyclerView.setAdapter(chipAdapter);
             } else if (position == filteredScheduleList.size()) {
+                holder.workingDaysLayout.setVisibility(View.GONE);
                 holder.itemView.setVisibility(View.INVISIBLE);
             }
 
@@ -202,6 +194,7 @@ public class ScheduleListAdapter extends RecyclerView.Adapter<ScheduleListAdapte
     }
 
     public class ScheduleViewHolder extends RecyclerView.ViewHolder {
+        LinearLayout workingDaysLayout;
         TextView optionMenu, schedule_name_txt, doctor_name_txt, locationTxt, time_from_txt, time_to_txt,dateToTxtView,dateFromTxtView;
         ImageView doctorImg;
         //Chip satChip, sundayChip,mondayChip,tuesdayChip,WednesdayChip,thursdayChuip,fridayChip;
@@ -223,6 +216,7 @@ public class ScheduleListAdapter extends RecyclerView.Adapter<ScheduleListAdapte
             dateToTxtView = itemView.findViewById(R.id.date_to_txt_view);
             dateFromTxtView = itemView.findViewById(R.id.date_from_txt_view);
             daysCardView = itemView.findViewById(R.id.daysCardV);
+            workingDaysLayout = itemView.findViewById(R.id.workingHoursLinearLayout);
         }
     }
 

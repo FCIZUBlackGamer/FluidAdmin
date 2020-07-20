@@ -8,6 +8,7 @@ import com.thetatechno.fluidadmin.model.AddNewOrModifyClientResponse;
 import com.thetatechno.fluidadmin.model.ClientModelForRegister;
 import com.thetatechno.fluidadmin.model.Status;
 import com.thetatechno.fluidadmin.model.code_model.CodeList;
+import com.thetatechno.fluidadmin.model.specialities_model.SpecialityCodeListModel;
 import com.thetatechno.fluidadmin.network.repositories.ClientRepository;
 import com.thetatechno.fluidadmin.network.repositories.CodeRepository;
 import com.thetatechno.fluidadmin.utils.App;
@@ -27,14 +28,14 @@ public class RegisterViewModel extends ViewModel {
     private ClientRepository clientRepository = new ClientRepository();
     private String email, password, mobileNumber;
     MutableLiveData<Status> createPatientStatus = new MutableLiveData<>();
-    private MutableLiveData<CodeList> nationalityLiveData = new MutableLiveData<>();
+    private MutableLiveData<SpecialityCodeListModel> nationalityLiveData = new MutableLiveData<>();
     private MutableLiveData<CodeList> idTypeLiveData = new MutableLiveData<>();
 
     public RegisterViewModel() {
 
     }
 
-    public MutableLiveData<CodeList> getNationalityList() {
+    public MutableLiveData<SpecialityCodeListModel> getNationalityList() {
         nationalityLiveData = codeRepository.getAllCodes(EnumCode.Code.NTNLTY.toString(), PreferenceController.getInstance(App.getContext()).get(PreferenceController.LANGUAGE).toUpperCase());
         return nationalityLiveData;
     }

@@ -6,7 +6,7 @@ import com.thetatechno.fluidadmin.model.facility_model.Facility;
 
 import java.util.List;
 
-public class Facilities {
+public class FacilitiesResponse {
     @SerializedName("data")
     @Expose
     private List<Facility> facilities = null;
